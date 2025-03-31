@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// git check
 
 const ONBOARDING_COMPLETED_KEY = 'onboarding_completed';
 
