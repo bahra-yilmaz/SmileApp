@@ -1,0 +1,90 @@
+You are an expert in JavaScript, React Native, Expo, and Mobile UI development.
+
+Project Philosophy
+- Prioritize rapid iteration and UI-focused development.
+- Maintain clean, modular, maintainable code with strong visual style.
+- Favor simple solutions that deliver a polished mobile experience.
+
+Code Style and Structure
+- Write concise, modern JavaScript code using functional components.
+- Avoid class-based components.
+- Use descriptive variable names (e.g., isLoading, hasError).
+- Prefer modular file structure: components, subcomponents, helpers, theme, assets, constants.
+- Export components using named exports.
+- Use hooks and custom hooks for logic reuse.
+- Rely on `colors.ts` or `theme.ts` for all styling values (colors, shadows, borderRadius).
+
+Theming
+- All components should consume color and spacing values from the theme.
+- Design must support light/dark mode and future custom themes.
+- Glassmorphism must be implemented using blur layers, opacity, and background effects.
+- Use `expo-blur` or equivalent for glass UI components.
+- Build a flexible `theme` system that supports future expansion via context or libraries like styled-components.
+
+UI and Styling
+- Use Expo built-in components or NativeBase for layout and UI.
+- Use Tailwind CSS (via NativeWind) or styled-components if needed.
+- Focus on modern UI patterns like glassmorphism.
+- Add responsive layouts using Flexbox and `useWindowDimensions`.
+- Integrate animations using `react-native-reanimated`, `moti`, or `react-native-animatable`.
+- Include delightful micro-animations for interactions (e.g., button presses, transitions).
+- Design should be accessible and adaptive (support for screen readers and scaling).
+
+Mascot Integration
+- App must include a modular, animated mascot component.
+- Prefer Lottie, sprite sheets, or Reanimated-based animations.
+- Mascot should react to user actions and app state (e.g., success, error, idle).
+- Keep the mascot decoupled from main app logic, accessible via context or props.
+
+Internationalization
+- Multi-language support is mandatory.
+- Use `expo-localization` and `i18next` or `react-native-i18n`.
+- Wrap all text with translation helpers (e.g., `t('login.title')`).
+- Ensure RTL support and proper scaling of text elements.
+
+State Management
+- Prefer `useState`, `useContext`, and `useReducer` for state.
+- For remote data, use `react-query` with caching and background refresh.
+- Separate UI state and server state cleanly.
+
+Backend Integration
+- App will consume an external API.
+- Use an API abstraction layer for all requests.
+- Use `expo-constants` for environment variables.
+- Handle loading and error states for every request.
+- Log errors using alerts, toasts, or a global error boundary.
+
+Navigation
+- Use `react-navigation` for all navigation.
+- Use stack and tab navigators as needed.
+- Follow best practices for deep linking and screen organization.
+
+Safe Area Management
+- Use `SafeAreaProvider` and `SafeAreaView` globally.
+- Use `SafeAreaScrollView` for scrollable content.
+- Avoid hardcoded margins for notches/status bars.
+
+Testing and Error Handling
+- Catch errors early in functions and return early to avoid nesting.
+- Add try/catch to async API calls.
+- Include runtime validation via Zod or manual checks when needed.
+- Use unit tests with Jest for key logic.
+- Snapshot test critical UI.
+
+Performance
+- Memoize expensive components with `React.memo`.
+- Use `useCallback` and `useMemo` properly.
+- Optimize images (WebP, expo-image).
+- Use code-splitting and lazy loading where appropriate.
+- Minimize unnecessary re-renders.
+
+Security
+- Sanitize user inputs where applicable.
+- Store sensitive data securely using `react-native-encrypted-storage`.
+- Always use HTTPS for API calls.
+- Follow [Expo Security Guidelines](https://docs.expo.dev/guides/security/)
+
+Publishing & Updates
+- Follow Expo’s managed workflow.
+- Use `expo-updates` for OTA updates in production.
+- Test both iOS and Android thoroughly.

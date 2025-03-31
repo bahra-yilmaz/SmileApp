@@ -1,39 +1,71 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+import { useFonts } from 'expo-font';
+import { useEffect, useState } from 'react';
+import { ThemeProvider } from '../components/ThemeProvider';
+import { View, StyleSheet } from 'react-native';
+import SplashScreen from '../components/SplashScreen';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  // Load custom fonts
+  const [fontsLoaded, error] = useFonts({
+    // Load Merienda fonts
+    'Merienda-Light': require('../assets/fonts/Merienda-Light.ttf'),
+    'Merienda-Regular': require('../assets/fonts/Merienda-Regular.ttf'),
+    'Merienda-Medium': require('../assets/fonts/Merienda-Medium.ttf'),
+    'Merienda-Bold': require('../assets/fonts/Merienda-Bold.ttf'),
+    // Load Quicksand fonts
+    'Quicksand-Light': require('../assets/fonts/Quicksand-Light.ttf'),
+    'Quicksand-Regular': require('../assets/fonts/Quicksand-Regular.ttf'),
+    'Quicksand-Medium': require('../assets/fonts/Quicksand-Medium.ttf'),
+    'Quicksand-Bold': require('../assets/fonts/Quicksand-Bold.ttf'),
   });
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
+  // State to track if splash screen should be shown
+  const [showSplash, setShowSplash] = useState(true);
 
-  if (!loaded) {
-    return null;
-  }
+  // Handle splash screen finish
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+  };
+
+  // Always render app content, but only hide splash when fonts are loaded
+  const appReady = fontsLoaded || error;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <View style={styles.container}>
+      <ThemeProvider defaultColorScheme="light" defaultThemeVariation="default">
+        <StatusBar style="auto" />
+        <Stack>
+          <Stack.Screen 
+            name="index" 
+            options={{ 
+              headerShown: false,
+            }} 
+          />
+          <Stack.Screen 
+            name="(home)/index" 
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen 
+            name="+not-found" 
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack>
+        
+        {/* Show splash screen until fonts are loaded, then trigger fade out */}
+        {(showSplash || !appReady) && <SplashScreen onFinish={handleSplashFinish} />}
+      </ThemeProvider>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

@@ -1,20 +1,47 @@
-import { Link, Stack } from 'expo-router';
-import { StyleSheet } from 'react-native';
-
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import React from 'react';
+import { View, StyleSheet, Image, Pressable } from 'react-native';
+import { Stack, useRouter } from 'expo-router';
+import ThemedText from '../components/ThemedText';
+import GlassmorphicCard from '../components/ui/GlassmorphicCard';
+import { useTheme } from '../components/ThemeProvider';
 
 export default function NotFoundScreen() {
+  const router = useRouter();
+  const { theme } = useTheme();
+  
   return (
-    <>
+    <View style={styles.container}>
       <Stack.Screen options={{ title: 'Oops!' }} />
-      <ThemedView style={styles.container}>
-        <ThemedText type="title">This screen doesn't exist.</ThemedText>
-        <Link href="/" style={styles.link}>
-          <ThemedText type="link">Go to home screen!</ThemedText>
-        </Link>
-      </ThemedView>
-    </>
+      
+      <Image 
+        source={require('../assets/images/background-light-default.png')}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      />
+      
+      <GlassmorphicCard style={styles.card}>
+        <ThemedText 
+          variant="title" 
+          style={styles.title}
+          useDisplayFont
+          weight="medium"
+        >
+          Not Found
+        </ThemedText>
+        <ThemedText variant="body" style={styles.message}>
+          The page you're looking for doesn't exist.
+        </ThemedText>
+        
+        <Pressable 
+          style={styles.button} 
+          onPress={() => router.replace('/')}
+        >
+          <ThemedText style={styles.buttonText} weight="medium">
+            Go to Home
+          </ThemedText>
+        </Pressable>
+      </GlassmorphicCard>
+    </View>
   );
 }
 
@@ -25,8 +52,34 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
-  link: {
-    marginTop: 15,
-    paddingVertical: 15,
+  backgroundImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
-});
+  card: {
+    padding: 24,
+    width: '100%',
+    alignItems: 'center',
+    maxWidth: 400,
+  },
+  title: {
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  message: {
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  button: {
+    backgroundColor: '#0095E6',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 30,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  }
+}); 
