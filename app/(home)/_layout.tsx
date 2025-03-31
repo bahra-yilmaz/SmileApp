@@ -35,6 +35,13 @@ export default function HomeLayout() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="settings"
+        options={{
+          title: 'Settings',
+          headerShown: false, // We handle our own header in the settings screen
+        }}
+      />
     </Stack>
   );
 } 

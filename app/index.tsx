@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Image, Dimensions, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import ThemedText from '../components/ThemedText';
 import ThemedView from '../components/ThemedView';
 import { useTheme } from '../components/ThemeProvider';
 import GlassmorphicCard from '../components/ui/GlassmorphicCard';
+import { OnboardingService } from '../services/OnboardingService';
 
 const { width } = Dimensions.get('window');
 
@@ -12,8 +13,21 @@ export default function LandingScreen() {
   const { theme } = useTheme();
   const router = useRouter();
   
+  useEffect(() => {
+    // Check if user has completed onboarding
+    const checkOnboardingStatus = async () => {
+      const hasCompletedOnboarding = await OnboardingService.hasCompletedOnboarding();
+      if (hasCompletedOnboarding) {
+        // If onboarding is completed, redirect to home screen
+        router.replace('/(home)');
+      }
+    };
+    
+    checkOnboardingStatus();
+  }, []);
+  
   const handleGetStarted = () => {
-    router.push('/(home)');
+    router.push('/onboarding');
   };
   
   return (

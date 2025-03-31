@@ -1,14 +1,62 @@
-import React from 'react';
-import { View, StyleSheet, ScrollView, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, ScrollView, Image, Animated, Pressable } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import ThemedText from '../../components/ThemedText';
 import ThemedView from '../../components/ThemedView';
 import GlassmorphicCard from '../../components/ui/GlassmorphicCard';
 import ThemeToggle from '../../components/ThemeToggle';
+import { OnboardingService } from '../../services/OnboardingService';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function HomeScreen() {
   const { theme } = useTheme();
-  const { spacing } = theme;
+  const { spacing, activeColors } = theme;
+  const [showWelcomeBanner, setShowWelcomeBanner] = useState(false);
+  const fadeAnim = useState(new Animated.Value(0))[0];
+  const [devOptionPressCount, setDevOptionPressCount] = useState(0);
+  const router = useRouter();
+  
+  useEffect(() => {
+    // Check if this is the first time after completing onboarding
+    const checkOnboardingStatus = async () => {
+      const hasCompletedOnboarding = await OnboardingService.hasCompletedOnboarding();
+      if (hasCompletedOnboarding) {
+        setShowWelcomeBanner(true);
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }).start();
+        
+        // Hide banner after 5 seconds
+        setTimeout(() => {
+          Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: 800,
+            useNativeDriver: true,
+          }).start(() => setShowWelcomeBanner(false));
+        }, 5000);
+      }
+    };
+    
+    checkOnboardingStatus();
+  }, []);
+  
+  // Secret developer function to reset onboarding
+  const handleTitlePress = () => {
+    setDevOptionPressCount(prev => {
+      const newCount = prev + 1;
+      if (newCount >= 7) {
+        // Reset onboarding and redirect to landing page
+        OnboardingService.resetOnboardingStatus().then(() => {
+          router.replace('/');
+        });
+        return 0;
+      }
+      return newCount;
+    });
+  };
   
   return (
     <View style={styles.container}>
@@ -24,11 +72,31 @@ export default function HomeScreen() {
         contentContainerStyle={{ padding: spacing.lg }}
       >
         <View style={styles.header}>
-          <ThemedText variant="title" useDisplayFont weight="medium">Hello!</ThemedText>
-          <ThemeToggle compact />
+          <Pressable onPress={handleTitlePress}>
+            <ThemedText variant="title" useDisplayFont weight="medium">Hello!</ThemedText>
+          </Pressable>
+          <View style={styles.headerRight}>
+            <Pressable 
+              style={styles.settingsButton} 
+              onPress={() => router.push('/settings')}
+            >
+              <Ionicons name="settings-outline" size={24} color={activeColors.tint} />
+            </Pressable>
+            <ThemeToggle compact />
+          </View>
         </View>
         
         <View style={{ height: spacing.md }} />
+        
+        {showWelcomeBanner && (
+          <Animated.View style={{ opacity: fadeAnim, marginBottom: spacing.md }}>
+            <GlassmorphicCard style={styles.onboardingCompleteCard}>
+              <ThemedText variant="body" style={styles.onboardingCompleteText}>
+                🎉 You've completed onboarding! Welcome to your Smile App experience.
+              </ThemedText>
+            </GlassmorphicCard>
+          </Animated.View>
+        )}
         
         <GlassmorphicCard style={styles.welcomeCard}>
           <ThemedText variant="subtitle" style={styles.welcomeTitle} useDisplayFont>
@@ -94,6 +162,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  settingsButton: {
+    marginRight: 10,
+  },
   welcomeCard: {
     padding: 20,
   },
@@ -111,5 +186,11 @@ const styles = StyleSheet.create({
   },
   featureTitle: {
     marginBottom: 8,
+  },
+  onboardingCompleteCard: {
+    padding: 20,
+  },
+  onboardingCompleteText: {
+    opacity: 0.8,
   },
 }); 
