@@ -88,3 +88,6 @@ Publishing & Updates
 - Follow Expo’s managed workflow.
 - Use `expo-updates` for OTA updates in production.
 - Test both iOS and Android thoroughly.
+
+Extra Note
+- Please don't restart the app from terminal in any stage, I can handle it.

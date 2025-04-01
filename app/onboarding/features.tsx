@@ -6,10 +6,10 @@ export default function OnboardingFeatures() {
     <OnboardingScreen
       title="Powerful Features"
       description="Track your mood, set goals, practice mindfulness, and create healthy habits with our easy-to-use tools."
-      imageSource={require('../../assets/images/splash-logo.png')}
+      imageSource={require('../../assets/images/splash-screen.png')}
       nextScreenPath="/onboarding/personalize"
       index={1}
       totalScreens={3}
     />
   );
-} 
+}

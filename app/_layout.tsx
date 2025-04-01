@@ -4,9 +4,18 @@ import { useFonts } from 'expo-font';
 import { useEffect, useState } from 'react';
 import { ThemeProvider } from '../components/ThemeProvider';
 import { View, StyleSheet } from 'react-native';
+import { preventAutoHideAsync, hideAsync } from 'expo-splash-screen';
 import SplashScreen from '../components/SplashScreen';
 
+// Keep the native splash screen visible while we load fonts
+preventAutoHideAsync().catch(() => {
+  /* ignore error */
+});
+
 export default function RootLayout() {
+  // State to track if splash screen should be shown
+  const [showSplash, setShowSplash] = useState(true);
+  
   // Load custom fonts
   const [fontsLoaded, error] = useFonts({
     // Load Merienda fonts
@@ -21,8 +30,15 @@ export default function RootLayout() {
     'Quicksand-Bold': require('../assets/fonts/Quicksand-Bold.ttf'),
   });
 
-  // State to track if splash screen should be shown
-  const [showSplash, setShowSplash] = useState(true);
+  // Handle when assets loaded and splash can be hidden
+  useEffect(() => {
+    if (fontsLoaded || error) {
+      // Fonts are loaded, hide the native splash screen
+      hideAsync().catch(() => {
+        /* ignore error */
+      });
+    }
+  }, [fontsLoaded, error]);
 
   // Handle splash screen finish
   const handleSplashFinish = () => {
@@ -57,7 +73,7 @@ export default function RootLayout() {
           />
         </Stack>
         
-        {/* Show splash screen until fonts are loaded, then trigger fade out */}
+        {/* Show custom splash screen until fonts are loaded, then trigger fade out */}
         {(showSplash || !appReady) && <SplashScreen onFinish={handleSplashFinish} />}
       </ThemeProvider>
     </View>
