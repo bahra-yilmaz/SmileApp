@@ -29,6 +29,11 @@ export interface GlassmorphicCardProps extends ViewProps {
    * The shadow size to apply to the card
    */
   shadow?: 'none' | 'sm' | 'md' | 'lg';
+
+  /**
+   * Card variant - 'default' for regular cards, 'input' for form fields
+   */
+  variant?: 'default' | 'input';
 }
 
 /**
@@ -40,6 +45,7 @@ export function GlassmorphicCard({
   withBorder = true,
   borderRadius = 'md',
   shadow = 'md',
+  variant = 'default',
   style,
   children,
   ...props
@@ -61,6 +67,18 @@ export function GlassmorphicCard({
     ? colors.shadows[colorScheme][shadow] 
     : {};
   
+  // Determine background and border color based on variant
+  const backgroundColor = variant === 'input' 
+    ? glass.inputBackground 
+    : glass.background;
+  
+  const borderColor = variant === 'input'
+    ? glass.inputBorder
+    : glass.border;
+  
+  // Adjust intensity for input variant for better text contrast
+  const adjustedIntensity = variant === 'input' ? intensity * 0.8 : intensity;
+  
   return (
     <View
       style={[
@@ -74,15 +92,15 @@ export function GlassmorphicCard({
       {...props}
     >
       <BlurView
-        intensity={intensity}
+        intensity={adjustedIntensity}
         tint={colorScheme}
         style={[
           styles.blurView,
           {
             borderRadius: borderRadiusValue,
             borderWidth: withBorder ? StyleSheet.hairlineWidth : 0,
-            borderColor: glass.border,
-            backgroundColor: glass.background,
+            borderColor: borderColor,
+            backgroundColor: backgroundColor,
           },
           style,
         ]}

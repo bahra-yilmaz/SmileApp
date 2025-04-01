@@ -69,16 +69,20 @@ const feedback = {
 // Glassmorphism configurations
 const glass = {
   light: {
-    background: 'rgba(255, 255, 255, 0.65)',
-    border: 'rgba(255, 255, 255, 0.2)',
-    shadow: 'rgba(31, 41, 51, 0.08)',
-    blur: 8,
+    background: 'rgba(255, 255, 255, 0.45)',
+    border: 'rgba(255, 255, 255, 0.3)',
+    shadow: 'rgba(31, 41, 51, 0.12)',
+    blur: 10,
+    inputBackground: 'rgba(31, 41, 51, 0.25)', // Darker background for input fields
+    inputBorder: 'rgba(255, 255, 255, 0.3)',
   },
   dark: {
-    background: 'rgba(31, 41, 51, 0.65)',
-    border: 'rgba(45, 55, 72, 0.2)',
-    shadow: 'rgba(0, 0, 0, 0.25)',
-    blur: 8,
+    background: 'rgba(31, 41, 51, 0.75)',
+    border: 'rgba(45, 55, 72, 0.3)',
+    shadow: 'rgba(0, 0, 0, 0.35)',
+    blur: 10,
+    inputBackground: 'rgba(0, 0, 0, 0.35)', // Darker background for input fields
+    inputBorder: 'rgba(70, 80, 100, 0.3)',
   },
 };
 

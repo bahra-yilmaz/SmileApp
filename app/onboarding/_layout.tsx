@@ -14,6 +14,11 @@ export default function OnboardingLayout() {
         },
         animation: 'slide_from_right',
       }}
-    />
+    >
+      <Stack.Screen name="signup" />
+      <Stack.Screen name="index" />
+      <Stack.Screen name="features" />
+      <Stack.Screen name="personalize" />
+    </Stack>
   );
 } 

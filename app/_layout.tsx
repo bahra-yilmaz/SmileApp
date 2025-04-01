@@ -1,4 +1,4 @@
-import { Stack } from 'expo-router';
+import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import { useEffect, useState } from 'react';
@@ -30,6 +30,8 @@ export default function RootLayout() {
     'Quicksand-Bold': require('../assets/fonts/Quicksand-Bold.ttf'),
   });
 
+  const appReady = fontsLoaded || error;
+
   // Handle when assets loaded and splash can be hidden
   useEffect(() => {
     if (fontsLoaded || error) {
@@ -45,33 +47,11 @@ export default function RootLayout() {
     setShowSplash(false);
   };
 
-  // Always render app content, but only hide splash when fonts are loaded
-  const appReady = fontsLoaded || error;
-
   return (
     <View style={styles.container}>
       <ThemeProvider defaultColorScheme="light" defaultThemeVariation="default">
         <StatusBar style="auto" />
-        <Stack>
-          <Stack.Screen 
-            name="index" 
-            options={{ 
-              headerShown: false,
-            }} 
-          />
-          <Stack.Screen 
-            name="(home)/index" 
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen 
-            name="+not-found" 
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack>
+        <Slot />
         
         {/* Show custom splash screen until fonts are loaded, then trigger fade out */}
         {(showSplash || !appReady) && <SplashScreen onFinish={handleSplashFinish} />}
