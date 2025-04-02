@@ -1,14 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, Animated, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, Image, Dimensions, Animated, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import PrimaryButton from '../../components/ui/PrimaryButton';
 import InputField from '../../components/ui/InputField';
-import { Colors } from '../../constants/Colors';
 import SecondaryButton from '../../components/ui/SecondaryButton';
 import { useFonts } from 'expo-font';
 
-export default function SignupScreen() {
+export default function SigninScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,7 +22,7 @@ export default function SignupScreen() {
     'Quicksand-Medium': require('../../assets/fonts/Quicksand-Medium.ttf'),
   });
 
-  const handleSignup = () => {
+  const handleSignin = () => {
     setIsSubmitting(true);
     // Simulate network request
     setTimeout(() => {
@@ -64,20 +63,6 @@ export default function SignupScreen() {
   const fontFamilyTitle = fontsLoaded ? 'Quicksand-Bold' : 'System';
   const fontFamilyText = fontsLoaded ? 'Quicksand-Medium' : 'System';
   
-  // Add keyboard dismiss when tapping outside
-  useEffect(() => {
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        handleInputBlur();
-      }
-    );
-
-    return () => {
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-  
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -98,15 +83,8 @@ export default function SignupScreen() {
           ]}
         >
           <View style={styles.titleContainer}>
-            <Text style={[styles.title, { fontFamily: fontFamilyTitle }]}>Create Account</Text>
+            <Text style={[styles.title, { fontFamily: fontFamilyTitle }]}>Welcome Back</Text>
           </View>
-          
-          <InputField 
-            placeholder="Username"
-            autoCapitalize="none"
-            onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
-          />
           
           <InputField 
             placeholder="Email"
@@ -116,9 +94,17 @@ export default function SignupScreen() {
             onBlur={handleInputBlur}
           />
           
+          <InputField 
+            placeholder="Password"
+            secureTextEntry
+            autoCapitalize="none"
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+          />
+          
           <PrimaryButton 
-            label="Start the journey"
-            onPress={handleSignup}
+            label="Sign in"
+            onPress={handleSignin}
             useDisplayFont={true}
             isLoading={isSubmitting}
           />
@@ -136,14 +122,14 @@ export default function SignupScreen() {
           />
         </Animated.View>
         
-        <View style={[styles.signInContainer, { marginBottom: insets.bottom + 20 }]}>
-          <Text style={[styles.signInText, { fontFamily: fontFamilyText }]}>
-            Already have an account?{' '}
+        <View style={[styles.signUpContainer, { marginBottom: insets.bottom + 20 }]}>
+          <Text style={[styles.signUpText, { fontFamily: fontFamilyText }]}>
+            Don't have an account?{' '}
             <Text 
-              style={[styles.signInLink, { fontFamily: fontFamilyHeader }]} 
-              onPress={() => router.push('/onboarding/signin')}
+              style={[styles.signUpLink, { fontFamily: fontFamilyHeader }]} 
+              onPress={() => router.push('/onboarding/signup')}
             >
-              Sign-in
+              Sign-up
             </Text>
           </Text>
         </View>
@@ -221,19 +207,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     fontSize: 16,
   },
-  signInContainer: {
+  signUpContainer: {
     position: 'absolute',
     bottom: 0,
     width: '100%',
     alignItems: 'center',
     paddingVertical: 16,
   },
-  signInText: {
+  signUpText: {
     color: 'white',
     fontSize: 16,
   },
-  signInLink: {
+  signUpLink: {
     color: '#4A5568',
     fontWeight: 'bold',
   },
-});
+}); 

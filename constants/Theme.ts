@@ -19,7 +19,7 @@ const spacing = {
 const borderRadius = {
   xs: 4,
   sm: 8,
-  md: 12,
+  md: 30,
   lg: 16,
   xl: 24,
   pill: 9999,

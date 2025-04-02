@@ -34,6 +34,11 @@ export interface GlassmorphicCardProps extends ViewProps {
    * Card variant - 'default' for regular cards, 'input' for form fields
    */
   variant?: 'default' | 'input';
+  
+  /**
+   * Optional width override
+   */
+  width?: number;
 }
 
 /**
@@ -46,6 +51,7 @@ export function GlassmorphicCard({
   borderRadius = 'md',
   shadow = 'md',
   variant = 'default',
+  width = 260,
   style,
   children,
   ...props
@@ -85,6 +91,7 @@ export function GlassmorphicCard({
         styles.container,
         {
           borderRadius: borderRadiusValue,
+          width: width,
         },
         shadowStyle,
         containerStyle,
@@ -101,6 +108,7 @@ export function GlassmorphicCard({
             borderWidth: withBorder ? StyleSheet.hairlineWidth : 0,
             borderColor: borderColor,
             backgroundColor: backgroundColor,
+            width: width,
           },
           style,
         ]}

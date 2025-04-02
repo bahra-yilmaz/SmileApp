@@ -4,7 +4,7 @@ import ThemedText from '../ThemedText';
 import { useTheme } from '../ThemeProvider';
 import { useFonts } from 'expo-font';
 
-interface PrimaryButtonProps {
+interface SecondaryButtonProps {
   /**
    * Button text content
    */
@@ -50,7 +50,7 @@ interface PrimaryButtonProps {
  * A secondary action button component that follows the app's design system.
  * Features a transparent background with white stroke/border.
  */
-export default function PrimaryButton({
+export default function SecondaryButton({
   label,
   onPress,
   style,
@@ -59,19 +59,19 @@ export default function PrimaryButton({
   disabled = false,
   width = 260,
   isLoading = false,
-}: PrimaryButtonProps) {
+}: SecondaryButtonProps) {
   const { theme } = useTheme();
   
-  // Load fonts explicitly in the component 
+  // Load fonts explicitly in the component
   const [fontsLoaded] = useFonts({
     'Merienda-Medium': require('../../assets/fonts/Merienda-Medium.ttf'),
   });
   
-  // Primary button style with solid background
+  // Secondary button style with transparent background and white border
   const buttonStyle = {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.9)',
+    borderColor: 'white',
     opacity: disabled ? 0.7 : 1,
   };
   
@@ -91,12 +91,12 @@ export default function PrimaryButton({
         ]}
       >
         {isLoading ? (
-          <ActivityIndicator size="small" color={theme.colors.primary[600]} />
+          <ActivityIndicator size="small" color="white" />
         ) : (
           <ThemedText 
             style={[
               styles.buttonText,
-              { color: theme.colors.primary[600] },
+              { color: 'white' },
               // Apply display font only if it's loaded and requested
               useDisplayFont && fontsLoaded ? { fontFamily: 'Merienda-Medium' } : {},
               textStyle,
@@ -141,8 +141,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 0,
     flexShrink: 1,
-    textShadowColor: 'rgba(0, 0, 0, 0.2)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
   },
 }); 
