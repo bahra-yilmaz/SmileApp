@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity, ViewStyle, TextStyle, View, ActivityIndic
 import ThemedText from '../ThemedText';
 import { useTheme } from '../ThemeProvider';
 import { useFonts } from 'expo-font';
+import { Colors } from '../../constants/Colors';
 
 interface PrimaryButtonProps {
   /**
@@ -91,12 +92,12 @@ export default function PrimaryButton({
         ]}
       >
         {isLoading ? (
-          <ActivityIndicator size="small" color={theme.colors.primary[600]} />
+          <ActivityIndicator size="small" color={Colors.primary[500]} />
         ) : (
           <ThemedText 
             style={[
               styles.buttonText,
-              { color: theme.colors.primary[600] },
+              { color: Colors.primary[500] },
               // Apply display font only if it's loaded and requested
               useDisplayFont && fontsLoaded ? { fontFamily: 'Merienda-Medium' } : {},
               textStyle,

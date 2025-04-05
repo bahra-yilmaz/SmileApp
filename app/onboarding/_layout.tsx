@@ -1,6 +1,7 @@
 import React from 'react';
 import { Stack } from 'expo-router';
 import { useTheme } from '../../components/ThemeProvider';
+import { Platform } from 'react-native';
 
 export default function OnboardingLayout() {
   const { theme } = useTheme();
@@ -9,13 +10,26 @@ export default function OnboardingLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        contentStyle: {
-          backgroundColor: 'transparent',
-        },
-        animation: 'slide_from_right',
+        animation: 'fade',
+        animationDuration: 200,
+        contentStyle: { backgroundColor: 'transparent' },
+        presentation: 'transparentModal',
       }}
     >
-      <Stack.Screen name="signup" />
+      <Stack.Screen
+        name="signup"
+        options={{
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
+        }}
+      />
+      <Stack.Screen
+        name="signin"
+        options={{
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
+        }}
+      />
       <Stack.Screen name="index" />
       <Stack.Screen name="features" />
       <Stack.Screen name="personalize" />

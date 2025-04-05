@@ -6,16 +6,16 @@
 
 // Primary palette
 const primary = {
-  50: '#E6F7FF',
-  100: '#B3E6FF',
-  200: '#80D4FF',
-  300: '#4DC2FF',
-  400: '#1AB0FF',
-  500: '#0095E6', // Main brand color
-  600: '#007ACC',
-  700: '#0060B3',
-  800: '#004799',
-  900: '#003380',
+  50:  '#E7F1FA',
+  100: '#C5DCF1',
+  200: '#A2C6E7',
+  300: '#7FB0DD',
+  400: '#5D9AD4',
+  500: '#386495', // Navy blue main color
+  600: '#325882',
+  700: '#2B4C6F',
+  800: '#24405C',
+  900: '#1D3449',
 };
 
 // Accent palette - used for highlights and call-to-actions
@@ -69,7 +69,7 @@ const feedback = {
 // Glassmorphism configurations
 const glass = {
   light: {
-    background: 'rgba(255, 255, 255, 0.45)',
+    background: 'rgba(255, 255, 255, 0.4)',
     border: 'rgba(255, 255, 255, 0.3)',
     shadow: 'rgba(31, 41, 51, 0.12)',
     blur: 10,
@@ -77,7 +77,7 @@ const glass = {
     inputBorder: 'rgba(255, 255, 255, 0.3)',
   },
   dark: {
-    background: 'rgba(31, 41, 51, 0.75)',
+    background: 'rgba(31, 41, 51, 0.65)',
     border: 'rgba(45, 55, 72, 0.3)',
     shadow: 'rgba(0, 0, 0, 0.35)',
     blur: 10,

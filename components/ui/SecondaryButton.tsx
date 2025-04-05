@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity, ViewStyle, TextStyle, View, ActivityIndic
 import ThemedText from '../ThemedText';
 import { useTheme } from '../ThemeProvider';
 import { useFonts } from 'expo-font';
+import { Colors } from '../../constants/Colors';
 
 interface SecondaryButtonProps {
   /**
@@ -44,6 +45,11 @@ interface SecondaryButtonProps {
    * Whether the button is in loading state
    */
   isLoading?: boolean;
+
+  /**
+   * Optional icon to show before the label
+   */
+  icon?: React.ReactNode;
 }
 
 /**
@@ -59,6 +65,7 @@ export default function SecondaryButton({
   disabled = false,
   width = 260,
   isLoading = false,
+  icon,
 }: SecondaryButtonProps) {
   const { theme } = useTheme();
   
@@ -71,7 +78,7 @@ export default function SecondaryButton({
   const buttonStyle = {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: 'white',
+    borderColor: 'rgba(255, 255, 255, 0.9)',
     opacity: disabled ? 0.7 : 1,
   };
   
@@ -93,19 +100,22 @@ export default function SecondaryButton({
         {isLoading ? (
           <ActivityIndicator size="small" color="white" />
         ) : (
-          <ThemedText 
-            style={[
-              styles.buttonText,
-              { color: 'white' },
-              // Apply display font only if it's loaded and requested
-              useDisplayFont && fontsLoaded ? { fontFamily: 'Merienda-Medium' } : {},
-              textStyle,
-            ]}
-            // Don't pass the useDisplayFont prop to ThemedText if we're handling it here
-            weight={useDisplayFont && fontsLoaded ? 'medium' : 'bold'}
-          >
-            {label}
-          </ThemedText>
+          <View style={styles.contentContainer}>
+            {icon && <View style={styles.iconContainer}>{icon}</View>}
+            <ThemedText 
+              style={[
+                styles.buttonText,
+                { color: 'white' },
+                // Apply display font only if it's loaded and requested
+                useDisplayFont && fontsLoaded ? { fontFamily: 'Merienda-Medium' } : {},
+                textStyle,
+              ]}
+              // Don't pass the useDisplayFont prop to ThemedText if we're handling it here
+              weight={useDisplayFont && fontsLoaded ? 'medium' : 'bold'}
+            >
+              {label}
+            </ThemedText>
+          </View>
         )}
       </TouchableOpacity>
     </View>
@@ -114,13 +124,13 @@ export default function SecondaryButton({
 
 const styles = StyleSheet.create({
   shadowContainer: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
     borderRadius: 30,
     marginVertical: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
   button: {
     padding: 16,
@@ -129,11 +139,15 @@ const styles = StyleSheet.create({
     height: 60,
     overflow: 'hidden',
     borderRadius: 30,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
+  },
+  contentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 4,
+  },
+  iconContainer: {
+    marginRight: 6,
   },
   buttonText: {
     fontSize: 18,
