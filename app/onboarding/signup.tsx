@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, Animated, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, Animated, Keyboard, TouchableWithoutFeedback, Easing } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import PrimaryButton from '../../components/ui/PrimaryButton';
@@ -8,6 +8,7 @@ import { Colors } from '../../constants/Colors';
 import SecondaryButton from '../../components/ui/SecondaryButton';
 import { useFonts } from 'expo-font';
 import { SvgXml } from 'react-native-svg';
+import HeaderLogo from '../../components/ui/HeaderLogo';
 
 const googleIcon = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M19.6 10.2273C19.6 9.51818 19.5364 8.83636 19.4182 8.18182H10V12.05H15.3818C15.15 13.3 14.4455 14.3591 13.3864 15.0682V17.5773H16.6182C18.5091 15.8364 19.6 13.2727 19.6 10.2273Z" fill="#4285F4"/>
@@ -55,6 +56,7 @@ export default function SignupScreen() {
     Animated.timing(contentTranslateY, {
       toValue: -55,
       duration: 300,
+      easing: Easing.out(Easing.ease),
       useNativeDriver: true,
     }).start();
   };
@@ -64,6 +66,7 @@ export default function SignupScreen() {
     Animated.timing(contentTranslateY, {
       toValue: 0,
       duration: 300,
+      easing: Easing.out(Easing.ease),
       useNativeDriver: true,
     }).start();
   };
@@ -88,11 +91,15 @@ export default function SignupScreen() {
   }, []);
   
   useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+    // Run entrance animations
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 400,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      })
+    ]).start();
   }, []);
   
   return (
@@ -103,10 +110,7 @@ export default function SignupScreen() {
           style={styles.backgroundImage}
         />
         
-        {/* Header with smile text */}
-        <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
-          <Text style={[styles.headerText, { fontFamily: fontFamilyHeader }]}>smile</Text>
-        </View>
+        <HeaderLogo />
         
         <Animated.View 
           style={[
@@ -117,11 +121,14 @@ export default function SignupScreen() {
                 { 
                   translateX: fadeAnim.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [-50, 0]
+                    outputRange: [-30, 0]
                   })
                 }
               ],
-              opacity: fadeAnim 
+              opacity: fadeAnim.interpolate({
+                inputRange: [0, 0.8, 1],
+                outputRange: [0, 0.8, 1]
+              })
             }
           ]}
         >
@@ -207,21 +214,6 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
   },
-  header: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 10,
-  },
-  headerText: {
-    fontSize: 32,
-    color: 'white',
-    letterSpacing: 1.6,
-    textAlign: 'center',
-  },
   contentContainer: {
     width: '100%',
     alignItems: 'center',
@@ -279,8 +271,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 160,
     height: 160,
-    right: 10,
-    bottom: 380,
+    right: 15,
+    bottom: 385,
     zIndex: 1,
     resizeMode: 'contain',
   },
