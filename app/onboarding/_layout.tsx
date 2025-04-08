@@ -1,38 +1,54 @@
 import React from 'react';
 import { Stack } from 'expo-router';
 import { useTheme } from '../../components/ThemeProvider';
-import { Platform } from 'react-native';
+import { Platform, View, StyleSheet } from 'react-native';
+import HeaderLogo from '../../components/ui/HeaderLogo';
 
 export default function OnboardingLayout() {
   const { theme } = useTheme();
   
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        animation: 'fade',
-        animationDuration: 200,
-        contentStyle: { backgroundColor: 'transparent' },
-        presentation: 'transparentModal',
-      }}
-    >
-      <Stack.Screen
-        name="signup"
-        options={{
-          gestureEnabled: true,
-          gestureDirection: 'horizontal',
+    <View style={styles.container}>
+      {/* Fixed HeaderLogo that stays visible during transitions */}
+      <HeaderLogo additionalTopPadding={Platform.OS === 'ios' ? 10 : 15} />
+      
+      <Stack
+        id="onboarding"
+        screenOptions={{
+          headerShown: false,
+          animation: 'none',
+          contentStyle: { backgroundColor: 'transparent' },
+          presentation: 'card',
         }}
-      />
-      <Stack.Screen
-        name="signin"
-        options={{
-          gestureEnabled: true,
-          gestureDirection: 'horizontal',
-        }}
-      />
-      <Stack.Screen name="index" />
-      <Stack.Screen name="features" />
-      <Stack.Screen name="personalize" />
-    </Stack>
+      >
+        <Stack.Screen
+          name="language-select"
+          options={{
+            gestureEnabled: false,
+          }}
+        />
+        <Stack.Screen
+          name="signup"
+          options={{
+            gestureEnabled: false,
+          }}
+        />
+        <Stack.Screen
+          name="signin"
+          options={{
+            gestureEnabled: false,
+          }}
+        />
+        <Stack.Screen name="index" />
+        <Stack.Screen name="features" />
+        <Stack.Screen name="personalize" />
+      </Stack>
+    </View>
   );
-} 
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+}); 

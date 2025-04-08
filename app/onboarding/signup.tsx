@@ -8,7 +8,6 @@ import { Colors } from '../../constants/Colors';
 import SecondaryButton from '../../components/ui/SecondaryButton';
 import { useFonts } from 'expo-font';
 import { SvgXml } from 'react-native-svg';
-import HeaderLogo from '../../components/ui/HeaderLogo';
 
 const googleIcon = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M19.6 10.2273C19.6 9.51818 19.5364 8.83636 19.4182 8.18182H10V12.05H15.3818C15.15 13.3 14.4455 14.3591 13.3864 15.0682V17.5773H16.6182C18.5091 15.8364 19.6 13.2727 19.6 10.2273Z" fill="#4285F4"/>
@@ -91,26 +90,40 @@ export default function SignupScreen() {
   }, []);
   
   useEffect(() => {
-    // Run entrance animations
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 400,
-        easing: Easing.out(Easing.ease),
-        useNativeDriver: true,
-      })
-    ]).start();
+    // Animate in when the component mounts
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      easing: Easing.out(Easing.ease),
+      useNativeDriver: true,
+    }).start();
+    
+    return () => {
+      // Reset animation value when unmounting
+      fadeAnim.setValue(0);
+    };
   }, []);
+  
+  const navigateToSignin = () => {
+    // First fade out this screen
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => {
+      // Then navigate when animation completes
+      router.replace('/onboarding/signin');
+    });
+  };
   
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-        <Image 
-          source={require('../../assets/images/meshgradient-light-default.png')}
-          style={styles.backgroundImage}
-        />
-        
-        <HeaderLogo />
+      <Animated.View style={[
+        styles.container, 
+        { opacity: fadeAnim, position: 'absolute', width: '100%', height: '100%' }
+      ]}>
+        {/* Background is now in root layout */}
+        {/* HeaderLogo is now in the layout */}
         
         <Animated.View 
           style={[
@@ -184,7 +197,7 @@ export default function SignupScreen() {
             Already have an account?{' '}
             <Text 
               style={[styles.signInLink, { fontFamily: fontFamilyHeader }]} 
-              onPress={() => router.push('/onboarding/signin')}
+              onPress={navigateToSignin}
             >
               Sign-in
             </Text>
@@ -205,14 +218,6 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     overflow: 'hidden',
-  },
-  backgroundImage: {
-    position: 'absolute',
-    width: width,
-    height: height,
-    resizeMode: 'cover',
-    left: 0,
-    top: 0,
   },
   contentContainer: {
     width: '100%',

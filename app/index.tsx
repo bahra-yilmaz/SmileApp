@@ -1,6 +1,6 @@
 import React from 'react';
-import { LanguageSelectScreen } from './screens/onboarding/LanguageSelectScreen';
+import { Redirect } from 'expo-router';
 
 export default function RootScreen() {
-  return <LanguageSelectScreen />;
+  return <Redirect href="/onboarding/language-select" />;
 } 

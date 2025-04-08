@@ -3,9 +3,12 @@ import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';
 import { useEffect, useState } from 'react';
 import { ThemeProvider } from '../components/ThemeProvider';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image, Dimensions } from 'react-native';
 import { preventAutoHideAsync, hideAsync } from 'expo-splash-screen';
 import SplashScreen from '../components/SplashScreen';
+
+// Get dimensions for background
+const { width, height } = Dimensions.get('window');
 
 // Keep the native splash screen visible while we load fonts
 preventAutoHideAsync().catch(() => {
@@ -49,6 +52,12 @@ export default function RootLayout() {
 
   return (
     <View style={styles.container}>
+      {/* Global background image that stays persistent during navigation */}
+      <Image 
+        source={require('../assets/images/meshgradient-light-default.png')}
+        style={styles.backgroundImage}
+      />
+      
       <ThemeProvider defaultColorScheme="light" defaultThemeVariation="default">
         <StatusBar style="auto" />
         <Slot />
@@ -63,5 +72,14 @@ export default function RootLayout() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  backgroundImage: {
+    position: 'absolute',
+    width: width,
+    height: height,
+    resizeMode: 'cover',
+    left: 0,
+    top: 0,
+    zIndex: -1,
   },
 });

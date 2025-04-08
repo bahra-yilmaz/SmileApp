@@ -1,32 +1,24 @@
 import React, { useCallback, useRef, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Image, Dimensions, Animated as RNAnimated, Platform, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Dimensions, Animated, Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Theme } from '../../../constants/Theme';
-import { ThemedText } from '../../../components/ThemedText';
-import { ThemedView } from '../../../components/ThemedView';
-import { LANGUAGES } from '../../i18n';
+import { Theme } from '../../constants/Theme';
+import { ThemedText } from '../../components/ThemedText';
+import { LANGUAGES } from '../i18n';
 import { useFonts } from 'expo-font';
-import Animated, { 
-  FadeInDown, 
-  FadeInUp,
-  Layout 
-} from 'react-native-reanimated';
-import { GlassmorphicCard } from '../../../components/ui/GlassmorphicCard';
+import { GlassmorphicCard } from '../../components/ui/GlassmorphicCard';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-export const LanguageSelectScreen = () => {
+export default function LanguageSelectScreen() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
-  const insets = useSafeAreaInsets();
-  const fadeAnim = useRef(new RNAnimated.Value(0)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   // Load fonts
   const [fontsLoaded] = useFonts({
-    'Quicksand-Bold': require('../../../assets/fonts/Quicksand-Bold.ttf'),
-    'Quicksand-Medium': require('../../../assets/fonts/Quicksand-Medium.ttf'),
+    'Quicksand-Bold': require('../../assets/fonts/Quicksand-Bold.ttf'),
+    'Quicksand-Medium': require('../../assets/fonts/Quicksand-Medium.ttf'),
   });
 
   const handleLanguageSelect = useCallback(async (langCode: string) => {
@@ -34,7 +26,7 @@ export const LanguageSelectScreen = () => {
     await i18n.changeLanguage(langCode);
     
     // Fade out this screen
-    RNAnimated.timing(fadeAnim, {
+    Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 200,
       useNativeDriver: true,
@@ -45,9 +37,9 @@ export const LanguageSelectScreen = () => {
   }, [i18n, router, fadeAnim]);
 
   useEffect(() => {
-    RNAnimated.timing(fadeAnim, {
+    Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 400,
+      duration: 300,
       useNativeDriver: true,
     }).start();
   }, []);
@@ -56,11 +48,10 @@ export const LanguageSelectScreen = () => {
   const fontFamilyTitle = fontsLoaded ? 'Quicksand-Bold' : 'System';
 
   return (
-    <RNAnimated.View style={[styles.container, { opacity: fadeAnim }]}>
-      {/* Remove background image as it's now in the root layout */}
-      
-      {/* HeaderLogo is now in the layout */}
-
+    <Animated.View style={[
+      styles.container, 
+      { opacity: fadeAnim, position: 'absolute', width: '100%', height: '100%' }
+    ]}>
       <View style={styles.contentContainer}>
         <View style={styles.titleContainer}>
           <ThemedText style={[styles.title, { fontFamily: fontFamilyTitle }]}>
@@ -68,10 +59,7 @@ export const LanguageSelectScreen = () => {
           </ThemedText>
         </View>
 
-        <Animated.View 
-          entering={FadeInUp.delay(400)}
-          style={styles.languageList}
-        >
+        <View style={styles.languageList}>
           {LANGUAGES.map((lang, index) => (
             <TouchableOpacity
               key={lang.code}
@@ -100,11 +88,11 @@ export const LanguageSelectScreen = () => {
               </GlassmorphicCard>
             </TouchableOpacity>
           ))}
-        </Animated.View>
+        </View>
       </View>
-    </RNAnimated.View>
+    </Animated.View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -114,14 +102,6 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     overflow: 'hidden',
-  },
-  backgroundImage: {
-    position: 'absolute',
-    width: width,
-    height: height,
-    resizeMode: 'cover',
-    left: 0,
-    top: 0,
   },
   contentContainer: {
     width: '100%',
