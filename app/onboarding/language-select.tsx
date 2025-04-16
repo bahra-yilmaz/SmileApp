@@ -1,5 +1,5 @@
-import React, { useCallback, useRef, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Dimensions, Animated, Text } from 'react-native';
+import React, { useCallback, useRef, useEffect, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, Dimensions, Animated, Text, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { Theme } from '../../constants/Theme';
@@ -9,11 +9,20 @@ import { useFonts } from 'expo-font';
 import { GlassmorphicCard } from '../../components/ui/GlassmorphicCard';
 
 const { width } = Dimensions.get('window');
+const ITEM_WIDTH = (width - (Theme.spacing.lg * 2) - Theme.spacing.md) / 2;
+
+// Define type for language item
+type LanguageItem = {
+  code: string;
+  name: string;
+  flag: string;
+};
 
 export default function LanguageSelectScreen() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -22,9 +31,13 @@ export default function LanguageSelectScreen() {
   });
 
   const handleLanguageSelect = useCallback(async (langCode: string) => {
-    // First change the language
+    // Change the language
     await i18n.changeLanguage(langCode);
-    
+    // Update selected language
+    setSelectedLanguage(langCode);
+  }, [i18n]);
+
+  const handleContinue = useCallback(() => {
     // Fade out this screen
     Animated.timing(fadeAnim, {
       toValue: 0,
@@ -34,7 +47,7 @@ export default function LanguageSelectScreen() {
       // Then navigate when animation completes
       router.replace('/onboarding/signup');
     });
-  }, [i18n, router, fadeAnim]);
+  }, [router, fadeAnim]);
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -46,6 +59,36 @@ export default function LanguageSelectScreen() {
 
   // If fonts aren't loaded yet, we'll still render but with system fonts as fallback
   const fontFamilyTitle = fontsLoaded ? 'Quicksand-Bold' : 'System';
+
+  const renderLanguageItem = ({ item: lang }: { item: LanguageItem }) => (
+    <TouchableOpacity
+      key={lang.code}
+      onPress={() => handleLanguageSelect(lang.code)}
+      style={styles.languageButton}
+    >
+      <GlassmorphicCard
+        intensity={25}
+        borderRadius="lg"
+        shadow="sm"
+        width={ITEM_WIDTH}
+        style={[
+          styles.buttonContent,
+          { 
+            backgroundColor: selectedLanguage === lang.code 
+              ? 'rgba(0, 100, 255, 0.3)' 
+              : 'rgba(0, 0, 0, 0.2)' 
+          }
+        ]}
+      >
+        <View style={styles.languageRow}>
+          <Text style={styles.flagText}>{lang.flag}</Text>
+          <ThemedText style={styles.languageText}>
+            {t(`languages.${lang.code}`)}
+          </ThemedText>
+        </View>
+      </GlassmorphicCard>
+    </TouchableOpacity>
+  );
 
   return (
     <Animated.View style={[
@@ -59,35 +102,41 @@ export default function LanguageSelectScreen() {
           </ThemedText>
         </View>
 
-        <View style={styles.languageList}>
-          {LANGUAGES.map((lang, index) => (
-            <TouchableOpacity
-              key={lang.code}
-              onPress={() => handleLanguageSelect(lang.code)}
+        <View style={styles.languageGrid}>
+          <FlatList
+            data={LANGUAGES}
+            renderItem={renderLanguageItem}
+            keyExtractor={(item) => item.code}
+            numColumns={2}
+            columnWrapperStyle={styles.row}
+            contentContainerStyle={styles.flatListContent}
+          />
+        </View>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={handleContinue}
+            disabled={!selectedLanguage}
+            style={[
+              styles.continueButton,
+              { opacity: selectedLanguage ? 1 : 0.6 }
+            ]}
+          >
+            <GlassmorphicCard
+              intensity={50}
+              borderRadius="lg"
+              shadow="md" 
+              width={width * 0.85}
               style={[
-                styles.languageButton,
-                { marginTop: index === 0 ? 0 : Theme.spacing.md }
+                styles.continueButtonContent,
+                { backgroundColor: 'rgba(0, 100, 255, 0.3)' }
               ]}
             >
-              <GlassmorphicCard
-                intensity={25}
-                borderRadius="lg"
-                shadow="sm"
-                width={width * 0.9}
-                style={[
-                  styles.buttonContent,
-                  { backgroundColor: 'rgba(0, 0, 0, 0.2)' }
-                ]}
-              >
-                <View style={styles.languageRow}>
-                  <Text style={styles.flagText}>{lang.flag}</Text>
-                  <ThemedText style={styles.languageText}>
-                    {t(`languages.${lang.code}`)}
-                  </ThemedText>
-                </View>
-              </GlassmorphicCard>
-            </TouchableOpacity>
-          ))}
+              <ThemedText style={styles.continueButtonText}>
+                {t('Continue')}
+              </ThemedText>
+            </GlassmorphicCard>
+          </TouchableOpacity>
         </View>
       </View>
     </Animated.View>
@@ -108,7 +157,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     flex: 1,
-    paddingBottom: 100,
+    paddingBottom: 40,
   },
   titleContainer: {
     position: 'absolute',
@@ -123,13 +172,19 @@ const styles = StyleSheet.create({
     color: 'white',
     lineHeight: 48,
   },
-  languageList: {
+  languageGrid: {
     width: '100%',
     paddingHorizontal: Theme.spacing.lg,
   },
+  flatListContent: {
+    paddingBottom: 20,
+  },
+  row: {
+    justifyContent: 'space-between',
+    marginBottom: Theme.spacing.md,
+  },
   languageButton: {
-    width: '100%',
-    alignItems: 'center',
+    marginBottom: Theme.spacing.md,
   },
   buttonContent: {
     height: 60,
@@ -146,7 +201,26 @@ const styles = StyleSheet.create({
     marginRight: Theme.spacing.md,
   },
   languageText: {
+    fontSize: Theme.typography.sizes.md,
+    color: 'white',
+  },
+  buttonContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  continueButton: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  continueButtonContent: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  continueButtonText: {
     fontSize: Theme.typography.sizes.lg,
+    fontWeight: 'bold',
     color: 'white',
   },
 }); 

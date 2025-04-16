@@ -22,6 +22,7 @@ export const resources = {
         de: 'Deutsch',
         it: 'Italiano',
         pt: 'Português',
+        zh: '中文',
       },
     },
   },
@@ -42,6 +43,7 @@ export const resources = {
         de: 'Deutsch',
         it: 'Italiano',
         pt: 'Português',
+        zh: '中文',
       },
     },
   },
@@ -55,6 +57,7 @@ export const LANGUAGES = [
   { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
   { code: 'it', name: 'Italiano', flag: '🇮🇹' },
   { code: 'pt', name: 'Português', flag: '🇵🇹' },
+  { code: 'zh', name: '中文', flag: '🇨🇳' },
 ];
 
 // Custom language detector (asynchronous)
