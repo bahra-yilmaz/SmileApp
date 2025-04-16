@@ -7,6 +7,7 @@ import { ThemedText } from '../../components/ThemedText';
 import { LANGUAGES } from '../i18n';
 import { useFonts } from 'expo-font';
 import { GlassmorphicCard } from '../../components/ui/GlassmorphicCard';
+import PrimaryButton from '../../components/ui/PrimaryButton';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - (Theme.spacing.lg * 2) - Theme.spacing.md) / 2;
@@ -114,29 +115,12 @@ export default function LanguageSelectScreen() {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
+          <PrimaryButton
+            label={t('Continue')}
             onPress={handleContinue}
             disabled={!selectedLanguage}
-            style={[
-              styles.continueButton,
-              { opacity: selectedLanguage ? 1 : 0.6 }
-            ]}
-          >
-            <GlassmorphicCard
-              intensity={50}
-              borderRadius="lg"
-              shadow="md" 
-              width={width * 0.85}
-              style={[
-                styles.continueButtonContent,
-                { backgroundColor: 'rgba(0, 100, 255, 0.3)' }
-              ]}
-            >
-              <ThemedText style={styles.continueButtonText}>
-                {t('Continue')}
-              </ThemedText>
-            </GlassmorphicCard>
-          </TouchableOpacity>
+            width={width * 0.85}
+          />
         </View>
       </View>
     </Animated.View>
@@ -208,19 +192,5 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     marginTop: 20,
-  },
-  continueButton: {
-    width: '100%',
-    alignItems: 'center',
-  },
-  continueButtonContent: {
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  continueButtonText: {
-    fontSize: Theme.typography.sizes.lg,
-    fontWeight: 'bold',
-    color: 'white',
   },
 }); 

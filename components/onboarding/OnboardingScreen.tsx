@@ -67,13 +67,6 @@ export default function OnboardingScreen({
 
   return (
     <View style={styles.container}>
-      {/* Background gradient */}
-      <Image 
-        source={require('../../assets/images/meshgradient-light-default.png')}
-        style={styles.backgroundImage}
-        resizeMode="cover"
-      />
-      
       {/* Content */}
       <Animated.View 
         style={[
@@ -154,11 +147,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  backgroundImage: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
   },
   content: {
     width: width * 0.9,

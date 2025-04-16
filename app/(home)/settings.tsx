@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, Image, Pressable, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, Pressable, Alert } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import ThemedText from '../../components/ThemedText';
 import GlassmorphicCard from '../../components/ui/GlassmorphicCard';
@@ -35,13 +35,6 @@ export default function SettingsScreen() {
   
   return (
     <View style={styles.container}>
-      {/* Background Image */}
-      <Image 
-        source={require('../../assets/images/background-light-default.png')}
-        style={styles.backgroundImage}
-        resizeMode="cover"
-      />
-      
       <ScrollView 
         style={{ flex: 1 }}
         contentContainerStyle={{ padding: spacing.lg }}
@@ -111,11 +104,6 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  backgroundImage: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
   },
   header: {
     flexDirection: 'row',

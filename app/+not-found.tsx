@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Image, Pressable } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import ThemedText from '../components/ThemedText';
 import GlassmorphicCard from '../components/ui/GlassmorphicCard';
@@ -12,12 +12,6 @@ export default function NotFoundScreen() {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: 'Oops!' }} />
-      
-      <Image 
-        source={require('../assets/images/background-light-default.png')}
-        style={styles.backgroundImage}
-        resizeMode="cover"
-      />
       
       <GlassmorphicCard style={styles.card}>
         <ThemedText 
@@ -51,11 +45,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-  },
-  backgroundImage: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
   },
   card: {
     padding: 24,
