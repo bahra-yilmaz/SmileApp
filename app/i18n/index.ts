@@ -24,6 +24,10 @@ export const resources = {
         pt: 'Português',
         zh: '中文',
       },
+      toothbrush: {
+        days: 'days',
+        used: 'used',
+      },
     },
   },
   tr: {
@@ -44,6 +48,10 @@ export const resources = {
         it: 'Italiano',
         pt: 'Português',
         zh: '中文',
+      },
+      toothbrush: {
+        days: 'gün',
+        used: 'kullanıldı',
       },
     },
   },

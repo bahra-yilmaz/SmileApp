@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { View, StyleSheet, Dimensions, Pressable, Animated, Text, Image } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import HeaderLogo from '../../components/ui/HeaderLogo';
@@ -14,11 +14,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRandomMascot } from '../../utils/mascotUtils';
+import { useTranslation } from 'react-i18next';
 
 export default function HomeScreen() {
   const { theme } = useTheme();
   const { spacing, borderRadius } = theme;
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
+  
+  // Get a random mascot and its positioning
+  const { variant: randomMascotVariant, position: mascotPosition } = useRandomMascot();
   
   // Full text to be typed
   const fullText = "Hello World!";
@@ -31,15 +37,15 @@ export default function HomeScreen() {
     width: new Animated.Value(1),
     mascotPosition: new Animated.Value(0),
     cornerRadius: new Animated.Value(1),
-    wavingOpacity: new Animated.Value(1),
-    glassesOpacity: new Animated.Value(0)
+    notExpandedMascotOpacity: new Animated.Value(1), // Regular glasses mascot visible initially
+    expandedMascotOpacity: new Animated.Value(0)     // PP glasses mascot hidden initially
   }));
   const { 
     width: widthAnim, 
     mascotPosition: mascotPositionAnim,
     cornerRadius: cornerRadiusAnim,
-    wavingOpacity: wavingOpacityAnim,
-    glassesOpacity: glassesOpacityAnim
+    notExpandedMascotOpacity: notExpandedMascotOpacityAnim,
+    expandedMascotOpacity: expandedMascotOpacityAnim
   } = animationValues;
   
   // Track expanded state
@@ -49,12 +55,14 @@ export default function HomeScreen() {
   const { height: screenHeight, width: screenWidth } = Dimensions.get('window');
   // Calculate container height
   const containerHeight = screenHeight * 0.65;
-  // Calculate circle size (20% of screen width)
-  const circleSize = screenWidth * 0.2;
-  // Reduced circle height (85% of original size)
-  const circleHeight = circleSize * 0.85;
+  // Calculate circle height (85% of original size)
+  const circleHeight = screenWidth * 0.2 * 0.85; // Keep the original height calculation
+  // Using height for width to create a perfect circle in non-expanded state
+  const circleSize = circleHeight; // Make width match height for perfect circle
   // Calculate mascot size (slightly smaller than the circle)
   const mascotSize = circleHeight * 0.8;
+  // Slightly larger mascot size for non-expanded state
+  const nonExpandedMascotSize = circleHeight * 0.9; // 10% larger than the default
   // Calculate expanded width (55% of screen width)
   const expandedWidth = screenWidth * 0.57;
   
@@ -130,41 +138,42 @@ export default function HomeScreen() {
   // Handle card press to expand (one-way only)
   const handlePress = () => {
     if (!isExpanded) {
-      // Expand the card - no option to collapse back
+      // Expand the card and switch mascot variants
       Animated.parallel([
+        // Expand the card width
         Animated.spring(widthAnim, {
           toValue: expandedWidth / circleSize,
           useNativeDriver: false,
           friction: 8,
         }),
+        // Move the mascot position
         Animated.spring(mascotPositionAnim, {
           toValue: -((expandedWidth - circleSize) / 2) * 0.3,
           useNativeDriver: true,
           friction: 8,
         }),
+        // Change the corner radius
         Animated.spring(cornerRadiusAnim, {
           toValue: 2,
           useNativeDriver: false,
           friction: 8,
         }),
-        // Fade out waving mascot
-        Animated.timing(wavingOpacityAnim, {
+        // Fade out regular glasses mascot
+        Animated.timing(notExpandedMascotOpacityAnim, {
           toValue: 0,
           duration: 200,
           useNativeDriver: true,
         }),
-        // Fade in glasses mascot
-        Animated.timing(glassesOpacityAnim, {
+        // Fade in the expanded state mascot (pp version)
+        Animated.timing(expandedMascotOpacityAnim, {
           toValue: 1,
-          duration: 300,
-          delay: 150, // Small delay for a better transition
+          duration: 200,
           useNativeDriver: true,
         })
       ]).start();
       
       setIsExpanded(true);
     }
-    // No else clause - we don't allow collapsing back
   };
   
   // Load fonts
@@ -202,16 +211,18 @@ export default function HomeScreen() {
                 shadow="lg"
                 containerStyle={{
                   height: circleHeight,
+                  width: isExpanded ? animatedWidth : circleHeight, // Force width to match height when not expanded
                   borderRadius: animatedRadius,
                 }}
                 style={{
                   height: circleHeight,
+                  width: isExpanded ? animatedWidth : circleHeight, // Force width to match height when not expanded
                   borderRadius: animatedRadius,
                   alignItems: 'center',
                   justifyContent: 'center',
                   backgroundColor: 'rgba(0, 0, 0, 0.3)',
                   flexDirection: 'row',
-                  paddingHorizontal: 15,
+                  paddingHorizontal: isExpanded ? 8 : 15,
                 }}
               >
                 {/* Nubo Mascot with fade transition */}
@@ -223,13 +234,13 @@ export default function HomeScreen() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     position: 'relative',
-                    marginLeft: 14,
+                    marginLeft: isExpanded ? 8 : 12, // Reduce left margin when not expanded
                   }}
                 >
-                  {/* Waving Nubo (fades out) */}
+                  {/* Regular Glasses Nubo (starts visible, hidden when expanded) */}
                   <Animated.View 
                     style={{ 
-                      opacity: wavingOpacityAnim, 
+                      opacity: notExpandedMascotOpacityAnim, 
                       position: 'absolute',
                       top: 0,
                       left: 0,
@@ -237,18 +248,24 @@ export default function HomeScreen() {
                       bottom: 0,
                       justifyContent: 'center',
                       alignItems: 'center',
+                      // Apply variant-specific positioning
+                      transform: [
+                        { translateX: mascotPosition.translateX },
+                        { translateY: mascotPosition.translateY },
+                        { scale: mascotPosition.scale }
+                      ]
                     }}
                   >
                     <Mascot 
-                      variant="waving" 
-                      size={mascotSize}
+                      variant={randomMascotVariant} 
+                      size={nonExpandedMascotSize} // Use larger size for non-expanded state
                     />
                   </Animated.View>
                   
-                  {/* Glasses Nubo (fades in) */}
+                  {/* PP Glasses Nubo (hidden initially, shown when expanded) */}
                   <Animated.View 
                     style={{ 
-                      opacity: glassesOpacityAnim, 
+                      opacity: expandedMascotOpacityAnim, 
                       position: 'absolute',
                       top: 0,
                       left: 0,
@@ -256,11 +273,12 @@ export default function HomeScreen() {
                       bottom: 0,
                       justifyContent: 'center',
                       alignItems: 'center',
+                      transform: [{ translateX: 15 }], // Move the expanded mascot slightly to the right
                     }}
                   >
                     <Mascot 
                       variant="glasses-1-pp" 
-                      size={mascotSize}
+                      size={mascotSize} // Keep original size for expanded state
                     />
                   </Animated.View>
                 </Animated.View>
@@ -272,7 +290,7 @@ export default function HomeScreen() {
                       variant="subtitle" 
                       style={{ 
                         color: 'white', 
-                        marginLeft: 0,
+                        marginLeft: 0, 
                         fontSize: 15,
                         fontWeight: '500', // Add slight emphasis
                       }}
@@ -334,11 +352,14 @@ export default function HomeScreen() {
             maxValue=""
             progress={0}
             progressLabels={[]}
-            containerStyle={styles.brushingsPerDayContainer}
+            containerStyle={styles.fixedStreakCardContainer}
             contentStyle={styles.streakCardContent}
+            cardStyle={styles.streakCardStyle}
+            height={74}
+            width={Dimensions.get('window').width * 0.42}
           />
           
-          {/* Average Brushing Time Card - Now positioned second/bottom */}
+          {/* Average Brushing Time Card - Now always visible with consistent styling */}
           <StatCard
             title=""
             value={
@@ -380,10 +401,11 @@ export default function HomeScreen() {
             maxValue=""
             progress={0}
             progressLabels={[]}
-            containerStyle={styles.brushingTimeContainer}
+            containerStyle={styles.fixedBrushingTimeContainer}
             contentStyle={styles.brushingTimeCardContent}
             cardStyle={styles.brushingTimeCardStyle}
             height={74}
+            width={Dimensions.get('window').width * 0.42}
           />
           
           {/* Right Side Card (Toothbrush Card) */}
@@ -391,6 +413,33 @@ export default function HomeScreen() {
             title=""
             value={
               <View style={styles.toothbrushContentContainer}>
+                {/* Health indicator (heart) and days */}
+                <View style={styles.toothbrushHealthContainer}>
+                  <View style={styles.heartContainer}>
+                    <MaterialCommunityIcons 
+                      name="heart-half-full" 
+                      size={48} 
+                      color={Colors.primary[200]} 
+                    />
+                  </View>
+                  <View style={styles.daysTextContainer}>
+                    <ThemedText 
+                      variant="title" 
+                      style={[
+                        styles.daysValue,
+                        fontsLoaded && { fontFamily: 'Merienda-Bold' }
+                      ]}
+                    >
+                      45
+                    </ThemedText>
+                    <ThemedText 
+                      variant="caption" 
+                      style={styles.daysText}
+                    >
+                      {t('toothbrush.days')}
+                    </ThemedText>
+                  </View>
+                </View>
                 <Image 
                   source={require('../../assets/images/toothbrush.png')}
                   style={styles.toothbrushImage}
@@ -437,7 +486,7 @@ const styles = StyleSheet.create({
   expandedContent: {
     flex: 1,
     justifyContent: 'flex-start',
-    paddingLeft: 10,
+    paddingLeft: 4,
     alignItems: 'flex-start',
     alignSelf: 'center',
   },
@@ -450,6 +499,14 @@ const styles = StyleSheet.create({
     top: 55, 
     left: 20,
     zIndex: 30, // Ensure it stays above other elements
+  },
+  // Fixed positioning for time card that doesn't depend on mascot state
+  fixedBrushingTimeContainer: {
+    position: 'absolute',
+    top: 55,
+    left: 20,
+    zIndex: 30,
+    width: Dimensions.get('window').width * 0.42,
   },
   toothbrushCardContainer: {
     top: -35, // Match the top position of the first card
@@ -497,6 +554,7 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     paddingHorizontal: 0,
     paddingTop: 2,
+    height: '100%',
   },
   flameContainer: {
     alignItems: 'center',
@@ -549,6 +607,7 @@ const styles = StyleSheet.create({
   },
   brushingTimeCardStyle: {
     padding: 0,
+    height: 74,
   },
   brushingTimeCardContent: {
     justifyContent: 'center',
@@ -557,12 +616,16 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     paddingHorizontal: 0,
     marginTop: -6, // Move content 8px above
+    height: '100%',
   },
   toothbrushContentContainer: {
     flex: 1,
     width: '100%',
     height: '100%',
     position: 'relative',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   toothbrushImage: {
     width: Dimensions.get('window').width * 0.32,
@@ -574,5 +637,59 @@ const styles = StyleSheet.create({
       { translateY: -75 },
       { scale: 1.1 }
     ],
+  },
+  toothbrushHealthContainer: {
+    position: 'absolute',
+    left: 16,
+    top: '30%', // Move entire container higher
+    transform: [{ translateY: -50 }],
+    flexDirection: 'column',
+    alignItems: 'center', // Center align all children
+    zIndex: 10,
+    paddingHorizontal: 0,
+    width: 48, // Match width of heart
+  },
+  heartContainer: {
+    position: 'relative',
+    width: 48,
+    height: 48,
+    marginBottom: 8, // Increased gap between heart and number
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  daysTextContainer: {
+    flexDirection: 'column',
+    alignItems: 'center', // Center align text elements
+    justifyContent: 'center',
+    width: '100%', // Take full width of parent to center properly
+  },
+  daysValue: {
+    fontSize: 34,
+    fontWeight: '700',
+    color: Colors.primary[800],
+    lineHeight: 34, // Tighter line height to reduce gap with text
+    textAlign: 'center', // Center the text
+  },
+  daysText: {
+    fontSize: 14,
+    fontFamily: 'Quicksand-Medium',
+    opacity: 0.8,
+    color: Colors.primary[800],
+    paddingTop: 0,
+    lineHeight: 16, // Reduced line height for tighter spacing
+    textAlign: 'center', // Center the text
+    marginTop: -2, // Pull text slightly closer to number
+  },
+  // Fixed positioning for streak card that doesn't depend on mascot state
+  fixedStreakCardContainer: {
+    position: 'absolute',
+    top: -35, // Position from top of the Light Container
+    left: 20,
+    zIndex: 30, // Ensure it stays above other elements
+    width: Dimensions.get('window').width * 0.42,
+  },
+  streakCardStyle: {
+    padding: 0,
+    height: 74,
   },
 }); 
