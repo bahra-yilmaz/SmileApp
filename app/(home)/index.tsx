@@ -1,17 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Dimensions, Pressable, Animated } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, Dimensions, Pressable, Animated, Text, Image } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import HeaderLogo from '../../components/ui/HeaderLogo';
 import LightContainer from '../../components/ui/LightContainer';
 import GlassmorphicCard from '../../components/ui/GlassmorphicCard';
 import Mascot from '../../components/ui/Mascot';
 import ThemedText from '../../components/ThemedText';
+import StatCard from '../../components/ui/StatCard';
+import DonutChart from '../../components/ui/DonutChart';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Colors } from '../../constants/Colors';
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useFonts } from 'expo-font';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function HomeScreen() {
   const { theme } = useTheme();
   const { spacing, borderRadius } = theme;
   const insets = useSafeAreaInsets();
+  
+  // Full text to be typed
+  const fullText = "Hello World!";
+  // For the typing effect
+  const [typedText, setTypedText] = useState("");
+  const typingInterval = useRef<NodeJS.Timeout | null>(null);
   
   // Create animation values
   const [animationValues] = useState(() => ({
@@ -38,10 +51,12 @@ export default function HomeScreen() {
   const containerHeight = screenHeight * 0.65;
   // Calculate circle size (20% of screen width)
   const circleSize = screenWidth * 0.2;
+  // Reduced circle height (85% of original size)
+  const circleHeight = circleSize * 0.85;
   // Calculate mascot size (slightly smaller than the circle)
-  const mascotSize = circleSize * 0.8;
+  const mascotSize = circleHeight * 0.8;
   // Calculate expanded width (55% of screen width)
-  const expandedWidth = screenWidth * 0.55;
+  const expandedWidth = screenWidth * 0.57;
   
   // Get theme border radius
   const pillRadius = circleSize / 2;
@@ -50,6 +65,9 @@ export default function HomeScreen() {
   // Calculate animated values safely
   const [animatedWidth, setAnimatedWidth] = useState(circleSize);
   const [animatedRadius, setAnimatedRadius] = useState(pillRadius);
+  
+  // Calculate the height for the right card (from top of first card to bottom of second card)
+  const rightCardHeight = 228; // Approximate height to span both left cards
   
   // Update animated width and radius based on the animated values
   useEffect(() => {
@@ -68,6 +86,46 @@ export default function HomeScreen() {
       cornerRadiusAnim.removeListener(radiusListener);
     };
   }, [widthAnim, cornerRadiusAnim, circleSize, expandedWidth, pillRadius, cardRadius]);
+  
+  // Typing effect for the text
+  useEffect(() => {
+    if (isExpanded) {
+      // Reset text first
+      setTypedText("");
+      
+      // Start typing after a shorter delay for a more immediate effect
+      const startTypingTimeout = setTimeout(() => {
+        let charIndex = 0;
+        
+        // Clear any existing interval
+        if (typingInterval.current) {
+          clearInterval(typingInterval.current);
+        }
+        
+        // Set up typing interval with faster speed
+        typingInterval.current = setInterval(() => {
+          if (charIndex < fullText.length) {
+            setTypedText(fullText.substring(0, charIndex + 1));
+            charIndex++;
+          } else {
+            // Clear interval once typing is complete
+            if (typingInterval.current) {
+              clearInterval(typingInterval.current);
+              typingInterval.current = null;
+            }
+          }
+        }, 50); // Faster typing speed (was 100)
+      }, 400); // Shorter delay before typing starts (was 600)
+      
+      return () => {
+        clearTimeout(startTypingTimeout);
+        if (typingInterval.current) {
+          clearInterval(typingInterval.current);
+          typingInterval.current = null;
+        }
+      };
+    }
+  }, [isExpanded, fullText]);
   
   // Handle card press to expand (one-way only)
   const handlePress = () => {
@@ -109,6 +167,11 @@ export default function HomeScreen() {
     // No else clause - we don't allow collapsing back
   };
   
+  // Load fonts
+  const [fontsLoaded] = useFonts({
+    'Merienda-Bold': require('../../assets/fonts/Merienda-Bold.ttf'),
+  });
+  
   return (
     <View style={styles.container}>
       <View style={styles.mainContainer}>
@@ -138,11 +201,11 @@ export default function HomeScreen() {
                 intensity={70}
                 shadow="lg"
                 containerStyle={{
-                  height: circleSize,
+                  height: circleHeight,
                   borderRadius: animatedRadius,
                 }}
                 style={{
-                  height: circleSize,
+                  height: circleHeight,
                   borderRadius: animatedRadius,
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -156,7 +219,7 @@ export default function HomeScreen() {
                   style={{
                     transform: [{ translateX: mascotPositionAnim }],
                     width: mascotSize,
-                    height: circleSize,
+                    height: circleHeight,
                     alignItems: 'center',
                     justifyContent: 'center',
                     position: 'relative',
@@ -209,11 +272,12 @@ export default function HomeScreen() {
                       variant="subtitle" 
                       style={{ 
                         color: 'white', 
-                        marginLeft: -15,
+                        marginLeft: 0,
                         fontSize: 15,
+                        fontWeight: '500', // Add slight emphasis
                       }}
                     >
-                      Hello World!
+                      {typedText}
                     </ThemedText>
                   </View>
                 )}
@@ -234,8 +298,115 @@ export default function HomeScreen() {
             paddingTop: 24,
             paddingBottom: insets.bottom > 0 ? insets.bottom : 24,
             flex: 0,
+            zIndex: 25, // Keep it consistently above other elements
           }}
         >
+          {/* Streak Days Card - Updated from Avg. Brushings Per Day */}
+          <StatCard
+            title=""
+            value={
+              <View style={styles.streakValueContainer}>
+                <View style={styles.flameContainer}>
+                  <MaterialCommunityIcons 
+                    name="fire" 
+                    size={42} 
+                    color={Colors.primary[500]} 
+                    style={styles.flameIcon}
+                  />
+                </View>
+                <ThemedText 
+                  variant="title" 
+                  style={[
+                    styles.streakValue,
+                    fontsLoaded && { fontFamily: 'Merienda-Bold' }
+                  ]}
+                >
+                  7
+                </ThemedText>
+                <ThemedText 
+                  variant="caption" 
+                  style={styles.streakText}
+                >
+                  days streak
+                </ThemedText>
+              </View>
+            }
+            maxValue=""
+            progress={0}
+            progressLabels={[]}
+            containerStyle={styles.brushingsPerDayContainer}
+            contentStyle={styles.streakCardContent}
+          />
+          
+          {/* Average Brushing Time Card - Now positioned second/bottom */}
+          <StatCard
+            title=""
+            value={
+              <View style={styles.brushingTimeValueContainer}>
+                <View style={styles.brushingTimeDonutContainer}>
+                  <DonutChart
+                    progress={(2.5 / 3) * 100}
+                    size={38}
+                    thickness={6}
+                    progressColor={Colors.primary[200]}
+                    style={styles.brushingTimeDonut}
+                  />
+                </View>
+                <ThemedText 
+                  variant="title" 
+                  style={[
+                    styles.brushingTimeValue,
+                    fontsLoaded && { fontFamily: 'Merienda-Bold' }
+                  ]}
+                >
+                  2
+                  <ThemedText
+                    style={[
+                      styles.brushingTimeSeconds,
+                      fontsLoaded && { fontFamily: 'Merienda-Bold' }
+                    ]}
+                  >
+                    :30
+                  </ThemedText>
+                </ThemedText>
+                <ThemedText 
+                  variant="caption" 
+                  style={styles.brushingTimeText}
+                >
+                  minutes
+                </ThemedText>
+              </View>
+            }
+            maxValue=""
+            progress={0}
+            progressLabels={[]}
+            containerStyle={styles.brushingTimeContainer}
+            contentStyle={styles.brushingTimeCardContent}
+            cardStyle={styles.brushingTimeCardStyle}
+            height={74}
+          />
+          
+          {/* Right Side Card (Toothbrush Card) */}
+          <StatCard
+            title=""
+            value={
+              <View style={styles.toothbrushContentContainer}>
+                <Image 
+                  source={require('../../assets/images/toothbrush.png')}
+                  style={styles.toothbrushImage}
+                  resizeMode="contain"
+                />
+              </View>
+            }
+            maxValue=""
+            progress={0}
+            progressLabels={[]}
+            height={165}
+            containerStyle={styles.toothbrushCardContainer}
+            contentStyle={styles.toothbrushCardContent}
+            cardStyle={styles.toothbrushCardStyle}
+          />
+          
           {/* Content for the light container will go here */}
         </LightContainer>
       </View>
@@ -261,7 +432,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     alignItems: 'center',
-    zIndex: 5,
+    zIndex: 5, // Keep this below other elements
   },
   expandedContent: {
     flex: 1,
@@ -269,5 +440,139 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     alignItems: 'flex-start',
     alignSelf: 'center',
+  },
+  brushingsPerDayContainer: {
+    top: -35, // Position from top of the Light Container
+    left: 20,
+    zIndex: 30, // Ensure it stays above other elements
+  },
+  brushingTimeContainer: {
+    top: 55, 
+    left: 20,
+    zIndex: 30, // Ensure it stays above other elements
+  },
+  toothbrushCardContainer: {
+    top: -35, // Match the top position of the first card
+    right: 20, // Positioned on the right side
+    zIndex: 30, // Ensure it stays above other elements
+  },
+  toothbrushCardContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    height: '100%',
+  },
+  toothbrushCardStyle: {
+    padding: 2,
+  },
+  streakValueContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    paddingHorizontal: 8,
+    height: '100%',
+    paddingLeft: 0,
+  },
+  streakValue: {
+    fontSize: 34,
+    fontWeight: '700',
+    marginLeft: 2,
+    marginRight: 2,
+    color: Colors.primary[800],
+  },
+  streakText: {
+    fontSize: 14,
+    fontFamily: 'Quicksand-Medium',
+    opacity: 0.8,
+    alignSelf: 'center',
+    paddingTop: 4,
+    color: Colors.primary[800],
+  },
+  streakCardContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    paddingTop: 2,
+  },
+  flameContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 2,
+    marginLeft: -2,
+  },
+  flameIcon: {
+    marginBottom: 8,
+    color: Colors.primary[200],
+  },
+  brushingTimeValueContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    paddingHorizontal: 8,
+    height: '100%',
+    paddingLeft: 0,
+  },
+  brushingTimeDonutContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 2,
+    marginLeft: -2,
+  },
+  brushingTimeDonut: {
+    marginBottom: 8,
+  },
+  brushingTimeValue: {
+    fontSize: 34,
+    fontWeight: '700',
+    marginLeft: 2,
+    marginRight: 2,
+    color: Colors.primary[800],
+  },
+  brushingTimeSeconds: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: Colors.primary[800],
+    opacity: 0.9,
+  },
+  brushingTimeText: {
+    fontSize: 14,
+    fontFamily: 'Quicksand-Medium',
+    opacity: 0.8,
+    alignSelf: 'center',
+    paddingTop: 4,
+    color: Colors.primary[800],
+  },
+  brushingTimeCardStyle: {
+    padding: 0,
+  },
+  brushingTimeCardContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    marginTop: -6, // Move content 8px above
+  },
+  toothbrushContentContainer: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    position: 'relative',
+  },
+  toothbrushImage: {
+    width: Dimensions.get('window').width * 0.32,
+    height: 150,
+    position: 'absolute',
+    right: -25,
+    top: '50%',
+    transform: [
+      { translateY: -75 },
+      { scale: 1.1 }
+    ],
   },
 }); 
