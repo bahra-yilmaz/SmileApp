@@ -27,6 +27,7 @@ export const resources = {
       toothbrush: {
         days: 'days',
         used: 'used',
+        message: 'Replace soon',
       },
     },
   },
@@ -52,6 +53,7 @@ export const resources = {
       toothbrush: {
         days: 'gün',
         used: 'kullanıldı',
+        message: 'Yakında değiştir',
       },
     },
   },

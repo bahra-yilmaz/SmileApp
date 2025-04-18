@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ViewProps, StyleProp, ViewStyle } from 'react-native';
+import { View, StyleSheet, ViewProps, StyleProp, ViewStyle, DimensionValue } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useTheme } from '../ThemeProvider';
 
@@ -36,9 +36,9 @@ export interface GlassmorphicCardProps extends ViewProps {
   variant?: 'default' | 'input';
   
   /**
-   * Optional width override
+   * Optional width override (number for exact width or string for percentages)
    */
-  width?: number;
+  width?: DimensionValue;
 }
 
 /**
