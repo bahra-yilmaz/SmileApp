@@ -198,7 +198,7 @@ export default function HomeScreen() {
       {/* Bottom left mascot */}
       <View style={styles.bottomLeftMascot}>
         <Image 
-          source={require('../../assets/mascot/nubo-seating-1.png')}
+          source={require('../../assets/mascot/nubo-bag-1.png')}
           style={styles.mascotImage}
           resizeMode="contain"
         />
