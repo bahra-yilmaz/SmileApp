@@ -3,16 +3,16 @@ import { View, StyleSheet, Pressable, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Colors } from '../../constants/Colors';
-import { useRouter } from 'expo-router';
 
 interface ChatButtonProps {
   hasUnreadMessages?: boolean;
+  onPress: () => void; // New prop for handling the press event
 }
 
 export const ChatButton: React.FC<ChatButtonProps> = ({
   hasUnreadMessages = true,
+  onPress,
 }) => {
-  const router = useRouter();
   const insets = useSafeAreaInsets();
   
   // Animation for badge pulsing
@@ -41,15 +41,10 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
       badgePulse.stopAnimation();
     };
   }, [hasUnreadMessages]);
-  
-  // Navigate to chat screen
-  const navigateToChat = () => {
-    router.push('/chat');
-  };
 
   return (
     <Pressable
-      onPress={navigateToChat}
+      onPress={onPress}
       style={({ pressed }) => [
         styles.chatButton,
         {

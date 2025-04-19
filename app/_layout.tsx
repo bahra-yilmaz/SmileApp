@@ -6,6 +6,7 @@ import { ThemeProvider } from '../components/ThemeProvider';
 import { View, StyleSheet, Image, Dimensions } from 'react-native';
 import { preventAutoHideAsync, hideAsync } from 'expo-splash-screen';
 import SplashScreen from '../components/SplashScreen';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // Get dimensions for background
 const { width, height } = Dimensions.get('window');
@@ -51,7 +52,7 @@ export default function RootLayout() {
   };
 
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       {/* Global background image that stays persistent during navigation */}
       <Image 
         source={require('../assets/images/meshgradient-light-default.png')}
@@ -65,7 +66,7 @@ export default function RootLayout() {
         {/* Show custom splash screen until fonts are loaded, then trigger fade out */}
         {(showSplash || !appReady) && <SplashScreen onFinish={handleSplashFinish} />}
       </ThemeProvider>
-    </View>
+    </GestureHandlerRootView>
   );
 }
 
