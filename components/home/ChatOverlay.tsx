@@ -74,27 +74,8 @@ export const ChatOverlay: React.FC<ChatOverlayProps> = ({ isVisible, onClose }) 
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   
-  // Fixed to ensure scrolling really works
-  const addTestMessages = () => {
-    // Add some test messages to ensure we have enough content to test scrolling
-    const newMessages = [...DEFAULT_MESSAGES];
-    
-    // Add 20 test messages
-    for (let i = 0; i < 20; i++) {
-      newMessages.push({
-        id: `test-${i}`,
-        text: `This is test message ${i + 1} to ensure scrolling works properly.`,
-        timestamp: "Earlier",
-        fromUser: i % 2 === 0, // alternate between user and system
-      });
-    }
-    
-    return newMessages;
-  };
-  
   // Start with more messages to test scrolling
-  const [messages, setMessages] = useState<Message[]>(addTestMessages());
-  const [inputText, setInputText] = useState('');
+  const [messages] = useState<Message[]>(DEFAULT_MESSAGES);
   
   // State to track if animation is completed
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -259,47 +240,6 @@ export const ChatOverlay: React.FC<ChatOverlayProps> = ({ isVisible, onClose }) 
   const handleClose = () => {
     // Always close completely when clicked outside
     onClose();
-  };
-
-  const sendMessage = () => {
-    if (inputText.trim() === '') return;
-    
-    const newMessage: Message = {
-      id: `user-${Date.now()}`,
-      text: inputText,
-      timestamp: 'Just now',
-      fromUser: true,
-    };
-    
-    setMessages(prev => [...prev, newMessage]);
-    setInputText('');
-    
-    // Smoother scroll animation after sending
-    setTimeout(() => {
-      if (flatListRef.current) {
-        flatListRef.current.scrollToEnd({ animated: true });
-      }
-    }, 100);
-    
-    // Simulate response after a delay
-    setTimeout(() => {
-      const responseMessage: Message = {
-        id: `response-${Date.now()}`,
-        text: "Thanks for reaching out! Our team is reviewing your message and will help you continue your smile journey.",
-        timestamp: 'Just now',
-        fromUser: false,
-      };
-      setMessages(prev => [...prev, responseMessage]);
-      
-      // Smoother scroll animation with proper cleanup
-      const scrollTimeout = setTimeout(() => {
-        if (flatListRef.current) {
-          flatListRef.current.scrollToEnd({ animated: true });
-        }
-      }, 100);
-      
-      return () => clearTimeout(scrollTimeout);
-    }, 1500);
   };
 
   const renderMessage = ({ item }: { item: Message }) => (
@@ -536,79 +476,15 @@ export const ChatOverlay: React.FC<ChatOverlayProps> = ({ isVisible, onClose }) 
                 </View>
                 
                 {/* Scrollable content area */}
-                <FlatList
-                  ref={flatListRef}
-                  data={messages}
-                  renderItem={renderMessage}
-                  keyExtractor={item => item.id}
-                  style={{ flex: 1 }}
-                  contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 24 }}
-                  initialNumToRender={10}
-                  showsVerticalScrollIndicator={true}
-                  scrollEventThrottle={16}
-                  decelerationRate="normal"
-                  onEndReachedThreshold={0.1}
-                  maintainVisibleContentPosition={{
-                    minIndexForVisible: 0,
-                    autoscrollToTopThreshold: 10
-                  }}
-                />
-                
-                {/* Input area - redesigned to look like stat cards */}
-                <View style={styles.inputAreaContainer}>
-                  <View style={styles.inputContainerWrapper}>
-                    <View style={styles.inputShadow}>
-                      <View style={[
-                        styles.inputContainer,
-                        { 
-                          backgroundColor: theme.colorScheme === 'dark' 
-                            ? 'rgba(42, 45, 60, 0.9)' 
-                            : 'rgba(255, 255, 255, 0.7)'
-                        }
-                      ]}>
-                        <BlurView
-                          intensity={15}
-                          tint={theme.colorScheme}
-                          style={StyleSheet.absoluteFill}
-                        />
-                        <TextInput
-                          style={[
-                            styles.input,
-                            { 
-                              color: activeColors.text,
-                              maxHeight: 100
-                            }
-                          ]}
-                          placeholder="Message the Smile Team..."
-                          placeholderTextColor={activeColors.textSecondary}
-                          value={inputText}
-                          onChangeText={setInputText}
-                          multiline
-                        />
-                        <Pressable
-                          onPress={sendMessage}
-                          style={({ pressed }) => [
-                            styles.sendButton,
-                            {
-                              backgroundColor: inputText.trim() === '' ? 
-                                (theme.colorScheme === 'dark' ? 'rgba(86, 88, 105, 1)' : 'rgba(236, 236, 241, 1)') : 
-                                Colors.primary[500],
-                              opacity: pressed ? 0.8 : 1
-                            }
-                          ]}
-                          disabled={inputText.trim() === ''}
-                        >
-                          <Ionicons 
-                            name="send" 
-                            size={18} 
-                            color={inputText.trim() === '' ? 
-                              (theme.colorScheme === 'dark' ? '#999' : '#999') : 
-                              '#fff'} 
-                          />
-                        </Pressable>
-                      </View>
-                    </View>
-                  </View>
+                <View style={styles.messagesList}>
+                  <FlatList
+                    ref={flatListRef}
+                    data={messages}
+                    renderItem={renderMessage}
+                    keyExtractor={(item) => item.id}
+                    contentContainerStyle={styles.messagesListContent}
+                    showsVerticalScrollIndicator={false}
+                  />
                 </View>
               </View>
             </Animated.View>
@@ -898,55 +774,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
     alignSelf: 'flex-end',
-  },
-  inputAreaContainer: {
-    padding: 16,
-    paddingTop: 0,
-  },
-  inputContainerWrapper: {
-    width: '100%',
-  },
-  inputShadow: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 5,
-    elevation: 6,
-    borderRadius: 20,
-    backgroundColor: 'transparent',
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Default light theme
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderWidth: 0,
-    overflow: 'hidden',
-    // Glassmorphic effect - blur effect will be applied via BlurView component
-  },
-  input: {
-    flex: 1,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    fontSize: 16,
-    maxHeight: 120,
-    lineHeight: 24,
-    backgroundColor: 'transparent',
-  },
-  sendButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 8,
-    marginBottom: 4,
   },
   previewContainer: {
     flex: 1,

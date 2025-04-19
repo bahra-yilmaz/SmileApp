@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, Image, Text, Platform, TouchableOpacity, Pressable } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import HeaderLogo from '../../components/ui/HeaderLogo';
 import LightContainer from '../../components/ui/LightContainer';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import { useRandomMascot } from '../../utils/mascotUtils';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 
 // Import home components using barrel imports
 import {
@@ -15,12 +18,15 @@ import {
   BrushingTimeCard,
   ToothbrushCard,
   CalendarView,
-  ChatOverlay
+  ChatOverlay,
+  MenuOverlay,
+  TimerOverlay
 } from '../../components/home';
 
 export default function HomeScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   
   // Get screen dimensions
   const { height: screenHeight } = Dimensions.get('window');
@@ -35,6 +41,12 @@ export default function HomeScreen() {
   
   // State for chat overlay visibility
   const [isChatVisible, setIsChatVisible] = useState(false);
+  
+  // State for menu overlay visibility
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  
+  // State for timer overlay visibility
+  const [isTimerVisible, setIsTimerVisible] = useState(false);
   
   // Get a random mascot and its positioning
   const { variant: randomMascotVariant, position: mascotPosition } = useRandomMascot();
@@ -52,11 +64,45 @@ export default function HomeScreen() {
     setIsChatVisible(!isChatVisible);
   };
   
+  // Handle floating action button press
+  const handleActionButtonPress = () => {
+    // Show timer overlay
+    setIsTimerVisible(true);
+  };
+  
+  // Handle user profile press
+  const handleUserProfilePress = () => {
+    router.push('/settings');
+  };
+  
+  // Handle menu button press
+  const handleMenuPress = () => {
+    setIsMenuVisible(true);
+  };
+  
   return (
     <View style={styles.container}>
       <View style={styles.mainContainer}>
         {/* Smile Header in safe area */}
         <SafeAreaView style={styles.headerContainer}>
+          <Pressable
+            onPress={handleMenuPress}
+            style={({ pressed }) => [
+              styles.menuButton,
+              {
+                top: insets.top + 13,
+                transform: [{ scale: pressed ? 0.95 : 1 }]
+              }
+            ]}
+          >
+            <View style={styles.menuIconContainer}>
+              <MaterialCommunityIcons 
+                name="menu" 
+                size={32} 
+                color="white" 
+              />
+            </View>
+          </Pressable>
           <HeaderLogo />
           <ChatButton 
             hasUnreadMessages={hasUnreadMessages}
@@ -121,6 +167,50 @@ export default function HomeScreen() {
           isVisible={isChatVisible}
           onClose={() => setIsChatVisible(false)}
         />
+        
+        {/* Menu Overlay */}
+        <MenuOverlay
+          isVisible={isMenuVisible}
+          onClose={() => setIsMenuVisible(false)}
+        />
+        
+        {/* Timer Overlay */}
+        <TimerOverlay
+          isVisible={isTimerVisible}
+          onClose={() => setIsTimerVisible(false)}
+        />
+        
+        {/* Floating Action Button */}
+        <TouchableOpacity 
+          style={styles.floatingActionButton}
+          onPress={handleActionButtonPress}
+          activeOpacity={0.8}
+        >
+          <LinearGradient
+            colors={[theme.colors.primary[500], theme.colors.primary[600]]}
+            style={styles.gradientButton}
+          >
+            <MaterialCommunityIcons name="tooth" size={36} color="white" />
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
+      
+      {/* Bottom left mascot */}
+      <View style={styles.bottomLeftMascot}>
+        <Image 
+          source={require('../../assets/mascot/nubo-seating-1.png')}
+          style={styles.mascotImage}
+          resizeMode="contain"
+        />
+      </View>
+
+      {/* Bottom mountain image */}
+      <View style={styles.bottomFixedContainer}>
+        <Image 
+          source={require('../../assets/images/mountain-1.png')} 
+          style={{width: '100%', height: '100%'}}
+          resizeMode="cover"
+        />
       </View>
     </View>
   );
@@ -140,8 +230,9 @@ const styles = StyleSheet.create({
     top: 0,
     zIndex: 10,
     flexDirection: 'row',
-    justifyContent: 'center', // Center the logo
+    justifyContent: 'space-between', // Changed to space-between
     alignItems: 'center',
+    paddingHorizontal: 16, // Add horizontal padding
   },
   mascotContainer: {
     position: 'absolute',
@@ -159,4 +250,60 @@ const styles = StyleSheet.create({
   spacer: {
     height: 100, // Reduced spacer height to bring calendar higher
   },
-}); 
+  bottomFixedContainer: {
+    position: 'absolute',
+    bottom: 0, // Reduced from 20px to 10px to move the image lower
+    left: 0,
+    right: 0,
+    height: 280, // Increased height to show more of the top
+    zIndex: 999, // Lowered z-index to allow floating button to be above
+  },
+  floatingActionButton: {
+    position: 'absolute',
+    bottom: 45,
+    left: '50%',
+    marginLeft: -35, // Half of width to center properly
+    width: 70, // Slightly smaller
+    height: 70, // Slightly smaller
+    borderRadius: 35, // Half of width/height
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  gradientButton: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 35, // Half of width/height
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  bottomLeftMascot: {
+    position: 'absolute',
+    bottom: 55,
+    left: 20,
+    width: 80,
+    height: 80,
+    zIndex: 1001, // Higher than floating button (1000) to be at the very front
+  },
+  mascotImage: {
+    width: '100%',
+    height: '100%',
+  },
+  menuButton: {
+    position: 'absolute',
+    left: 20,
+    zIndex: 15,
+  },
+  menuIconContainer: {
+    width: 42,
+    height: 42,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+});

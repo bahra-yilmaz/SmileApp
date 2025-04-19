@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, ActivityIndicator } from 'react-native';
 import { useTheme } from '../ThemeProvider';
-import { format, startOfWeek, addDays, isSameDay, subWeeks } from 'date-fns';
+import { format, startOfWeek, addDays, isSameDay, subWeeks, parse } from 'date-fns';
 import { BlurView } from 'expo-blur';
 
 // Import the track color from DonutChart
@@ -45,63 +45,70 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   const { width: screenWidth } = Dimensions.get('window');
   const flatListRef = useRef<FlatList>(null);
   
-  // State to track visible weeks and if we've scrolled
+  // State to track visible weeks and if we're ready to display
   const [weeks, setWeeks] = useState<WeekData[]>([]);
-  const [hasInitiallyScrolled, setHasInitiallyScrolled] = useState(false);
-  const [isDataReady, setIsDataReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   // Calculate the width of one week view
   const weekWidth = screenWidth - 40;
+  const dayWidth = weekWidth / 7;
   
-  // Pre-generate a stable set of weeks
-  const generateStaticWeeks = useMemo(() => {
+  // Generate weeks data
+  const generateWeeks = () => {
+    // Fix the date at initialization time to prevent rerendering issues
     const today = new Date();
+    const formattedToday = format(today, 'yyyy-MM-dd');
+    const fixedToday = parse(formattedToday, 'yyyy-MM-dd', new Date());
+    
     const weeksData: WeekData[] = [];
     
-    // Generate 12 weeks - current week and 11 past weeks
-    for (let i = 11; i >= 0; i--) {
-      const weekStart = startOfWeek(subWeeks(today, i), { weekStartsOn: 0 });
-      const weekDates = Array.from({ length: 7 }, (_, dayIndex) => 
-        addDays(weekStart, dayIndex)
-      );
+    // Only generate 5 weeks - current week and 4 past weeks
+    for (let i = 4; i >= 0; i--) {
+      const weekStart = startOfWeek(subWeeks(fixedToday, i), { weekStartsOn: 0 });
+      const formattedWeekStart = format(weekStart, 'yyyy-MM-dd');
+      
+      // Create dates array with consistent formatting
+      const weekDates = Array.from({ length: 7 }, (_, dayIndex) => {
+        const date = addDays(weekStart, dayIndex);
+        const formattedDate = format(date, 'yyyy-MM-dd');
+        return parse(formattedDate, 'yyyy-MM-dd', new Date());
+      });
       
       weeksData.push({
-        id: format(weekStart, 'yyyy-MM-dd'),
-        dates: weekDates
+        id: formattedWeekStart,
+        dates: weekDates,
       });
     }
     
     return weeksData;
-  }, []);
+  };
   
-  // Initialize calendar with static weeks
+  // Initialize calendar with weeks
   useEffect(() => {
-    // Set the pre-generated weeks
-    setWeeks(generateStaticWeeks);
-    setIsDataReady(true);
-  }, [generateStaticWeeks]);
-  
-  // Scroll to current week once data is ready
-  useEffect(() => {
-    if (isDataReady && !hasInitiallyScrolled && flatListRef.current) {
-      // Need a delay to ensure the FlatList has rendered
-      const scrollTimer = setTimeout(() => {
-        if (flatListRef.current) {
-          // Scroll to the last item (current week)
-          flatListRef.current.scrollToOffset({
-            offset: (weeks.length - 1) * weekWidth,
-            animated: false
-          });
-          setHasInitiallyScrolled(true);
+    // Generate weeks
+    const weeksData = generateWeeks();
+    setWeeks(weeksData);
+    
+    // Force display after a short time even if scrolling fails
+    const safetyTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    
+    // Simple timeout to let FlatList render before trying to scroll
+    setTimeout(() => {
+      if (flatListRef.current) {
+        // Scroll to the last item (current week)
+        try {
+          flatListRef.current.scrollToEnd({ animated: false });
+        } catch (e) {
+          console.log('Error scrolling to end:', e);
         }
-      }, 500);
-      
-      return () => clearTimeout(scrollTimer);
-    }
-  }, [isDataReady, hasInitiallyScrolled, weeks.length, weekWidth]);
-  
-  // Calculate item width based on screen width to fit all 7 days
-  const dayWidth = weekWidth / 7;
+      }
+      setIsLoading(false);
+    }, 300);
+    
+    return () => clearTimeout(safetyTimer);
+  }, []);
   
   // Render activity dots based on number of times brushed
   const renderActivityDots = (date: Date) => {
@@ -136,73 +143,76 @@ const CalendarView: React.FC<CalendarViewProps> = ({
     );
   };
   
-  // Render each calendar day (memoized for performance)
-  const renderDay = useMemo(() => {
-    return (date: Date) => {
-      const dayName = format(date, 'EEE').substring(0, 3);
-      const dayNumber = format(date, 'd');
-      const isSelected = isSameDay(selectedDate, date);
-      
-      return (
-        <View style={[styles.dayContainer, { width: dayWidth }]}>
-          {isSelected ? (
-            <BlurView 
-              intensity={80}
-              tint={theme.colorScheme === 'dark' ? 'dark' : 'light'}
-              style={[
-                styles.selectedDay,
-                { borderColor: theme.activeColors.border }
-              ]}
-            >
-              <Text style={[styles.dayName, { color: theme.activeColors.text }]}>
-                {dayName}
-              </Text>
-              <Text style={[styles.dayNumber, { 
-                color: theme.activeColors.text,
-                fontFamily: theme.typography.fonts.displayBold
-              }]}>
-                {dayNumber}
-              </Text>
-              {renderActivityDots(date)}
-            </BlurView>
-          ) : (
-            <View style={styles.day}>
-              <Text style={[styles.dayName, { color: theme.activeColors.textSecondary }]}>
-                {dayName}
-              </Text>
-              <Text style={[styles.dayNumber, { 
-                color: theme.activeColors.text,
-                fontFamily: theme.typography.fonts.displayBold
-              }]}>
-                {dayNumber}
-              </Text>
-              {renderActivityDots(date)}
-            </View>
-          )}
-        </View>
-      );
-    };
-  }, [dayWidth, renderActivityDots, selectedDate, theme]);
+  // Day renderer component for better performance
+  const DayComponent = React.memo(({ date }: { date: Date }) => {
+    const dayName = format(date, 'EEE').substring(0, 3);
+    const dayNumber = format(date, 'd');
+    const isSelected = isSameDay(selectedDate, date);
+    
+    return (
+      <View style={[styles.dayContainer, { width: dayWidth }]}>
+        {isSelected ? (
+          <BlurView 
+            intensity={80}
+            tint={theme.colorScheme === 'dark' ? 'dark' : 'light'}
+            style={[
+              styles.selectedDay,
+              { borderColor: theme.activeColors.border }
+            ]}
+          >
+            <Text style={[styles.dayName, { color: theme.activeColors.text }]}>
+              {dayName}
+            </Text>
+            <Text style={[styles.dayNumber, { 
+              color: theme.activeColors.text,
+              fontFamily: theme.typography.fonts.displayBold
+            }]}>
+              {dayNumber}
+            </Text>
+            {renderActivityDots(date)}
+          </BlurView>
+        ) : (
+          <View style={styles.day}>
+            <Text style={[styles.dayName, { color: theme.activeColors.textSecondary }]}>
+              {dayName}
+            </Text>
+            <Text style={[styles.dayNumber, { 
+              color: theme.activeColors.text,
+              fontFamily: theme.typography.fonts.displayBold
+            }]}>
+              {dayNumber}
+            </Text>
+            {renderActivityDots(date)}
+          </View>
+        )}
+      </View>
+    );
+  });
 
-  // Highly optimized week component to prevent unnecessary re-renders
-  const WeekItem = React.memo(({ item }: { item: WeekData }) => {
+  // Week component with its own memo
+  const WeekComponent = React.memo(({ item }: { item: WeekData }) => {
     return (
       <View style={[styles.weekContainer, { width: weekWidth }]}>
         {item.dates.map((date) => (
-          <View key={format(date, 'yyyy-MM-dd')} style={{ width: dayWidth }}>
-            {renderDay(date)}
-          </View>
+          <DayComponent 
+            key={format(date, 'yyyy-MM-dd')} 
+            date={date} 
+          />
         ))}
       </View>
     );
   }, (prevProps, nextProps) => {
-    // Custom comparison function - only re-render if the week ID changes
+    // Only re-render if the week ID changes
     return prevProps.item.id === nextProps.item.id;
   });
 
-  // If no weeks yet, show empty view until data loads
-  if (!isDataReady) {
-    return <View style={styles.container} />;
+  // Show loading indicator while initializing
+  if (isLoading) {
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <ActivityIndicator size="small" color={theme.activeColors.tint} />
+      </View>
+    );
   }
 
   return (
@@ -210,14 +220,13 @@ const CalendarView: React.FC<CalendarViewProps> = ({
       <FlatList
         ref={flatListRef}
         data={weeks}
-        renderItem={({ item }) => <WeekItem item={item} />}
+        renderItem={({ item }) => <WeekComponent item={item} />}
         keyExtractor={(item) => item.id}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        initialNumToRender={weeks.length} // Render all items initially 
-        maxToRenderPerBatch={3}
-        windowSize={7}
+        initialNumToRender={weeks.length}
+        windowSize={5}
         getItemLayout={(data, index) => ({
           length: weekWidth,
           offset: weekWidth * index,
@@ -227,11 +236,15 @@ const CalendarView: React.FC<CalendarViewProps> = ({
         snapToAlignment="start"
         decelerationRate="fast"
         scrollEventThrottle={16}
-        maintainVisibleContentPosition={{
-          minIndexForVisible: 0,
-          autoscrollToTopThreshold: 10,
-        }}
         removeClippedSubviews={false}
+        initialScrollIndex={weeks.length - 1}
+        onScrollToIndexFailed={() => {
+          setTimeout(() => {
+            if (flatListRef.current) {
+              flatListRef.current.scrollToEnd({ animated: false });
+            }
+          }, 200);
+        }}
       />
     </View>
   );
@@ -242,6 +255,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
     marginVertical: 25,
     overflow: 'hidden',
+    minHeight: 110, // Minimum height to prevent layout shift
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   weekContainer: {
     flexDirection: 'row',
@@ -249,7 +267,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   dayContainer: {
-    height: 90, // Increased height to accommodate activity dots
+    height: 90,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -4,4 +4,6 @@ export { default as StreakCard } from './StreakCard';
 export { default as BrushingTimeCard } from './BrushingTimeCard';
 export { default as ToothbrushCard } from './ToothbrushCard';
 export { default as CalendarView } from './CalendarView';
-export { default as ChatOverlay } from './ChatOverlay'; 
+export { default as ChatOverlay } from './ChatOverlay';
+export { default as MenuOverlay } from './MenuOverlay';
+export { default as TimerOverlay } from './TimerOverlay'; 
