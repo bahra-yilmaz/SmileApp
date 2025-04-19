@@ -393,7 +393,7 @@ const TimerCircle: React.FC<TimerCircleProps> = ({
             activeOpacity={0.9}
           >
             <View style={styles.contentContainer}>
-              <View style={styles.buttonsContainer}>
+              <View style={styles.buttonIconContainer}>
                 <MaterialCommunityIcons 
                   name={isRunning ? "refresh" : "play"} 
                   size={28} 
@@ -426,7 +426,7 @@ const TimerCircle: React.FC<TimerCircleProps> = ({
             activeOpacity={0.9}
           >
             <View style={styles.contentContainer}>
-              <View style={styles.buttonsContainer}>
+              <View style={styles.buttonIconContainer}>
                 <MaterialCommunityIcons 
                   name={isRunning ? "check" : "plus"} 
                   size={28} 
@@ -566,10 +566,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },  
+  buttonIconContainer: {
+    marginRight: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   buttonText: {
     fontSize: 18,
     textAlign: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: 2,
   },
 });
 
