@@ -1,15 +1,14 @@
 import React from 'react';
-import OnboardingScreen from '../../components/onboarding/OnboardingScreen';
+import AgeSelectionScreen from '../../components/onboarding/AgeSelectionScreen';
 
-export default function OnboardingFeatures() {
+export default function OnboardingAgeSelection() {
   return (
-    <OnboardingScreen
-      title="Powerful Features"
-      description="Track your mood, set goals, practice mindfulness, and create healthy habits with our easy-to-use tools."
-      imageSource={require('../../assets/images/splash-screen.png')}
+    <AgeSelectionScreen
+      title="What is your age?"
+      description="This helps us filter out workouts for you"
       nextScreenPath="/onboarding/personalize"
-      index={1}
-      totalScreens={3}
+      index={0}
+      totalScreens={4}
     />
   );
 }

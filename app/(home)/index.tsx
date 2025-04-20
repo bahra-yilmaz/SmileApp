@@ -9,6 +9,8 @@ import { useRandomMascot } from '../../utils/mascotUtils';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import { BlurView } from 'expo-blur';
+import { Colors } from '../../constants/Colors';
 
 // Import home components using barrel imports
 import {
@@ -195,8 +197,16 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
       
-      {/* Bottom left mascot */}
+      {/* Bottom left mascot with card above it */}
       <View style={styles.bottomLeftMascot}>
+        {/* Card above mascot */}
+        <View style={styles.mascotCard}>
+          <BlurView intensity={70} tint="light" style={styles.cardBlur}>
+            <View style={styles.progressBar}>
+              <View style={[styles.progressFill, { width: '70%' }]} />
+            </View>
+          </BlurView>
+        </View>
         <Image 
           source={require('../../assets/mascot/nubo-bag-1.png')}
           style={styles.mascotImage}
@@ -284,11 +294,16 @@ const styles = StyleSheet.create({
   },
   bottomLeftMascot: {
     position: 'absolute',
-    bottom: 55,
+    bottom: 95,
     left: 20,
-    width: 80,
-    height: 80,
-    zIndex: 1001, // Higher than floating button (1000) to be at the very front
+    width: 100,
+    height: 100,
+    zIndex: 1001,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 10,
   },
   mascotImage: {
     width: '100%',
@@ -305,5 +320,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
+  },
+  mascotCard: {
+    position: 'absolute',
+    top: -35,
+    left: 0,
+    width: 100,
+    borderRadius: 12,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 5,
+    zIndex: 1002,
+  },
+  cardBlur: {
+    padding: 8,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  progressBar: {
+    height: 8,
+    width: '100%',
+    backgroundColor: 'rgba(200, 200, 220, 0.3)',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: Colors.primary[500],
   },
 });

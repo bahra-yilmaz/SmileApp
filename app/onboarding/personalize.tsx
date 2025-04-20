@@ -1,16 +1,15 @@
 import React from 'react';
-import OnboardingScreen from '../../components/onboarding/OnboardingScreen';
+import BrushingGoalScreen from '../../components/onboarding/BrushingGoalScreen';
 
-export default function OnboardingPersonalize() {
+export default function OnboardingBrushingGoal() {
   return (
-    <OnboardingScreen
-      title="Made For You"
-      description="Your app experience adapts to your needs. Customize colors, themes, and notifications to make Smile uniquely yours."
-      imageSource={require('../../assets/images/splash-screen.png')}
-      nextScreenPath="/(home)"
-      index={2}
-      totalScreens={3}
-      isLastScreen={true}
+    <BrushingGoalScreen
+      title="Set Your Brushing Goal"
+      description="How many times per day do you want to brush your teeth? Dentists recommend at least twice daily."
+      nextScreenPath="/onboarding/toothbrush"
+      index={1}
+      totalScreens={4}
+      isLastScreen={false}
     />
   );
 }

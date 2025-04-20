@@ -11,11 +11,12 @@ const { width, height } = Dimensions.get('window');
 interface OnboardingScreenProps {
   title: string;
   description: string;
-  imageSource: ImageSourcePropType;
+  imageSource?: ImageSourcePropType;
   nextScreenPath: string;
   isLastScreen?: boolean;
   index: number;
   totalScreens: number;
+  hideImage?: boolean;
 }
 
 export default function OnboardingScreen({
@@ -26,6 +27,7 @@ export default function OnboardingScreen({
   isLastScreen = false,
   index,
   totalScreens,
+  hideImage = false,
 }: OnboardingScreenProps) {
   const { theme } = useTheme();
   const router = useRouter();
@@ -77,17 +79,19 @@ export default function OnboardingScreen({
           }
         ]}
       >
-        {/* Image */}
-        <View style={styles.imageContainer}>
-          <Image 
-            source={imageSource}
-            style={styles.image}
-            resizeMode="contain"
-          />
-        </View>
+        {/* Image - conditionally rendered */}
+        {!hideImage && imageSource && (
+          <View style={styles.imageContainer}>
+            <Image 
+              source={imageSource}
+              style={styles.image}
+              resizeMode="contain"
+            />
+          </View>
+        )}
         
         {/* Main Content */}
-        <GlassmorphicCard style={styles.card}>
+        <GlassmorphicCard style={[styles.card, hideImage && styles.cardWithoutImage]}>
           <ThemedText 
             variant="title" 
             style={styles.title}
@@ -170,6 +174,9 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     borderRadius: 24,
+  },
+  cardWithoutImage: {
+    marginTop: 100, // Add more space on top when no image
   },
   title: {
     fontSize: 28,

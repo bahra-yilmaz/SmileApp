@@ -19,6 +19,7 @@ export default function OnboardingLayout() {
           animation: 'none',
           contentStyle: { backgroundColor: 'transparent' },
           presentation: 'card',
+          gestureEnabled: false,
         }}
       >
         <Stack.Screen
@@ -39,9 +40,36 @@ export default function OnboardingLayout() {
             gestureEnabled: false,
           }}
         />
-        <Stack.Screen name="index" />
-        <Stack.Screen name="features" />
-        <Stack.Screen name="personalize" />
+        <Stack.Screen
+          name="index"
+          options={{
+            gestureEnabled: false,
+          }}
+        />
+        <Stack.Screen
+          name="features"
+          options={{
+            gestureEnabled: false,
+          }}
+        />
+        <Stack.Screen
+          name="personalize"
+          options={{
+            gestureEnabled: false,
+          }}
+        />
+        <Stack.Screen
+          name="toothbrush"
+          options={{
+            gestureEnabled: false,
+          }}
+        />
+        <Stack.Screen
+          name="nubo-tone"
+          options={{
+            gestureEnabled: false,
+          }}
+        />
       </Stack>
     </View>
   );
