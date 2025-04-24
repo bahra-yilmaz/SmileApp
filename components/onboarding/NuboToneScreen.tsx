@@ -49,6 +49,7 @@ export default function NuboToneScreen({
   // Load fonts
   const [fontsLoaded] = useFonts({
     'Quicksand-Bold': require('../../assets/fonts/Quicksand-Bold.ttf'),
+    'Quicksand-Medium': require('../../assets/fonts/Quicksand-Medium.ttf'),
     'Merienda-Medium': require('../../assets/fonts/Merienda-Medium.ttf'),
   });
   
@@ -161,7 +162,7 @@ export default function NuboToneScreen({
                 { 
                   fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined,
                   color: option.id === selectedTone 
-                    ? theme.colors.primary[400] 
+                    ? theme.colors.primary[500] 
                     : 'white'
                 }
               ]}>
@@ -170,7 +171,11 @@ export default function NuboToneScreen({
               <ThemedText style={[
                 styles.cardDescription,
                 { 
-                  opacity: option.id === selectedTone ? 1 : 0.7 
+                  fontFamily: fontsLoaded ? 'Quicksand-Medium' : undefined,
+                  opacity: option.id === selectedTone ? 1 : 0.9,
+                  color: option.id === selectedTone 
+                    ? theme.colors.primary[500] 
+                    : 'white'
                 }
               ]}>
                 {option.description}

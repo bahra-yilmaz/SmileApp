@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, Pressable } from 'react-native';
 import StatCard from '../ui/StatCard';
 import ThemedText from '../ThemedText';
 import DonutChart from '../ui/DonutChart';
@@ -10,6 +10,7 @@ interface BrushingTimeCardProps {
   seconds: number;
   targetMinutes?: number;
   fontFamily?: string;
+  onPress?: () => void;
 }
 
 const BrushingTimeCard: React.FC<BrushingTimeCardProps> = ({
@@ -17,62 +18,81 @@ const BrushingTimeCard: React.FC<BrushingTimeCardProps> = ({
   seconds,
   targetMinutes = 3,
   fontFamily,
+  onPress,
 }) => {
   // Calculate progress as a percentage
   const progress = ((minutes + seconds / 60) / targetMinutes) * 100;
   
   return (
-    <StatCard
-      title=""
-      value={
-        <View style={styles.brushingTimeValueContainer}>
-          <View style={styles.brushingTimeDonutContainer}>
-            <DonutChart
-              progress={progress}
-              size={38}
-              thickness={6}
-              progressColor={Colors.primary[200]}
-              style={styles.brushingTimeDonut}
-            />
-          </View>
-          <ThemedText 
-            variant="title" 
-            style={[
-              styles.brushingTimeValue,
-              fontFamily && { fontFamily }
-            ]}
-          >
-            {minutes}
-            <ThemedText
+    <Pressable 
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.pressableContainer,
+        pressed && styles.pressed
+      ]}
+    >
+      <StatCard
+        title=""
+        value={
+          <View style={styles.brushingTimeValueContainer}>
+            <View style={styles.brushingTimeDonutContainer}>
+              <DonutChart
+                progress={progress}
+                size={38}
+                thickness={6}
+                progressColor={Colors.primary[200]}
+                style={styles.brushingTimeDonut}
+              />
+            </View>
+            <ThemedText 
+              variant="title" 
               style={[
-                styles.brushingTimeSeconds,
+                styles.brushingTimeValue,
                 fontFamily && { fontFamily }
               ]}
             >
-              :{seconds < 10 ? `0${seconds}` : seconds}
+              {minutes}
+              <ThemedText
+                style={[
+                  styles.brushingTimeSeconds,
+                  fontFamily && { fontFamily }
+                ]}
+              >
+                :{seconds < 10 ? `0${seconds}` : seconds}
+              </ThemedText>
             </ThemedText>
-          </ThemedText>
-          <ThemedText 
-            variant="caption" 
-            style={styles.brushingTimeText}
-          >
-            minutes
-          </ThemedText>
-        </View>
-      }
-      maxValue=""
-      progress={0}
-      progressLabels={[]}
-      containerStyle={styles.fixedBrushingTimeContainer}
-      contentStyle={styles.brushingTimeCardContent}
-      cardStyle={styles.brushingTimeCardStyle}
-      height={74}
-      width={Dimensions.get('window').width * 0.42}
-    />
+            <ThemedText 
+              variant="caption" 
+              style={styles.brushingTimeText}
+            >
+              minutes
+            </ThemedText>
+          </View>
+        }
+        maxValue=""
+        progress={0}
+        progressLabels={[]}
+        containerStyle={styles.fixedBrushingTimeContainer}
+        contentStyle={styles.brushingTimeCardContent}
+        cardStyle={styles.brushingTimeCardStyle}
+        height={74}
+        width={Dimensions.get('window').width * 0.42}
+      />
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
+  pressableContainer: {
+    position: 'absolute',
+    top: 55,
+    left: 20,
+    zIndex: 30,
+  },
+  pressed: {
+    opacity: 0.9,
+    transform: [{ scale: 0.98 }],
+  },
   brushingTimeValueContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -126,9 +146,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   fixedBrushingTimeContainer: {
-    position: 'absolute',
-    top: 55,
-    left: 20,
+    position: 'relative',
     zIndex: 30,
     width: Dimensions.get('window').width * 0.42,
   },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, Pressable } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import StatCard from '../ui/StatCard';
 import ThemedText from '../ThemedText';
@@ -8,55 +8,75 @@ import { Colors } from '../../constants/Colors';
 interface StreakCardProps {
   streakDays: number;
   fontFamily?: string;
+  onPress?: () => void;
 }
 
 const StreakCard: React.FC<StreakCardProps> = ({
   streakDays,
   fontFamily,
+  onPress,
 }) => {
   return (
-    <StatCard
-      title=""
-      value={
-        <View style={styles.streakValueContainer}>
-          <View style={styles.flameContainer}>
-            <MaterialCommunityIcons 
-              name="fire" 
-              size={42} 
-              color={Colors.primary[500]} 
-              style={styles.flameIcon}
-            />
+    <Pressable 
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.pressableContainer,
+        pressed && styles.pressed
+      ]}
+    >
+      <StatCard
+        title=""
+        value={
+          <View style={styles.streakValueContainer}>
+            <View style={styles.flameContainer}>
+              <MaterialCommunityIcons 
+                name="fire" 
+                size={42} 
+                color={Colors.primary[500]} 
+                style={styles.flameIcon}
+              />
+            </View>
+            <ThemedText 
+              variant="title" 
+              style={[
+                styles.streakValue,
+                fontFamily && { fontFamily }
+              ]}
+            >
+              {streakDays}
+            </ThemedText>
+            <ThemedText 
+              variant="caption" 
+              style={styles.streakText}
+            >
+              days streak
+            </ThemedText>
           </View>
-          <ThemedText 
-            variant="title" 
-            style={[
-              styles.streakValue,
-              fontFamily && { fontFamily }
-            ]}
-          >
-            {streakDays}
-          </ThemedText>
-          <ThemedText 
-            variant="caption" 
-            style={styles.streakText}
-          >
-            days streak
-          </ThemedText>
-        </View>
-      }
-      maxValue=""
-      progress={0}
-      progressLabels={[]}
-      containerStyle={styles.fixedStreakCardContainer}
-      contentStyle={styles.streakCardContent}
-      cardStyle={styles.streakCardStyle}
-      height={74}
-      width={Dimensions.get('window').width * 0.42}
-    />
+        }
+        maxValue=""
+        progress={0}
+        progressLabels={[]}
+        containerStyle={styles.fixedStreakCardContainer}
+        contentStyle={styles.streakCardContent}
+        cardStyle={styles.streakCardStyle}
+        height={74}
+        width={Dimensions.get('window').width * 0.42}
+      />
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
+  pressableContainer: {
+    position: 'absolute',
+    top: -35,
+    left: 20,
+    zIndex: 30,
+  },
+  pressed: {
+    opacity: 0.9,
+    transform: [{ scale: 0.98 }],
+  },
   streakValueContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -101,9 +121,7 @@ const styles = StyleSheet.create({
     color: Colors.primary[200],
   },
   fixedStreakCardContainer: {
-    position: 'absolute',
-    top: -35, // Position from top of the Light Container
-    left: 20,
+    position: 'relative',
     zIndex: 30, // Ensure it stays above other elements
     width: Dimensions.get('window').width * 0.42,
   },

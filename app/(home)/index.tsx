@@ -22,7 +22,10 @@ import {
   CalendarView,
   ChatOverlay,
   MenuOverlay,
-  TimerOverlay
+  TimerOverlay,
+  ToothbrushOverlay,
+  StreakOverlay,
+  BrushingTimeOverlay
 } from '../../components/home';
 
 export default function HomeScreen() {
@@ -49,6 +52,15 @@ export default function HomeScreen() {
   
   // State for timer overlay visibility
   const [isTimerVisible, setIsTimerVisible] = useState(false);
+  
+  // State for toothbrush overlay visibility
+  const [isToothbrushVisible, setIsToothbrushVisible] = useState(false);
+  
+  // State for streak overlay visibility
+  const [isStreakVisible, setIsStreakVisible] = useState(false);
+  
+  // State for brushing time overlay visibility
+  const [isBrushingTimeVisible, setIsBrushingTimeVisible] = useState(false);
   
   // Get a random mascot and its positioning
   const { variant: randomMascotVariant, position: mascotPosition } = useRandomMascot();
@@ -138,6 +150,7 @@ export default function HomeScreen() {
             <StreakCard 
               streakDays={7} 
               fontFamily={fontFamily} 
+              onPress={() => setIsStreakVisible(true)}
             />
             
             {/* Average Brushing Time Card */}
@@ -145,12 +158,14 @@ export default function HomeScreen() {
               minutes={2}
               seconds={30}
               fontFamily={fontFamily}
+              onPress={() => setIsBrushingTimeVisible(true)}
             />
             
             {/* Right Side Card (Toothbrush Card) */}
             <ToothbrushCard 
               daysInUse={45}
               fontFamily={fontFamily}
+              onPress={() => setIsToothbrushVisible(true)}
             />
             
             {/* Add medium spacer */}
@@ -180,6 +195,28 @@ export default function HomeScreen() {
         <TimerOverlay
           isVisible={isTimerVisible}
           onClose={() => setIsTimerVisible(false)}
+        />
+        
+        {/* Toothbrush Overlay */}
+        <ToothbrushOverlay
+          isVisible={isToothbrushVisible}
+          onClose={() => setIsToothbrushVisible(false)}
+          daysInUse={45}
+        />
+        
+        {/* Streak Overlay */}
+        <StreakOverlay
+          isVisible={isStreakVisible}
+          onClose={() => setIsStreakVisible(false)}
+          streakDays={7}
+        />
+        
+        {/* BrushingTime Overlay */}
+        <BrushingTimeOverlay
+          isVisible={isBrushingTimeVisible}
+          onClose={() => setIsBrushingTimeVisible(false)}
+          minutes={2}
+          seconds={30}
         />
         
         {/* Floating Action Button */}

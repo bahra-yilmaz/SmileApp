@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Image } from 'react-native';
+import { View, StyleSheet, Dimensions, Image, Pressable } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import StatCard from '../ui/StatCard';
 import ThemedText from '../ThemedText';
@@ -10,79 +10,97 @@ interface ToothbrushCardProps {
   daysInUse: number;
   replaceSoonText?: string;
   fontFamily?: string;
+  onPress?: () => void;
 }
 
 const ToothbrushCard: React.FC<ToothbrushCardProps> = ({
   daysInUse,
   replaceSoonText = "You should replace soon",
   fontFamily,
+  onPress,
 }) => {
   const { t } = useTranslation();
   
   return (
-    <StatCard
-      title=""
-      value={
-        <View style={styles.toothbrushContentContainer}>
-          {/* Health indicator (heart) and days */}
-          <View style={styles.toothbrushHealthContainer}>
-            <View style={styles.heartContainer}>
-              <MaterialCommunityIcons 
-                name="heart-half-full" 
-                size={48} 
-                color={Colors.primary[200]} 
-              />
-            </View>
-            <View style={styles.daysTextContainer}>
-              <ThemedText 
-                variant="title" 
-                style={[
-                  styles.daysValue,
-                  fontFamily && { fontFamily }
-                ]}
-              >
-                {daysInUse}
-              </ThemedText>
+    <Pressable 
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.pressableContainer,
+        pressed && styles.pressed
+      ]}
+    >
+      <StatCard
+        title=""
+        value={
+          <View style={styles.toothbrushContentContainer}>
+            {/* Health indicator (heart) and days */}
+            <View style={styles.toothbrushHealthContainer}>
+              <View style={styles.heartContainer}>
+                <MaterialCommunityIcons 
+                  name="heart-half-full" 
+                  size={48} 
+                  color={Colors.primary[200]} 
+                />
+              </View>
+              <View style={styles.daysTextContainer}>
+                <ThemedText 
+                  variant="title" 
+                  style={[
+                    styles.daysValue,
+                    fontFamily && { fontFamily }
+                  ]}
+                >
+                  {daysInUse}
+                </ThemedText>
+                <ThemedText 
+                  variant="caption" 
+                  style={styles.daysText}
+                >
+                  {t('toothbrush.days')}
+                </ThemedText>
+              </View>
               <ThemedText 
                 variant="caption" 
-                style={styles.daysText}
+                style={styles.replaceSoonText}
+                numberOfLines={2}
               >
-                {t('toothbrush.days')}
+                {replaceSoonText}
               </ThemedText>
             </View>
-            <ThemedText 
-              variant="caption" 
-              style={styles.replaceSoonText}
-              numberOfLines={2}
-            >
-              {replaceSoonText}
-            </ThemedText>
+            
+            <Image 
+              source={require('../../assets/images/toothbrush.png')}
+              style={styles.toothbrushImage}
+              resizeMode="contain"
+            />
           </View>
-          
-          <Image 
-            source={require('../../assets/images/toothbrush.png')}
-            style={styles.toothbrushImage}
-            resizeMode="contain"
-          />
-        </View>
-      }
-      maxValue=""
-      progress={0}
-      progressLabels={[]}
-      height={165}
-      containerStyle={styles.toothbrushCardContainer}
-      contentStyle={styles.toothbrushCardContent}
-      cardStyle={styles.toothbrushCardStyle}
-    />
+        }
+        maxValue=""
+        progress={0}
+        progressLabels={[]}
+        height={165}
+        containerStyle={styles.toothbrushCardContainer}
+        contentStyle={styles.toothbrushCardContent}
+        cardStyle={styles.toothbrushCardStyle}
+      />
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
-  toothbrushCardContainer: {
+  pressableContainer: {
     position: 'absolute',
-    top: -35, // Match the top position of the first card
-    right: 20, // Positioned on the right side
-    zIndex: 30, // Ensure it stays above other elements
+    top: -35,
+    right: 20,
+    zIndex: 30,
+  },
+  pressed: {
+    opacity: 0.9,
+    transform: [{ scale: 0.98 }],
+  },
+  toothbrushCardContainer: {
+    position: 'relative',
+    zIndex: 30,
   },
   toothbrushCardContent: {
     justifyContent: 'center',
