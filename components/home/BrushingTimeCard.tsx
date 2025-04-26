@@ -31,53 +31,53 @@ const BrushingTimeCard: React.FC<BrushingTimeCardProps> = ({
         pressed && styles.pressed
       ]}
     >
-      <StatCard
-        title=""
-        value={
-          <View style={styles.brushingTimeValueContainer}>
-            <View style={styles.brushingTimeDonutContainer}>
-              <DonutChart
-                progress={progress}
-                size={38}
-                thickness={6}
-                progressColor={Colors.primary[200]}
-                style={styles.brushingTimeDonut}
-              />
-            </View>
-            <ThemedText 
-              variant="title" 
+    <StatCard
+      title=""
+      value={
+        <View style={styles.brushingTimeValueContainer}>
+          <View style={styles.brushingTimeDonutContainer}>
+            <DonutChart
+              progress={progress}
+              size={38}
+              thickness={6}
+              progressColor={Colors.primary[200]}
+              style={styles.brushingTimeDonut}
+            />
+          </View>
+          <ThemedText 
+            variant="title" 
+            style={[
+              styles.brushingTimeValue,
+              fontFamily && { fontFamily }
+            ]}
+          >
+            {minutes}
+            <ThemedText
               style={[
-                styles.brushingTimeValue,
+                styles.brushingTimeSeconds,
                 fontFamily && { fontFamily }
               ]}
             >
-              {minutes}
-              <ThemedText
-                style={[
-                  styles.brushingTimeSeconds,
-                  fontFamily && { fontFamily }
-                ]}
-              >
-                :{seconds < 10 ? `0${seconds}` : seconds}
-              </ThemedText>
+              :{seconds < 10 ? `0${seconds}` : seconds}
             </ThemedText>
-            <ThemedText 
-              variant="caption" 
-              style={styles.brushingTimeText}
-            >
-              minutes
-            </ThemedText>
-          </View>
-        }
-        maxValue=""
-        progress={0}
-        progressLabels={[]}
-        containerStyle={styles.fixedBrushingTimeContainer}
-        contentStyle={styles.brushingTimeCardContent}
-        cardStyle={styles.brushingTimeCardStyle}
-        height={74}
-        width={Dimensions.get('window').width * 0.42}
-      />
+          </ThemedText>
+          <ThemedText 
+            variant="caption" 
+            style={styles.brushingTimeText}
+          >
+            minutes
+          </ThemedText>
+        </View>
+      }
+      maxValue=""
+      progress={0}
+      progressLabels={[]}
+      containerStyle={styles.fixedBrushingTimeContainer}
+      contentStyle={styles.brushingTimeCardContent}
+      cardStyle={styles.brushingTimeCardStyle}
+      height={74}
+      width={Dimensions.get('window').width * 0.42}
+    />
     </Pressable>
   );
 };

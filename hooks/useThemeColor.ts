@@ -47,3 +47,5 @@ export function useTextStyle(
     color: color || theme.activeColors.text,
   };
 }
+
+export default useThemeColor;

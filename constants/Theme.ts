@@ -161,4 +161,6 @@ export const getTheme = (
     themeVariation,
     activeColors: customColors[colorScheme],
   };
-}; 
+};
+
+export default Theme; 

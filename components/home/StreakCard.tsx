@@ -24,44 +24,44 @@ const StreakCard: React.FC<StreakCardProps> = ({
         pressed && styles.pressed
       ]}
     >
-      <StatCard
-        title=""
-        value={
-          <View style={styles.streakValueContainer}>
-            <View style={styles.flameContainer}>
-              <MaterialCommunityIcons 
-                name="fire" 
-                size={42} 
-                color={Colors.primary[500]} 
-                style={styles.flameIcon}
-              />
-            </View>
-            <ThemedText 
-              variant="title" 
-              style={[
-                styles.streakValue,
-                fontFamily && { fontFamily }
-              ]}
-            >
-              {streakDays}
-            </ThemedText>
-            <ThemedText 
-              variant="caption" 
-              style={styles.streakText}
-            >
-              days streak
-            </ThemedText>
+    <StatCard
+      title=""
+      value={
+        <View style={styles.streakValueContainer}>
+          <View style={styles.flameContainer}>
+            <MaterialCommunityIcons 
+              name="fire" 
+              size={42} 
+              color={Colors.primary[500]} 
+              style={styles.flameIcon}
+            />
           </View>
-        }
-        maxValue=""
-        progress={0}
-        progressLabels={[]}
-        containerStyle={styles.fixedStreakCardContainer}
-        contentStyle={styles.streakCardContent}
-        cardStyle={styles.streakCardStyle}
-        height={74}
-        width={Dimensions.get('window').width * 0.42}
-      />
+          <ThemedText 
+            variant="title" 
+            style={[
+              styles.streakValue,
+              fontFamily && { fontFamily }
+            ]}
+          >
+            {streakDays}
+          </ThemedText>
+          <ThemedText 
+            variant="caption" 
+            style={styles.streakText}
+          >
+            days streak
+          </ThemedText>
+        </View>
+      }
+      maxValue=""
+      progress={0}
+      progressLabels={[]}
+      containerStyle={styles.fixedStreakCardContainer}
+      contentStyle={styles.streakCardContent}
+      cardStyle={styles.streakCardStyle}
+      height={74}
+      width={Dimensions.get('window').width * 0.42}
+    />
     </Pressable>
   );
 };

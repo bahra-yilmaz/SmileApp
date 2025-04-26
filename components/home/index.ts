@@ -6,6 +6,7 @@ export { default as ToothbrushCard } from './ToothbrushCard';
 export { default as ToothbrushOverlay } from './ToothbrushOverlay';
 export { default as StreakOverlay } from './StreakOverlay';
 export { default as BrushingTimeOverlay } from './BrushingTimeOverlay';
+export { default as AchievementsOverlay } from './AchievementsOverlay';
 export { default as CalendarView } from './CalendarView';
 export { default as ChatOverlay } from './ChatOverlay';
 export { default as MenuOverlay } from './MenuOverlay';

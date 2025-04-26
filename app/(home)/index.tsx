@@ -28,6 +28,9 @@ import {
   BrushingTimeOverlay
 } from '../../components/home';
 
+// Get dimensions for background
+const { width, height } = Dimensions.get('window');
+
 export default function HomeScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -96,6 +99,12 @@ export default function HomeScreen() {
   
   return (
     <View style={styles.container}>
+      {/* Home-specific background image */}
+      <Image 
+        source={require('../../assets/images/homescreen-background.png')}
+        style={styles.homeBackgroundImage}
+      />
+      
       <View style={styles.mainContainer}>
         {/* Smile Header in safe area */}
         <SafeAreaView style={styles.headerContainer}>
@@ -266,6 +275,15 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  homeBackgroundImage: {
+    position: 'absolute',
+    width: width,
+    height: height,
+    resizeMode: 'cover',
+    left: 0,
+    top: 0,
+    zIndex: -1,
   },
   mainContainer: {
     flex: 1,

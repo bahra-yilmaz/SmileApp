@@ -243,3 +243,5 @@ export const ThemeVariations = {
 
 // Export type for theme variation keys
 export type ThemeVariationKey = keyof typeof ThemeVariations;
+
+export default Colors;

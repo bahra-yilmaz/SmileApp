@@ -259,17 +259,18 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
           ]}
         >
           {/* BrushingTime Header with gradient */}
-          <LinearGradient
-            colors={[gradientStart, gradientEnd]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
+          <BlurView
+            intensity={70}
+            tint={theme.colorScheme}
             style={[
               styles.menuHeader,
               { 
                 borderBottomColor: theme.colorScheme === 'dark' 
                   ? 'rgba(255, 255, 255, 0.1)' 
                   : 'rgba(0, 0, 0, 0.05)',
-                // Lighter drop shadow like chat header
+                backgroundColor: theme.colorScheme === 'dark'
+                  ? 'rgba(30, 40, 60, 0.7)' 
+                  : 'rgba(255, 255, 255, 0.7)',
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.05,
@@ -302,7 +303,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
                 {minutes}:{seconds < 10 ? `0${seconds}` : seconds} minutes
               </ThemedText>
             </View>
-          </LinearGradient>
+          </BlurView>
           
           {/* BrushingTime Items List */}
           <FlatList

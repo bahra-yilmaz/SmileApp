@@ -29,60 +29,60 @@ const ToothbrushCard: React.FC<ToothbrushCardProps> = ({
         pressed && styles.pressed
       ]}
     >
-      <StatCard
-        title=""
-        value={
-          <View style={styles.toothbrushContentContainer}>
-            {/* Health indicator (heart) and days */}
-            <View style={styles.toothbrushHealthContainer}>
-              <View style={styles.heartContainer}>
-                <MaterialCommunityIcons 
-                  name="heart-half-full" 
-                  size={48} 
-                  color={Colors.primary[200]} 
-                />
-              </View>
-              <View style={styles.daysTextContainer}>
-                <ThemedText 
-                  variant="title" 
-                  style={[
-                    styles.daysValue,
-                    fontFamily && { fontFamily }
-                  ]}
-                >
-                  {daysInUse}
-                </ThemedText>
-                <ThemedText 
-                  variant="caption" 
-                  style={styles.daysText}
-                >
-                  {t('toothbrush.days')}
-                </ThemedText>
-              </View>
+    <StatCard
+      title=""
+      value={
+        <View style={styles.toothbrushContentContainer}>
+          {/* Health indicator (heart) and days */}
+          <View style={styles.toothbrushHealthContainer}>
+            <View style={styles.heartContainer}>
+              <MaterialCommunityIcons 
+                name="heart-half-full" 
+                size={48} 
+                color={Colors.primary[200]} 
+              />
+            </View>
+            <View style={styles.daysTextContainer}>
+              <ThemedText 
+                variant="title" 
+                style={[
+                  styles.daysValue,
+                  fontFamily && { fontFamily }
+                ]}
+              >
+                {daysInUse}
+              </ThemedText>
               <ThemedText 
                 variant="caption" 
-                style={styles.replaceSoonText}
-                numberOfLines={2}
+                style={styles.daysText}
               >
-                {replaceSoonText}
+                {t('toothbrush.days')}
               </ThemedText>
             </View>
-            
-            <Image 
-              source={require('../../assets/images/toothbrush.png')}
-              style={styles.toothbrushImage}
-              resizeMode="contain"
-            />
+            <ThemedText 
+              variant="caption" 
+              style={styles.replaceSoonText}
+              numberOfLines={2}
+            >
+              {replaceSoonText}
+            </ThemedText>
           </View>
-        }
-        maxValue=""
-        progress={0}
-        progressLabels={[]}
-        height={165}
-        containerStyle={styles.toothbrushCardContainer}
-        contentStyle={styles.toothbrushCardContent}
-        cardStyle={styles.toothbrushCardStyle}
-      />
+          
+          <Image 
+            source={require('../../assets/images/toothbrush.png')}
+            style={styles.toothbrushImage}
+            resizeMode="contain"
+          />
+        </View>
+      }
+      maxValue=""
+      progress={0}
+      progressLabels={[]}
+      height={165}
+      containerStyle={styles.toothbrushCardContainer}
+      contentStyle={styles.toothbrushCardContent}
+      cardStyle={styles.toothbrushCardStyle}
+    />
     </Pressable>
   );
 };
