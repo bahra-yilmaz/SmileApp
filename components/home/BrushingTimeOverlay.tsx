@@ -6,15 +6,14 @@ import {
   Animated, 
   Pressable, 
   TouchableWithoutFeedback, 
-  Text,
   FlatList,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Image
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useTheme } from '../ThemeProvider';
 import { Colors } from '../../constants/Colors';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ThemedText from '../ThemedText';
@@ -83,6 +82,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   // Load Merienda font for header
   const [fontsLoaded] = useFonts({
     'Merienda-Regular': require('../../assets/fonts/Merienda-Regular.ttf'),
+    'Merienda-Bold': require('../../assets/fonts/Merienda-Bold.ttf'),
   });
   
   const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -93,11 +93,6 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   
   // Calculate progress as a percentage
   const progress = ((minutes + seconds / 60) / targetMinutes) * 100;
-  
-  // Calculate gradient colors
-  const primaryColor = Colors.primary[500];
-  const gradientStart = theme.colorScheme === 'dark' ? Colors.primary[700] : Colors.primary[300];
-  const gradientEnd = theme.colorScheme === 'dark' ? Colors.primary[500] : Colors.primary[500];
   
   // Handle animations when visibility changes
   useEffect(() => {
@@ -147,6 +142,44 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
     }
     // Optionally close overlay or navigate
   };
+  
+  // ListHeaderComponent with Brushing Time Info
+  const BrushingTimeHeader = () => (
+    <View>
+      <View style={styles.headerContainer}>
+        <View style={styles.iconBackdrop}>
+          <DonutChart
+            progress={progress}
+            size={90}
+            thickness={16}
+            progressColor={theme.colorScheme === 'dark' ? Colors.primary[400] : Colors.primary[700]}
+            style={styles.timeDonut}
+          />
+        </View>
+        <View style={styles.headerTextContainer}>
+          <ThemedText
+            style={[
+              styles.brushingTimeTitle,
+              { fontFamily: fontsLoaded ? 'Merienda-Bold' : undefined }
+            ]}
+            variant="subtitle"
+            lightColor={Colors.primary[700]}
+            darkColor={Colors.primary[400]}
+          >
+            Brushing Time
+          </ThemedText>
+          <ThemedText style={styles.timeText}>
+            {minutes}:{seconds < 10 ? `0${seconds}` : seconds} minutes
+          </ThemedText>
+        </View>
+      </View>
+      <View style={[styles.separator, { 
+        borderBottomColor: theme.colorScheme === 'dark' 
+          ? 'rgba(255, 255, 255, 0.1)' 
+          : 'rgba(0, 0, 0, 0.05)' 
+      }]} />
+    </View>
+  );
   
   const renderBrushingTimeItem = ({ item }: { item: BrushingTimeItem }) => (
     <Pressable 
@@ -198,9 +231,6 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
     </Pressable>
   );
   
-  // Use the exact light container color
-  const backgroundColor = theme.colorScheme === 'dark' ? '#1A2235' : Colors.neutral[50];
-  
   // If not visible and animation is complete, don't render anything
   if (!isVisible && !animationComplete) return null;
   
@@ -245,7 +275,6 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
               transform: [
                 { scale: scaleAnim },
               ],
-              backgroundColor,
               // Enhanced shadow
               shadowColor: '#000000',
               shadowOffset: { width: 0, height: 12 },
@@ -253,66 +282,37 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
               shadowRadius: 24,
               elevation: 20,
               borderWidth: 0,
-              padding: 0,
               overflow: 'hidden',
             }
           ]}
         >
-          {/* BrushingTime Header with gradient */}
           <BlurView
             intensity={70}
             tint={theme.colorScheme}
             style={[
-              styles.menuHeader,
-              { 
-                borderBottomColor: theme.colorScheme === 'dark' 
-                  ? 'rgba(255, 255, 255, 0.1)' 
-                  : 'rgba(0, 0, 0, 0.05)',
+              StyleSheet.absoluteFill,
+              {
                 backgroundColor: theme.colorScheme === 'dark'
                   ? 'rgba(30, 40, 60, 0.7)' 
                   : 'rgba(255, 255, 255, 0.7)',
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.05,
-                shadowRadius: 3,
-                elevation: 2,
-                zIndex: 10,
+                borderWidth: StyleSheet.hairlineWidth,
+                borderColor: theme.colorScheme === 'dark' 
+                  ? 'rgba(255, 255, 255, 0.1)' 
+                  : 'rgba(0, 0, 0, 0.05)',
+                borderRadius: 28,
               }
             ]}
-          >
-            <Text 
-              style={[
-                styles.headerTitle,
-                { 
-                  fontFamily: fontsLoaded ? 'Merienda-Regular' : undefined,
-                  color: primaryColor
-                }
-              ]}
-            >
-              Brushing Time
-            </Text>
-            <View style={styles.headerTimeContainer}>
-              <DonutChart
-                progress={progress}
-                size={34}
-                thickness={5}
-                progressColor={Colors.primary[400]}
-                style={styles.timeDonut}
-              />
-              <ThemedText style={styles.headerSubtitle}>
-                {minutes}:{seconds < 10 ? `0${seconds}` : seconds} minutes
-              </ThemedText>
-            </View>
-          </BlurView>
+          />
           
           {/* BrushingTime Items List */}
           <FlatList
             data={BRUSHING_TIME_ITEMS}
             renderItem={renderBrushingTimeItem}
             keyExtractor={(item) => item.id}
+            ListHeaderComponent={BrushingTimeHeader}
             style={styles.list}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingVertical: 12 }}
+            contentContainerStyle={{ paddingVertical: 16, paddingHorizontal: 16 }}
           />
         </Animated.View>
       </KeyboardAvoidingView>
@@ -335,30 +335,40 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     flexDirection: 'column',
   },
-  menuHeader: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: '400',
-    letterSpacing: 0.5,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    marginTop: 4,
-    opacity: 0.8,
-    marginLeft: 8,
-  },
-  headerTimeContainer: {
+  headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 4,
+    paddingVertical: 20,
+    paddingHorizontal: 8,
+    marginBottom: 0,
+  },
+  iconBackdrop: {
+    width: 90,
+    height: 90,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+    backgroundColor: 'transparent',
   },
   timeDonut: {
     margin: 0,
+  },
+  headerTextContainer: {
+    flex: 1,
+  },
+  brushingTimeTitle: {
+    fontSize: 22,
+    marginBottom: 4,
+  },
+  timeText: {
+    fontSize: 16,
+    opacity: 0.8,
+  },
+  targetText: {
+    fontSize: 14,
+    opacity: 0.6,
+    marginTop: 4,
   },
   list: {
     flex: 1,
@@ -368,6 +378,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
     borderRadius: 12,
+    marginBottom: 8,
   },
   iconContainer: {
     width: 50,
@@ -379,7 +390,12 @@ const styles = StyleSheet.create({
   },
   menuContent: {
     flex: 1,
-  }
+  },
+  separator: {
+    borderBottomWidth: 1,
+    marginHorizontal: 8,
+    marginBottom: 16,
+  },
 });
 
 export default BrushingTimeOverlay; 

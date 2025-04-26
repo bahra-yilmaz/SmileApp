@@ -6,15 +6,14 @@ import {
   Animated, 
   Pressable, 
   TouchableWithoutFeedback, 
-  Text,
   FlatList,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Image
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useTheme } from '../ThemeProvider';
 import { Colors } from '../../constants/Colors';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ThemedText from '../ThemedText';
@@ -23,6 +22,7 @@ interface ToothbrushOverlayProps {
   isVisible: boolean;
   onClose: () => void;
   daysInUse: number;
+  usageCycles?: number;
 }
 
 interface ToothbrushItem {
@@ -60,7 +60,12 @@ const TOOTHBRUSH_ITEMS: ToothbrushItem[] = [
   }
 ];
 
-export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({ isVisible, onClose, daysInUse }) => {
+export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({ 
+  isVisible, 
+  onClose, 
+  daysInUse,
+  usageCycles = 123 // Default value if not provided
+}) => {
   const { theme } = useTheme();
   const { activeColors } = theme;
   
@@ -74,6 +79,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({ isVisible,
   // Load Merienda font for header
   const [fontsLoaded] = useFonts({
     'Merienda-Regular': require('../../assets/fonts/Merienda-Regular.ttf'),
+    'Merienda-Bold': require('../../assets/fonts/Merienda-Bold.ttf'),
   });
   
   const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -81,11 +87,6 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({ isVisible,
   // Calculate dimensions to leave space around edges
   const overlayWidth = screenWidth * 0.9;
   const overlayHeight = screenHeight * 0.7;
-  
-  // Calculate gradient colors
-  const primaryColor = Colors.primary[500];
-  const gradientStart = theme.colorScheme === 'dark' ? Colors.primary[700] : Colors.primary[300];
-  const gradientEnd = theme.colorScheme === 'dark' ? Colors.primary[500] : Colors.primary[500];
   
   // Handle animations when visibility changes
   useEffect(() => {
@@ -135,6 +136,61 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({ isVisible,
     }
     // Optionally close overlay or navigate
   };
+  
+  // ListHeaderComponent with Usage Stats and Toothbrush Info
+  const ToothbrushHeader = () => (
+    <View>
+      <View style={styles.headerContainer}>
+        <View style={styles.iconBackdrop}>
+          <Image
+            source={require('../../assets/images/toothbrush.png')}
+            style={styles.toothbrushImage}
+            resizeMode="contain"
+          />
+        </View>
+        <View style={styles.headerTextContainer}>
+          <ThemedText
+            style={[
+              styles.toothbrushTitle,
+              { fontFamily: fontsLoaded ? 'Merienda-Bold' : undefined }
+            ]}
+            variant="subtitle"
+            lightColor={Colors.primary[700]}
+            darkColor={Colors.primary[400]}
+          >
+            Your Toothbrush
+          </ThemedText>
+          <ThemedText style={styles.daysInUse}>
+            {daysInUse} days in use
+          </ThemedText>
+        </View>
+      </View>
+      <View style={[styles.separator, { 
+        borderBottomColor: theme.colorScheme === 'dark' 
+          ? 'rgba(255, 255, 255, 0.1)' 
+          : 'rgba(0, 0, 0, 0.05)' 
+      }]} />
+      
+      {/* Usage Stats Section */}
+      <View style={styles.usageContainer}>
+        <View style={styles.usageIconContainer}>
+          <MaterialCommunityIcons
+            name="clock-outline" 
+            size={30}
+            color={theme.colorScheme === 'dark' ? Colors.primary[400] : Colors.primary[700]}
+          />
+        </View>
+        <View style={styles.usageTextContainer}>
+          <ThemedText style={styles.usageTitle}>
+            Toothbrush Usage
+          </ThemedText>
+          <ThemedText style={styles.usageText}>
+            {usageCycles} cycles
+          </ThemedText>
+        </View>
+      </View>
+    </View>
+  );
   
   const renderToothbrushItem = ({ item }: { item: ToothbrushItem }) => (
     <Pressable 
@@ -186,9 +242,6 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({ isVisible,
     </Pressable>
   );
   
-  // Use the exact light container color
-  const backgroundColor = theme.colorScheme === 'dark' ? '#1A2235' : Colors.neutral[50];
-  
   // If not visible and animation is complete, don't render anything
   if (!isVisible && !animationComplete) return null;
   
@@ -233,7 +286,6 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({ isVisible,
               transform: [
                 { scale: scaleAnim },
               ],
-              backgroundColor,
               // Enhanced shadow
               shadowColor: '#000000',
               shadowOffset: { width: 0, height: 12 },
@@ -241,57 +293,37 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({ isVisible,
               shadowRadius: 24,
               elevation: 20,
               borderWidth: 0,
-              padding: 0,
               overflow: 'hidden',
             }
           ]}
         >
-          {/* Toothbrush Header with gradient */}
           <BlurView
             intensity={70}
             tint={theme.colorScheme}
             style={[
-              styles.menuHeader,
-              { 
-                borderBottomColor: theme.colorScheme === 'dark' 
-                  ? 'rgba(255, 255, 255, 0.1)' 
-                  : 'rgba(0, 0, 0, 0.05)',
+              StyleSheet.absoluteFill,
+              {
                 backgroundColor: theme.colorScheme === 'dark'
                   ? 'rgba(30, 40, 60, 0.7)' 
                   : 'rgba(255, 255, 255, 0.7)',
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.05,
-                shadowRadius: 3,
-                elevation: 2,
-                zIndex: 10,
+                borderWidth: StyleSheet.hairlineWidth,
+                borderColor: theme.colorScheme === 'dark' 
+                  ? 'rgba(255, 255, 255, 0.1)' 
+                  : 'rgba(0, 0, 0, 0.05)',
+                borderRadius: 28,
               }
             ]}
-          >
-            <Text 
-              style={[
-                styles.headerTitle,
-                { 
-                  fontFamily: fontsLoaded ? 'Merienda-Regular' : undefined,
-                  color: primaryColor
-                }
-              ]}
-            >
-              Your Toothbrush
-            </Text>
-            <ThemedText style={styles.headerSubtitle}>
-              {daysInUse} days in use
-            </ThemedText>
-          </BlurView>
+          />
           
           {/* Toothbrush Items List */}
           <FlatList
             data={TOOTHBRUSH_ITEMS}
             renderItem={renderToothbrushItem}
             keyExtractor={(item) => item.id}
+            ListHeaderComponent={ToothbrushHeader}
             style={styles.list}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingVertical: 12 }}
+            contentContainerStyle={{ paddingVertical: 16, paddingHorizontal: 16 }}
           />
         </Animated.View>
       </KeyboardAvoidingView>
@@ -314,20 +346,31 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     flexDirection: 'column',
   },
-  menuHeader: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
+  headerContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 20,
+    paddingHorizontal: 8,
+    marginBottom: 0,
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: '400',
-    letterSpacing: 0.5,
+  iconBackdrop: {
+    width: 90,
+    height: 90,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+    backgroundColor: 'transparent',
   },
-  headerSubtitle: {
-    fontSize: 14,
-    marginTop: 4,
+  headerTextContainer: {
+    flex: 1,
+  },
+  toothbrushTitle: {
+    fontSize: 22,
+    marginBottom: 4,
+  },
+  daysInUse: {
+    fontSize: 16,
     opacity: 0.8,
   },
   list: {
@@ -338,6 +381,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
     borderRadius: 12,
+    marginBottom: 8,
   },
   iconContainer: {
     width: 50,
@@ -349,7 +393,41 @@ const styles = StyleSheet.create({
   },
   menuContent: {
     flex: 1,
-  }
+  },
+  toothbrushImage: {
+    width: 110,
+    height: 110,
+    marginBottom: -20,
+  },
+  separator: {
+    borderBottomWidth: 1,
+    marginHorizontal: 8,
+    marginBottom: 16,
+  },
+  usageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: 'rgba(0, 0, 0, 0.05)',
+    marginBottom: 8,
+  },
+  usageIconContainer: {
+    marginRight: 16,
+  },
+  usageTextContainer: {
+    flex: 1,
+  },
+  usageTitle: {
+    fontSize: 16,
+    fontFamily: 'Quicksand-Medium',
+    marginBottom: 2,
+  },
+  usageText: {
+    fontSize: 14,
+    opacity: 0.8,
+  },
 });
 
 export default ToothbrushOverlay; 

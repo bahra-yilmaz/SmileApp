@@ -6,15 +6,14 @@ import {
   Animated, 
   Pressable, 
   TouchableWithoutFeedback, 
-  Text,
   FlatList,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Image
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useTheme } from '../ThemeProvider';
 import { Colors } from '../../constants/Colors';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useFonts } from 'expo-font';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ThemedText from '../ThemedText';
@@ -74,6 +73,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
   // Load Merienda font for header
   const [fontsLoaded] = useFonts({
     'Merienda-Regular': require('../../assets/fonts/Merienda-Regular.ttf'),
+    'Merienda-Bold': require('../../assets/fonts/Merienda-Bold.ttf'),
   });
   
   const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -81,11 +81,6 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
   // Calculate dimensions to leave space around edges
   const overlayWidth = screenWidth * 0.9;
   const overlayHeight = screenHeight * 0.7;
-  
-  // Calculate gradient colors
-  const primaryColor = Colors.primary[500];
-  const gradientStart = theme.colorScheme === 'dark' ? Colors.primary[700] : Colors.primary[300];
-  const gradientEnd = theme.colorScheme === 'dark' ? Colors.primary[500] : Colors.primary[500];
   
   // Handle animations when visibility changes
   useEffect(() => {
@@ -135,6 +130,42 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
     }
     // Optionally close overlay or navigate
   };
+  
+  // ListHeaderComponent with Streak Info
+  const StreakHeader = () => (
+    <View>
+      <View style={styles.headerContainer}>
+        <View style={styles.iconBackdrop}>
+          <MaterialCommunityIcons 
+            name="fire" 
+            size={90} 
+            color={theme.colorScheme === 'dark' ? Colors.primary[400] : Colors.primary[700]} 
+          />
+        </View>
+        <View style={styles.headerTextContainer}>
+          <ThemedText
+            style={[
+              styles.streakTitle,
+              { fontFamily: fontsLoaded ? 'Merienda-Bold' : undefined }
+            ]}
+            variant="subtitle"
+            lightColor={Colors.primary[700]}
+            darkColor={Colors.primary[400]}
+          >
+            Your Streak
+          </ThemedText>
+          <ThemedText style={styles.streakText}>
+            {streakDays} days streak!
+          </ThemedText>
+        </View>
+      </View>
+      <View style={[styles.separator, { 
+        borderBottomColor: theme.colorScheme === 'dark' 
+          ? 'rgba(255, 255, 255, 0.1)' 
+          : 'rgba(0, 0, 0, 0.05)' 
+      }]} />
+    </View>
+  );
   
   const renderStreakItem = ({ item }: { item: StreakItem }) => (
     <Pressable 
@@ -186,9 +217,6 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
     </Pressable>
   );
   
-  // Use the exact light container color
-  const backgroundColor = theme.colorScheme === 'dark' ? '#1A2235' : Colors.neutral[50];
-  
   // If not visible and animation is complete, don't render anything
   if (!isVisible && !animationComplete) return null;
   
@@ -233,7 +261,6 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
               transform: [
                 { scale: scaleAnim },
               ],
-              backgroundColor,
               // Enhanced shadow
               shadowColor: '#000000',
               shadowOffset: { width: 0, height: 12 },
@@ -241,64 +268,37 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
               shadowRadius: 24,
               elevation: 20,
               borderWidth: 0,
-              padding: 0,
               overflow: 'hidden',
             }
           ]}
         >
-          {/* Streak Header with gradient */}
           <BlurView
             intensity={70}
             tint={theme.colorScheme}
             style={[
-              styles.menuHeader,
-              { 
-                borderBottomColor: theme.colorScheme === 'dark' 
-                  ? 'rgba(255, 255, 255, 0.1)' 
-                  : 'rgba(0, 0, 0, 0.05)',
+              StyleSheet.absoluteFill,
+              {
                 backgroundColor: theme.colorScheme === 'dark'
                   ? 'rgba(30, 40, 60, 0.7)' 
                   : 'rgba(255, 255, 255, 0.7)',
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.05,
-                shadowRadius: 3,
-                elevation: 2,
-                zIndex: 10,
+                borderWidth: StyleSheet.hairlineWidth,
+                borderColor: theme.colorScheme === 'dark' 
+                  ? 'rgba(255, 255, 255, 0.1)' 
+                  : 'rgba(0, 0, 0, 0.05)',
+                borderRadius: 28,
               }
             ]}
-          >
-            <Text 
-              style={[
-                styles.headerTitle,
-                { 
-                  fontFamily: fontsLoaded ? 'Merienda-Regular' : undefined,
-                  color: primaryColor
-                }
-              ]}
-            >
-              Your Streak
-            </Text>
-            <View style={styles.headerStreakContainer}>
-              <MaterialCommunityIcons 
-                name="fire" 
-                size={24} 
-                color={Colors.primary[400]} 
-              />
-              <ThemedText style={styles.headerSubtitle}>
-                {streakDays} days streak
-              </ThemedText>
-            </View>
-          </BlurView>
+          />
           
           {/* Streak Items List */}
           <FlatList
             data={STREAK_ITEMS}
             renderItem={renderStreakItem}
             keyExtractor={(item) => item.id}
+            ListHeaderComponent={StreakHeader}
             style={styles.list}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingVertical: 12 }}
+            contentContainerStyle={{ paddingVertical: 16, paddingHorizontal: 16 }}
           />
         </Animated.View>
       </KeyboardAvoidingView>
@@ -321,27 +321,38 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     flexDirection: 'column',
   },
-  menuHeader: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: '400',
-    letterSpacing: 0.5,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    marginTop: 4,
-    opacity: 0.8,
-    marginLeft: 8,
-  },
-  headerStreakContainer: {
+  headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 20,
+    paddingHorizontal: 8,
+    marginBottom: 0,
+  },
+  iconBackdrop: {
+    width: 90,
+    height: 90,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+    backgroundColor: 'transparent',
+  },
+  headerTextContainer: {
+    flex: 1,
+  },
+  streakTitle: {
+    fontSize: 22,
+    marginBottom: 4,
+  },
+  streakText: {
+    fontSize: 16,
+    opacity: 0.8,
+  },
+  streakMessage: {
+    fontSize: 14,
+    opacity: 0.6,
     marginTop: 4,
+    fontStyle: 'italic',
   },
   list: {
     flex: 1,
@@ -351,6 +362,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
     borderRadius: 12,
+    marginBottom: 8,
   },
   iconContainer: {
     width: 50,
@@ -362,7 +374,12 @@ const styles = StyleSheet.create({
   },
   menuContent: {
     flex: 1,
-  }
+  },
+  separator: {
+    borderBottomWidth: 1,
+    marginHorizontal: 8,
+    marginBottom: 16,
+  },
 });
 
 export default StreakOverlay; 
