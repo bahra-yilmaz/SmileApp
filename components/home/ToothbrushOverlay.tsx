@@ -4,12 +4,12 @@ import {
   StyleSheet, 
   Dimensions, 
   Animated, 
-  Pressable, 
-  TouchableWithoutFeedback, 
-  FlatList,
-  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
   Platform,
-  Image
+  KeyboardAvoidingView,
+  Image,
+  Pressable,
+  ScrollView
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useTheme } from '../ThemeProvider';
@@ -25,41 +25,6 @@ interface ToothbrushOverlayProps {
   usageCycles?: number;
 }
 
-interface ToothbrushItem {
-  id: string;
-  name: string;
-  description: string;
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
-  action?: () => void;
-}
-
-const TOOTHBRUSH_ITEMS: ToothbrushItem[] = [
-  {
-    id: '1',
-    name: 'Replace Toothbrush',
-    description: 'Reset your toothbrush timer',
-    icon: 'refresh',
-  },
-  {
-    id: '2',
-    name: 'Toothbrush History',
-    description: 'View your toothbrush usage history',
-    icon: 'history',
-  },
-  {
-    id: '3',
-    name: 'Set Reminder',
-    description: 'Get notified when it\'s time to replace',
-    icon: 'bell',
-  },
-  {
-    id: '4',
-    name: 'Toothbrush Tips',
-    description: 'Learn about toothbrush care',
-    icon: 'lightbulb',
-  }
-];
-
 export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({ 
   isVisible, 
   onClose, 
@@ -67,7 +32,6 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   usageCycles = 123 // Default value if not provided
 }) => {
   const { theme } = useTheme();
-  const { activeColors } = theme;
   
   // Animation values for container
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -75,6 +39,14 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   
   // State to track if animation is completed
   const [animationComplete, setAnimationComplete] = useState(false);
+
+  // State for toothbrush history
+  const [showHistory, setShowHistory] = useState(false);
+  const [historyData, setHistoryData] = useState([
+    { id: 'h3', date: '2024-03-15' },
+    { id: 'h2', date: '2023-12-10' },
+    { id: 'h1', date: '2023-09-01' },
+  ]);
   
   // Load Merienda font for header
   const [fontsLoaded] = useFonts({
@@ -129,119 +101,6 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
     onClose();
   };
   
-  const handleToothbrushItemPress = (item: ToothbrushItem) => {
-    // Handle item press logic
-    if (item.action) {
-      item.action();
-    }
-    // Optionally close overlay or navigate
-  };
-  
-  // ListHeaderComponent with Usage Stats and Toothbrush Info
-  const ToothbrushHeader = () => (
-    <View>
-      <View style={styles.headerContainer}>
-        <View style={styles.iconBackdrop}>
-          <Image
-            source={require('../../assets/images/toothbrush.png')}
-            style={styles.toothbrushImage}
-            resizeMode="contain"
-          />
-        </View>
-        <View style={styles.headerTextContainer}>
-          <ThemedText
-            style={[
-              styles.toothbrushTitle,
-              { fontFamily: fontsLoaded ? 'Merienda-Bold' : undefined }
-            ]}
-            variant="subtitle"
-            lightColor={Colors.primary[700]}
-            darkColor={Colors.primary[400]}
-          >
-            Your Toothbrush
-          </ThemedText>
-          <ThemedText style={styles.daysInUse}>
-            {daysInUse} days in use
-          </ThemedText>
-        </View>
-      </View>
-      <View style={[styles.separator, { 
-        borderBottomColor: theme.colorScheme === 'dark' 
-          ? 'rgba(255, 255, 255, 0.1)' 
-          : 'rgba(0, 0, 0, 0.05)' 
-      }]} />
-      
-      {/* Usage Stats Section */}
-      <View style={styles.usageContainer}>
-        <View style={styles.usageIconContainer}>
-          <MaterialCommunityIcons
-            name="clock-outline" 
-            size={30}
-            color={theme.colorScheme === 'dark' ? Colors.primary[400] : Colors.primary[700]}
-          />
-        </View>
-        <View style={styles.usageTextContainer}>
-          <ThemedText style={styles.usageTitle}>
-            Toothbrush Usage
-          </ThemedText>
-          <ThemedText style={styles.usageText}>
-            {usageCycles} cycles
-          </ThemedText>
-        </View>
-      </View>
-    </View>
-  );
-  
-  const renderToothbrushItem = ({ item }: { item: ToothbrushItem }) => (
-    <Pressable 
-      style={({ pressed }) => [
-        styles.menuItem,
-        {
-          backgroundColor: pressed 
-            ? theme.colorScheme === 'dark' 
-              ? 'rgba(255, 255, 255, 0.1)' 
-              : 'rgba(0, 0, 0, 0.05)'
-            : 'transparent'
-        }
-      ]}
-      onPress={() => handleToothbrushItemPress(item)}
-    >
-      <View style={[styles.iconContainer, {
-        backgroundColor: theme.colorScheme === 'dark' 
-          ? 'rgba(233, 196, 106, 0.2)' 
-          : 'rgba(233, 196, 106, 0.1)'
-      }]}>
-        <MaterialCommunityIcons 
-          name={item.icon} 
-          size={24} 
-          color={Colors.primary[500]} 
-        />
-      </View>
-      
-      <View style={styles.menuContent}>
-        <ThemedText 
-          style={{ 
-            fontSize: theme.typography.sizes.md, 
-            fontFamily: theme.typography.fonts.medium,
-          }}
-          numberOfLines={1}
-        >
-          {item.name}
-        </ThemedText>
-        
-        <ThemedText 
-          style={{ 
-            fontSize: theme.typography.sizes.sm,
-            color: activeColors.textSecondary,
-          }}
-          numberOfLines={1}
-        >
-          {item.description}
-        </ThemedText>
-      </View>
-    </Pressable>
-  );
-  
   // If not visible and animation is complete, don't render anything
   if (!isVisible && !animationComplete) return null;
   
@@ -281,7 +140,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
             {
               width: overlayWidth,
               height: overlayHeight,
-              borderRadius: 28,
+              borderRadius: 45,
               opacity: fadeAnim,
               transform: [
                 { scale: scaleAnim },
@@ -310,21 +169,186 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                 borderColor: theme.colorScheme === 'dark' 
                   ? 'rgba(255, 255, 255, 0.1)' 
                   : 'rgba(0, 0, 0, 0.05)',
-                borderRadius: 28,
+                borderRadius: 45,
               }
             ]}
           />
           
-          {/* Toothbrush Items List */}
-          <FlatList
-            data={TOOTHBRUSH_ITEMS}
-            renderItem={renderToothbrushItem}
-            keyExtractor={(item) => item.id}
-            ListHeaderComponent={ToothbrushHeader}
-            style={styles.list}
+          {/* Content Area: ScrollView for content, separate View for Button */}
+          <ScrollView 
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContentContainer}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingVertical: 16, paddingHorizontal: 16 }}
-          />
+          >
+            <View style={styles.headerContainer}>
+              <View style={styles.iconBackdrop}>
+                <Image
+                  source={require('../../assets/images/toothbrush.png')}
+                  style={styles.toothbrushImage}
+                  resizeMode="contain"
+                />
+              </View>
+              <View style={styles.headerTextContainer}>
+                <ThemedText
+                  style={[
+                    styles.toothbrushTitle,
+                    { fontFamily: fontsLoaded ? 'Merienda-Bold' : undefined }
+                  ]}
+                  variant="subtitle"
+                  lightColor={Colors.primary[700]}
+                  darkColor={Colors.primary[400]}
+                >
+                  Your Toothbrush
+                </ThemedText>
+                <ThemedText style={styles.daysInUse}>
+                  {daysInUse} days in use
+                </ThemedText>
+              </View>
+            </View>
+            <View style={[styles.separator, { 
+              borderBottomColor: theme.colorScheme === 'dark' 
+                ? 'rgba(255, 255, 255, 0.1)' 
+                : 'rgba(0, 0, 0, 0.05)' 
+            }]} />
+            
+            {/* Usage Stats Section */}
+            <View style={styles.usageContainer}>
+              <View style={styles.usageIconContainer}>
+                <MaterialCommunityIcons
+                  name="clock-outline" 
+                  size={30}
+                  color={theme.colorScheme === 'dark' ? Colors.primary[400] : Colors.primary[700]}
+                />
+              </View>
+              <View style={styles.usageTextContainer}>
+                <ThemedText style={styles.usageTitle}>
+                  Toothbrush Usage
+                </ThemedText>
+                <ThemedText style={styles.usageText}>
+                  {usageCycles} brushings
+                </ThemedText>
+              </View>
+            </View>
+
+            {/* Replace History Section */}
+            <Pressable 
+              style={styles.usageContainer} 
+              onPress={() => setShowHistory(!showHistory)}
+            >
+              <View style={styles.usageIconContainer}>
+                <MaterialCommunityIcons
+                  name="history" 
+                  size={30}
+                  color={theme.colorScheme === 'dark' ? Colors.primary[400] : Colors.primary[700]}
+                />
+              </View>
+              <View style={styles.usageTextContainer}>
+                <ThemedText style={styles.usageTitle}>
+                  Replace History
+                </ThemedText>
+                <ThemedText style={styles.usageText}>
+                  View past replacement dates
+                </ThemedText>
+              </View>
+            </Pressable>
+
+            {/* Conditional History List */}
+            {showHistory && (
+              <View style={styles.historyListContainer}>
+                {historyData.map((item, index) => (
+                  <View 
+                    key={item.id} 
+                    style={[
+                      styles.historyItem,
+                      // Add a separator line unless it's the last item
+                      index < historyData.length - 1 && [
+                        styles.historyItemSeparator,
+                        { 
+                          borderBottomColor: theme.colorScheme === 'dark' 
+                            ? 'rgba(255, 255, 255, 0.1)' 
+                            : 'rgba(0, 0, 0, 0.05)'
+                        }
+                      ]
+                    ]}
+                  >
+                    <ThemedText style={styles.historyItemText}>
+                      Replaced on: {item.date}
+                    </ThemedText>
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {/* NEW Toothbrush Renewal Info Section */}
+            <View style={{
+              marginHorizontal: 16,
+              marginBottom: 16,
+              marginTop: 12,
+              borderRadius: 20,
+              padding: 16,
+              borderWidth: 1,
+              borderColor: theme.colorScheme === 'dark' 
+                ? Colors.primary[400] + '60'  
+                : Colors.primary[700] + '40',
+            }}>
+              <ThemedText style={styles.usageTitle}>
+                Why Renew Your Toothbrush?
+              </ThemedText>
+              <ThemedText style={styles.usageText}>
+                Dentists recommend replacing your brush every 3 months to keep your mouth healthy and your gums safe.
+              </ThemedText>
+            </View>
+
+            {/* Toothbrush Health Progress Bar */}
+            <View style={styles.progressContainer}>
+              <View style={styles.progressLabelContainer}>
+                <ThemedText style={styles.usageTitle}>Toothbrush Health</ThemedText>
+                <ThemedText style={[styles.usageText, {textAlign: 'right'}]}>
+                  {Math.max(0, Math.min(100, Math.round((1 - daysInUse/90) * 100)))}%
+                </ThemedText>
+              </View>
+              <View style={styles.progressBarBackground}>
+                <View 
+                  style={[
+                    styles.progressBarFill, 
+                    { 
+                      width: `${Math.max(0, Math.min(100, Math.round((1 - daysInUse/90) * 100)))}%`,
+                      backgroundColor: daysInUse > 60 
+                        ? Colors.primary[300] 
+                        : daysInUse > 30 
+                          ? Colors.primary[500] 
+                          : Colors.primary[700]
+                    }
+                  ]} 
+                />
+              </View>
+            </View>
+          </ScrollView>
+
+          {/* Button Container - Positioned below ScrollView -> Now positioned absolutely */}
+          <View style={styles.buttonShadowContainer}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                {
+                  backgroundColor: pressed 
+                    ? theme.colorScheme === 'dark' 
+                      ? Colors.primary[600] 
+                      : Colors.primary[500]
+                    : theme.colorScheme === 'dark' 
+                      ? Colors.primary[500] 
+                      : Colors.primary[600],
+                }
+              ]}
+              onPress={() => {
+                console.log('New toothbrush button pressed');
+              }}
+            >
+              <ThemedText style={styles.buttonText}>
+                I have a new one
+              </ThemedText>
+            </Pressable>
+          </View>
         </Animated.View>
       </KeyboardAvoidingView>
     </View>
@@ -373,27 +397,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     opacity: 0.8,
   },
-  list: {
-    flex: 1,
-  },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 8,
-  },
-  iconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  menuContent: {
-    flex: 1,
-  },
   toothbrushImage: {
     width: 110,
     height: 110,
@@ -408,10 +411,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 16,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(0, 0, 0, 0.05)',
-    marginBottom: 8,
+    paddingVertical: 8,
+    marginBottom: 4,
   },
   usageIconContainer: {
     marginRight: 16,
@@ -427,6 +428,78 @@ const styles = StyleSheet.create({
   usageText: {
     fontSize: 14,
     opacity: 0.8,
+  },
+  progressContainer: {
+    marginHorizontal: 16,
+    marginBottom: 16,
+    marginTop: 8,
+  },
+  progressLabelContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  progressBarBackground: {
+    height: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    borderRadius: 10,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContentContainer: {
+    padding: 16,
+    paddingBottom: 80,
+  },
+  buttonShadowContainer: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    right: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+    borderRadius: 30,
+  },
+  button: {
+    borderRadius: 30,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 60,
+    padding: 16,
+    overflow: 'hidden',
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontFamily: 'Merienda-Bold',
+  },
+  historyListContainer: {
+    marginHorizontal: 16, 
+    marginBottom: 16, 
+    marginTop: 4, // Small gap after the history button
+  },
+  historyItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 16, // Indent slightly from container edges
+  },
+  historyItemSeparator: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    // borderBottomColor will be applied dynamically
+  },
+  historyItemText: {
+    fontSize: 14,
+    opacity: 0.8,
+    fontFamily: 'Quicksand-Regular',
   },
 });
 
