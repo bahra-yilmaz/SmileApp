@@ -32,6 +32,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   usageCycles = 123 // Default value if not provided
 }) => {
   const { theme } = useTheme();
+  const { activeColors } = theme; // Destructure activeColors
   
   // Animation values for container
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -60,6 +61,19 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   const overlayWidth = screenWidth * 0.9;
   const overlayHeight = screenHeight * 0.7;
   
+  // Calculate progress percentage and status
+  const maxDays = 90;
+  const healthPercentage = Math.max(0, Math.min(100, Math.round((1 - daysInUse / maxDays) * 100)));
+  let healthStatus = "Good";
+  let healthColor = Colors.feedback.success[theme.colorScheme]; // Use feedback color
+  if (daysInUse > maxDays * 0.66) { // Over 60 days
+    healthStatus = "Replace Soon";
+    healthColor = Colors.feedback.warning[theme.colorScheme]; // Use feedback color
+  } else if (daysInUse > maxDays * 0.33) { // Over 30 days
+    healthStatus = "Fair";
+    healthColor = Colors.primary[theme.colorScheme === 'dark' ? 400 : 500]; // Use primary, adjust shade for theme
+  } // Else it stays Good (Green)
+  
   // Handle animations when visibility changes
   useEffect(() => {
     if (isVisible) {
@@ -73,7 +87,8 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
         }),
         Animated.spring(scaleAnim, {
           toValue: 1,
-          friction: 8,
+          friction: 6,
+          tension: 80,
           useNativeDriver: true,
         }),
       ]).start();
@@ -222,10 +237,10 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
               </View>
               <View style={styles.usageTextContainer}>
                 <ThemedText style={styles.usageTitle}>
-                  Toothbrush Usage
+                Brushing Tracker
                 </ThemedText>
                 <ThemedText style={styles.usageText}>
-                  {usageCycles} brushings
+                That’s {usageCycles} brushes on this toothbrush
                 </ThemedText>
               </View>
             </View>
@@ -247,9 +262,15 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                   Replace History
                 </ThemedText>
                 <ThemedText style={styles.usageText}>
-                  View past replacement dates
+                Track your brush change timeline
                 </ThemedText>
               </View>
+              <MaterialCommunityIcons 
+                name={showHistory ? "chevron-up" : "chevron-down"}
+                size={24}
+                color={activeColors.textSecondary}
+                style={{ marginLeft: 8 }}
+              />
             </Pressable>
 
             {/* Conditional History List */}
@@ -292,10 +313,10 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                 : Colors.primary[700] + '40',
             }}>
               <ThemedText style={styles.usageTitle}>
-                Why Renew Your Toothbrush?
+                Why Replace It?
               </ThemedText>
               <ThemedText style={styles.usageText}>
-                Dentists recommend replacing your brush every 3 months to keep your mouth healthy and your gums safe.
+                Bristles wear out and trap bacteria. Replace every 3 months for a healthier mouth.
               </ThemedText>
             </View>
 
@@ -303,21 +324,22 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
             <View style={styles.progressContainer}>
               <View style={styles.progressLabelContainer}>
                 <ThemedText style={styles.usageTitle}>Toothbrush Health</ThemedText>
-                <ThemedText style={[styles.usageText, {textAlign: 'right'}]}>
-                  {Math.max(0, Math.min(100, Math.round((1 - daysInUse/90) * 100)))}%
-                </ThemedText>
+                <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+                  <ThemedText style={[styles.usageText, { color: healthColor, fontFamily: theme.typography.fonts.medium }]}>
+                    {healthStatus}
+                  </ThemedText>
+                  <ThemedText style={[styles.usageText, {textAlign: 'right', marginLeft: 4}]}>
+                    ({healthPercentage}%)
+                  </ThemedText>
+                </View>
               </View>
               <View style={styles.progressBarBackground}>
                 <View 
                   style={[
                     styles.progressBarFill, 
                     { 
-                      width: `${Math.max(0, Math.min(100, Math.round((1 - daysInUse/90) * 100)))}%`,
-                      backgroundColor: daysInUse > 60 
-                        ? Colors.primary[300] 
-                        : daysInUse > 30 
-                          ? Colors.primary[500] 
-                          : Colors.primary[700]
+                      width: `${healthPercentage}%`,
+                      backgroundColor: healthColor // Use dynamic health color
                     }
                   ]} 
                 />
@@ -344,8 +366,14 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                 console.log('New toothbrush button pressed');
               }}
             >
+              <MaterialCommunityIcons
+                name="autorenew"
+                size={20} 
+                color="#FFF"
+                style={{ marginRight: 8 }} 
+              />
               <ThemedText style={styles.buttonText}>
-                I have a new one
+                I got a new brush
               </ThemedText>
             </Pressable>
           </View>
@@ -412,7 +440,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 8,
-    marginBottom: 4,
+    marginBottom: 0,
   },
   usageIconContainer: {
     marginRight: 16,

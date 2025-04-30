@@ -6,7 +6,7 @@ import {
   Animated, 
   Pressable, 
   TouchableWithoutFeedback, 
-  FlatList,
+  ScrollView,
   KeyboardAvoidingView,
   Platform,
   Image
@@ -24,38 +24,24 @@ interface StreakOverlayProps {
   streakDays: number;
 }
 
-interface StreakItem {
-  id: string;
-  name: string;
-  description: string;
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
-  action?: () => void;
-}
-
-const STREAK_ITEMS: StreakItem[] = [
-  {
-    id: '1',
-    name: 'View Streak History',
-    description: 'See your daily brushing streak history',
-    icon: 'calendar-check',
-  },
+const STREAK_ITEMS = [
   {
     id: '2',
     name: 'Achievements',
     description: 'View your earned badges and milestones',
-    icon: 'trophy',
+    icon: 'trophy' as keyof typeof MaterialCommunityIcons.glyphMap,
   },
   {
     id: '3',
-    name: 'Share Streak',
+    name: 'Share Streak (Item)',
     description: 'Share your brushing streak with friends',
-    icon: 'share-variant',
+    icon: 'share-variant' as keyof typeof MaterialCommunityIcons.glyphMap,
   },
   {
     id: '4',
     name: 'Streak Goals',
     description: 'Set personal streak goals to achieve',
-    icon: 'target',
+    icon: 'target' as keyof typeof MaterialCommunityIcons.glyphMap,
   }
 ];
 
@@ -70,6 +56,21 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
   // State to track if animation is completed
   const [animationComplete, setAnimationComplete] = useState(false);
   
+  // State for streak history visibility and data
+  const [showHistory, setShowHistory] = useState(false);
+  // Updated dummy data to represent streak periods
+  const [historyData, setHistoryData] = useState([ 
+    { id: 'sp1', startDate: '2024-07-16', endDate: '2024-07-20', duration: 5 },
+    { id: 'sp2', startDate: '2024-05-01', endDate: '2024-05-03', duration: 3 },
+    { id: 'sp3', startDate: '2024-02-10', endDate: '2024-02-11', duration: 2 },
+  ]);
+  
+  // Calculate progress towards next phase (assuming 7-day phases)
+  const phaseLength = 7;
+  const currentPhaseProgress = streakDays % phaseLength;
+  const nextPhaseTarget = Math.ceil((streakDays + 1) / phaseLength) * phaseLength;
+  const progressPercentage = Math.min(100, Math.round((currentPhaseProgress / phaseLength) * 100));
+  
   // Load Merienda font for header
   const [fontsLoaded] = useFonts({
     'Merienda-Regular': require('../../assets/fonts/Merienda-Regular.ttf'),
@@ -80,7 +81,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
   
   // Calculate dimensions to leave space around edges
   const overlayWidth = screenWidth * 0.9;
-  const overlayHeight = screenHeight * 0.7;
+  const overlayHeight = screenHeight * 0.75;
   
   // Handle animations when visibility changes
   useEffect(() => {
@@ -95,7 +96,8 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
         }),
         Animated.spring(scaleAnim, {
           toValue: 1,
-          friction: 8,
+          friction: 6,
+          tension: 80,
           useNativeDriver: true,
         }),
       ]).start();
@@ -123,99 +125,11 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
     onClose();
   };
   
-  const handleStreakItemPress = (item: StreakItem) => {
-    // Handle item press logic
-    if (item.action) {
-      item.action();
-    }
+  const handleStreakItemPress = (item: typeof STREAK_ITEMS[0]) => {
+    // Handle item press logic - placeholder
+    console.log(`Pressed: ${item.name}`);
     // Optionally close overlay or navigate
   };
-  
-  // ListHeaderComponent with Streak Info
-  const StreakHeader = () => (
-    <View>
-      <View style={styles.headerContainer}>
-        <View style={styles.iconBackdrop}>
-          <MaterialCommunityIcons 
-            name="fire" 
-            size={90} 
-            color={theme.colorScheme === 'dark' ? Colors.primary[400] : Colors.primary[700]} 
-          />
-        </View>
-        <View style={styles.headerTextContainer}>
-          <ThemedText
-            style={[
-              styles.streakTitle,
-              { fontFamily: fontsLoaded ? 'Merienda-Bold' : undefined }
-            ]}
-            variant="subtitle"
-            lightColor={Colors.primary[700]}
-            darkColor={Colors.primary[400]}
-          >
-            Your Streak
-          </ThemedText>
-          <ThemedText style={styles.streakText}>
-            {streakDays} days streak!
-          </ThemedText>
-        </View>
-      </View>
-      <View style={[styles.separator, { 
-        borderBottomColor: theme.colorScheme === 'dark' 
-          ? 'rgba(255, 255, 255, 0.1)' 
-          : 'rgba(0, 0, 0, 0.05)' 
-      }]} />
-    </View>
-  );
-  
-  const renderStreakItem = ({ item }: { item: StreakItem }) => (
-    <Pressable 
-      style={({ pressed }) => [
-        styles.menuItem,
-        {
-          backgroundColor: pressed 
-            ? theme.colorScheme === 'dark' 
-              ? 'rgba(255, 255, 255, 0.1)' 
-              : 'rgba(0, 0, 0, 0.05)'
-            : 'transparent'
-        }
-      ]}
-      onPress={() => handleStreakItemPress(item)}
-    >
-      <View style={[styles.iconContainer, {
-        backgroundColor: theme.colorScheme === 'dark' 
-          ? 'rgba(233, 196, 106, 0.2)' 
-          : 'rgba(233, 196, 106, 0.1)'
-      }]}>
-        <MaterialCommunityIcons 
-          name={item.icon} 
-          size={24} 
-          color={Colors.primary[500]} 
-        />
-      </View>
-      
-      <View style={styles.menuContent}>
-        <ThemedText 
-          style={{ 
-            fontSize: theme.typography.sizes.md, 
-            fontFamily: theme.typography.fonts.medium,
-          }}
-          numberOfLines={1}
-        >
-          {item.name}
-        </ThemedText>
-        
-        <ThemedText 
-          style={{ 
-            fontSize: theme.typography.sizes.sm,
-            color: activeColors.textSecondary,
-          }}
-          numberOfLines={1}
-        >
-          {item.description}
-        </ThemedText>
-      </View>
-    </Pressable>
-  );
   
   // If not visible and animation is complete, don't render anything
   if (!isVisible && !animationComplete) return null;
@@ -256,7 +170,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
             {
               width: overlayWidth,
               height: overlayHeight,
-              borderRadius: 28,
+              borderRadius: 45,
               opacity: fadeAnim,
               transform: [
                 { scale: scaleAnim },
@@ -285,21 +199,233 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                 borderColor: theme.colorScheme === 'dark' 
                   ? 'rgba(255, 255, 255, 0.1)' 
                   : 'rgba(0, 0, 0, 0.05)',
-                borderRadius: 28,
+                borderRadius: 45,
               }
             ]}
           />
           
-          {/* Streak Items List */}
-          <FlatList
-            data={STREAK_ITEMS}
-            renderItem={renderStreakItem}
-            keyExtractor={(item) => item.id}
-            ListHeaderComponent={StreakHeader}
-            style={styles.list}
+          {/* Content Area: Use ScrollView */}
+          <ScrollView 
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContentContainer}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingVertical: 16, paddingHorizontal: 16 }}
-          />
+          >
+            {/* Integrated Header */}
+            <View style={styles.headerContainer}>
+              <View style={styles.iconBackdrop}>
+                <MaterialCommunityIcons 
+                  name="fire" 
+                  size={90} 
+                  color={theme.colorScheme === 'dark' ? Colors.primary[400] : Colors.primary[700]} 
+                />
+              </View>
+              <View style={styles.headerTextContainer}>
+                <ThemedText
+                  style={[
+                    styles.streakTitle,
+                    { fontFamily: fontsLoaded ? 'Merienda-Bold' : undefined }
+                  ]}
+                  variant="subtitle"
+                  lightColor={Colors.primary[700]}
+                  darkColor={Colors.primary[400]}
+                >
+                  {streakDays}-Day Streak
+                </ThemedText>
+                <ThemedText style={styles.streakText}> 
+                  You're on fire!
+                </ThemedText>
+              </View>
+            </View>
+            <View style={[styles.separator, { 
+              borderBottomColor: theme.colorScheme === 'dark' 
+                ? 'rgba(255, 255, 255, 0.1)' 
+                : 'rgba(0, 0, 0, 0.05)' 
+            }]} />
+
+            {/* NEW Continuous Brushings Section */}
+            <View style={styles.usageContainer}> 
+              <View style={styles.usageIconContainer}>
+                <MaterialCommunityIcons
+                  name="trending-up"
+                  size={30}
+                  color={Colors.primary[500]} 
+                />
+              </View>
+              <View style={styles.usageTextContainer}>
+                <ThemedText style={styles.usageTitle}>
+                  Keep it Going!
+                </ThemedText>
+                <ThemedText style={styles.usageText}>
+                  {/* Placeholder value - replace with actual count */} 
+                  Kept the streak alive 12 times
+                </ThemedText>
+              </View>
+            </View>
+
+            {/* Best Streaks Section */}
+            <Pressable 
+              style={styles.usageContainer}
+              onPress={() => setShowHistory(!showHistory)}
+            >
+              <View style={styles.usageIconContainer}> 
+                <MaterialCommunityIcons
+                  name="calendar-check"
+                  size={30} 
+                  color={Colors.primary[500]} 
+                />
+              </View>
+              <View style={styles.usageTextContainer}>
+                <ThemedText style={styles.usageTitle}>
+                  Best Streaks
+                </ThemedText>
+                <ThemedText style={styles.usageText}>
+                   Your all-time best streaks
+                </ThemedText>
+              </View>
+               <MaterialCommunityIcons
+                  name={showHistory ? "chevron-up" : "chevron-down"}
+                  size={24}
+                  color={activeColors.textSecondary}
+                  style={{ marginLeft: 8 }} 
+                />
+            </Pressable>
+
+            {/* Conditional History List */}
+            {showHistory && (
+              <View style={styles.historyListContainer}>
+                {historyData.map((item, index) => (
+                  <View 
+                    key={item.id} 
+                    style={[
+                      styles.historyItem,
+                      index < historyData.length - 1 && [
+                        styles.historyItemSeparator,
+                        { 
+                          borderBottomColor: theme.colorScheme === 'dark' 
+                            ? 'rgba(255, 255, 255, 0.1)' 
+                            : 'rgba(0, 0, 0, 0.05)'
+                        }
+                      ]
+                    ]}
+                  >
+                    <ThemedText style={styles.historyItemText}>
+                      {item.startDate} - {item.endDate} ({item.duration} Day{item.duration !== 1 ? 's' : ''})
+                    </ThemedText>
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {/* Set Reminder Section */}
+            <Pressable 
+              style={styles.usageContainer}
+              onPress={() => {
+                console.log('Set Reminder pressed');
+                // Add navigation or modal logic here
+              }}
+            >
+              <View style={styles.usageIconContainer}>
+                <MaterialCommunityIcons 
+                  name="bell-outline" 
+                  size={30}
+                  color={Colors.primary[500]}
+                />
+              </View>
+              <View style={styles.usageTextContainer}>
+                <ThemedText style={styles.usageTitle}>
+                  Set Reminder
+                </ThemedText>
+                <ThemedText style={styles.usageText}>
+                Let Nubo give you a little nudge
+                </ThemedText>
+              </View>
+            </Pressable>
+
+            {/* Nubo Motivation Info Section */}
+            <View style={[
+              styles.infoBoxContainer, 
+              {
+                borderColor: theme.colorScheme === 'dark' 
+                  ? Colors.primary[400] + '60' 
+                  : Colors.primary[700] + '40'
+              }
+            ]}>
+              <View style={styles.infoBoxTextContainer}>
+                <ThemedText style={styles.usageTitle}> 
+                  Nubo's Ascent!
+                </ThemedText>
+                <ThemedText style={styles.usageText}> 
+                Every day you keep your streak, Nubo climbs higher up the mountain!
+                </ThemedText>
+              </View>
+            </View>
+
+            {/* Progress Bar Section - MOVED HERE (After Info Box) */}
+            <View style={styles.progressContainer}>
+              <View style={styles.progressLabelContainer}>
+                <ThemedText style={styles.usageTitle}>Next Summit</ThemedText>
+                {/* Split text for coloring */}
+                <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+                   <ThemedText style={[
+                      styles.usageText, 
+                      {
+                        color: Colors.primary[theme.colorScheme === 'dark' ? 400 : 500], // Apply "Fair" color
+                        fontFamily: theme.typography.fonts.medium // Make it slightly bolder maybe?
+                       }
+                    ]}>
+                      {phaseLength - currentPhaseProgress} days to go!
+                    </ThemedText>
+                    <ThemedText style={[styles.usageText, { marginLeft: 4 }]}> 
+                      ({progressPercentage}%)
+                    </ThemedText>
+                </View>
+              </View>
+              <View style={styles.progressBarBackground}>
+                <View 
+                  style={[
+                    styles.progressBarFill, 
+                    { 
+                      width: `${progressPercentage}%`,
+                      backgroundColor: Colors.primary[500] 
+                    }
+                  ]} 
+                />
+              </View>
+            </View>
+
+          </ScrollView> 
+          
+          {/* Share Button Container (mimics ToothbrushOverlay) */}
+          <View style={styles.buttonShadowContainer}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                {
+                  backgroundColor: pressed 
+                    ? theme.colorScheme === 'dark' 
+                      ? Colors.primary[600] 
+                      : Colors.primary[500]
+                    : theme.colorScheme === 'dark' 
+                      ? Colors.primary[500] 
+                      : Colors.primary[600],
+                }
+              ]}
+              onPress={() => {
+                console.log('Share streak button pressed');
+                // Add actual share logic here
+              }}
+            >
+              <MaterialCommunityIcons
+                  name="share-variant" 
+                  size={20} 
+                  color="#FFF"
+                  style={{ marginRight: 8 }} 
+              />
+              <ThemedText style={styles.buttonText}>
+                Share Streak
+              </ThemedText>
+            </Pressable>
+          </View>
         </Animated.View>
       </KeyboardAvoidingView>
     </View>
@@ -348,14 +474,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     opacity: 0.8,
   },
-  streakMessage: {
-    fontSize: 14,
-    opacity: 0.6,
-    marginTop: 4,
-    fontStyle: 'italic',
-  },
-  list: {
+  scrollView: {
     flex: 1,
+  },
+  scrollContentContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 96,
   },
   menuItem: {
     flexDirection: 'row',
@@ -378,7 +503,108 @@ const styles = StyleSheet.create({
   separator: {
     borderBottomWidth: 1,
     marginHorizontal: 8,
+    marginBottom: 8,
+  },
+  usageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginBottom: 0,
+  },
+  usageIconContainer: {
+    marginRight: 16,
+  },
+  usageTextContainer: {
+    flex: 1,
+  },
+  usageTitle: {
+    fontSize: 16,
+    fontFamily: 'Quicksand-Medium',
+    marginBottom: 2,
+  },
+  usageText: {
+    fontSize: 14,
+    opacity: 0.8,
+  },
+  historyListContainer: {
+    marginHorizontal: 16,
     marginBottom: 16,
+    marginTop: 4,
+  },
+  historyItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 16, 
+  },
+  historyItemSeparator: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  historyItemText: {
+    fontSize: 14,
+    opacity: 0.8,
+    fontFamily: 'Quicksand-Regular',
+  },
+  buttonShadowContainer: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    right: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+    borderRadius: 30,
+  },
+  button: {
+    borderRadius: 30,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 60,
+    paddingHorizontal: 16,
+    overflow: 'hidden',
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontFamily: 'Merienda-Bold',
+    marginLeft: 4,
+  },
+  // --- Styles moved inside StyleSheet.create ---
+  infoBoxContainer: {
+    flexDirection: 'row', 
+    marginHorizontal: 16,
+    marginBottom: 16, 
+    marginTop: 12,
+    borderRadius: 20,
+    padding: 16,
+    borderWidth: 1,
+    // borderColor is set dynamically in component rendering
+  },
+  infoBoxTextContainer: {
+    flex: 1, 
+  },
+  progressContainer: {
+    marginHorizontal: 16,
+    marginBottom: 16,
+    marginTop: 8,
+  },
+  progressLabelContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  progressBarBackground: {
+    height: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.05)', // Use theme appropriate color later
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    borderRadius: 10,
   },
 });
 
