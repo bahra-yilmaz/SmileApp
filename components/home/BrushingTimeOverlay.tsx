@@ -6,10 +6,13 @@ import {
   Animated, 
   Pressable, 
   TouchableWithoutFeedback, 
-  FlatList,
+  ScrollView,
   KeyboardAvoidingView,
   Platform,
-  Image
+  Image,
+  TextInput,
+  Alert,
+  Keyboard,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useTheme } from '../ThemeProvider';
@@ -25,49 +28,19 @@ interface BrushingTimeOverlayProps {
   minutes: number;
   seconds: number;
   targetMinutes?: number;
+  onTargetTimeUpdate?: (newTarget: number) => void;
 }
 
-interface BrushingTimeItem {
-  id: string;
-  name: string;
-  description: string;
-  icon: keyof typeof MaterialCommunityIcons.glyphMap;
-  action?: () => void;
-}
-
-const BRUSHING_TIME_ITEMS: BrushingTimeItem[] = [
-  {
-    id: '1',
-    name: 'Brushing Technique',
-    description: 'Learn the best technique for effective brushing',
-    icon: 'toothbrush',
-  },
-  {
-    id: '2',
-    name: 'Set Target Time',
-    description: 'Customize your target brushing time',
-    icon: 'clock-time-three',
-  },
-  {
-    id: '3',
-    name: 'View History',
-    description: 'See your brushing duration history',
-    icon: 'chart-line',
-  },
-  {
-    id: '4',
-    name: 'Set Reminders',
-    description: 'Configure brushing time reminders',
-    icon: 'bell-ring',
-  }
-];
+// Define common target time options
+const TARGET_TIME_OPTIONS = [2, 3, 4];
 
 export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({ 
   isVisible, 
   onClose, 
   minutes, 
   seconds, 
-  targetMinutes = 3 
+  targetMinutes = 3,
+  onTargetTimeUpdate,
 }) => {
   const { theme } = useTheme();
   const { activeColors } = theme;
@@ -79,10 +52,15 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   // State to track if animation is completed
   const [animationComplete, setAnimationComplete] = useState(false);
   
+  // State for target time options visibility
+  const [isTargetOptionsVisible, setIsTargetOptionsVisible] = useState(false);
+  
   // Load Merienda font for header
   const [fontsLoaded] = useFonts({
     'Merienda-Regular': require('../../assets/fonts/Merienda-Regular.ttf'),
     'Merienda-Bold': require('../../assets/fonts/Merienda-Bold.ttf'),
+    'Quicksand-Regular': require('../../assets/fonts/Quicksand-Regular.ttf'),
+    'Quicksand-Medium': require('../../assets/fonts/Quicksand-Medium.ttf'),
   });
   
   const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -98,6 +76,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   useEffect(() => {
     if (isVisible) {
       setAnimationComplete(true);
+      setIsTargetOptionsVisible(false); // Collapse options when overlay opens
       // Animate in
       Animated.parallel([
         Animated.timing(fadeAnim, {
@@ -107,7 +86,8 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
         }),
         Animated.spring(scaleAnim, {
           toValue: 1,
-          friction: 8,
+          friction: 6,
+          tension: 80,
           useNativeDriver: true,
         }),
       ]).start();
@@ -132,112 +112,40 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   }, [isVisible, fadeAnim, scaleAnim]);
   
   const handleClose = () => {
+    // No keyboard to dismiss
+    setIsTargetOptionsVisible(false); // Collapse options on close
     onClose();
   };
   
-  const handleBrushingTimeItemPress = (item: BrushingTimeItem) => {
-    // Handle item press logic
-    if (item.action) {
-      item.action();
+  // Handler for selecting a predefined target time
+  const handleSelectTargetTime = (newTarget: number) => {
+    if (onTargetTimeUpdate) {
+      onTargetTimeUpdate(newTarget);
+    } else {
+      console.warn("BrushingTimeOverlay: onTargetTimeUpdate prop not provided. Target time not saved.");
     }
-    // Optionally close overlay or navigate
+    setIsTargetOptionsVisible(false); // Collapse options after selection
   };
-  
-  // ListHeaderComponent with Brushing Time Info
-  const BrushingTimeHeader = () => (
-    <View>
-      <View style={styles.headerContainer}>
-        <View style={styles.iconBackdrop}>
-          <DonutChart
-            progress={progress}
-            size={90}
-            thickness={16}
-            progressColor={theme.colorScheme === 'dark' ? Colors.primary[400] : Colors.primary[700]}
-            style={styles.timeDonut}
-          />
-        </View>
-        <View style={styles.headerTextContainer}>
-          <ThemedText
-            style={[
-              styles.brushingTimeTitle,
-              { fontFamily: fontsLoaded ? 'Merienda-Bold' : undefined }
-            ]}
-            variant="subtitle"
-            lightColor={Colors.primary[700]}
-            darkColor={Colors.primary[400]}
-          >
-            Brushing Time
-          </ThemedText>
-          <ThemedText style={styles.timeText}>
-            {minutes}:{seconds < 10 ? `0${seconds}` : seconds} minutes
-          </ThemedText>
-        </View>
-      </View>
-      <View style={[styles.separator, { 
-        borderBottomColor: theme.colorScheme === 'dark' 
-          ? 'rgba(255, 255, 255, 0.1)' 
-          : 'rgba(0, 0, 0, 0.05)' 
-      }]} />
-    </View>
-  );
-  
-  const renderBrushingTimeItem = ({ item }: { item: BrushingTimeItem }) => (
-    <Pressable 
-      style={({ pressed }) => [
-        styles.menuItem,
-        {
-          backgroundColor: pressed 
-            ? theme.colorScheme === 'dark' 
-              ? 'rgba(255, 255, 255, 0.1)' 
-              : 'rgba(0, 0, 0, 0.05)'
-            : 'transparent'
-        }
-      ]}
-      onPress={() => handleBrushingTimeItemPress(item)}
-    >
-      <View style={[styles.iconContainer, {
-        backgroundColor: theme.colorScheme === 'dark' 
-          ? 'rgba(233, 196, 106, 0.2)' 
-          : 'rgba(233, 196, 106, 0.1)'
-      }]}>
-        <MaterialCommunityIcons 
-          name={item.icon} 
-          size={24} 
-          color={Colors.primary[500]} 
-        />
-      </View>
-      
-      <View style={styles.menuContent}>
-        <ThemedText 
-          style={{ 
-            fontSize: theme.typography.sizes.md, 
-            fontFamily: theme.typography.fonts.medium,
-          }}
-          numberOfLines={1}
-        >
-          {item.name}
-        </ThemedText>
-        
-        <ThemedText 
-          style={{ 
-            fontSize: theme.typography.sizes.sm,
-            color: activeColors.textSecondary,
-          }}
-          numberOfLines={1}
-        >
-          {item.description}
-        </ThemedText>
-      </View>
-    </Pressable>
-  );
   
   // If not visible and animation is complete, don't render anything
   if (!isVisible && !animationComplete) return null;
   
+  // Placeholder for trend data - replace with actual logic
+  const trendIcon = 'trending-up'; // or 'trending-down' or 'trending-neutral'
+  const trendText = 'Average brushing time is improving 🌟'; // Updated text
+  
+  // Calculate remaining time
+  const totalSecondsBrushed = minutes * 60 + seconds;
+  const targetTotalSeconds = targetMinutes * 60;
+  const remainingSeconds = Math.max(0, targetTotalSeconds - totalSecondsBrushed);
+  const remainingMinutes = Math.floor(remainingSeconds / 60);
+  const remainingSecondsPart = remainingSeconds % 60;
+  const remainingTimeString = `${remainingMinutes}:${remainingSecondsPart < 10 ? '0' : ''}${remainingSecondsPart}`;
+  
   return (
     <View style={[StyleSheet.absoluteFill, styles.mainContainer]}>
       {/* Backdrop - covers the entire screen and handles touches outside the overlay */}
-      <TouchableWithoutFeedback onPress={handleClose}>
+      <TouchableWithoutFeedback onPress={handleClose} accessible={false}>
         <View style={StyleSheet.absoluteFill}>
           <Animated.View 
             style={[
@@ -259,10 +167,10 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
       
       {/* Overlay Container - contains the actual overlay content */}
       <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'position' : 'height'} 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
         style={styles.centerContainer} 
         pointerEvents="box-none"
-        keyboardVerticalOffset={0}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
       >
         <Animated.View 
           style={[
@@ -270,7 +178,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
             {
               width: overlayWidth,
               height: overlayHeight,
-              borderRadius: 28,
+              borderRadius: 45,
               opacity: fadeAnim,
               transform: [
                 { scale: scaleAnim },
@@ -299,21 +207,216 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
                 borderColor: theme.colorScheme === 'dark' 
                   ? 'rgba(255, 255, 255, 0.1)' 
                   : 'rgba(0, 0, 0, 0.05)',
-                borderRadius: 28,
+                borderRadius: 45,
               }
             ]}
           />
           
-          {/* BrushingTime Items List */}
-          <FlatList
-            data={BRUSHING_TIME_ITEMS}
-            renderItem={renderBrushingTimeItem}
-            keyExtractor={(item) => item.id}
-            ListHeaderComponent={BrushingTimeHeader}
-            style={styles.list}
+          {/* Content Area: Use ScrollView */}
+          <ScrollView 
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContentContainer}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingVertical: 16, paddingHorizontal: 16 }}
-          />
+          >
+            {/* Integrated Header - Updated */}
+            <View style={styles.headerContainer}>
+              <View style={styles.iconBackdrop}>
+                <DonutChart
+                  progress={progress}
+                  size={80}
+                  thickness={14}
+                  progressColor={theme.colorScheme === 'dark' ? Colors.primary[400] : Colors.primary[700]}
+                  style={styles.timeDonut}
+                />
+              </View>
+              <View style={styles.headerTextContainer}>
+                <ThemedText
+                  style={[
+                    styles.brushingTimeTitle,
+                    { fontFamily: fontsLoaded ? 'Merienda-Bold' : undefined }
+                  ]}
+                  variant="subtitle"
+                  lightColor={Colors.primary[700]}
+                  darkColor={Colors.primary[400]}
+                >
+                  Brushing Time
+                </ThemedText>
+                <ThemedText style={styles.timeText}>
+                  {minutes}:{seconds < 10 ? `0${seconds}` : seconds} / {targetMinutes}:00 min
+                </ThemedText>
+              </View>
+            </View>
+            <View style={[styles.separator, { 
+              borderBottomColor: theme.colorScheme === 'dark' 
+                ? 'rgba(255, 255, 255, 0.1)' 
+                : 'rgba(0, 0, 0, 0.05)' 
+            }]} />
+
+            {/* NEW Brushing Trend Section */}
+            <View style={styles.usageContainer}> 
+              <View style={styles.usageIconContainer}>
+                <MaterialCommunityIcons
+                  name={trendIcon as keyof typeof MaterialCommunityIcons.glyphMap}
+                  size={30}
+                  color={Colors.primary[500]} 
+                />
+              </View>
+              <View style={styles.usageTextContainer}>
+                <ThemedText style={styles.usageTitle}>
+                  Brushing Trend
+                </ThemedText>
+                <ThemedText style={styles.usageText}>
+                  {trendText}
+                </ThemedText>
+              </View>
+            </View>
+
+            {/* Set Target Time Section - Now Expandable */}
+            <Pressable 
+              style={styles.usageContainer}
+              onPress={() => setIsTargetOptionsVisible(!isTargetOptionsVisible)} // Toggle visibility
+            >
+              <View style={styles.usageIconContainer}>
+                <MaterialCommunityIcons 
+                  name={"clock-time-three-outline"}
+                  size={30} 
+                  color={Colors.primary[500]} 
+                />
+              </View>
+              <View style={styles.usageTextContainer}>
+                <ThemedText style={styles.usageTitle}>
+                  Set Target Time
+                </ThemedText>
+                <ThemedText style={styles.usageText}>
+                  Current goal: {targetMinutes} min
+                </ThemedText>
+              </View>
+              {/* Removed chevron icon as row itself is not interactive */}
+              <MaterialCommunityIcons
+                name={isTargetOptionsVisible ? "chevron-up" : "chevron-down"} // Toggle icon
+                size={24}
+                color={activeColors.textSecondary}
+                style={{ marginLeft: 8 }} 
+              />
+            </Pressable>
+
+            {/* Target Time Options - Conditionally Rendered */}
+            {isTargetOptionsVisible && (
+              <View style={styles.targetOptionsContainer}>
+                {TARGET_TIME_OPTIONS.map((option) => {
+                  const isSelected = option === targetMinutes;
+                  return (
+                    <Pressable
+                      key={option}
+                      style={({ pressed }) => [
+                        styles.targetOptionButton,
+                        isSelected 
+                          ? { backgroundColor: Colors.primary[500] } 
+                          : { backgroundColor: activeColors.backgroundSecondary },
+                        pressed && { opacity: 0.8 }
+                      ]}
+                      onPress={() => handleSelectTargetTime(option)}
+                    >
+                      <ThemedText 
+                        style={[
+                          styles.targetOptionText,
+                          isSelected && { color: '#FFFFFF' } // White text when selected
+                        ]}
+                      >
+                        {option} min
+                      </ThemedText>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            )}
+
+            {/* Refactored Brushing Technique Info Section */}
+            <View style={[
+              styles.infoBoxContainer, 
+              {
+                borderColor: theme.colorScheme === 'dark' 
+                  ? Colors.primary[400] + '60' 
+                  : Colors.primary[700] + '40'
+              }
+            ]}>
+              <View style={styles.infoBoxTextContainer}>
+                <ThemedText style={styles.usageTitle}> 
+                  Why Time Matters
+                </ThemedText>
+                <ThemedText style={styles.usageText}> 
+                  Brushing under 2 minutes leaves plaque behind. Aim for 2–3 minutes for a full clean.
+                </ThemedText>
+              </View>
+            </View>
+            
+            {/* Progress Bar Section - Added */}
+            <View style={styles.progressContainer}>
+              <View style={styles.progressLabelContainer}>
+                <ThemedText style={styles.usageTitle}>Target Progress</ThemedText>
+                <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+                  {remainingSeconds > 0 && (
+                    <ThemedText style={[
+                       styles.usageText, 
+                       {
+                         color: Colors.primary[theme.colorScheme === 'dark' ? 400 : 500], 
+                         fontFamily: theme.typography.fonts.medium
+                       }
+                     ]}>
+                       {remainingTimeString} to go!
+                     </ThemedText>
+                  )}
+                  <ThemedText style={[styles.usageText, { marginLeft: remainingSeconds > 0 ? 4 : 0 }]}> 
+                    ({Math.round(progress)}%)
+                  </ThemedText>
+                </View>
+              </View>
+              <View style={[styles.progressBarBackground, { backgroundColor: theme.colorScheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)' }]}>
+                <View 
+                  style={[
+                    styles.progressBarFill, 
+                    { 
+                      width: `${Math.min(100, Math.max(0, progress))}%`, // Ensure width is between 0-100
+                      backgroundColor: Colors.primary[500] // Consistent color
+                    }
+                  ]} 
+                />
+              </View>
+            </View>
+
+          </ScrollView> 
+          
+          {/* Share Button Container - Added */}
+          <View style={styles.buttonShadowContainer}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.button,
+                {
+                  backgroundColor: pressed 
+                    ? theme.colorScheme === 'dark' 
+                      ? Colors.primary[600] 
+                      : Colors.primary[500]
+                    : theme.colorScheme === 'dark' 
+                      ? Colors.primary[500] 
+                      : Colors.primary[600],
+                }
+              ]}
+              onPress={() => {
+                console.log('Share stats button pressed');
+              }}
+            >
+              <MaterialCommunityIcons
+                  name="share-variant" 
+                  size={20} 
+                  color="#FFF"
+                  style={{ marginRight: 8 }} 
+              />
+              <ThemedText style={styles.buttonText}>
+                Share Stats
+              </ThemedText>
+            </Pressable>
+          </View>
+
         </Animated.View>
       </KeyboardAvoidingView>
     </View>
@@ -365,36 +468,123 @@ const styles = StyleSheet.create({
     fontSize: 16,
     opacity: 0.8,
   },
-  targetText: {
-    fontSize: 14,
-    opacity: 0.6,
-    marginTop: 4,
-  },
-  list: {
+  scrollView: {
     flex: 1,
   },
-  menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 8,
-  },
-  iconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  menuContent: {
-    flex: 1,
+  scrollContentContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 96,
   },
   separator: {
-    borderBottomWidth: 1,
-    marginHorizontal: 8,
+    borderBottomWidth: 1, 
+    marginHorizontal: 8, 
     marginBottom: 16,
+  },
+  usageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16, 
+    paddingVertical: 12, 
+    marginBottom: 0,
+  },
+  usageIconContainer: {
+    marginRight: 16,
+    width: 30,
+    alignItems: 'center',
+  },
+  usageTextContainer: {
+    flex: 1,
+  },
+  usageTitle: {
+    fontSize: 16,
+    fontFamily: 'Quicksand-Medium',
+    marginBottom: 2,
+  },
+  usageText: {
+    fontSize: 14,
+    fontFamily: 'Quicksand-Regular',
+    opacity: 0.8,
+  },
+  infoBoxContainer: {
+    flexDirection: 'row', 
+    marginHorizontal: 16,
+    marginBottom: 16, 
+    marginTop: 12,
+    borderRadius: 20,
+    padding: 16,
+    borderWidth: 1,
+  },
+  infoBoxTextContainer: {
+    flex: 1, 
+  },
+  progressContainer: {
+    marginHorizontal: 16,
+    marginBottom: 16,
+    marginTop: 8,
+  },
+  progressLabelContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  progressBarBackground: {
+    height: 10,
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    borderRadius: 10,
+  },
+  buttonShadowContainer: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    right: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5,
+    borderRadius: 30,
+  },
+  button: {
+    borderRadius: 30,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 60,
+    paddingHorizontal: 16,
+    overflow: 'hidden',
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontFamily: 'Merienda-Bold',
+    marginLeft: 4,
+  },
+  targetOptionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around', // Distribute buttons evenly
+    marginHorizontal: 16,
+    marginTop: 4,
+    marginBottom: 16,
+  },
+  targetOptionButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: Colors.primary[500], // Use primary color for border
+    minWidth: 80, // Ensure decent button size
+    alignItems: 'center',
+  },
+  targetOptionText: {
+    fontSize: 14,
+    fontFamily: 'Quicksand-Medium',
+    // Color is set dynamically based on selection
   },
 });
 
