@@ -249,7 +249,7 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose }) => 
       )}
       
       {/* Song Menu */}
-      {isVisible && <SongMenu />}
+      {isVisible && <SongMenu opacity={contentOpacity} />}
       
       {/* Close Button in top right corner */}
       {isVisible && (

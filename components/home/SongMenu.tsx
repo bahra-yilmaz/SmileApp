@@ -17,6 +17,7 @@ interface SongMenuProps {
   onSelectSong?: (song: Song) => void;
   songs?: Song[];
   onSelectNoSound?: () => void;
+  opacity?: Animated.Value | Animated.AnimatedAddition<string | number>;
 }
 
 const DEFAULT_SONGS: Song[] = [
@@ -32,6 +33,7 @@ export const SongMenu: React.FC<SongMenuProps> = ({
   onSelectSong,
   songs = DEFAULT_SONGS,
   onSelectNoSound,
+  opacity,
 }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
@@ -84,7 +86,7 @@ export const SongMenu: React.FC<SongMenuProps> = ({
   };
 
   return (
-    <View style={styles.wrapper}>
+    <Animated.View style={[styles.wrapper, opacity ? { opacity } : {}]}>
       {/* Shadow Wrapper for Collapsed Bar */}
       <View style={styles.shadowWrapper}>
         <BlurView tint={theme.colorScheme === 'dark' ? 'dark' : 'light'} intensity={80} style={styles.blurViewStyle}> 
@@ -148,7 +150,7 @@ export const SongMenu: React.FC<SongMenuProps> = ({
           </BlurView>
         </View>
       </Animated.View>
-    </View>
+    </Animated.View>
   );
 };
 
