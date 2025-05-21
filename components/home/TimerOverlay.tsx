@@ -16,6 +16,7 @@ import { useTheme } from '../ThemeProvider';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import TimerCircle from './TimerCircle';
+import SongMenu from './SongMenu';
 
 interface OverlayProps {
   isVisible: boolean;
@@ -246,6 +247,9 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose }) => 
           <TimerCircle />
         </Animated.View>
       )}
+      
+      {/* Song Menu */}
+      {isVisible && <SongMenu />}
       
       {/* Close Button in top right corner */}
       {isVisible && (

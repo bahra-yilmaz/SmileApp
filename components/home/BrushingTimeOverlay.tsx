@@ -247,10 +247,8 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
               </View>
             </View>
             <View style={[styles.separator, { 
-              borderBottomColor: theme.colorScheme === 'dark' 
-                ? 'rgba(255, 255, 255, 0.1)' 
-                : 'rgba(0, 0, 0, 0.05)' 
-            }]} />
+              borderBottomColor: theme.colorScheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)' 
+            }, { marginBottom: 8 }]} />
 
             {/* NEW Brushing Trend Section */}
             <View style={styles.usageContainer}> 
@@ -441,7 +439,8 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 20,
+    paddingTop: 20,
+    paddingBottom: 10,
     paddingHorizontal: 8,
     marginBottom: 0,
   },
@@ -479,7 +478,7 @@ const styles = StyleSheet.create({
   separator: {
     borderBottomWidth: 1, 
     marginHorizontal: 8, 
-    marginBottom: 16,
+    marginBottom: 8,
   },
   usageContainer: {
     flexDirection: 'row',
