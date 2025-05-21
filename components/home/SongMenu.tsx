@@ -92,8 +92,8 @@ export const SongMenu: React.FC<SongMenuProps> = ({
             <TouchableOpacity onPress={onPlayPause} style={styles.playPauseButton}>
               <MaterialCommunityIcons
                 name={isPlaying ? "pause" : "play"}
-                size={40} // Further Increased play button size again
-                color={theme.activeColors.text}
+                size={40} 
+                color={theme.colorScheme === 'dark' ? theme.colors.primary[200] : theme.colors.primary[800]} // Using primary[800] for light, primary[200] for dark
               />
             </TouchableOpacity>
             <View style={styles.songInfoContainer}>
@@ -114,7 +114,11 @@ export const SongMenu: React.FC<SongMenuProps> = ({
       {/* Shadow Wrapper for Menu Options */}
       <Animated.View style={[styles.menuOptionsShadowWrapper, { height: menuHeight, opacity: animation }]}>
         <View style={styles.shadowWrapper}> 
-          <BlurView tint={theme.colorScheme === 'dark' ? 'dark' : 'light'} intensity={90} style={styles.blurViewOptionsStyle}> 
+          <BlurView 
+            tint={theme.colorScheme === 'dark' ? 'dark' : 'light'} 
+            intensity={70} // Intensity as a direct prop
+            style={styles.blurViewOptionsStyle}
+          > 
             <View style={styles.menuOptionsContainer}>
               {songs.map((song) => (
                 <TouchableOpacity
@@ -125,7 +129,7 @@ export const SongMenu: React.FC<SongMenuProps> = ({
                     toggleMenu(); // Close menu on selection
                   }}
                 >
-                  <MaterialCommunityIcons name="music-note" size={20} color={theme.activeColors.text} />
+                  <MaterialCommunityIcons name="music-note" size={20} color={theme.colorScheme === 'dark' ? theme.colors.primary[200] : theme.colors.primary[800]} />
                   <Text style={styles.menuItemText}>{song.name}</Text>
                 </TouchableOpacity>
               ))}
@@ -137,7 +141,7 @@ export const SongMenu: React.FC<SongMenuProps> = ({
                   toggleMenu(); // Close menu on selection
                 }}
               >
-                <MaterialCommunityIcons name="volume-off" size={20} color={theme.activeColors.text} />
+                <MaterialCommunityIcons name="volume-off" size={20} color={theme.colorScheme === 'dark' ? theme.colors.primary[200] : theme.colors.primary[800]} />
                 <Text style={styles.menuItemText}>No Sound</Text>
               </TouchableOpacity>
             </View>
@@ -172,13 +176,17 @@ const createStyles = (theme: any, insets: any) => StyleSheet.create({
   },
   blurViewStyle: { 
     width: '100%',
-    borderRadius: 30, // Add borderRadius to BlurView itself
-    overflow: 'hidden', // Add overflow: hidden to BlurView itself
+    borderRadius: 30, 
+    overflow: 'hidden', 
   },
-  blurViewOptionsStyle: { // Specific for options if different intensity/tint, or merge with blurViewStyle
+  blurViewOptionsStyle: { 
     width: '100%',
-    borderRadius: 30, // Add borderRadius to BlurView itself
-    overflow: 'hidden', // Add overflow: hidden to BlurView itself
+    borderRadius: 30, 
+    overflow: 'hidden', 
+    // Matching BrushingTimeOverlay glassmorphism - intensity moved to props
+    backgroundColor: theme.colorScheme === 'dark' ? 'rgba(30, 40, 60, 0.7)' : 'rgba(255, 255, 255, 0.7)',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: theme.colorScheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
   },
   collapsedBarContainer: {
     flexDirection: 'row',
@@ -204,7 +212,7 @@ const createStyles = (theme: any, insets: any) => StyleSheet.create({
   songNameText: {
     fontSize: 16,
     fontWeight: '600',
-    color: theme.activeColors.text,
+    color: theme.colorScheme === 'dark' ? theme.colors.primary[200] : theme.colors.primary[800], // Using primary[800] for light, primary[200] for dark
     fontFamily: 'Quicksand', // Changed font to Quicksand
     marginBottom: 5, // Space between song name and visualizer
   },
@@ -223,17 +231,15 @@ const createStyles = (theme: any, insets: any) => StyleSheet.create({
     position: 'relative',
     bottom: 13, 
   },
-  menuOptionsShadowWrapper: { // Wrapper for the animated height/opacity part OF THE SHADOW VIEW
+  menuOptionsShadowWrapper: { 
     width: '100%',
     marginTop: 8,
-    // overflow: 'hidden', // This might clip shadow if applied here, shadow wrapper will handle rounding
-    // borderRadius for shadow shape is on shadowWrapper
   },
   menuOptionsContainer: {
     paddingVertical: 5,
-    backgroundColor: theme.colorScheme === 'dark' ? 'rgba(50, 50, 50, 0.7)' : 'rgba(245, 245, 245, 0.8)',
-    borderRadius: 40, // Changed corner radius to 40
-    overflow: 'hidden',
+    backgroundColor: 'transparent', // Background handled by BlurView now
+    borderRadius: 30, 
+    overflow: 'hidden', 
   },
   menuItem: {
     flexDirection: 'row',
@@ -242,7 +248,7 @@ const createStyles = (theme: any, insets: any) => StyleSheet.create({
     paddingHorizontal: 20,
   },
   menuItemText: {
-    color: theme.activeColors.text,
+    color: theme.colorScheme === 'dark' ? theme.colors.primary[200] : theme.colors.primary[800], // Using primary[800] for light, primary[200] for dark
     fontSize: 15,
     marginLeft: 15,
   },
