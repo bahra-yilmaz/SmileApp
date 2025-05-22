@@ -10,7 +10,7 @@ import {
   Animated,
   Dimensions,
   PanResponder,
-  TouchableOpacity
+  Pressable
 } from 'react-native';
 import { useTheme } from '../ThemeProvider';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -263,17 +263,22 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose }) => 
           ]}
           pointerEvents="box-none"
         >
-          <TouchableOpacity
-            style={styles.closeButton}
+          <Pressable
+            style={({ pressed }) => [
+              styles.closeButton,
+              {
+                opacity: pressed ? 0.7 : 1,
+                transform: [{ scale: pressed ? 0.90 : 1 }]
+              }
+            ]}
             onPress={handleClosePress}
-            activeOpacity={0.7}
           >
             <MaterialCommunityIcons 
               name="chevron-down" 
               size={28} 
               color={theme.activeColors.text} 
             />
-          </TouchableOpacity>
+          </Pressable>
         </Animated.View>
       )}
       
