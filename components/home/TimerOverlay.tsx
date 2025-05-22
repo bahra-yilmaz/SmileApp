@@ -244,7 +244,7 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose }) => 
           pointerEvents="box-none"
         >
           {/* Timer Circle Component */}
-          <TimerCircle />
+          <TimerCircle onBrushedPress={onClose} />
         </Animated.View>
       )}
       

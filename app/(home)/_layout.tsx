@@ -4,6 +4,12 @@ import { useTheme } from '../../components/ThemeProvider';
 import { BlurView } from 'expo-blur';
 import { StyleSheet, View } from 'react-native';
 
+export type HomeStackParamList = {
+  index: undefined; // Assuming 'index' is your main home screen
+  settings: undefined;
+  BrushingResultsScreen: undefined; // Add the new screen here
+};
+
 export default function HomeLayout() {
   const { theme, colorScheme } = useTheme();
   const { colors } = theme;
@@ -33,6 +39,8 @@ export default function HomeLayout() {
         options={{
           title: 'Smile App',
           headerShown: false,
+          animation: 'fade',
+          animationDuration: 300,
         }}
       />
       <Stack.Screen
@@ -40,6 +48,15 @@ export default function HomeLayout() {
         options={{
           title: 'Settings',
           headerShown: false, // We handle our own header in the settings screen
+        }}
+      />
+      <Stack.Screen // Add the screen definition
+        name="BrushingResultsScreen"
+        options={{
+          title: 'Brushing Results',
+          headerShown: false, // Or true if you want a header
+          animation: 'fade',
+          animationDuration: 300, // Explicitly set animation duration
         }}
       />
     </Stack>

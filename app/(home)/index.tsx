@@ -203,7 +203,13 @@ export default function HomeScreen() {
         {/* Timer Overlay */}
         <TimerOverlay
           isVisible={isTimerVisible}
-          onClose={() => setIsTimerVisible(false)}
+          onClose={() => {
+            router.push('./BrushingResultsScreen'); // Navigate first
+            // Delay hiding the overlay to match BrushingResultsScreen animation duration
+            setTimeout(() => {
+              setIsTimerVisible(false);
+            }, 300); // Matched to animationDuration
+          }}
         />
         
         {/* Toothbrush Overlay */}

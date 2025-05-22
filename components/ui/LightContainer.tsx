@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
+import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native';
 
 interface LightContainerProps {
   children?: React.ReactNode;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   backgroundColor?: string;
 }
 
@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 0,
     padding: 16,
-    flex: 1,
     marginBottom: 0,
   },
 }); 
