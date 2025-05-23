@@ -21,9 +21,10 @@ import SongMenu from './SongMenu';
 interface OverlayProps {
   isVisible: boolean;
   onClose: () => void;
+  onNavigateToResults: () => void;
 }
 
-export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose }) => {
+export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNavigateToResults }) => {
   // Animation values
   const expandAnim = useRef(new Animated.Value(0)).current;
   const gestureAnim = useRef(new Animated.Value(0)).current;
@@ -244,7 +245,7 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose }) => 
           pointerEvents="box-none"
         >
           {/* Timer Circle Component */}
-          <TimerCircle onBrushedPress={onClose} />
+          <TimerCircle onBrushedPress={onNavigateToResults} />
         </Animated.View>
       )}
       

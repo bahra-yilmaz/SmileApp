@@ -204,11 +204,14 @@ export default function HomeScreen() {
         <TimerOverlay
           isVisible={isTimerVisible}
           onClose={() => {
-            router.push('./BrushingResultsScreen'); // Navigate first
-            // Delay hiding the overlay to match BrushingResultsScreen animation duration
+            router.push('/(home)'); // Navigate to home screen
+            setIsTimerVisible(false); // Hide the overlay
+          }}
+          onNavigateToResults={() => {
+            router.push('./BrushingResultsScreen');
             setTimeout(() => {
               setIsTimerVisible(false);
-            }, 300); // Matched to animationDuration
+            }, 300);
           }}
         />
         

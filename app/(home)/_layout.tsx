@@ -54,9 +54,9 @@ export default function HomeLayout() {
         name="BrushingResultsScreen"
         options={{
           title: 'Brushing Results',
-          headerShown: false, // Or true if you want a header
-          animation: 'fade',
-          animationDuration: 300, // Explicitly set animation duration
+          headerShown: false, 
+          presentation: 'transparentModal', // Key change for transparency
+          animation: 'none', // Disable navigator animation, our component handles it
         }}
       />
     </Stack>
