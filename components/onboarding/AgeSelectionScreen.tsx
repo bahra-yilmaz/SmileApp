@@ -239,7 +239,7 @@ export default function AgeSelectionScreen({
         <PrimaryButton 
           label="Continue"
           onPress={handleNext}
-          width={260}
+          width={width * 0.85}
           useDisplayFont={true}
         />
       </View>

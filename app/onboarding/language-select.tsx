@@ -120,6 +120,7 @@ export default function LanguageSelectScreen() {
             onPress={handleContinue}
             disabled={!selectedLanguage}
             width={width * 0.85}
+            useDisplayFont={true}
           />
         </View>
       </View>

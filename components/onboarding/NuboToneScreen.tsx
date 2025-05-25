@@ -190,7 +190,7 @@ export default function NuboToneScreen({
         <PrimaryButton 
           label={isLastScreen ? 'Start Now' : 'Continue'}
           onPress={handleNext}
-          width={260}
+          width={width * 0.85}
           useDisplayFont={true}
         />
       </View>

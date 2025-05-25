@@ -115,6 +115,7 @@ export default function OnboardingWelcome() {
             label="Lets Go"
             onPress={handleContinue}
             useDisplayFont={true}
+            width={width * 0.85}
           />
         </View>
       </View>
