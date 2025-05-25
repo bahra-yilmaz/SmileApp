@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, ViewStyle, TextStyle, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, TouchableOpacity, ViewStyle, TextStyle, ActivityIndicator, Animated } from 'react-native';
 import ThemedText from '../ThemedText';
 import { useTheme } from '../ThemeProvider';
 import { useFonts } from 'expo-font';
 import { Colors } from '../../constants/Colors';
+import { useButtonPulseAnimation } from '../../hooks/useButtonPulseAnimation';
 
 interface PrimaryButtonProps {
   /**
@@ -48,8 +49,8 @@ interface PrimaryButtonProps {
 }
 
 /**
- * A secondary action button component that follows the app's design system.
- * Features a transparent background with white stroke/border.
+ * A primary action button component that follows the app's design system.
+ * Features a solid background with a subtle shadow.
  */
 export default function PrimaryButton({
   label,
@@ -63,33 +64,37 @@ export default function PrimaryButton({
 }: PrimaryButtonProps) {
   const { theme } = useTheme();
   
-  // Load fonts explicitly in the component 
   const [fontsLoaded] = useFonts({
     'Merienda-Medium': require('../../assets/fonts/Merienda-Medium.ttf'),
   });
+
+  const isClickable = !disabled && !isLoading;
+  const { transformStyle, shadowStyle } = useButtonPulseAnimation(isClickable);
   
-  // Primary button style with solid background
   const buttonStyle = {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.9)',
-    opacity: disabled ? 0.7 : 1,
+    opacity: !isClickable ? 0.7 : 1,
   };
   
   return (
-    <View style={[
+    <Animated.View style={[
       styles.shadowContainer,
       { width: width },
+      transformStyle,
+      shadowStyle,
       style,
     ]}>
       <TouchableOpacity
         onPress={onPress}
-        disabled={disabled || isLoading}
+        disabled={!isClickable}
         style={[
           styles.button,
           { width: width, borderRadius: 30 },
           buttonStyle,
         ]}
+        activeOpacity={0.8}
       >
         {isLoading ? (
           <ActivityIndicator size="small" color={Colors.primary[500]} />
@@ -98,18 +103,16 @@ export default function PrimaryButton({
             style={[
               styles.buttonText,
               { color: Colors.primary[500] },
-              // Apply display font only if it's loaded and requested
               useDisplayFont && fontsLoaded ? { fontFamily: 'Merienda-Medium' } : {},
               textStyle,
             ]}
-            // Don't pass the useDisplayFont prop to ThemedText if we're handling it here
             weight={useDisplayFont && fontsLoaded ? 'medium' : 'bold'}
           >
             {label}
           </ThemedText>
         )}
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -117,8 +120,6 @@ const styles = StyleSheet.create({
   shadowContainer: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
     elevation: 4,
     borderRadius: 30,
     marginVertical: 6,
@@ -130,11 +131,6 @@ const styles = StyleSheet.create({
     height: 60,
     overflow: 'hidden',
     borderRadius: 30,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
   },
   buttonText: {
     fontSize: 18,
