@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Dimensions, Animated, Text, FlatList } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Dimensions, Animated, Text, FlatList, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { Theme } from '../../constants/Theme';
@@ -104,11 +104,17 @@ export default function OnboardingWelcome() {
             Welcome to{
               '\n' /* Newline character */
             }
-            <Text style={{ fontFamily: fontFamilySmile, fontSize: 36, color: 'white' }}>
-              your app
-            </Text>
+            your app{
+              '\n' /* Newline character */
+            }  
           </ThemedText>
         </View>
+
+        <Image 
+          source={require('../../assets/images/mountain-faded.png')} 
+          style={styles.backgroundImage} 
+          resizeMode="cover"
+        />
 
         <View style={styles.buttonContainer}>
           <PrimaryButton
@@ -131,6 +137,11 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     overflow: 'hidden',
+  },
+  backgroundImage: {
+    width: width,
+    height: width * (9/16),
+    marginBottom: 30,
   },
   contentContainer: {
     width: '100%',
