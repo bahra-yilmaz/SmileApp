@@ -238,6 +238,7 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     width: '100%',
+    flex: 1,
   },
   cardsContentContainer: {
     alignItems: 'center',
@@ -262,9 +263,7 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     alignItems: 'center',
-    justifyContent: 'center',
     width: '100%',
-    paddingHorizontal: 20,
-    marginBottom: 20,
+    marginTop: 20,
   },
 }); 
