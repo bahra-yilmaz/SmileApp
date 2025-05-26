@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Animated, Pressable, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import GlassmorphicCard from '../ui/GlassmorphicCard';
@@ -6,6 +6,15 @@ import Mascot from '../ui/Mascot';
 import ThemedText from '../ThemedText';
 import { useTypingEffect } from '../../utils/hooks/useTypingEffect';
 import { useTheme } from '../ThemeProvider';
+import Reanimated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withSequence,
+  withTiming,
+  Easing,
+  cancelAnimation,
+} from 'react-native-reanimated';
 
 // Use the same variant types as the Mascot component
 type MascotVariant = 'waving' | 'glasses' | 'brushing' | 'welcoming' | 'glasses-1-pp';
@@ -17,20 +26,23 @@ interface ExpandableMascotCardProps {
     translateY: number;
     scale: number;
   };
-  greetingText?: string;
+  greetingText: string;
+  isExpanded: boolean;
+  onPress: () => void;
+  enablePulse: boolean;
 }
 
 const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
   mascotVariant,
   mascotPosition,
-  greetingText = "Hello World!",
+  greetingText,
+  isExpanded,
+  onPress,
+  enablePulse
 }) => {
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const { borderRadius } = theme;
-  
-  // Track expanded state
-  const [isExpanded, setIsExpanded] = useState(false);
   
   // Get screen dimensions
   const { width: screenWidth } = Dimensions.get('window');
@@ -51,13 +63,13 @@ const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
   const cardRadius = borderRadius.md;
   
   // Create animation values
-  const [animationValues] = useState(() => ({
+  const animationValuesRef = useRef({
     width: new Animated.Value(1),
     mascotPosition: new Animated.Value(0),
     cornerRadius: new Animated.Value(1),
-    notExpandedMascotOpacity: new Animated.Value(1), // Regular glasses mascot visible initially
-    expandedMascotOpacity: new Animated.Value(0)     // PP glasses mascot hidden initially
-  }));
+    notExpandedMascotOpacity: new Animated.Value(1),
+    expandedMascotOpacity: new Animated.Value(0)
+  }).current;
   
   const { 
     width: widthAnim, 
@@ -65,7 +77,7 @@ const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
     cornerRadius: cornerRadiusAnim,
     notExpandedMascotOpacity: notExpandedMascotOpacityAnim,
     expandedMascotOpacity: expandedMascotOpacityAnim
-  } = animationValues;
+  } = animationValuesRef;
   
   // Calculate animated values safely
   const [animatedWidth, setAnimatedWidth] = useState(circleSize);
@@ -95,170 +107,190 @@ const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
     enabled: isExpanded
   });
   
-  // Handle card press to expand (one-way only)
-  const handlePress = () => {
-    if (!isExpanded) {
-      // Expand the card and switch mascot variants
-      Animated.parallel([
-        // Expand the card width
-        Animated.spring(widthAnim, {
-          toValue: expandedWidth / circleSize,
-          useNativeDriver: false,
-          friction: 8,
-        }),
-        // Move the mascot position
-        Animated.spring(mascotPositionAnim, {
-          toValue: -((expandedWidth - circleSize) / 2) * 0.3,
-          useNativeDriver: true,
-          friction: 8,
-        }),
-        // Change the corner radius
-        Animated.spring(cornerRadiusAnim, {
-          toValue: 2,
-          useNativeDriver: false,
-          friction: 8,
-        }),
-        // Fade out regular glasses mascot
-        Animated.timing(notExpandedMascotOpacityAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        // Fade in the expanded state mascot (pp version)
-        Animated.timing(expandedMascotOpacityAnim, {
-          toValue: 1,
-          duration: 200,
-          useNativeDriver: true,
-        })
-      ]).start();
-      
-      setIsExpanded(true);
+  // Pulse animation setup with Reanimated
+  const pulseScale = useSharedValue(1);
+
+  useEffect(() => {
+    if (enablePulse && !isExpanded) {
+      pulseScale.value = withRepeat(
+        withSequence(
+          withTiming(1.05, { duration: 700, easing: Easing.bezier(0.25, 0.1, 0.25, 1) }),
+          withTiming(1, { duration: 700, easing: Easing.bezier(0.25, 0.1, 0.25, 1) })
+        ),
+        -1, // Infinite repeat
+        true // Reverse animation
+      );
+    } else {
+      cancelAnimation(pulseScale); // Stop animation
+      pulseScale.value = withTiming(1, { duration: 200 }); // Reset scale
     }
-  };
+    // Cleanup on unmount or when pulse is disabled
+    return () => {
+      cancelAnimation(pulseScale);
+    };
+  }, [enablePulse, isExpanded, pulseScale]);
+
+  const pulseAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: pulseScale.value }],
+    };
+  });
+
+  // Handle card expansion/collapse based on isExpanded prop
+  useEffect(() => {
+    const animations = [
+      Animated.spring(widthAnim, {
+        toValue: isExpanded ? expandedWidth / circleSize : 1,
+        useNativeDriver: false,
+        friction: 8,
+      }),
+      Animated.spring(mascotPositionAnim, {
+        toValue: isExpanded ? -((expandedWidth - circleSize) / 2) * 0.3 : 0,
+        useNativeDriver: true,
+        friction: 8,
+      }),
+      Animated.spring(cornerRadiusAnim, {
+        toValue: isExpanded ? 2 : 1,
+        useNativeDriver: false,
+        friction: 8,
+      }),
+      Animated.timing(notExpandedMascotOpacityAnim, {
+        toValue: isExpanded ? 0 : 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(expandedMascotOpacityAnim, {
+        toValue: isExpanded ? 1 : 0,
+        duration: 200,
+        useNativeDriver: true,
+      })
+    ];
+    Animated.parallel(animations).start();
+  }, [isExpanded, widthAnim, mascotPositionAnim, cornerRadiusAnim, notExpandedMascotOpacityAnim, expandedMascotOpacityAnim, expandedWidth, circleSize]);
   
   return (
-    <View style={styles.cardContainer}>
-      <View 
-        style={{
-          marginTop: 80 + insets.top,
-          alignItems: 'center',
-        }}
-      >
-        <Pressable
-          onPress={handlePress}
-          disabled={isExpanded} // Disable press once expanded
-          style={({ pressed }) => ({
-            opacity: (!isExpanded && pressed) ? 0.95 : 1 
-          })}
+    <Reanimated.View style={pulseAnimatedStyle}>
+      <View style={styles.cardContainer}>
+        <View 
+          style={{
+            alignItems: 'center',
+          }}
         >
-          <GlassmorphicCard
-            width={animatedWidth}
-            borderRadius="none"
-            intensity={70}
-            shadow="lg"
-            containerStyle={{
-              height: circleHeight,
-              width: isExpanded ? animatedWidth : circleHeight, // Force width to match height when not expanded
-              borderRadius: animatedRadius,
-            }}
-            style={{
-              height: circleHeight,
-              width: isExpanded ? animatedWidth : circleHeight, // Force width to match height when not expanded
-              borderRadius: animatedRadius,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: 'rgba(0, 0, 0, 0.3)',
-              flexDirection: 'row',
-              paddingHorizontal: isExpanded ? 8 : 15,
-            }}
+          <Pressable
+            onPress={onPress}
+            disabled={isExpanded}
+            style={({ pressed }) => ({
+              opacity: (!isExpanded && pressed) ? 0.95 : 1 
+            })}
           >
-            {/* Nubo Mascot with fade transition */}
-            <Animated.View
-              style={{
-                transform: [{ translateX: mascotPositionAnim }],
-                width: mascotSize,
+            <GlassmorphicCard
+              width={animatedWidth}
+              borderRadius="none"
+              intensity={70}
+              shadow="lg"
+              containerStyle={{
                 height: circleHeight,
+                width: isExpanded ? animatedWidth : circleHeight,
+                borderRadius: animatedRadius,
+              }}
+              style={{
+                height: circleHeight,
+                width: isExpanded ? animatedWidth : circleHeight,
+                borderRadius: animatedRadius,
                 alignItems: 'center',
                 justifyContent: 'center',
-                position: 'relative',
-                marginLeft: isExpanded ? 8 : 12, // Reduce left margin when not expanded
+                backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                flexDirection: 'row',
+                paddingHorizontal: isExpanded ? 8 : 15,
               }}
             >
-              {/* Regular Glasses Nubo (starts visible, hidden when expanded) */}
-              <Animated.View 
-                style={{ 
-                  opacity: notExpandedMascotOpacityAnim, 
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  justifyContent: 'center',
+              {/* Nubo Mascot with fade transition */}
+              <Animated.View
+                style={{
+                  transform: [{ translateX: mascotPositionAnim }],
+                  width: mascotSize,
+                  height: circleHeight,
                   alignItems: 'center',
-                  // Apply variant-specific positioning
-                  transform: [
-                    { translateX: mascotPosition.translateX },
-                    { translateY: mascotPosition.translateY },
-                    { scale: mascotPosition.scale }
-                  ]
+                  justifyContent: 'center',
+                  position: 'relative',
+                  marginLeft: isExpanded ? 8 : 12,
                 }}
               >
-                <Mascot 
-                  variant={mascotVariant} 
-                  size={nonExpandedMascotSize} // Use larger size for non-expanded state
-                />
-              </Animated.View>
-              
-              {/* PP Glasses Nubo (hidden initially, shown when expanded) */}
-              <Animated.View 
-                style={{ 
-                  opacity: expandedMascotOpacityAnim, 
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  transform: [{ translateX: 15 }], // Move the expanded mascot slightly to the right
-                }}
-              >
-                <Mascot 
-                  variant="glasses-1-pp" 
-                  size={mascotSize} // Keep original size for expanded state
-                />
-              </Animated.View>
-            </Animated.View>
-            
-            {/* Content that appears on expansion */}
-            {isExpanded && (
-              <View style={styles.expandedContent}>
-                <ThemedText 
-                  variant="subtitle" 
+                {/* Regular Glasses Nubo (starts visible, hidden when expanded) */}
+                <Animated.View 
                   style={{ 
-                    color: 'white', 
-                    marginLeft: 0, 
-                    fontSize: 15,
-                    fontWeight: '500', // Add slight emphasis
+                    opacity: notExpandedMascotOpacityAnim, 
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    transform: [
+                      { translateX: mascotPosition.translateX },
+                      { translateY: mascotPosition.translateY },
+                      { scale: mascotPosition.scale }
+                    ]
                   }}
                 >
-                  {typedText}
-                </ThemedText>
-              </View>
-            )}
-          </GlassmorphicCard>
-        </Pressable>
+                  <Mascot 
+                    variant={mascotVariant} 
+                    size={nonExpandedMascotSize}
+                  />
+                </Animated.View>
+                
+                {/* PP Glasses Nubo (hidden initially, shown when expanded) */}
+                <Animated.View 
+                  style={{ 
+                    opacity: expandedMascotOpacityAnim, 
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    transform: [{ translateX: 15 }],
+                  }}
+                >
+                  <Mascot 
+                    variant="glasses-1-pp" 
+                    size={mascotSize}
+                  />
+                </Animated.View>
+              </Animated.View>
+              
+              {/* Content that appears on expansion */}
+              {isExpanded && (
+                <View style={styles.expandedContent}>
+                  <ThemedText 
+                    variant="subtitle" 
+                    style={{ 
+                      color: 'white', 
+                      marginLeft: 0, 
+                      fontSize: 15,
+                      fontWeight: '500',
+                    }}
+                  >
+                    {typedText}
+                  </ThemedText>
+                </View>
+              )}
+            </GlassmorphicCard>
+          </Pressable>
+        </View>
       </View>
-    </View>
+    </Reanimated.View>
   );
 };
 
 const styles = StyleSheet.create({
   cardContainer: {
-    position: 'absolute',
     width: '100%',
     alignItems: 'center',
-    zIndex: 5, // Keep this below other elements
+    zIndex: 5,
+    marginTop: 20,
   },
   expandedContent: {
     flex: 1,
