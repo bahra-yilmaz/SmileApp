@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Dimensions, Animated, Text, FlatList, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Dimensions, Animated, Text, FlatList, Image, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { Theme } from '../../constants/Theme';
@@ -37,6 +37,13 @@ export default function OnboardingWelcome() {
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
   const [isMascotCardExpanded, setIsMascotCardExpanded] = useState(false);
   const [isCheckpoint1Done, setIsCheckpoint1Done] = useState(false);
+  const [isCheckpoint2Done, setIsCheckpoint2Done] = useState(false);
+  const [isCheckpoint3Done, setIsCheckpoint3Done] = useState(false);
+  // State for mascot greeting text
+  const initialGreeting = t('onboarding.welcomeMascotGreeting');
+  const nextGreeting = t('onboarding.mascotNextGreeting');
+  const finalGreeting = t('onboarding.mascotFinalGreeting');
+  const [mascotGreeting, setMascotGreeting] = useState(initialGreeting);
 
   // Get a random mascot and its positioning for the new card
   const { variant: randomMascotVariant, position: mascotPosition } = useRandomMascot();
@@ -47,22 +54,80 @@ export default function OnboardingWelcome() {
   const checkmarkOpacity = useSharedValue(0);
   const checkmarkScale = useSharedValue(0.5); // Start smaller for a pop-in effect
 
+  // Animation values for Circle 2
+  const circle2Opacity = useSharedValue(0);
+  const circle2BackgroundColor = useSharedValue('transparent');
+  const circle2BorderWidth = useSharedValue(2);
+  const checkmark2Opacity = useSharedValue(0);
+  const checkmark2Scale = useSharedValue(0.5);
+
+  // Animation values for Circle 3
+  const circle3Opacity = useSharedValue(0);
+  const circle3BackgroundColor = useSharedValue('transparent');
+  const circle3BorderWidth = useSharedValue(2);
+  const checkmark3Opacity = useSharedValue(0);
+  const checkmark3Scale = useSharedValue(0.5);
+
   useEffect(() => {
     if (isCheckpoint1Done) {
-      // Transition to "done" state
-      circle1BackgroundColor.value = withTiming('white', { duration: 300, easing: Easing.out(Easing.quad) });
-      circle1BorderWidth.value = withTiming(0, { duration: 200, easing: Easing.out(Easing.quad) });
-      // Animate checkmark with delay
-      checkmarkOpacity.value = withDelay(150, withTiming(1, { duration: 250, easing: Easing.out(Easing.quad) })); 
-      checkmarkScale.value = withDelay(150, withTiming(1, { duration: 300, easing: Easing.elastic(1) }));
+      // Slower transition to "done" state for Circle 1
+      circle1BackgroundColor.value = withTiming('white', { duration: 500, easing: Easing.out(Easing.quad) });
+      circle1BorderWidth.value = withTiming(0, { duration: 400, easing: Easing.out(Easing.quad) });
+      checkmarkOpacity.value = withDelay(300, withTiming(1, { duration: 400, easing: Easing.out(Easing.quad) }));
+      checkmarkScale.value = withDelay(300, withTiming(1, { duration: 500, easing: Easing.elastic(1) }));
+      // Reveal Circle 2
+      circle2Opacity.value = withDelay(500, withTiming(1, { duration: 400 }));
     } else {
-      // Reset to initial unfilled state if needed (e.g., for a reset feature later)
-      circle1BackgroundColor.value = withTiming('transparent', { duration: 200 });
-      circle1BorderWidth.value = withTiming(2, { duration: 200 });
-      checkmarkOpacity.value = withTiming(0, { duration: 150 });
-      checkmarkScale.value = withTiming(0.5, { duration: 150 });
+      // Reset Circle 1 to initial unfilled state
+      circle1BackgroundColor.value = withTiming('transparent', { duration: 300 });
+      circle1BorderWidth.value = withTiming(2, { duration: 300 });
+      checkmarkOpacity.value = withTiming(0, { duration: 200 });
+      checkmarkScale.value = withTiming(0.5, { duration: 200 });
+      // Hide Circle 2 if C1 is reset
+      circle2Opacity.value = withTiming(0, { duration: 300 });
     }
-  }, [isCheckpoint1Done]); // Removed dependencies not directly used in this effect logic
+  }, [isCheckpoint1Done, circle1BackgroundColor, circle1BorderWidth, checkmarkOpacity, checkmarkScale, circle2Opacity]);
+
+  // useEffect for Circle 2 completion and Circle 3 reveal
+  useEffect(() => {
+    if (isCheckpoint2Done) {
+      circle2BackgroundColor.value = withTiming('white', { duration: 500, easing: Easing.out(Easing.quad) });
+      circle2BorderWidth.value = withTiming(0, { duration: 400, easing: Easing.out(Easing.quad) });
+      checkmark2Opacity.value = withDelay(300, withTiming(1, { duration: 400, easing: Easing.out(Easing.quad) }));
+      checkmark2Scale.value = withDelay(300, withTiming(1, { duration: 500, easing: Easing.elastic(1) }));
+      // Reveal Circle 3 only if it's not already marked done (in case of state resets)
+      if (!isCheckpoint3Done) { 
+        circle3Opacity.value = withDelay(500, withTiming(1, { duration: 400 }));
+      }
+    } else {
+      circle2BackgroundColor.value = withTiming('transparent', { duration: 300 });
+      circle2BorderWidth.value = withTiming(2, { duration: 300 });
+      checkmark2Opacity.value = withTiming(0, { duration: 200 });
+      checkmark2Scale.value = withTiming(0.5, { duration: 200 });
+      // Hide Circle 3 if C2 is reset, but only if C3 isn't done
+      if (!isCheckpoint3Done) {
+        circle3Opacity.value = withTiming(0, { duration: 300 }); 
+      }
+    }
+  }, [isCheckpoint2Done, isCheckpoint3Done, circle2BackgroundColor, circle2BorderWidth, checkmark2Opacity, checkmark2Scale, circle3Opacity]);
+
+  // useEffect for Circle 3 completion
+  useEffect(() => {
+    if (isCheckpoint3Done) {
+      circle3Opacity.value = withTiming(1, { duration: 0 }); // Ensure it's visible if not already
+      circle3BackgroundColor.value = withTiming('white', { duration: 500, easing: Easing.out(Easing.quad) });
+      circle3BorderWidth.value = withTiming(0, { duration: 400, easing: Easing.out(Easing.quad) });
+      checkmark3Opacity.value = withDelay(300, withTiming(1, { duration: 400, easing: Easing.out(Easing.quad) }));
+      checkmark3Scale.value = withDelay(300, withTiming(1, { duration: 500, easing: Easing.elastic(1) }));
+    } else {
+      // Reset Circle 3 if its completion is undone
+      // Keep C3 visible if C2 is done but C3 is not yet done (handled by circle3Opacity in C2's useEffect)
+      circle3BackgroundColor.value = withTiming('transparent', { duration: 300 });
+      circle3BorderWidth.value = withTiming(2, { duration: 300 });
+      checkmark3Opacity.value = withTiming(0, { duration: 200 });
+      checkmark3Scale.value = withTiming(0.5, { duration: 200 });
+    }
+  }, [isCheckpoint3Done, circle3BackgroundColor, circle3BorderWidth, checkmark3Opacity, checkmark3Scale, circle3Opacity]);
 
   const animatedCircle1Style = useAnimatedStyle(() => {
     return {
@@ -75,6 +140,36 @@ export default function OnboardingWelcome() {
     return {
       opacity: checkmarkOpacity.value,
       transform: [{ scale: checkmarkScale.value }],
+    };
+  });
+
+  const animatedCircle2Style = useAnimatedStyle(() => {
+    return {
+      opacity: circle2Opacity.value,
+      backgroundColor: circle2BackgroundColor.value,
+      borderWidth: circle2BorderWidth.value,
+    };
+  });
+
+  const animatedCheckmark2Style = useAnimatedStyle(() => {
+    return {
+      opacity: checkmark2Opacity.value,
+      transform: [{ scale: checkmark2Scale.value }],
+    };
+  });
+
+  const animatedCircle3Style = useAnimatedStyle(() => {
+    return {
+      opacity: circle3Opacity.value,
+      backgroundColor: circle3BackgroundColor.value,
+      borderWidth: circle3BorderWidth.value,
+    };
+  });
+
+  const animatedCheckmark3Style = useAnimatedStyle(() => {
+    return {
+      opacity: checkmark3Opacity.value,
+      transform: [{ scale: checkmark3Scale.value }],
     };
   });
 
@@ -151,6 +246,20 @@ export default function OnboardingWelcome() {
       styles.container, 
       { opacity: fadeAnim, position: 'absolute', width: '100%', height: '100%' }
     ]}>
+      {/* Backdrop Pressable to collapse mascot card, disabled after C3 is done */}
+      {isMascotCardExpanded && !isCheckpoint3Done && (
+        <Pressable
+          style={styles.backdropPressable} 
+          onPress={() => {
+            setIsMascotCardExpanded(false);
+            // Determine next greeting based on which checkpoint is next
+            if (!isCheckpoint1Done) setMascotGreeting(initialGreeting);
+            else if (!isCheckpoint2Done) setMascotGreeting(nextGreeting);
+            else setMascotGreeting(finalGreeting);
+          }}
+        />
+      )}
+
       <View style={styles.contentContainer}>
         <View style={styles.titleContainer}>
           <ThemedText style={[styles.title, { fontFamily: fontFamilyTitle }]}>
@@ -168,13 +277,27 @@ export default function OnboardingWelcome() {
           <ExpandableMascotCard 
             mascotVariant={randomMascotVariant}
             mascotPosition={mascotPosition}
-            greetingText={t('onboarding.welcomeMascotGreeting')}
+            greetingText={mascotGreeting}
             isExpanded={isMascotCardExpanded}
             onPress={() => {
-              setIsMascotCardExpanded(true);
-              setIsCheckpoint1Done(true);
+              if (!isMascotCardExpanded) {
+                setIsMascotCardExpanded(true);
+                if (!isCheckpoint1Done) {
+                  setIsCheckpoint1Done(true);
+                  setMascotGreeting(initialGreeting);
+                } else if (!isCheckpoint2Done) {
+                  setIsCheckpoint2Done(true);
+                  setMascotGreeting(nextGreeting);
+                } else if (!isCheckpoint3Done) {
+                  setIsCheckpoint3Done(true);
+                  setMascotGreeting(finalGreeting);
+                } else {
+                  // All checkpoints done, card remains expanded with final greeting
+                  setMascotGreeting(finalGreeting);
+                }
+              }
             }}
-            enablePulse={!isMascotCardExpanded}
+            enablePulse={!isMascotCardExpanded && (!isCheckpoint1Done || (isCheckpoint1Done && !isCheckpoint2Done) || (isCheckpoint1Done && isCheckpoint2Done && !isCheckpoint3Done))}
           />
         </View>
 
@@ -191,9 +314,16 @@ export default function OnboardingWelcome() {
               <MaterialCommunityIcons name="check" size={20} color="#0057FF" />
             </Reanimated.View>
           </Reanimated.View>
-          {/* Circles 2 and 3 are now static (no pulse animation applied) */}
-          <Reanimated.View style={[styles.checkpointCircle, styles.checkpointCircle2]} />
-          <Reanimated.View style={[styles.checkpointCircle, styles.checkpointCircle3]} />
+          <Reanimated.View style={[styles.checkpointCircle, styles.checkpointCircle2, animatedCircle2Style]}>
+            <Reanimated.View style={[styles.checkmarkContainer, animatedCheckmark2Style]}>
+              <MaterialCommunityIcons name="check" size={20} color="#0057FF" />
+            </Reanimated.View>
+          </Reanimated.View>
+          <Reanimated.View style={[styles.checkpointCircle, styles.checkpointCircle3, animatedCircle3Style]}>
+            <Reanimated.View style={[styles.checkmarkContainer, animatedCheckmark3Style]}>
+              <MaterialCommunityIcons name="check" size={20} color="#0057FF" />
+            </Reanimated.View>
+          </Reanimated.View>
         </View>
 
         <View style={styles.buttonContainer}>
@@ -334,5 +464,9 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  backdropPressable: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 0,
   },
 });
