@@ -65,6 +65,9 @@ export default function HomeScreen() {
   // State for brushing time overlay visibility
   const [isBrushingTimeVisible, setIsBrushingTimeVisible] = useState(false);
   
+  // State for home screen mascot card expansion
+  const [isHomeMascotExpanded, setIsHomeMascotExpanded] = useState(false); // Changed from true to false
+  
   // Get a random mascot and its positioning
   const { variant: randomMascotVariant, position: mascotPosition } = useRandomMascot();
   
@@ -95,6 +98,11 @@ export default function HomeScreen() {
   // Handle menu button press
   const handleMenuPress = () => {
     setIsMenuVisible(true);
+  };
+  
+  // Toggle home mascot card expansion
+  const toggleHomeMascotExpansion = () => {
+    setIsHomeMascotExpanded(!isHomeMascotExpanded);
   };
   
   return (
@@ -139,6 +147,9 @@ export default function HomeScreen() {
             mascotVariant={randomMascotVariant}
             mascotPosition={mascotPosition}
             greetingText="Hello World!"
+            isExpanded={isHomeMascotExpanded}
+            onPress={toggleHomeMascotExpansion}
+            enablePulse={false} // No pulse on home screen by default
           />
         </View>
         
@@ -304,15 +315,16 @@ const styles = StyleSheet.create({
     top: 0,
     zIndex: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between', // Changed to space-between
+    justifyContent: 'space-between', 
     alignItems: 'center',
-    paddingHorizontal: 16, // Add horizontal padding
+    paddingHorizontal: 16, 
   },
   mascotContainer: {
     position: 'absolute',
-    top: 0, // Position the mascot just below the header
+    top: 145, // Increased from 100 to move it further down
     width: '100%',
     zIndex: 5,
+    alignItems: 'center', // Changed from flex-start to center for horizontal centering
   },
   contentWrapper: {
     position: 'absolute',

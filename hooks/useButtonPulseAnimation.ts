@@ -36,8 +36,8 @@ export const useButtonPulseAnimation = (isClickable: boolean) => {
       scaleAnim.setValue(0.95);
       scaleUpAnimationRef.current = Animated.spring(scaleAnim, {
         toValue: 1,
-        friction: 5,
-        tension: 60,
+        friction: 7,
+        tension: 40,
         useNativeDriver: false, 
       });
       scaleUpAnimationRef.current.start();

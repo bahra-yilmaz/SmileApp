@@ -290,7 +290,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     zIndex: 5,
-    marginTop: 20,
   },
   expandedContent: {
     flex: 1,

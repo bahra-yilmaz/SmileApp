@@ -39,6 +39,7 @@ export default function OnboardingWelcome() {
   const [isCheckpoint1Done, setIsCheckpoint1Done] = useState(false);
   const [isCheckpoint2Done, setIsCheckpoint2Done] = useState(false);
   const [isCheckpoint3Done, setIsCheckpoint3Done] = useState(false);
+  const [isContinueButtonEnabled, setIsContinueButtonEnabled] = useState(false);
   // State for mascot greeting text
   const initialGreeting = t('onboarding.welcomeMascotGreeting');
   const nextGreeting = t('onboarding.mascotNextGreeting');
@@ -114,18 +115,18 @@ export default function OnboardingWelcome() {
   // useEffect for Circle 3 completion
   useEffect(() => {
     if (isCheckpoint3Done) {
-      circle3Opacity.value = withTiming(1, { duration: 0 }); // Ensure it's visible if not already
+      circle3Opacity.value = withTiming(1, { duration: 0 });
       circle3BackgroundColor.value = withTiming('white', { duration: 500, easing: Easing.out(Easing.quad) });
       circle3BorderWidth.value = withTiming(0, { duration: 400, easing: Easing.out(Easing.quad) });
       checkmark3Opacity.value = withDelay(300, withTiming(1, { duration: 400, easing: Easing.out(Easing.quad) }));
       checkmark3Scale.value = withDelay(300, withTiming(1, { duration: 500, easing: Easing.elastic(1) }));
+      setIsContinueButtonEnabled(true);
     } else {
-      // Reset Circle 3 if its completion is undone
-      // Keep C3 visible if C2 is done but C3 is not yet done (handled by circle3Opacity in C2's useEffect)
       circle3BackgroundColor.value = withTiming('transparent', { duration: 300 });
       circle3BorderWidth.value = withTiming(2, { duration: 300 });
       checkmark3Opacity.value = withTiming(0, { duration: 200 });
       checkmark3Scale.value = withTiming(0.5, { duration: 200 });
+      setIsContinueButtonEnabled(false);
     }
   }, [isCheckpoint3Done, circle3BackgroundColor, circle3BorderWidth, checkmark3Opacity, checkmark3Scale, circle3Opacity]);
 
@@ -332,6 +333,7 @@ export default function OnboardingWelcome() {
             onPress={handleContinue}
             useDisplayFont={true}
             width={width * 0.85}
+            disabled={!isContinueButtonEnabled}
           />
         </View>
       </View>
@@ -420,7 +422,7 @@ const styles = StyleSheet.create({
   },
   mascotCardContainer: {
     position: 'absolute',
-    top: 280,
+    top: 300,
     width: '100%',
     alignItems: 'center',
     zIndex: 1,
