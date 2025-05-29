@@ -1,11 +1,12 @@
 import React from 'react';
 import { Image, StyleSheet, View, ImageStyle, ViewStyle } from 'react-native';
+import type { MascotVariant } from '../../types/mascot';
 
 interface MascotProps {
   /**
    * The variant of mascot to display
    */
-  variant?: 'waving' | 'glasses' | 'brushing' | 'welcoming' | 'glasses-1-pp';
+  variant?: MascotVariant;
   
   /**
    * Optional style for the container

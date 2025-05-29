@@ -15,12 +15,14 @@ import Reanimated, {
   Easing,
   cancelAnimation,
 } from 'react-native-reanimated';
+import type { MascotVariant } from '../../types/mascot';
 
 // Use the same variant types as the Mascot component
-type MascotVariant = 'waving' | 'glasses' | 'brushing' | 'welcoming' | 'glasses-1-pp';
+// type MascotVariant = 'waving' | 'glasses' | 'brushing' | 'welcoming' | 'glasses-1-pp'; // Remove or comment out local definition
 
 interface ExpandableMascotCardProps {
-  mascotVariant: MascotVariant;
+  collapsedMascotVariant: MascotVariant;
+  expandedMascotVariant: MascotVariant;
   mascotPosition: {
     translateX: number;
     translateY: number;
@@ -33,7 +35,8 @@ interface ExpandableMascotCardProps {
 }
 
 const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
-  mascotVariant,
+  collapsedMascotVariant,
+  expandedMascotVariant,
   mascotPosition,
   greetingText,
   isExpanded,
@@ -235,7 +238,7 @@ const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
                   }}
                 >
                   <Mascot 
-                    variant={mascotVariant} 
+                    variant={collapsedMascotVariant} 
                     size={nonExpandedMascotSize}
                   />
                 </Animated.View>
@@ -255,7 +258,7 @@ const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
                   }}
                 >
                   <Mascot 
-                    variant="glasses-1-pp" 
+                    variant={expandedMascotVariant} 
                     size={mascotSize}
                   />
                 </Animated.View>
@@ -266,11 +269,13 @@ const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
                 <View style={styles.expandedContent}>
                   <ThemedText 
                     variant="subtitle" 
-                    style={{ 
-                      color: 'white', 
+                    style={{
+                      color: 'white',
                       marginLeft: 0, 
                       fontSize: 15,
                       fontWeight: '500',
+                      fontFamily: 'Quicksand-Medium',
+                      lineHeight: 18,
                     }}
                   >
                     {typedText}

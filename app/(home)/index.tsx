@@ -5,7 +5,7 @@ import HeaderLogo from '../../components/ui/HeaderLogo';
 import LightContainer from '../../components/ui/LightContainer';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
-import { useRandomMascot } from '../../utils/mascotUtils';
+import { getRandomMascotConfig } from '../../constants/mascotConfig';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -69,15 +69,19 @@ export default function HomeScreen() {
   const [isHomeMascotExpanded, setIsHomeMascotExpanded] = useState(false); // Changed from true to false
   
   // Get a random mascot and its positioning
-  const { variant: randomMascotVariant, position: mascotPosition } = useRandomMascot();
+  const [selectedMascotConfig] = useState(() => getRandomMascotConfig()); // Get random config on mount
   
   // Load fonts
   const [fontsLoaded] = useFonts({
     'Merienda-Bold': require('../../assets/fonts/Merienda-Bold.ttf'),
+    'Quicksand-Medium': require('../../assets/fonts/Quicksand-Medium.ttf'),
   });
   
   // Font to use for displayed values
   const fontFamily = fontsLoaded ? 'Merienda-Bold' : undefined;
+  
+  // Prepare the greeting text using the translation key
+  const greeting = selectedMascotConfig.greetingTextKey || 'mascotGreetings.defaultHello'; // Fallback to a default key or empty string
   
   // Toggle chat overlay visibility
   const toggleChat = () => {
@@ -144,9 +148,10 @@ export default function HomeScreen() {
         {/* Expandable Circular Glassmorphic Card - positioned just below header */}
         <View style={styles.mascotContainer}>
           <ExpandableMascotCard 
-            mascotVariant={randomMascotVariant}
-            mascotPosition={mascotPosition}
-            greetingText="Hello World!"
+            collapsedMascotVariant={selectedMascotConfig.collapsedVariant}
+            expandedMascotVariant={selectedMascotConfig.expandedVariant}
+            mascotPosition={selectedMascotConfig.mascotPosition}
+            greetingText={greeting}
             isExpanded={isHomeMascotExpanded}
             onPress={toggleHomeMascotExpansion}
             enablePulse={false} // No pulse on home screen by default
