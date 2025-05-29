@@ -1,7 +1,8 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Stack } from 'expo-router';
-import './app/i18n';
+// import './app/i18n'; // Remove potentially conflicting old i18n setup
+import './services/i18n'; // Our new i18n setup
 
 export default function App() {
   return (

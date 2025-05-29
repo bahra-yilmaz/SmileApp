@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { BlurView } from 'expo-blur';
 import { Colors } from '../../constants/Colors';
+import { useTranslation } from 'react-i18next';
 
 // Import home components using barrel imports
 import {
@@ -35,6 +36,7 @@ export default function HomeScreen() {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { t } = useTranslation();
   
   // Get screen dimensions
   const { height: screenHeight } = Dimensions.get('window');
@@ -80,8 +82,14 @@ export default function HomeScreen() {
   // Font to use for displayed values
   const fontFamily = fontsLoaded ? 'Merienda-Bold' : undefined;
   
+  // Add these console.log lines:
+  const testTranslation = t('common.ok');
+  console.log('[i18n DEBUG] Test Translation for common.ok:', testTranslation);
+  
   // Prepare the greeting text using the translation key
-  const greeting = selectedMascotConfig.greetingTextKey || 'mascotGreetings.defaultHello'; // Fallback to a default key or empty string
+  const greeting = t(selectedMascotConfig.greetingTextKey, { defaultValue: selectedMascotConfig.greetingTextKey });
+  console.log('[i18n DEBUG] Attempted greeting key:', selectedMascotConfig.greetingTextKey);
+  console.log('[i18n DEBUG] Resolved greeting:', greeting);
   
   // Toggle chat overlay visibility
   const toggleChat = () => {

@@ -1,0 +1,39 @@
+{
+  "mascotGreetings": {
+    "defaultHello": "Hello there!",
+    "smileJourney": "Hey there! 👋 Let's get started on your smile journey!",
+    "welcomeBack": "Welcome back! Ready to brighten your day?",
+    "pearlyWhites": "Time for a check-in! How are those pearly whites?",
+    "nuboHelp": "Nubo's here to help you smile more!",
+    "wavingWithGlassesPP": {
+      "greeting1": "Hey! Nubo here, waving with my cool glasses on!",
+      "greeting2": "Just waving by to say hi!",
+      "tip1": "Remember, a friendly wave can brighten someone's day!"
+    },
+    "brushingTime": {
+      "reminder1": "It's brushing o'clock! Let's get those teeth sparkling.",
+      "fact1": "Did you know brushing for two minutes is just right?",
+      "encouragement1": "Keep up the great brushing habits!"
+    },
+    "generalGreetings": {
+      "niceDay": "Hope you're having a fantastic day!",
+      "keepSmiling": "Keep smiling, it looks great on you!"
+    },
+    "playfulReminders": {
+      "hollywoodSmile": "Give me a minute and step closer to that Hollywood smile! 🎬😁",
+      "toothFairyResigning": "If you skip brushing today… the tooth fairy's resigning. For real. 🧚‍♀️❌",
+      "breakAlgorithm": "Skip today and I'll break the algorithm. You'll get random alerts at 7:37 PM forever 😈",
+      "notTherapist": "I'm your mascot, not your therapist. My patience has limits 😶‍🌫️",
+      "boringMascot": "No sparkle today? Fine. I'll leave and send in a boring mascot 💅",
+      "brushDanceTrade": "You brush, I dance. Fair trade.",
+      "cleanedSneakers": "I cleaned my sneakers for this. Don't make me wait by the sink.",
+      "brushWantsAction": "This brush wants action. Not small talk.",
+      "shineBragPartnership": "You shine, I brag. Let's keep this partnership healthy.",
+      "mirrorLosesRespect": "Miss a day, and your mirror loses respect for you. Trust me."
+    }
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel"
+  }
+} 

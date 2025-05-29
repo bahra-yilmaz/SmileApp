@@ -22,39 +22,78 @@ interface MascotConfig {
 }
 
 export const mascotConfigurations: MascotConfig[] = [
+  // --- Configurations for 'waving' (expanded) with 'glasses-1-pp' (collapsed) ---
   {
-    id: 'config1',
-    collapsedVariant: 'glasses-1-pp',         // Must be a PpMascotVariant
-    expandedVariant: 'waving',               // Must be a NonPpMascotVariant
-    greetingTextKey: 'mascotGreetings.smileJourney',
-    probability: 0.4,
+    id: 'waving_glassesPP_text1',
+    collapsedVariant: 'glasses-1-pp',
+    expandedVariant: 'waving',
+    greetingTextKey: 'mascotGreetings.wavingWithGlassesPP.greeting1',
+    probability: 0.05,
     mascotPosition: { translateX: 0, translateY: 0, scale: 1 },
   },
   {
-    id: 'config2',
-    collapsedVariant: 'another-pp-variant',   // Must be a PpMascotVariant
-    expandedVariant: 'welcoming',            // Must be a NonPpMascotVariant
-    greetingTextKey: 'mascotGreetings.welcomeBack',
-    probability: 0.3,
+    id: 'waving_glassesPP_text2',
+    collapsedVariant: 'glasses-1-pp',
+    expandedVariant: 'waving',
+    greetingTextKey: 'mascotGreetings.wavingWithGlassesPP.greeting2',
+    probability: 0.05,
     mascotPosition: { translateX: 0, translateY: 0, scale: 1 },
   },
   {
-    id: 'config3',
-    collapsedVariant: 'glasses-1-pp',        // Must be a PpMascotVariant
-    expandedVariant: 'brushing',             // Must be a NonPpMascotVariant
-    greetingTextKey: 'mascotGreetings.pearlyWhites',
-    probability: 0.2,
+    id: 'waving_glassesPP_text3',
+    collapsedVariant: 'glasses-1-pp',
+    expandedVariant: 'waving',
+    greetingTextKey: 'mascotGreetings.wavingWithGlassesPP.tip1',
+    probability: 0.04,
+    mascotPosition: { translateX: 0, translateY: 0, scale: 1 },
+  },
+
+  // --- Configurations for 'brushing' (expanded) with 'another-pp-variant' (collapsed) ---
+  {
+    id: 'brushing_anotherPP_text1',
+    collapsedVariant: 'another-pp-variant',
+    expandedVariant: 'brushing',
+    greetingTextKey: 'mascotGreetings.brushingTime.reminder1',
+    probability: 0.06,
     mascotPosition: { translateX: 0, translateY: 0, scale: 1 },
   },
   {
-    id: 'config4',
-    collapsedVariant: 'another-pp-variant',  // Must be a PpMascotVariant
-    expandedVariant: 'another-expanded-variant', // Must be a NonPpMascotVariant
-    greetingTextKey: 'mascotGreetings.nuboHelp',
-    probability: 0.1,
+    id: 'brushing_anotherPP_text2',
+    collapsedVariant: 'another-pp-variant',
+    expandedVariant: 'brushing',
+    greetingTextKey: 'mascotGreetings.brushingTime.fact1',
+    probability: 0.03,
     mascotPosition: { translateX: 0, translateY: 0, scale: 1 },
   },
-  // Add more configurations as needed, ensuring types are correct
+
+  // --- Example Configurations for Playful Reminders with 'welcoming' mascot ---
+  {
+    id: 'playful_hollywood',
+    collapsedVariant: 'glasses-1-pp',
+    expandedVariant: 'welcoming',
+    greetingTextKey: 'mascotGreetings.playfulReminders.hollywoodSmile',
+    probability: 0.02,
+    mascotPosition: { translateX: 0, translateY: 0, scale: 1 },
+  },
+  {
+    id: 'playful_toothFairy',
+    collapsedVariant: 'glasses-1-pp',
+    expandedVariant: 'welcoming',
+    greetingTextKey: 'mascotGreetings.playfulReminders.toothFairyResigning',
+    probability: 0.02,
+    mascotPosition: { translateX: 0, translateY: 0, scale: 1 },
+  },
+  // ... Add entries for the other 8 playful texts here, e.g.:
+  // {
+  //   id: 'playful_breakAlgorithm',
+  //   collapsedVariant: 'glasses-1-pp',
+  //   expandedVariant: 'welcoming',
+  //   greetingTextKey: 'mascotGreetings.playfulReminders.breakAlgorithm',
+  //   probability: 0.02,
+  //   mascotPosition: { translateX: 0, translateY: 0, scale: 1 },
+  // },
+  
+  // Add more configurations for other mascot pairs and texts as needed
 ];
 
 // Default configuration to prevent errors
