@@ -71,28 +71,57 @@ export default function PrimaryButton({
   const isClickable = !disabled && !isLoading;
   const { transformStyle, shadowStyle } = useButtonPulseAnimation(isClickable);
   
-  const buttonStyle = {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.9)',
+  const flatParentStyle = StyleSheet.flatten(style || {});
+
+  // Determine background and border for the TouchableOpacity
+  const touchableOpacityBackgroundColor = 
+    flatParentStyle.backgroundColor !== undefined 
+    ? flatParentStyle.backgroundColor 
+    : 'rgba(255, 255, 255, 0.9)'; // Default primary button background
+
+  // If a custom background is provided, remove the default border.
+  const touchableOpacityBorderWidth = flatParentStyle.backgroundColor !== undefined ? 0 : 1;
+  // Keep default border color, only used if borderWidth is > 0
+  const touchableOpacityBorderColor = 'rgba(255, 255, 255, 0.9)'; 
+
+  // Styles for the TouchableOpacity itself
+  const touchableOpacitySpecificStyles: ViewStyle = {
+    backgroundColor: touchableOpacityBackgroundColor,
+    borderWidth: touchableOpacityBorderWidth,
+    borderColor: touchableOpacityBorderColor,
     opacity: !isClickable ? 0.7 : 1,
   };
   
+  // Determine borderRadius for the Animated.View (shadowContainer) and TouchableOpacity
+  const finalBorderRadius = typeof flatParentStyle.borderRadius === 'number' 
+    ? flatParentStyle.borderRadius 
+    : 30; // Default PrimaryButton borderRadius
+
+  // The style for Animated.View (wrapper) will take all styles from flatParentStyle.
+  // This includes properties like shadowOpacity and elevation, which will override defaults 
+  // from styles.shadowContainer if provided.
+  // The backgroundColor from flatParentStyle will apply to the Animated.View,
+  // and touchableOpacityBackgroundColor will apply to the TouchableOpacity on top.
+
   return (
     <Animated.View style={[
-      styles.shadowContainer,
-      { width: width },
-      transformStyle,
-      shadowStyle,
-      style,
+      styles.shadowContainer, // Default shadow styles (excluding borderRadius)
+      { width: width },      // Default width for shadow container
+      transformStyle,         // Animation transform
+      shadowStyle,            // Animation shadow from hook
+      flatParentStyle,        // Parent-provided styles (e.g., shadowOpacity:0, elevation:0, and BG for wrapper)
+      { borderRadius: finalBorderRadius }, // Apply finalBorderRadius to the shadow container
     ]}>
       <TouchableOpacity
         onPress={onPress}
         disabled={!isClickable}
         style={[
-          styles.button,
-          { width: width, borderRadius: 30 },
-          buttonStyle,
+          styles.button, // Base layout (padding, alignment, excluding borderRadius)
+          { 
+            width: width, 
+            borderRadius: finalBorderRadius // Use the determined borderRadius for the touchable area
+          }, 
+          touchableOpacitySpecificStyles, // Calculated BG, border, opacity for the touchable surface
         ]}
         activeOpacity={0.8}
       >
@@ -121,7 +150,6 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     elevation: 4,
-    borderRadius: 30,
     marginVertical: 6,
   },
   button: {
@@ -130,7 +158,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 60,
     overflow: 'hidden',
-    borderRadius: 30,
   },
   buttonText: {
     fontSize: 18,

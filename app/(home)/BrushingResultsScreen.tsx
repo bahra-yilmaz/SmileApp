@@ -11,6 +11,7 @@ import GlassmorphicCard from '../../components/ui/GlassmorphicCard';
 import DonutChart from '../../components/ui/DonutChart';
 import { Colors } from '../../constants/Colors';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import ConfirmModal from '../../components/modals/ConfirmModal';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -38,6 +39,7 @@ const BrushingResultsScreen = () => {
 
   // State to control final rendering
   const [isFullyHidden, setIsFullyHidden] = useState(false); // New state
+  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false); // State for modal visibility
 
   // Themed background for the scaler, like TimerOverlay's expandingCircle
   const themedScalerBackgroundColor = theme.colorScheme === 'dark' ? '#1F2933' : '#F3F9FF';
@@ -57,6 +59,31 @@ const BrushingResultsScreen = () => {
     requestAnimationFrame(() => { 
       router.back(); // Correct method for expo-router
     });
+  };
+
+  const handleOpenConfirmModal = () => {
+    setIsConfirmModalVisible(true);
+  };
+
+  const handleConfirmRevert = () => {
+    setIsConfirmModalVisible(false);
+    // Start the close animation and navigate back
+    Animated.parallel([
+      Animated.timing(visibilityAnim, {
+        toValue: 0,
+        duration: 300, 
+        useNativeDriver: true,
+      }),
+      Animated.timing(gestureAnim, {
+        toValue: 1, 
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start(animateCloseComplete);
+  };
+
+  const handleCancelRevert = () => {
+    setIsConfirmModalVisible(false);
   };
 
   const panResponder = useRef(
@@ -202,7 +229,7 @@ const BrushingResultsScreen = () => {
       {/* 2. The screen's actual content, absolutely positioned OVER the scaler */}
       <Animated.View style={[styles.screenContentWrapper, { opacity: animatedContentOpacity }]}>
         <Image
-          source={require('../../assets/images/shiny-background.png')}
+          source={require('../../assets/images/meshgradient-light-default.png')}
           style={styles.backgroundImage} 
         />
         <View style={[styles.topContentContainerWrapper, { paddingTop: insets.top + 40 }]}>
@@ -293,8 +320,8 @@ const BrushingResultsScreen = () => {
 
           <View style={styles.buttonRowContainer}>
             <View style={styles.leftActionButtonsContainer}> 
-              <Pressable onPress={() => router.back()} style={[styles.actionButton, { backgroundColor: Colors.primary[200] }]}> 
-                <Feather name="trash-2" size={28} color={'#FFFFFF'} />
+              <Pressable onPress={handleOpenConfirmModal} style={[styles.actionButton, { backgroundColor: Colors.primary[200] }]}> 
+                <MaterialCommunityIcons name="history" size={28} color={'#FFFFFF'} />
               </Pressable>
               <Pressable onPress={handleShare} style={[styles.actionButton, { marginLeft: 10, backgroundColor: Colors.primary[500] }]}> 
                 <Feather name="share-2" size={24} color={'#FFFFFF'} />
@@ -342,6 +369,16 @@ const BrushingResultsScreen = () => {
           />
         </Pressable>
       </Animated.View>
+
+      <ConfirmModal
+        visible={isConfirmModalVisible}
+        title="Revert Brushing?"
+        message={"Do you want to revert this brushing? \nIt'll be like this brushing never happened."}
+        confirmText="Revert"
+        cancelText="Cancel"
+        onConfirm={handleConfirmRevert}
+        onCancel={handleCancelRevert}
+      />
     </Animated.View>
   );
 };
