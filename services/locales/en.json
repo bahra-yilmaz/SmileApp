@@ -34,6 +34,21 @@
   },
   "common": {
     "ok": "OK",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "Continue": "Continue"
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español",
+    "de": "Deutsch",
+    "fr": "Français"
+  },
+  "onboarding": { 
+    "welcomeMascotGreeting": "(Welcome Onboarding Greeting)",
+    "mascotNextGreeting": "(Next Onboarding Step Greeting)",
+    "mascotFinalGreeting": "(Final Onboarding Greeting)"
+  },
+  "toothbrush": {
+    "days": "Days in use: {{count}}"
   }
 } 

@@ -7,6 +7,8 @@ import { View, StyleSheet, Image, Dimensions } from 'react-native';
 import { preventAutoHideAsync, hideAsync } from 'expo-splash-screen';
 import SplashScreen from '../components/SplashScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import i18nInstance from '../services/i18n';
+import { I18nextProvider } from 'react-i18next';
 
 // Get dimensions for background
 const { width, height } = Dimensions.get('window');
@@ -59,13 +61,15 @@ export default function RootLayout() {
         style={styles.backgroundImage}
       />
       
-      <ThemeProvider defaultColorScheme="light" defaultThemeVariation="default">
-        <StatusBar style="auto" />
-        <Slot />
-        
-        {/* Show custom splash screen until fonts are loaded, then trigger fade out */}
-        {(showSplash || !appReady) && <SplashScreen onFinish={handleSplashFinish} />}
-      </ThemeProvider>
+      <I18nextProvider i18n={i18nInstance}>
+        <ThemeProvider defaultColorScheme="light" defaultThemeVariation="default">
+          <StatusBar style="auto" />
+          <Slot />
+          
+          {/* Show custom splash screen until fonts are loaded, then trigger fade out */}
+          {(showSplash || !appReady) && <SplashScreen onFinish={handleSplashFinish} />}
+        </ThemeProvider>
+      </I18nextProvider>
     </GestureHandlerRootView>
   );
 }

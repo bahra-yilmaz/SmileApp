@@ -4,20 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { Theme } from '../../constants/Theme';
 import { ThemedText } from '../../components/ThemedText';
-import { LANGUAGES } from '../i18n';
+import { LANGUAGES, LanguageItem } from '../../services/languageConfig';
 import { useFonts } from 'expo-font';
 import { GlassmorphicCard } from '../../components/ui/GlassmorphicCard';
 import PrimaryButton from '../../components/ui/PrimaryButton';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - (Theme.spacing.lg * 2) - Theme.spacing.md) / 2;
-
-// Define type for language item
-type LanguageItem = {
-  code: string;
-  name: string;
-  flag: string;
-};
 
 export default function LanguageSelectScreen() {
   const { t, i18n } = useTranslation();
@@ -116,7 +109,7 @@ export default function LanguageSelectScreen() {
 
         <View style={styles.buttonContainer}>
           <PrimaryButton
-            label={t('Continue')}
+            label={t('common.Continue')}
             onPress={handleContinue}
             disabled={!selectedLanguage}
             width={width * 0.85}
