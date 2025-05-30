@@ -41,14 +41,248 @@
     "en": "English",
     "es": "Español",
     "de": "Deutsch",
-    "fr": "Français"
+    "fr": "Français",
+    "tr": "Türkçe",
+    "pt": "Português",
+    "ja": "日本語",
+    "hi": "हिन्दी"
   },
-  "onboarding": { 
+  "onboarding": {
     "welcomeMascotGreeting": "(Welcome Onboarding Greeting)",
     "mascotNextGreeting": "(Next Onboarding Step Greeting)",
-    "mascotFinalGreeting": "(Final Onboarding Greeting)"
+    "mascotFinalGreeting": "(Final Onboarding Greeting)",
+    "actions": {
+      "skip": "Skip",
+      "next": "Next",
+      "getStarted": "Get Started"
+    },
+    "welcomeScreen": {
+      "mainTitle": "Welcome to Smile App!",
+      "mainTitleApp": "Welcome to\nyour app",
+      "journeyTitle": "Personalize Your Smile Journey",
+      "checkpoint1": "Choose Your Language",
+      "checkpoint2": "Meet Your Mascot",
+      "checkpoint3": "Set Your Goals",
+      "letsGoButton": "Lets Go"
+    },
+    "ageSelectionScreen": {
+      "title": "What is your age?",
+      "description": "This helps us filter out workouts for you",
+      "ageRange0_5": "0–5",
+      "ageRange6_12": "6–12",
+      "ageRange13_18": "13–18",
+      "ageRange19_29": "19–29",
+      "ageRange30_45": "30–45",
+      "ageRange46_60": "46–60",
+      "ageRange60_plus": "60+",
+      "question": "How old are you?",
+      "useForChildButton": "Use for child",
+      "continueButton": "Continue"
+    },
+    "brushingGoalScreen": {
+      "title": "Set Your Brushing Goal",
+      "description": "How many times per day do you want to brush your teeth? Dentists recommend at least twice daily.",
+      "optionsLabel_one": "{{count}} time per day",
+      "optionsLabel_other": "{{count}} times per day",
+      "question": "Your daily brushing target:",
+      "startButton": "Start Now"
+    },
+    "toothbrushDurationScreen": {
+      "title": "Toothbrush Duration",
+      "description": "When did you last change your toothbrush?",
+      "options": {
+        "lessThan1Week": "Less than 1 week",
+        "oneToTwoWeeks": "1–2 weeks ago",
+        "threeToFourWeeks": "3–4 weeks ago",
+        "about2Months": "About 2 months ago",
+        "about3Months": "About 3 months ago",
+        "dontRemember": "I don't remember"
+      },
+      "question": "Current toothbrush age:",
+      "startButton": "Start Now"
+    },
+    "nuboToneScreen": {
+      "title": "Nubo's Tone",
+      "description": "Choose how Nubo will interact with you",
+      "options": {
+        "playful_label": "Playful",
+        "playful_description": "Fun and encouraging",
+        "supportive_label": "Supportive",
+        "supportive_description": "Gentle and helpful",
+        "motivational_label": "Motivational",
+        "motivational_description": "Energetic and inspiring",
+        "educational_label": "Educational",
+        "educational_description": "Informative and detailed"
+      },
+      "question": "Choose Nubo's tone",
+      "startButton": "Start Now"
+    },
+    "signinScreen": {
+      "title": "Welcome to\nyour account",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "submitButton": "Step Inside",
+      "orDivider": "or",
+      "googleButton": "Sign-in with Google",
+      "noAccountText": "Don't have an account? ",
+      "signUpLink": "Sign-up"
+    },
+    "signupScreen": {
+      "title": "Create a\nnew account",
+      "usernamePlaceholder": "Username",
+      "emailPlaceholder": "Email",
+      "submitButton": "Start the Journey",
+      "googleButton": "Sign-up with Google",
+      "hasAccountText": "Already have an account? ",
+      "signInLink": "Sign-in"
+    }
   },
   "toothbrush": {
     "days": "Days in use: {{count}}"
+  },
+  "homeScreen": {
+    "streakCard": {
+      "daysStreak": "days streak"
+    },
+    "brushingTimeCard": {
+      "minutes": "minutes"
+    },
+    "toothbrushCard": {
+      "replaceSoon": "You should replace soon",
+      "daysUnit": "days"
+    }
+  },
+  "chatOverlay": {
+    "smileTeamName": "Smile Team",
+    "welcomeMessage": "Welcome to your personal smile journey! How can we help you today?",
+    "justNow": "Just now",
+    "typeMessagePlaceholder": "Type your message...",
+    "sendButton": "Send"
+  },
+  "menuOverlay": {
+    "title": "Menu",
+    "profile": {
+      "name": "Profile",
+      "description": "Manage your profile and settings"
+    },
+    "statistics": {
+      "name": "Statistics",
+      "description": "View your brushing statistics"
+    },
+    "reminders": {
+      "name": "Reminders",
+      "description": "Set up your brushing reminders"
+    },
+    "achievements": {
+      "name": "Achievements",
+      "description": "Check your brushing achievements"
+    },
+    "settings": {
+      "name": "Settings",
+      "description": "App settings and preferences"
+    }
+  },
+  "timerOverlay": {
+    "start": "Start",
+    "pause": "Pause",
+    "resume": "Resume",
+    "stop": "Stop",
+    "done": "Done",
+    "skip": "Skip",
+    "next": "Next",
+    "finishBrushing": "Finish Brushing",
+    "songMenuTitle": "Choose a song",
+    "selectSong": "Select Song",
+    "restart": "Restart",
+    "brushed": "Brushed",
+    "songMenu": {
+      "rainyMood": "Rainy Mood",
+      "forestAmbience": "Forest Ambience",
+      "cafeSounds": "Cafe Sounds",
+      "selectASound": "Select a sound",
+      "noSound": "No Sound"
+    }
+  },
+  "toothbrushOverlay": {
+    "title": "Your Toothbrush",
+    "daysInUseText": "days in use", 
+    "healthStatusGood": "Good",
+    "healthStatusReplaceSoon": "Replace Soon",
+    "healthStatusFair": "Fair",
+    "brushingTrackerTitle": "Brushing Tracker",
+    "brushesOnThisToothbrushText": "That's {{count}} brushes on this toothbrush",
+    "replaceHistoryTitle": "Replacement History",
+    "replaceHistorySubtitle": "Track your brush change timeline",
+    "replacedOnDate": "Replaced on: {{date}}",
+    "whyReplaceTitle": "Why Replace It?",
+    "whyReplaceText": "Bristles wear out and trap bacteria. Replace every 3 months for a healthier mouth.",
+    "toothbrushHealthTitle": "Toothbrush Health",
+    "gotNewBrushButton": "I got a new brush",
+    "lastReplaced": "Last replaced: {{date}}",
+    "replaceButton": "Replace Now",
+    "confirmReplaceTitle": "Confirm Replacement",
+    "confirmReplaceMessage": "Are you sure you want to mark your toothbrush as replaced? This will reset its usage days.",
+    "showHistory": "Show History",
+    "hideHistory": "Hide History"
+  },
+  "streakOverlay": {
+    "title": "{{count}}-Day Streak",
+    "subtitle": "You're on fire!",
+    "achievementsTitle": "Achievements",
+    "achievementsDescription": "View your earned badges and milestones",
+    "shareStreakTitle": "Share Streak",
+    "shareStreakDescription": "Share your brushing streak with friends",
+    "streakGoalsTitle": "Streak Goals",
+    "streakGoalsDescription": "Set personal streak goals to achieve",
+    "continuousBrushingsTitle": "Keep it Going!",
+    "continuousBrushingsText": "Kept the streak alive {{count}} times",
+    "streakHistoryTitle": "Best Streaks",
+    "streakHistorySubtitle": "Your all-time best streaks",
+    "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}} Day{{duration, plural, one {} other {s}}})",
+    "setReminderTitle": "Set Reminder",
+    "setReminderSubtitle": "Let Nubo give you a little nudge",
+    "nuboMotivationTitle": "Nubo's Ascent!",
+    "nuboMotivationText": "Every day you keep your streak, Nubo climbs higher up the mountain!",
+    "nextSummitTitle": "Next Summit",
+    "daysToGoText": "{{count}} days to go!",
+    "showHistory": "Show History",
+    "hideHistory": "Hide History",
+    "noHistory": "No past streaks yet. Keep it up!"
+  },
+  "brushingTimeOverlay": {
+    "title": "Brushing Time",
+    "timeProgressFormat": "{{currentTime}} / {{targetTime}} min",
+    "averageTimeImproving": "Average brushing time is improving 🌟",
+    "averageTimeDeclining": "Let's get that brushing time up! 💪",
+    "brushingTrendTitle": "Brushing Trend",
+    "targetTitle": "Set Target Time",
+    "targetDescriptionFormat": "Current goal: {{targetMinutes}} min",
+    "targetOptionFormat": "{{option}} min",
+    "whyTimeMattersTitle": "Why Time Matters",
+    "whyTimeMattersText": "Brushing under 2 minutes leaves plaque behind. Aim for 2–3 minutes for a full clean.",
+    "targetProgressTitle": "Target Progress",
+    "timeToGoFormat": "{{time}} to go!",
+    "shareStatsButton": "Share Stats",
+    "setTargetButton": "Set New Target",
+    "editTargetButton": "Edit Target",
+    "customTargetPrompt": "Enter target in minutes (e.g., 2.5 for 2m 30s)",
+    "saveTargetButton": "Save Target",
+    "cancelButton": "Cancel",
+    "targetUpdatedAlert": "Target time updated to {{newTarget}} minutes!",
+    "invalidInputAlert": "Please enter a valid number for minutes.",
+    "chooseTargetPrompt": "Or choose from common targets:"
+  },
+  "brushingResultsScreen": {
+    "title": "Brushing Complete!",
+    "message": "Great job on brushing your teeth!",
+    "timeSpentCardTitle": "Time Spent Brushing",
+    "pointsCardLabel": "Points",
+    "bonusCardLabel": "Bonus",
+    "motivationalText": "Keep up the sparkle! Every brush counts.",
+    "goHomeButton": "Go Home",
+    "revertModalTitle": "Revert Brushing?",
+    "revertModalMessage": "Do you want to revert this brushing? \nIt'll be like this brushing never happened.",
+    "revertModalConfirmButton": "Revert",
+    "revertModalCancelButton": "Cancel"
   }
 } 

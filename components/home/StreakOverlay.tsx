@@ -17,6 +17,7 @@ import { Colors } from '../../constants/Colors';
 import { useFonts } from 'expo-font';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ThemedText from '../ThemedText';
+import { useTranslation } from 'react-i18next';
 
 interface StreakOverlayProps {
   isVisible: boolean;
@@ -24,28 +25,8 @@ interface StreakOverlayProps {
   streakDays: number;
 }
 
-const STREAK_ITEMS = [
-  {
-    id: '2',
-    name: 'Achievements',
-    description: 'View your earned badges and milestones',
-    icon: 'trophy' as keyof typeof MaterialCommunityIcons.glyphMap,
-  },
-  {
-    id: '3',
-    name: 'Share Streak (Item)',
-    description: 'Share your brushing streak with friends',
-    icon: 'share-variant' as keyof typeof MaterialCommunityIcons.glyphMap,
-  },
-  {
-    id: '4',
-    name: 'Streak Goals',
-    description: 'Set personal streak goals to achieve',
-    icon: 'target' as keyof typeof MaterialCommunityIcons.glyphMap,
-  }
-];
-
 export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose, streakDays }) => {
+  const { t } = useTranslation();
   const { theme } = useTheme();
   const { activeColors } = theme;
   
@@ -125,7 +106,28 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
     onClose();
   };
   
-  const handleStreakItemPress = (item: typeof STREAK_ITEMS[0]) => {
+  const STREAK_ITEMS_DATA = [
+    {
+      id: '2',
+      name: t('streakOverlay.achievementsTitle'),
+      description: t('streakOverlay.achievementsDescription'),
+      icon: 'trophy' as keyof typeof MaterialCommunityIcons.glyphMap,
+    },
+    {
+      id: '3',
+      name: t('streakOverlay.shareStreakTitle'),
+      description: t('streakOverlay.shareStreakDescription'),
+      icon: 'share-variant' as keyof typeof MaterialCommunityIcons.glyphMap,
+    },
+    {
+      id: '4',
+      name: t('streakOverlay.streakGoalsTitle'),
+      description: t('streakOverlay.streakGoalsDescription'),
+      icon: 'target' as keyof typeof MaterialCommunityIcons.glyphMap,
+    }
+  ];
+  
+  const handleStreakItemPress = (item: typeof STREAK_ITEMS_DATA[0]) => {
     // Handle item press logic - placeholder
     console.log(`Pressed: ${item.name}`);
     // Optionally close overlay or navigate
@@ -229,10 +231,10 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                   lightColor={Colors.primary[700]}
                   darkColor={Colors.primary[400]}
                 >
-                  {streakDays}-Day Streak
+                  {t('streakOverlay.title', { count: streakDays })}
                 </ThemedText>
                 <ThemedText style={styles.streakText}> 
-                  You're on fire!
+                  {t('streakOverlay.subtitle')}
                 </ThemedText>
               </View>
             </View>
@@ -253,11 +255,11 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
               </View>
               <View style={styles.usageTextContainer}>
                 <ThemedText style={styles.usageTitle}>
-                  Keep it Going!
+                  {t('streakOverlay.continuousBrushingsTitle')}
                 </ThemedText>
                 <ThemedText style={styles.usageText}>
-                  {/* Placeholder value - replace with actual count */} 
-                  Kept the streak alive 12 times
+                  {/* Placeholder value - replace with actual count */}
+                  {t('streakOverlay.continuousBrushingsText', { count: 12 })}{/* TODO: Replace 12 with actual count */}
                 </ThemedText>
               </View>
             </View>
@@ -276,10 +278,10 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
               </View>
               <View style={styles.usageTextContainer}>
                 <ThemedText style={styles.usageTitle}>
-                  Best Streaks
+                  {t('streakOverlay.streakHistoryTitle')}
                 </ThemedText>
                 <ThemedText style={styles.usageText}>
-                   Your all-time best streaks
+                   {t('streakOverlay.streakHistorySubtitle')}
                 </ThemedText>
               </View>
                <MaterialCommunityIcons
@@ -309,7 +311,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                     ]}
                   >
                     <ThemedText style={styles.historyItemText}>
-                      {item.startDate} - {item.endDate} ({item.duration} Day{item.duration !== 1 ? 's' : ''})
+                      {t('streakOverlay.streakPeriodText', { startDate: item.startDate, endDate: item.endDate, duration: item.duration })}
                     </ThemedText>
                   </View>
                 ))}
@@ -333,10 +335,10 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
               </View>
               <View style={styles.usageTextContainer}>
                 <ThemedText style={styles.usageTitle}>
-                  Set Reminder
+                  {t('streakOverlay.setReminderTitle')}
                 </ThemedText>
                 <ThemedText style={styles.usageText}>
-                Let Nubo give you a little nudge
+                {t('streakOverlay.setReminderSubtitle')}
                 </ThemedText>
               </View>
             </Pressable>
@@ -352,10 +354,10 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
             ]}>
               <View style={styles.infoBoxTextContainer}>
                 <ThemedText style={styles.usageTitle}> 
-                  Nubo's Ascent!
+                  {t('streakOverlay.nuboMotivationTitle')}
                 </ThemedText>
                 <ThemedText style={styles.usageText}> 
-                Every day you keep your streak, Nubo climbs higher up the mountain!
+                {t('streakOverlay.nuboMotivationText')}
                 </ThemedText>
               </View>
             </View>
@@ -363,7 +365,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
             {/* Progress Bar Section - MOVED HERE (After Info Box) */}
             <View style={styles.progressContainer}>
               <View style={styles.progressLabelContainer}>
-                <ThemedText style={styles.usageTitle}>Next Summit</ThemedText>
+                <ThemedText style={styles.usageTitle}>{t('streakOverlay.nextSummitTitle')}</ThemedText>
                 {/* Split text for coloring */}
                 <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
                    <ThemedText style={[
@@ -373,7 +375,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                         fontFamily: theme.typography.fonts.medium // Make it slightly bolder maybe?
                        }
                     ]}>
-                      {phaseLength - currentPhaseProgress} days to go!
+                      {t('streakOverlay.daysToGoText', { count: phaseLength - currentPhaseProgress })}
                     </ThemedText>
                     <ThemedText style={[styles.usageText, { marginLeft: 4 }]}> 
                       ({progressPercentage}%)
@@ -422,7 +424,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                   style={{ marginRight: 8 }} 
               />
               <ThemedText style={styles.buttonText}>
-                Share Streak
+                {t('streakOverlay.shareStreakTitle')}
               </ThemedText>
             </Pressable>
           </View>

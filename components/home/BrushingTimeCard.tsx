@@ -4,6 +4,7 @@ import StatCard from '../ui/StatCard';
 import ThemedText from '../ThemedText';
 import DonutChart from '../ui/DonutChart';
 import { Colors } from '../../constants/Colors';
+import { useTranslation } from 'react-i18next';
 
 interface BrushingTimeCardProps {
   minutes: number;
@@ -20,6 +21,7 @@ const BrushingTimeCard: React.FC<BrushingTimeCardProps> = ({
   fontFamily,
   onPress,
 }) => {
+  const { t } = useTranslation();
   // Calculate progress as a percentage
   const progress = ((minutes + seconds / 60) / targetMinutes) * 100;
   
@@ -65,7 +67,7 @@ const BrushingTimeCard: React.FC<BrushingTimeCardProps> = ({
             variant="caption" 
             style={styles.brushingTimeText}
           >
-            minutes
+            {t('homeScreen.brushingTimeCard.minutes')}
           </ThemedText>
         </View>
       }

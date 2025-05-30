@@ -13,6 +13,7 @@ import { useRouter } from 'expo-router';
 import { Colors } from '../../constants/Colors';
 import { useFonts } from 'expo-font';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTranslation } from 'react-i18next';
 
 // Define menu item type
 interface MenuItem {
@@ -24,44 +25,8 @@ interface MenuItem {
   action?: () => void;
 }
 
-// Sample data for menu items
-const MENU_ITEMS: MenuItem[] = [
-  {
-    id: '1',
-    name: 'Profile',
-    description: 'Manage your profile and settings',
-    icon: 'account-circle',
-    route: '/profile',
-  },
-  {
-    id: '2',
-    name: 'Statistics',
-    description: 'View your brushing statistics',
-    icon: 'chart-bar',
-    route: '/statistics',
-  },
-  {
-    id: '3',
-    name: 'Reminders',
-    description: 'Set up your brushing reminders',
-    icon: 'bell',
-    route: '/reminders',
-  },
-  {
-    id: '4',
-    name: 'Achievements',
-    description: 'Check your brushing achievements',
-    icon: 'trophy',
-    route: '/achievements',
-  },
-  {
-    id: '5',
-    name: 'Settings',
-    description: 'App settings and preferences',
-    icon: 'cog',
-    route: '/settings',
-  },
-];
+// Sample data for menu items - will be initialized inside the component
+// const MENU_ITEMS: MenuItem[] = [...];
 
 interface MenuOverlayProps {
   isVisible: boolean;
@@ -69,11 +34,51 @@ interface MenuOverlayProps {
 }
 
 export const MenuOverlay: React.FC<MenuOverlayProps> = ({ isVisible, onClose }) => {
+  const { t } = useTranslation();
+
+  const MENU_ITEMS_DATA: MenuItem[] = [
+    {
+      id: '1',
+      name: t('menuOverlay.profile.name'),
+      description: t('menuOverlay.profile.description'),
+      icon: 'account-circle',
+      route: '/profile',
+    },
+    {
+      id: '2',
+      name: t('menuOverlay.statistics.name'),
+      description: t('menuOverlay.statistics.description'),
+      icon: 'chart-bar',
+      route: '/statistics',
+    },
+    {
+      id: '3',
+      name: t('menuOverlay.reminders.name'),
+      description: t('menuOverlay.reminders.description'),
+      icon: 'bell',
+      route: '/reminders',
+    },
+    {
+      id: '4',
+      name: t('menuOverlay.achievements.name'),
+      description: t('menuOverlay.achievements.description'),
+      icon: 'trophy',
+      route: '/achievements',
+    },
+    {
+      id: '5',
+      name: t('menuOverlay.settings.name'),
+      description: t('menuOverlay.settings.description'),
+      icon: 'cog',
+      route: '/settings',
+    },
+  ];
+
   const { theme } = useTheme();
   const { spacing, borderRadius, activeColors } = theme;
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [menuItems] = useState<MenuItem[]>(MENU_ITEMS);
+  const [menuItems] = useState<MenuItem[]>(MENU_ITEMS_DATA);
   
   // State to track if animation is completed
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -298,7 +303,7 @@ export const MenuOverlay: React.FC<MenuOverlayProps> = ({ isVisible, onClose }) 
                 }
               ]}
             >
-              Menu
+              {t('menuOverlay.title')}
             </Text>
           </LinearGradient>
           

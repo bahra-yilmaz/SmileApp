@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { View, StyleSheet, Animated, Pressable, Dimensions, Platform, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../ThemeProvider';
@@ -8,16 +8,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import PrimaryButton from '../ui/PrimaryButton';
+import { useTranslation } from 'react-i18next';
 
 const NUBO_TONE_KEY = 'nubo_tone';
 
-// Nubo tone options
-const TONE_OPTIONS = [
-  { id: 'playful', label: 'Playful', description: 'Fun and encouraging' },
-  { id: 'supportive', label: 'Supportive', description: 'Gentle and helpful' },
-  { id: 'motivational', label: 'Motivational', description: 'Energetic and inspiring' },
-  { id: 'educational', label: 'Educational', description: 'Informative and detailed' }
-];
+// Nubo tone options will be defined inside the component using t() and useMemo
 
 interface NuboToneScreenProps {
   title: string;
@@ -43,6 +38,7 @@ export default function NuboToneScreen({
 }: NuboToneScreenProps) {
   const { theme } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const [selectedTone, setSelectedTone] = useState<string>('supportive'); // Default to supportive
   const insets = useSafeAreaInsets();
   
@@ -101,6 +97,13 @@ export default function NuboToneScreen({
   // Calculate header height to position progress indicators below it
   const headerHeight = insets.top + (Platform.OS === 'ios' ? 10 : 15) + 16 + 32; // SafeArea + additionalPadding + paddingVertical + fontSize
 
+  const TONE_OPTIONS = useMemo(() => [
+    { id: 'playful', label: t('onboarding.nuboToneScreen.options.playful_label'), description: t('onboarding.nuboToneScreen.options.playful_description') },
+    { id: 'supportive', label: t('onboarding.nuboToneScreen.options.supportive_label'), description: t('onboarding.nuboToneScreen.options.supportive_description') },
+    { id: 'motivational', label: t('onboarding.nuboToneScreen.options.motivational_label'), description: t('onboarding.nuboToneScreen.options.motivational_description') },
+    { id: 'educational', label: t('onboarding.nuboToneScreen.options.educational_label'), description: t('onboarding.nuboToneScreen.options.educational_description') }
+  ], [t]);
+
   return (
     <View style={styles.container}>
       {/* Progress indicators and question text */}
@@ -130,7 +133,7 @@ export default function NuboToneScreen({
               styles.questionText,
               { fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined }
             ]}>
-              Choose Nubo's tone
+              {t('onboarding.nuboToneScreen.question')}
             </ThemedText>
           </View>
         </View>
@@ -188,7 +191,7 @@ export default function NuboToneScreen({
       {/* Action buttons - positioned at bottom */}
       <View style={styles.buttonsContainer}>
         <PrimaryButton 
-          label={isLastScreen ? 'Start Now' : 'Continue'}
+          label={isLastScreen ? t('onboarding.nuboToneScreen.startButton') : t('common.Continue')}
           onPress={handleNext}
           width={width * 0.85}
           useDisplayFont={true}

@@ -1,3 +1,10 @@
+// export interface LanguageItem { // Keep this local definition if it was there
+//   code: string; 
+//   name: string; 
+//   flag: string; 
+// }
+// import type { LanguageItem } from '../types/language'; // Remove this if LanguageItem is local
+
 export interface LanguageItem {
   code: string; // e.g., 'en', 'es', 'de'
   name: string; // e.g., 'English', 'Español', 'Deutsch' (this might be a translation key itself)
@@ -9,6 +16,10 @@ export const LANGUAGES: LanguageItem[] = [
   { code: 'es', name: 'Español', flag: '🇪🇸' },
   { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
+  { code: 'pt', name: 'Português', flag: '🇵🇹' }, // Or 🇧🇷 for Brazil
+  { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
   // Add other languages your app will support
 ];
 

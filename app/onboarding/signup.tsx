@@ -8,6 +8,7 @@ import { Colors } from '../../constants/Colors';
 import SecondaryButton from '../../components/ui/SecondaryButton';
 import { useFonts } from 'expo-font';
 import { SvgXml } from 'react-native-svg';
+import { useTranslation } from 'react-i18next';
 
 const googleIcon = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M19.6 10.2273C19.6 9.51818 19.5364 8.83636 19.4182 8.18182H10V12.05H15.3818C15.15 13.3 14.4455 14.3591 13.3864 15.0682V17.5773H16.6182C18.5091 15.8364 19.6 13.2727 19.6 10.2273Z" fill="#4285F4"/>
@@ -18,6 +19,7 @@ const googleIcon = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" 
 
 export default function SignupScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGuestLoading, setIsGuestLoading] = useState(false);
@@ -147,19 +149,19 @@ export default function SignupScreen() {
         >
           <View style={styles.titleContainer}>
             <Text style={[styles.title, { fontFamily: fontFamilyTitle }]}>
-              Create a{'\n'}new account
+              {t('onboarding.signupScreen.title')}
             </Text>
           </View>
           
           <InputField 
-            placeholder="Username"
+            placeholder={t('onboarding.signupScreen.usernamePlaceholder')}
             autoCapitalize="none"
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
           />
           
           <InputField 
-            placeholder="Email"
+            placeholder={t('onboarding.signupScreen.emailPlaceholder')} 
             keyboardType="email-address"
             autoCapitalize="none"
             onFocus={handleInputFocus}
@@ -172,7 +174,7 @@ export default function SignupScreen() {
           />
           
           <PrimaryButton 
-            label="Start the Journey"
+            label={t('onboarding.signupScreen.submitButton')}
             onPress={handleSignup}
             useDisplayFont={true}
             isLoading={isSubmitting}
@@ -180,12 +182,12 @@ export default function SignupScreen() {
           
           <View style={styles.dividerContainer}>
             <View style={styles.divider} />
-            <Text style={[styles.dividerText, { fontFamily: fontFamilyText }]}>or</Text>
+            <Text style={[styles.dividerText, { fontFamily: fontFamilyText }]}>{t('onboarding.signinScreen.orDivider')}</Text>
             <View style={styles.divider} />
           </View>
           
           <SecondaryButton 
-            label="Sign-up with Google"
+            label={t('onboarding.signupScreen.googleButton')}
             onPress={handleContinue}
             isLoading={isGuestLoading}
             icon={<SvgXml xml={googleIcon} width={20} height={20} />}
@@ -194,12 +196,12 @@ export default function SignupScreen() {
         
         <View style={[styles.signInContainer, { marginBottom: insets.bottom + 20 }]}>
           <Text style={[styles.signInText, { fontFamily: fontFamilyText }]}>
-            Already have an account?{' '}
+            {t('onboarding.signupScreen.hasAccountText')}
             <Text 
               style={[styles.signInLink, { fontFamily: fontFamilyHeader }]} 
               onPress={navigateToSignin}
             >
-              Sign-in
+              {t('onboarding.signupScreen.signInLink')}
             </Text>
           </Text>
         </View>

@@ -13,6 +13,7 @@ import { BlurView } from 'expo-blur';
 import { useRouter } from 'expo-router';
 import { Colors } from '../../constants/Colors';
 import { useFonts } from 'expo-font';
+import { useTranslation } from 'react-i18next';
 
 // Define chat item type
 interface ChatItem {
@@ -33,40 +34,29 @@ interface Message {
   fromUser: boolean;
 }
 
-// Sample data for chat list - only Smile Team
-const CHATS: ChatItem[] = [
-  {
-    id: '0',
-    name: 'Smile Team',
-    lastMessage: 'Welcome to your personal smile journey! How can we help you today?',
-    time: 'Just now',
-    avatar: require('../../assets/images/logo.png'),
-    unread: 1,
-    isTeam: true,
-  }
-];
-
-// Default welcome message
-const DEFAULT_MESSAGES: Message[] = [
-  {
-    id: '1',
-    text: "Welcome to your personal smile journey! How can we help you today?",
-    timestamp: "Just now",
-    fromUser: false,
-  }
-];
-
 interface ChatOverlayProps {
   isVisible: boolean;
   onClose: () => void;
 }
 
 export const ChatOverlay: React.FC<ChatOverlayProps> = ({ isVisible, onClose }) => {
+  const { t } = useTranslation();
+
   const { theme } = useTheme();
   const { spacing, borderRadius, activeColors } = theme;
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [chats] = useState<ChatItem[]>(CHATS);
+  const [chats] = useState<ChatItem[]>([
+    {
+      id: '0',
+      name: t('chatOverlay.smileTeamName'),
+      lastMessage: t('chatOverlay.welcomeMessage'),
+      time: t('chatOverlay.justNow'),
+      avatar: require('../../assets/images/logo.png'),
+      unread: 1,
+      isTeam: true,
+    }
+  ]);
   const [selectedChat, setSelectedChat] = useState<ChatItem | null>(null);
   const flatListRef = useRef<FlatList>(null);
   
@@ -75,7 +65,14 @@ export const ChatOverlay: React.FC<ChatOverlayProps> = ({ isVisible, onClose }) 
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   
   // Start with more messages to test scrolling
-  const [messages] = useState<Message[]>(DEFAULT_MESSAGES);
+  const [messages] = useState<Message[]>([
+    {
+      id: '1',
+      text: t('chatOverlay.welcomeMessage'),
+      timestamp: t('chatOverlay.justNow'),
+      fromUser: false,
+    }
+  ]);
   
   // State to track if animation is completed
   const [animationComplete, setAnimationComplete] = useState(false);

@@ -4,8 +4,17 @@ import * as Localization from 'expo-localization';
 
 // Import your language resources
 import enTranslations from './locales/en.json';
+import esTranslations from './locales/es.json'; // Import Spanish translations
+import deTranslations from './locales/de.json'; // Assuming you will create this
+import frTranslations from './locales/fr.json'; // Assuming you will create this
+import trTranslations from './locales/tr.json';
+import ptTranslations from './locales/pt.json';
+import jaTranslations from './locales/ja.json';
+import hiTranslations from './locales/hi.json';
 
 console.log('[i18n Service DEBUG] Imported enTranslations:', JSON.stringify(enTranslations, null, 2));
+console.log('[i18n Service DEBUG] Imported esTranslations:', JSON.stringify(esTranslations, null, 2)); // Log Spanish translations
+// Add logs for other new languages as needed
 
 // Later, you would add other languages like this:
 // import deTranslations from './locales/de.json'; 
@@ -18,8 +27,13 @@ i18next
     compatibilityJSON: 'v4',
     resources: {
       en: { translation: enTranslations }, // Use the imported JSON
-      // de: { translation: deTranslations }, // Add other languages here
-      // es: { translation: esTranslations },
+      es: { translation: esTranslations }, // Add Spanish resources
+      de: { translation: deTranslations }, // Add German resources
+      fr: { translation: frTranslations }, // Add French resources
+      tr: { translation: trTranslations }, 
+      pt: { translation: ptTranslations }, 
+      ja: { translation: jaTranslations }, 
+      hi: { translation: hiTranslations }, 
     },
     lng: Localization.getLocales()[0]?.languageCode || 'en', // Get device language or default to English
     fallbackLng: 'en', // Fallback language if a translation is missing

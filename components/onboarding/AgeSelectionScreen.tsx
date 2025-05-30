@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import PrimaryButton from '../ui/PrimaryButton';
 import SecondaryButton from '../ui/SecondaryButton';
+import { useTranslation } from 'react-i18next';
 
 const USER_AGE_KEY = 'user_age';
 
@@ -20,15 +21,6 @@ interface AgeSelectionScreenProps {
 }
 
 // Define age ranges
-const AGES = [
-  { id: 'range_0_5', label: '0–5', value: 3 },
-  { id: 'range_6_12', label: '6–12', value: 9 },
-  { id: 'range_13_18', label: '13–18', value: 16 },
-  { id: 'range_19_29', label: '19–29', value: 24 },
-  { id: 'range_30_45', label: '30–45', value: 38 },
-  { id: 'range_46_60', label: '46–60', value: 53 },
-  { id: 'range_60_plus', label: '60+', value: 65 }
-];
 const { width, height } = Dimensions.get('window');
 const ITEM_HEIGHT = 60;
 const VISIBLE_ITEMS = 7;
@@ -42,6 +34,7 @@ export default function AgeSelectionScreen({
 }: AgeSelectionScreenProps) {
   const { theme } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const [selectedAge, setSelectedAge] = useState<number>(24); // Default to 19-29 range
   const flatListRef = useRef<FlatList>(null);
   const insets = useSafeAreaInsets();
@@ -55,6 +48,17 @@ export default function AgeSelectionScreen({
   // Animation values
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const slideAnim = React.useRef(new Animated.Value(50)).current;
+  
+  // Define age ranges using t()
+  const AGES = React.useMemo(() => [
+    { id: 'range_0_5', label: t('onboarding.ageSelectionScreen.ageRange0_5'), value: 3 },
+    { id: 'range_6_12', label: t('onboarding.ageSelectionScreen.ageRange6_12'), value: 9 },
+    { id: 'range_13_18', label: t('onboarding.ageSelectionScreen.ageRange13_18'), value: 16 },
+    { id: 'range_19_29', label: t('onboarding.ageSelectionScreen.ageRange19_29'), value: 24 },
+    { id: 'range_30_45', label: t('onboarding.ageSelectionScreen.ageRange30_45'), value: 38 },
+    { id: 'range_46_60', label: t('onboarding.ageSelectionScreen.ageRange46_60'), value: 53 },
+    { id: 'range_60_plus', label: t('onboarding.ageSelectionScreen.ageRange60_plus'), value: 65 }
+  ], [t]);
   
   useEffect(() => {
     // Run animations when the component mounts
@@ -188,7 +192,7 @@ export default function AgeSelectionScreen({
             styles.questionText,
             { fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined }
           ]}>
-            How old are you?
+            {t('onboarding.ageSelectionScreen.question')}
           </ThemedText>
         </View>
       </View>
@@ -223,7 +227,7 @@ export default function AgeSelectionScreen({
         {/* Child mode button - positioned below the wheel */}
         <View style={styles.childButtonContainer}>
           <SecondaryButton
-            label="Use for child"
+            label={t('onboarding.ageSelectionScreen.useForChildButton')}
             onPress={() => {}}
             width={160}
             textStyle={{ 
@@ -237,7 +241,7 @@ export default function AgeSelectionScreen({
       {/* Action buttons - positioned at bottom */}
       <View style={styles.buttonsContainer}>
         <PrimaryButton 
-          label="Continue"
+          label={t('onboarding.ageSelectionScreen.continueButton')}
           onPress={handleNext}
           width={width * 0.85}
           useDisplayFont={true}

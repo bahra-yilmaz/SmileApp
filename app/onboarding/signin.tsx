@@ -8,6 +8,7 @@ import { Colors } from '../../constants/Colors';
 import SecondaryButton from '../../components/ui/SecondaryButton';
 import { useFonts } from 'expo-font';
 import { SvgXml } from 'react-native-svg';
+import { useTranslation } from 'react-i18next';
 
 const googleIcon = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M19.6 10.2273C19.6 9.51818 19.5364 8.83636 19.4182 8.18182H10V12.05H15.3818C15.15 13.3 14.4455 14.3591 13.3864 15.0682V17.5773H16.6182C18.5091 15.8364 19.6 13.2727 19.6 10.2273Z" fill="#4285F4"/>
@@ -18,6 +19,7 @@ const googleIcon = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" 
 
 export default function SigninScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGuestLoading, setIsGuestLoading] = useState(false);
@@ -147,12 +149,12 @@ export default function SigninScreen() {
         >
           <View style={styles.titleContainer}>
             <Text style={[styles.title, { fontFamily: fontFamilyTitle }]}>
-              Welcome to{'\n'}your account
+              {t('onboarding.signinScreen.title')}
             </Text>
           </View>
           
           <InputField 
-            placeholder="Email"
+            placeholder={t('onboarding.signinScreen.emailPlaceholder')}
             keyboardType="email-address"
             autoCapitalize="none"
             onFocus={handleInputFocus}
@@ -160,7 +162,7 @@ export default function SigninScreen() {
           />
           
           <InputField 
-            placeholder="Password"
+            placeholder={t('onboarding.signinScreen.passwordPlaceholder')}
             secureTextEntry
             autoCapitalize="none"
             onFocus={handleInputFocus}
@@ -173,7 +175,7 @@ export default function SigninScreen() {
           />
           
           <PrimaryButton 
-            label="Step Inside"
+            label={t('onboarding.signinScreen.submitButton')}
             onPress={handleSignin}
             useDisplayFont={true}
             isLoading={isSubmitting}
@@ -181,12 +183,12 @@ export default function SigninScreen() {
           
           <View style={styles.dividerContainer}>
             <View style={styles.divider} />
-            <Text style={[styles.dividerText, { fontFamily: fontFamilyText }]}>or</Text>
+            <Text style={[styles.dividerText, { fontFamily: fontFamilyText }]}>{t('onboarding.signinScreen.orDivider')}</Text>
             <View style={styles.divider} />
           </View>
           
           <SecondaryButton 
-            label="Sign-in with Google"
+            label={t('onboarding.signinScreen.googleButton')}
             onPress={handleContinue}
             isLoading={isGuestLoading}
             icon={<SvgXml xml={googleIcon} width={20} height={20} />}
@@ -195,12 +197,12 @@ export default function SigninScreen() {
         
         <View style={[styles.signInContainer, { marginBottom: insets.bottom + 20 }]}>
           <Text style={[styles.signInText, { fontFamily: fontFamilyText }]}>
-            Don't have an account?{' '}
+            {t('onboarding.signinScreen.noAccountText')}
             <Text 
               style={[styles.signInLink, { fontFamily: fontFamilyHeader }]} 
               onPress={navigateToSignup}
             >
-              Sign-up
+              {t('onboarding.signinScreen.signUpLink')}
             </Text>
           </Text>
         </View>

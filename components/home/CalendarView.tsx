@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList, Dimensions, ActivityIndicator } from 'react-native';
 import { useTheme } from '../ThemeProvider';
 import { format, startOfWeek, addDays, isSameDay, subWeeks, parse } from 'date-fns';
+import { enUS, es, de, fr, tr, pt, ja, hi } from 'date-fns/locale'; // Import locales
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 import { BlurView } from 'expo-blur';
 
 // Import the track color from DonutChart
@@ -41,6 +43,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   selectedDate,
   onDateChange,
 }) => {
+  const { t, i18n } = useTranslation(); // Get i18n instance
   const { theme } = useTheme();
   const { width: screenWidth } = Dimensions.get('window');
   const flatListRef = useRef<FlatList>(null);
@@ -49,6 +52,22 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   const [weeks, setWeeks] = useState<WeekData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
+  // Map app language codes to date-fns locales
+  const dateFnsLocales = useMemo(() => ({
+    en: enUS,
+    es: es,
+    de: de,
+    fr: fr,
+    tr: tr, // Add Turkish locale
+    pt: pt, // Add Portuguese locale
+    ja: ja, // Add Japanese locale
+    hi: hi, // Add Hindi locale
+    // Add other mappings as needed
+  }), []);
+
+  const currentLngCode = i18n.language.split('-')[0];
+  const currentLocale = dateFnsLocales[currentLngCode as keyof typeof dateFnsLocales] || enUS;
+
   // Calculate the width of one week view
   const weekWidth = screenWidth - 40;
   const dayWidth = weekWidth / 7;
@@ -57,21 +76,21 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   const generateWeeks = () => {
     // Fix the date at initialization time to prevent rerendering issues
     const today = new Date();
-    const formattedToday = format(today, 'yyyy-MM-dd');
-    const fixedToday = parse(formattedToday, 'yyyy-MM-dd', new Date());
+    const formattedToday = format(today, 'yyyy-MM-dd', { locale: currentLocale });
+    const fixedToday = parse(formattedToday, 'yyyy-MM-dd', new Date(), { locale: currentLocale });
     
     const weeksData: WeekData[] = [];
     
     // Only generate 5 weeks - current week and 4 past weeks
     for (let i = 4; i >= 0; i--) {
-      const weekStart = startOfWeek(subWeeks(fixedToday, i), { weekStartsOn: 0 });
-      const formattedWeekStart = format(weekStart, 'yyyy-MM-dd');
+      const weekStart = startOfWeek(subWeeks(fixedToday, i), { weekStartsOn: 0, locale: currentLocale });
+      const formattedWeekStart = format(weekStart, 'yyyy-MM-dd', { locale: currentLocale });
       
       // Create dates array with consistent formatting
       const weekDates = Array.from({ length: 7 }, (_, dayIndex) => {
         const date = addDays(weekStart, dayIndex);
-        const formattedDate = format(date, 'yyyy-MM-dd');
-        return parse(formattedDate, 'yyyy-MM-dd', new Date());
+        const formattedDate = format(date, 'yyyy-MM-dd', { locale: currentLocale });
+        return parse(formattedDate, 'yyyy-MM-dd', new Date(), { locale: currentLocale });
       });
       
       weeksData.push({
@@ -112,7 +131,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   
   // Render activity dots based on number of times brushed
   const renderActivityDots = (date: Date) => {
-    const dateKey = format(date, 'yyyy-MM-dd');
+    const dateKey = format(date, 'yyyy-MM-dd', { locale: currentLocale });
     const brushCount = mockBrushingData[dateKey] || 0;
     
     // Maximum 2 dots (for morning and evening brushing)
@@ -145,8 +164,8 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   
   // Day renderer component for better performance
   const DayComponent = React.memo(({ date }: { date: Date }) => {
-    const dayName = format(date, 'EEE').substring(0, 3);
-    const dayNumber = format(date, 'd');
+    const dayName = format(date, 'EEE', { locale: currentLocale }).substring(0, 3);
+    const dayNumber = format(date, 'd', { locale: currentLocale });
     const isSelected = isSameDay(selectedDate, date);
     
     return (
@@ -195,7 +214,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
       <View style={[styles.weekContainer, { width: weekWidth }]}>
         {item.dates.map((date) => (
           <DayComponent 
-            key={format(date, 'yyyy-MM-dd')} 
+            key={format(date, 'yyyy-MM-dd', { locale: currentLocale })} 
             date={date} 
           />
         ))}

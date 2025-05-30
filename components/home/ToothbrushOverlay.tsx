@@ -17,6 +17,7 @@ import { Colors } from '../../constants/Colors';
 import { useFonts } from 'expo-font';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ThemedText from '../ThemedText';
+import { useTranslation } from 'react-i18next';
 
 interface ToothbrushOverlayProps {
   isVisible: boolean;
@@ -31,6 +32,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   daysInUse,
   usageCycles = 123 // Default value if not provided
 }) => {
+  const { t } = useTranslation();
   const { theme } = useTheme();
   const { activeColors } = theme; // Destructure activeColors
   
@@ -64,13 +66,13 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   // Calculate progress percentage and status
   const maxDays = 90;
   const healthPercentage = Math.max(0, Math.min(100, Math.round((1 - daysInUse / maxDays) * 100)));
-  let healthStatus = "Good";
+  let healthStatus = t('toothbrushOverlay.healthStatusGood');
   let healthColor = Colors.feedback.success[theme.colorScheme]; // Use feedback color
   if (daysInUse > maxDays * 0.66) { // Over 60 days
-    healthStatus = "Replace Soon";
+    healthStatus = t('toothbrushOverlay.healthStatusReplaceSoon');
     healthColor = Colors.feedback.warning[theme.colorScheme]; // Use feedback color
   } else if (daysInUse > maxDays * 0.33) { // Over 30 days
-    healthStatus = "Fair";
+    healthStatus = t('toothbrushOverlay.healthStatusFair');
     healthColor = Colors.primary[theme.colorScheme === 'dark' ? 400 : 500]; // Use primary, adjust shade for theme
   } // Else it stays Good (Green)
   
@@ -213,10 +215,10 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                   lightColor={Colors.primary[700]}
                   darkColor={Colors.primary[400]}
                 >
-                  Your Toothbrush
+                  {t('toothbrushOverlay.title')}
                 </ThemedText>
                 <ThemedText style={styles.daysInUse}>
-                  {daysInUse} days in use
+                  {`${daysInUse} ${t('toothbrushOverlay.daysInUseText')}`}
                 </ThemedText>
               </View>
             </View>
@@ -237,10 +239,10 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
               </View>
               <View style={styles.usageTextContainer}>
                 <ThemedText style={styles.usageTitle}>
-                Brushing Tracker
+                {t('toothbrushOverlay.brushingTrackerTitle')}
                 </ThemedText>
                 <ThemedText style={styles.usageText}>
-                That’s {usageCycles} brushes on this toothbrush
+                {t('toothbrushOverlay.brushesOnThisToothbrushText', { count: usageCycles })}
                 </ThemedText>
               </View>
             </View>
@@ -259,10 +261,10 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
               </View>
               <View style={styles.usageTextContainer}>
                 <ThemedText style={styles.usageTitle}>
-                  Replace History
+                  {t('toothbrushOverlay.replaceHistoryTitle')}
                 </ThemedText>
                 <ThemedText style={styles.usageText}>
-                Track your brush change timeline
+                {t('toothbrushOverlay.replaceHistorySubtitle')}
                 </ThemedText>
               </View>
               <MaterialCommunityIcons 
@@ -293,7 +295,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                     ]}
                   >
                     <ThemedText style={styles.historyItemText}>
-                      Replaced on: {item.date}
+                      {t('toothbrushOverlay.replacedOnDate', { date: item.date })}
                     </ThemedText>
                   </View>
                 ))}
@@ -313,17 +315,17 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                 : Colors.primary[700] + '40',
             }}>
               <ThemedText style={styles.usageTitle}>
-                Why Replace It?
+                {t('toothbrushOverlay.whyReplaceTitle')}
               </ThemedText>
               <ThemedText style={styles.usageText}>
-                Bristles wear out and trap bacteria. Replace every 3 months for a healthier mouth.
+                {t('toothbrushOverlay.whyReplaceText')}
               </ThemedText>
             </View>
 
             {/* Toothbrush Health Progress Bar */}
             <View style={styles.progressContainer}>
               <View style={styles.progressLabelContainer}>
-                <ThemedText style={styles.usageTitle}>Toothbrush Health</ThemedText>
+                <ThemedText style={styles.usageTitle}>{t('toothbrushOverlay.toothbrushHealthTitle')}</ThemedText>
                 <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
                   <ThemedText style={[styles.usageText, { color: healthColor, fontFamily: theme.typography.fonts.medium }]}>
                     {healthStatus}
@@ -373,7 +375,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                 style={{ marginRight: 8 }} 
               />
               <ThemedText style={styles.buttonText}>
-                I got a new brush
+                {t('toothbrushOverlay.gotNewBrushButton')}
               </ThemedText>
             </Pressable>
           </View>

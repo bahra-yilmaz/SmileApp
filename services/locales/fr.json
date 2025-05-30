@@ -1,0 +1,285 @@
+{
+    "mascotGreetings": {
+      "defaultHello": "Bonjour !",
+      "smileJourney": "Salut ! 👋 Commençons ton voyage vers un beau sourire !",
+      "welcomeBack": "Bon retour ! Prêt à illuminer ta journée ?",
+      "pearlyWhites": "Petit check-up ! Comment vont tes jolies dents blanches ?",
+      "nuboHelp": "Nubo est là pour t’aider à sourire davantage !",
+      "wavingWithGlassesPP": {
+        "greeting1": "Salut ! Nubo ici, je te salue avec mes super lunettes !",
+        "greeting2": "Juste un petit coucou !",
+        "tip1": "Rappelle-toi : un petit geste amical peut illuminer la journée de quelqu'un !"
+      },
+      "brushingTime": {
+        "reminder1": "C’est l’heure du brossage ! Fais briller tes dents.",
+        "fact1": "Savais-tu que 2 minutes de brossage, c’est l’idéal ?",
+        "encouragement1": "Continue tes bonnes habitudes de brossage !"
+      },
+      "generalGreetings": {
+        "niceDay": "Passe une journée fantastique !",
+        "keepSmiling": "Continue de sourire, ça te va à merveille !"
+      },
+      "playfulReminders": {
+        "hollywoodSmile": "Donne-moi une minute et rapproche-toi de ce sourire Hollywood 🎬😁",
+        "toothFairyResigning": "Si tu sautes le brossage aujourd’hui… la petite souris démissionne. Sérieusement. 🧚‍♀️❌",
+        "breakAlgorithm": "Si tu oublies aujourd’hui, je casse l’algorithme. Alertes aléatoires à 19h37 pour toujours 😈",
+        "notTherapist": "Je suis ta mascotte, pas ton psy. Ma patience a des limites 😶‍🌫️",
+        "boringMascot": "Pas de brillance aujourd’hui ? Très bien. Je pars et j’envoie une mascotte ennuyeuse 💅",
+        "brushDanceTrade": "Tu brosses, je danse. Marché équitable.",
+        "cleanedSneakers": "J’ai nettoyé mes baskets pour ça. Ne me fais pas attendre près du lavabo.",
+        "brushWantsAction": "Cette brosse veut de l’action. Pas du blabla.",
+        "shineBragPartnership": "Tu brilles, je me vante. Gardons ce partenariat en forme.",
+        "mirrorLosesRespect": "Un jour sans brossage et ton miroir te perdra le respect. Crois-moi."
+      }
+    },
+    "common": {
+      "ok": "OK",
+      "cancel": "Annuler",
+      "Continue": "Continuer"
+    },
+    "languages": {
+      "en": "English",
+      "es": "Español",
+      "de": "Deutsch",
+      "fr": "Français"
+    },
+    "onboarding": {
+      "welcomeMascotGreeting": "(Message de bienvenue Onboarding)",
+      "mascotNextGreeting": "(Message suivant Onboarding)",
+      "mascotFinalGreeting": "(Message final Onboarding)",
+      "actions": {
+        "skip": "Passer",
+        "next": "Suivant",
+        "getStarted": "Commencer"
+      },
+      "welcomeScreen": {
+        "mainTitle": "Bienvenue sur Smile App !",
+        "mainTitleApp": "Bienvenue dans\nton application",
+        "journeyTitle": "Personnalise ton parcours sourire",
+        "checkpoint1": "Choisis ta langue",
+        "checkpoint2": "Rencontre ta mascotte",
+        "checkpoint3": "Fixe tes objectifs",
+        "letsGoButton": "C’est parti"
+      },
+      "ageSelectionScreen": {
+        "title": "Quel âge as-tu ?",
+        "description": "Cela nous aide à filtrer les exercices pour toi",
+        "ageRange0_5": "0–5",
+        "ageRange6_12": "6–12",
+        "ageRange13_18": "13–18",
+        "ageRange19_29": "19–29",
+        "ageRange30_45": "30–45",
+        "ageRange46_60": "46–60",
+        "ageRange60_plus": "60+",
+        "question": "Quel est ton âge ?",
+        "useForChildButton": "Pour un enfant",
+        "continueButton": "Continuer"
+      },
+      "brushingGoalScreen": {
+        "title": "Fixe ton objectif de brossage",
+        "description": "Combien de fois veux-tu te brosser les dents par jour ? Les dentistes recommandent au moins deux fois.",
+        "optionsLabel_one": "{{count}} fois par jour",
+        "optionsLabel_other": "{{count}} fois par jour",
+        "question": "Ton objectif quotidien de brossage :",
+        "startButton": "Commencer maintenant"
+      },
+      "toothbrushDurationScreen": {
+        "title": "Durée de la brosse à dents",
+        "description": "Quand as-tu changé ta brosse pour la dernière fois ?",
+        "options": {
+          "lessThan1Week": "Moins d’une semaine",
+          "oneToTwoWeeks": "Il y a 1–2 semaines",
+          "threeToFourWeeks": "Il y a 3–4 semaines",
+          "about2Months": "Il y a environ 2 mois",
+          "about3Months": "Il y a environ 3 mois",
+          "dontRemember": "Je ne sais plus"
+        },
+        "question": "Âge actuel de la brosse :",
+        "startButton": "Commencer maintenant"
+      },
+      "nuboToneScreen": {
+        "title": "Le ton de Nubo",
+        "description": "Choisis comment Nubo interagira avec toi",
+        "options": {
+          "playful_label": "Ludique",
+          "playful_description": "Amusant et encourageant",
+          "supportive_label": "Soutenant",
+          "supportive_description": "Doux et utile",
+          "motivational_label": "Motivant",
+          "motivational_description": "Énergique et inspirant",
+          "educational_label": "Éducatif",
+          "educational_description": "Informatif et détaillé"
+        },
+        "question": "Choisis le ton de Nubo",
+        "startButton": "Commencer maintenant"
+      },
+      "signinScreen": {
+        "title": "Bienvenue dans\nton compte",
+        "emailPlaceholder": "Email",
+        "passwordPlaceholder": "Mot de passe",
+        "submitButton": "Entrer",
+        "orDivider": "ou",
+        "googleButton": "Se connecter avec Google",
+        "noAccountText": "Pas encore de compte ? ",
+        "signUpLink": "S’inscrire"
+      },
+      "signupScreen": {
+        "title": "Créer un\nnouveau compte",
+        "usernamePlaceholder": "Nom d’utilisateur",
+        "emailPlaceholder": "Email",
+        "submitButton": "Lancer le voyage",
+        "googleButton": "S’inscrire avec Google",
+        "hasAccountText": "Déjà un compte ? ",
+        "signInLink": "Se connecter"
+      }
+    },
+    "toothbrush": {
+      "days": "Jours d’utilisation : {{count}}"
+    },
+    "homeScreen": {
+      "streakCard": {
+        "daysStreak": "jours de suite"
+      },
+      "brushingTimeCard": {
+        "minutes": "minutes"
+      },
+      "toothbrushCard": {
+        "replaceSoon": "Pense à remplacer bientôt",
+        "daysUnit": "jours"
+      }
+    },
+    "chatOverlay": {
+      "smileTeamName": "Équipe Smile",
+      "welcomeMessage": "Bienvenue dans ton parcours personnel de sourire ! Comment pouvons-nous t’aider aujourd’hui ?",
+      "justNow": "À l’instant",
+      "typeMessagePlaceholder": "Tape ton message...",
+      "sendButton": "Envoyer"
+    },
+    "menuOverlay": {
+      "title": "Menu",
+      "profile": {
+        "name": "Profil",
+        "description": "Gère ton profil et tes paramètres"
+      },
+      "statistics": {
+        "name": "Statistiques",
+        "description": "Voir tes statistiques de brossage"
+      },
+      "reminders": {
+        "name": "Rappels",
+        "description": "Configurer tes rappels de brossage"
+      },
+      "achievements": {
+        "name": "Réalisations",
+        "description": "Consulter tes badges et objectifs"
+      },
+      "settings": {
+        "name": "Paramètres",
+        "description": "Paramètres et préférences"
+      }
+    },
+    "timerOverlay": {
+      "start": "Démarrer",
+      "pause": "Pause",
+      "resume": "Reprendre",
+      "stop": "Arrêter",
+      "done": "Terminé",
+      "skip": "Passer",
+      "next": "Suivant",
+      "finishBrushing": "Finir le brossage",
+      "songMenuTitle": "Choisis une musique",
+      "selectSong": "Sélectionner une musique",
+      "restart": "Redémarrer",
+      "brushed": "Brossé",
+      "songMenu": {
+        "rainyMood": "Ambiance pluvieuse",
+        "forestAmbience": "Ambiance forêt",
+        "cafeSounds": "Ambiance café",
+        "selectASound": "Sélectionner un son",
+        "noSound": "Aucun son"
+      }
+    },
+    "toothbrushOverlay": {
+      "title": "Ta brosse à dents",
+      "daysInUseText": "jours d’utilisation",
+      "healthStatusGood": "Bon",
+      "healthStatusReplaceSoon": "À remplacer bientôt",
+      "healthStatusFair": "Moyen",
+      "brushingTrackerTitle": "Suivi de brossage",
+      "brushesOnThisToothbrushText": "{{count}} brossages effectués avec cette brosse",
+      "replaceHistoryTitle": "Historique de remplacement",
+      "replaceHistorySubtitle": "Suis tes changements de brosse",
+      "replacedOnDate": "Remplacée le : {{date}}",
+      "whyReplaceTitle": "Pourquoi remplacer ?",
+      "whyReplaceText": "Les poils s’usent et retiennent les bactéries. Remplace-la tous les 3 mois.",
+      "toothbrushHealthTitle": "Santé de la brosse",
+      "gotNewBrushButton": "J’ai une nouvelle brosse",
+      "lastReplaced": "Dernier remplacement : {{date}}",
+      "replaceButton": "Remplacer maintenant",
+      "confirmReplaceTitle": "Confirmer le remplacement",
+      "confirmReplaceMessage": "Veux-tu vraiment marquer la brosse comme remplacée ? Cela réinitialisera les jours d’utilisation.",
+      "showHistory": "Afficher l’historique",
+      "hideHistory": "Masquer l’historique"
+    },
+    "streakOverlay": {
+      "title": "{{count}} jours d’affilée",
+      "subtitle": "Tu es en feu !",
+      "achievementsTitle": "Réalisations",
+      "achievementsDescription": "Voir tes badges et jalons obtenus",
+      "shareStreakTitle": "Partager ta série",
+      "shareStreakDescription": "Partage ta série de brossages avec tes amis",
+      "streakGoalsTitle": "Objectifs de série",
+      "streakGoalsDescription": "Fixe des objectifs personnels",
+      "continuousBrushingsTitle": "Continue comme ça !",
+      "continuousBrushingsText": "Série maintenue {{count}} fois",
+      "streakHistoryTitle": "Meilleures séries",
+      "streakHistorySubtitle": "Tes meilleures séries de tous les temps",
+      "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}} jour{{duration, plural, one {} other {s}}})",
+      "setReminderTitle": "Configurer un rappel",
+      "setReminderSubtitle": "Laisse Nubo te rappeler",
+      "nuboMotivationTitle": "L’ascension de Nubo !",
+      "nuboMotivationText": "Chaque jour de série maintenue, Nubo grimpe plus haut dans la montagne !",
+      "nextSummitTitle": "Prochain sommet",
+      "daysToGoText": "{{count}} jours restants !",
+      "showHistory": "Afficher l’historique",
+      "hideHistory": "Masquer l’historique",
+      "noHistory": "Aucune série encore. Continue !"
+    },
+    "brushingTimeOverlay": {
+      "title": "Durée du brossage",
+      "timeProgressFormat": "{{currentTime}} / {{targetTime}} min",
+      "averageTimeImproving": "Ton temps de brossage s’améliore 🌟",
+      "averageTimeDeclining": "Allons-y pour augmenter ton temps de brossage 💪",
+      "brushingTrendTitle": "Tendance de brossage",
+      "targetTitle": "Fixer un objectif",
+      "targetDescriptionFormat": "Objectif actuel : {{targetMinutes}} min",
+      "targetOptionFormat": "{{option}} min",
+      "whyTimeMattersTitle": "Pourquoi le temps est important",
+      "whyTimeMattersText": "Moins de 2 minutes laisse de la plaque. Vise 2–3 minutes pour un nettoyage optimal.",
+      "targetProgressTitle": "Progression de l’objectif",
+      "timeToGoFormat": "{{time}} restants !",
+      "shareStatsButton": "Partager les stats",
+      "setTargetButton": "Fixer un nouvel objectif",
+      "editTargetButton": "Modifier l’objectif",
+      "customTargetPrompt": "Saisis l’objectif en minutes (ex : 2.5 pour 2m30s)",
+      "saveTargetButton": "Sauvegarder",
+      "cancelButton": "Annuler",
+      "targetUpdatedAlert": "Objectif mis à jour à {{newTarget}} minutes !",
+      "invalidInputAlert": "Merci d’entrer un nombre valide de minutes.",
+      "chooseTargetPrompt": "Ou choisis parmi les objectifs fréquents :"
+    },
+    "brushingResultsScreen": {
+      "title": "Brossage terminé !",
+      "message": "Bravo pour le brossage !",
+      "timeSpentCardTitle": "Temps de brossage",
+      "pointsCardLabel": "Points",
+      "bonusCardLabel": "Bonus",
+      "motivationalText": "Continue de briller ! Chaque brossage compte.",
+      "goHomeButton": "Accueil",
+      "revertModalTitle": "Annuler le brossage ?",
+      "revertModalMessage": "Veux-tu annuler ce brossage ? \nCe sera comme s'il n'avait jamais eu lieu.",
+      "revertModalConfirmButton": "Annuler",
+      "revertModalCancelButton": "Annuler"
+    }
+  }
+  

@@ -15,12 +15,14 @@ interface ToothbrushCardProps {
 
 const ToothbrushCard: React.FC<ToothbrushCardProps> = ({
   daysInUse,
-  replaceSoonText = "You should replace soon",
+  replaceSoonText,
   fontFamily,
   onPress,
 }) => {
   const { t } = useTranslation();
   
+  const actualReplaceSoonText = replaceSoonText ?? t('homeScreen.toothbrushCard.replaceSoon');
+
   return (
     <Pressable 
       onPress={onPress}
@@ -56,7 +58,7 @@ const ToothbrushCard: React.FC<ToothbrushCardProps> = ({
                 variant="caption" 
                 style={styles.daysText}
               >
-                {t('toothbrush.days')}
+                {t('homeScreen.toothbrushCard.daysUnit')}
               </ThemedText>
             </View>
             <ThemedText 
@@ -64,7 +66,7 @@ const ToothbrushCard: React.FC<ToothbrushCardProps> = ({
               style={styles.replaceSoonText}
               numberOfLines={2}
             >
-              {replaceSoonText}
+              {actualReplaceSoonText}
             </ThemedText>
           </View>
           

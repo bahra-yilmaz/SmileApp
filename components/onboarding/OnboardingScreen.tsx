@@ -5,6 +5,7 @@ import { useTheme } from '../ThemeProvider';
 import ThemedText from '../ThemedText';
 import GlassmorphicCard from '../ui/GlassmorphicCard';
 import { OnboardingService } from '../../services/OnboardingService';
+import { useTranslation } from 'react-i18next';
 
 const { width, height } = Dimensions.get('window');
 
@@ -31,6 +32,7 @@ export default function OnboardingScreen({
 }: OnboardingScreenProps) {
   const { theme } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   
   // Animation values
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
@@ -130,13 +132,13 @@ export default function OnboardingScreen({
           <View style={styles.buttonsContainer}>
             {!isLastScreen && (
               <Pressable onPress={handleSkip} style={styles.skipButton}>
-                <ThemedText style={styles.skipText}>Skip</ThemedText>
+                <ThemedText style={styles.skipText}>{t('onboarding.actions.skip')}</ThemedText>
               </Pressable>
             )}
             
             <Pressable style={styles.nextButton} onPress={handleNext}>
               <ThemedText style={styles.nextText}>
-                {isLastScreen ? 'Get Started' : 'Next'}
+                {isLastScreen ? t('onboarding.actions.getStarted') : t('onboarding.actions.next')}
               </ThemedText>
             </Pressable>
           </View>

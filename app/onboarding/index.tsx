@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { Theme } from '../../constants/Theme';
 import { ThemedText } from '../../components/ThemedText';
-import { LANGUAGES } from '../i18n';
 import { useFonts } from 'expo-font';
 import { GlassmorphicCard } from '../../components/ui/GlassmorphicCard';
 import PrimaryButton from '../../components/ui/PrimaryButton';
@@ -264,19 +263,15 @@ export default function OnboardingWelcome() {
       <View style={styles.contentContainer}>
         <View style={styles.titleContainer}>
           <ThemedText style={[styles.title, { fontFamily: fontFamilyTitle }]}>
-            Welcome to{
-              '\n' /* Newline character */
-            }
-            your app{
-              '\n' /* Newline character */
-            }  
+            {t('onboarding.welcomeScreen.mainTitleApp')} 
           </ThemedText>
         </View>
 
         {/* Expandable Mascot Card */}
         <View style={styles.mascotCardContainer}>
           <ExpandableMascotCard 
-            mascotVariant={randomMascotVariant}
+            collapsedMascotVariant={randomMascotVariant}
+            expandedMascotVariant={randomMascotVariant}
             mascotPosition={mascotPosition}
             greetingText={mascotGreeting}
             isExpanded={isMascotCardExpanded}
@@ -329,7 +324,7 @@ export default function OnboardingWelcome() {
 
         <View style={styles.buttonContainer}>
           <PrimaryButton
-            label="Lets Go"
+            label={t('onboarding.welcomeScreen.letsGoButton')}
             onPress={handleContinue}
             useDisplayFont={true}
             width={width * 0.85}

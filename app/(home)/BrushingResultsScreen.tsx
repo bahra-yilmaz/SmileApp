@@ -12,6 +12,7 @@ import DonutChart from '../../components/ui/DonutChart';
 import { Colors } from '../../constants/Colors';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import ConfirmModal from '../../components/modals/ConfirmModal';
+import { useTranslation } from 'react-i18next';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -26,6 +27,7 @@ const BrushingResultsScreen = () => {
   const { theme } = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   const [fontsLoaded] = useFonts({
     'Merienda-Bold': require('../../assets/fonts/Merienda-Bold.ttf'),
@@ -233,14 +235,14 @@ const BrushingResultsScreen = () => {
           style={styles.backgroundImage} 
         />
         <View style={[styles.topContentContainerWrapper, { paddingTop: insets.top + 40 }]}>
-          <ThemedText style={styles.title} variant="title">Brushing Complete!</ThemedText>
-          <ThemedText style={styles.message}>Great job on brushing your teeth!</ThemedText>
+          <ThemedText style={styles.title} variant="title">{t('brushingResultsScreen.title')}</ThemedText>
+          <ThemedText style={styles.message}>{t('brushingResultsScreen.message')}</ThemedText>
 
           <View style={styles.timeCardContainer}>
             <ThemedText style={[styles.cardText, { fontFamily: 'Merienda-Bold' }]}>
               {String(brushingMinutes).padStart(2, '0')}:{String(brushingSeconds).padStart(2, '0')}
             </ThemedText>
-            <ThemedText style={styles.cardTitle}>Time Spent Brushing</ThemedText>
+            <ThemedText style={styles.cardTitle}>{t('brushingResultsScreen.timeSpentCardTitle')}</ThemedText>
           </View>
         </View>
 
@@ -275,7 +277,7 @@ const BrushingResultsScreen = () => {
                   </View>
                   <View style={styles.metricTextContainer}>
                     <ThemedText style={styles.metricValue}>{card1Data.value}</ThemedText>
-                    <ThemedText style={styles.metricLabel}>{card1Data.label}</ThemedText>
+                    <ThemedText style={styles.metricLabel}>{t('brushingResultsScreen.pointsCardLabel')}</ThemedText>
                   </View>
                 </View>
               </GlassmorphicCard>
@@ -301,7 +303,7 @@ const BrushingResultsScreen = () => {
                   </View>
                   <View style={styles.metricTextContainer}>
                     <ThemedText style={styles.metricValue}>{card2Data.value}</ThemedText>
-                    <ThemedText style={styles.metricLabel}>{card2Data.label}</ThemedText>
+                    <ThemedText style={styles.metricLabel}>{t('brushingResultsScreen.bonusCardLabel')}</ThemedText>
                   </View>
                 </View>
               </GlassmorphicCard>
@@ -310,7 +312,7 @@ const BrushingResultsScreen = () => {
 
           <View style={styles.motivationalContainer}>
             <ThemedText style={styles.motivationalText}>
-              Keep up the sparkle! Every brush counts.
+              {t('brushingResultsScreen.motivationalText')}
             </ThemedText>
             <Image
               source={require('../../assets/mascot/nubo-welcoming-1.png')}
@@ -328,7 +330,7 @@ const BrushingResultsScreen = () => {
               </Pressable>
             </View>
             <PrimaryButton
-              label="Go Home"
+              label={t('brushingResultsScreen.goHomeButton')}
               onPress={handleChevronClosePress} // Changed to use the animated close
               width={styles.goHomeButton.width} // Pass width directly as a prop
               style={{ // Keep other styles like marginLeft, paddingHorizontal (if still needed)
@@ -372,10 +374,10 @@ const BrushingResultsScreen = () => {
 
       <ConfirmModal
         visible={isConfirmModalVisible}
-        title="Revert Brushing?"
-        message={"Do you want to revert this brushing? \nIt'll be like this brushing never happened."}
-        confirmText="Revert"
-        cancelText="Cancel"
+        title={t('brushingResultsScreen.revertModalTitle')}
+        message={t('brushingResultsScreen.revertModalMessage')}
+        confirmText={t('brushingResultsScreen.revertModalConfirmButton')}
+        cancelText={t('brushingResultsScreen.revertModalCancelButton')}
         onConfirm={handleConfirmRevert}
         onCancel={handleCancelRevert}
       />

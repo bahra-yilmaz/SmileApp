@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import StatCard from '../ui/StatCard';
 import ThemedText from '../ThemedText';
 import { Colors } from '../../constants/Colors';
+import { useTranslation } from 'react-i18next';
 
 interface StreakCardProps {
   streakDays: number;
@@ -16,6 +17,7 @@ const StreakCard: React.FC<StreakCardProps> = ({
   fontFamily,
   onPress,
 }) => {
+  const { t } = useTranslation();
   return (
     <Pressable 
       onPress={onPress}
@@ -49,7 +51,7 @@ const StreakCard: React.FC<StreakCardProps> = ({
             variant="caption" 
             style={styles.streakText}
           >
-            days streak
+            {t('homeScreen.streakCard.daysStreak')}
           </ThemedText>
         </View>
       }

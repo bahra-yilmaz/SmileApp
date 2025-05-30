@@ -1,0 +1,289 @@
+{
+    "mascotGreetings": {
+      "defaultHello": "¡Hola!",
+      "smileJourney": "¡Hola! 👋 ¡Empecemos tu viaje de sonrisa!",
+      "welcomeBack": "¡Bienvenido de nuevo! ¿Listo para iluminar tu día?",
+      "pearlyWhites": "¡Hora de revisar! ¿Cómo están esos dientes blancos?",
+      "nuboHelp": "¡Nubo está aquí para ayudarte a sonreír más!",
+      "wavingWithGlassesPP": {
+        "greeting1": "¡Hola! Nubo aquí, saludando con mis geniales gafas!",
+        "greeting2": "¡Solo pasando a saludar!",
+        "tip1": "Recuerda, un saludo amigable puede alegrar el día de alguien."
+      },
+      "brushingTime": {
+        "reminder1": "¡Es hora de cepillarse! Vamos a dejar esos dientes relucientes.",
+        "fact1": "¿Sabías que cepillarse durante dos minutos es lo ideal?",
+        "encouragement1": "¡Sigue con tus buenos hábitos de cepillado!"
+      },
+      "generalGreetings": {
+        "niceDay": "¡Espero que estés teniendo un día fantástico!",
+        "keepSmiling": "¡Sigue sonriendo, te queda genial!"
+      },
+      "playfulReminders": {
+        "hollywoodSmile": "Dame un minuto y acércate a esa sonrisa de Hollywood 🎬😁",
+        "toothFairyResigning": "Si no te cepillas hoy… el hada de los dientes renuncia. En serio. 🧚‍♀️❌",
+        "breakAlgorithm": "Si lo saltas hoy, romperé el algoritmo. Recibirás alertas aleatorias a las 7:37 PM por siempre 😈",
+        "notTherapist": "Soy tu mascota, no tu terapeuta. Mi paciencia tiene límites 😶‍🌫️",
+        "boringMascot": "¿No hay brillo hoy? Bien. Me iré y enviaré una mascota aburrida 💅",
+        "brushDanceTrade": "Tú cepillas, yo bailo. Trato justo.",
+        "cleanedSneakers": "Limpié mis zapatillas para esto. No me hagas esperar junto al lavabo.",
+        "brushWantsAction": "Este cepillo quiere acción. No charla.",
+        "shineBragPartnership": "Tú brillas, yo presumo. Mantengamos esta alianza saludable.",
+        "mirrorLosesRespect": "Si fallas un día, tu espejo perderá respeto por ti. Créeme."
+      }
+    },
+    "common": {
+      "ok": "OK",
+      "cancel": "Cancelar",
+      "Continue": "Continuar"
+    },
+    "languages": {
+      "en": "English",
+      "es": "Español",
+      "de": "Deutsch",
+      "fr": "Français",
+      "tr": "Türkçe",
+      "pt": "Português",
+      "ja": "日本語",
+      "hi": "हिन्दी"
+    },
+    "onboarding": {
+      "welcomeMascotGreeting": "(Saludo de bienvenida en onboarding)",
+      "mascotNextGreeting": "(Saludo para el siguiente paso en onboarding)",
+      "mascotFinalGreeting": "(Saludo final de onboarding)",
+      "actions": {
+        "skip": "Omitir",
+        "next": "Siguiente",
+        "getStarted": "Empezar"
+      },
+      "welcomeScreen": {
+        "mainTitle": "¡Bienvenido a Smile App!",
+        "mainTitleApp": "Bienvenido a\ntu aplicación",
+        "journeyTitle": "Personaliza tu viaje de sonrisa",
+        "checkpoint1": "Elige tu idioma",
+        "checkpoint2": "Conoce a tu mascota",
+        "checkpoint3": "Establece tus metas",
+        "letsGoButton": "Vamos"
+      },
+      "ageSelectionScreen": {
+        "title": "¿Cuál es tu edad?",
+        "description": "Esto nos ayuda a filtrar los entrenamientos para ti",
+        "ageRange0_5": "0–5",
+        "ageRange6_12": "6–12",
+        "ageRange13_18": "13–18",
+        "ageRange19_29": "19–29",
+        "ageRange30_45": "30–45",
+        "ageRange46_60": "46–60",
+        "ageRange60_plus": "60+",
+        "question": "¿Cuántos años tienes?",
+        "useForChildButton": "Usar para niño",
+        "continueButton": "Continuar"
+      },
+      "brushingGoalScreen": {
+        "title": "Establece tu objetivo de cepillado",
+        "description": "¿Cuántas veces al día quieres cepillarte los dientes? Los dentistas recomiendan al menos dos veces al día.",
+        "optionsLabel_one": "{{count}} vez por día",
+        "optionsLabel_other": "{{count}} veces por día",
+        "question": "Tu objetivo diario de cepillado:",
+        "startButton": "Comenzar ahora"
+      },
+      "toothbrushDurationScreen": {
+        "title": "Duración del cepillo",
+        "description": "¿Cuándo cambiaste tu cepillo por última vez?",
+        "options": {
+          "lessThan1Week": "Hace menos de 1 semana",
+          "oneToTwoWeeks": "Hace 1–2 semanas",
+          "threeToFourWeeks": "Hace 3–4 semanas",
+          "about2Months": "Hace unos 2 meses",
+          "about3Months": "Hace unos 3 meses",
+          "dontRemember": "No lo recuerdo"
+        },
+        "question": "Edad actual del cepillo:",
+        "startButton": "Comenzar ahora"
+      },
+      "nuboToneScreen": {
+        "title": "Tono de Nubo",
+        "description": "Elige cómo interactuará Nubo contigo",
+        "options": {
+          "playful_label": "Divertido",
+          "playful_description": "Divertido y alentador",
+          "supportive_label": "Apoyo",
+          "supportive_description": "Suave y servicial",
+          "motivational_label": "Motivador",
+          "motivational_description": "Enérgico e inspirador",
+          "educational_label": "Educativo",
+          "educational_description": "Informativo y detallado"
+        },
+        "question": "Elige el tono de Nubo",
+        "startButton": "Comenzar ahora"
+      },
+      "signinScreen": {
+        "title": "Bienvenido a\ntu cuenta",
+        "emailPlaceholder": "Correo electrónico",
+        "passwordPlaceholder": "Contraseña",
+        "submitButton": "Entrar",
+        "orDivider": "o",
+        "googleButton": "Iniciar sesión con Google",
+        "noAccountText": "¿No tienes una cuenta? ",
+        "signUpLink": "Registrarse"
+      },
+      "signupScreen": {
+        "title": "Crea una\nnueva cuenta",
+        "usernamePlaceholder": "Nombre de usuario",
+        "emailPlaceholder": "Correo electrónico",
+        "submitButton": "Empezar el viaje",
+        "googleButton": "Registrarse con Google",
+        "hasAccountText": "¿Ya tienes una cuenta? ",
+        "signInLink": "Iniciar sesión"
+      }
+    },
+    "toothbrush": {
+      "days": "Días en uso: {{count}}"
+    },
+    "homeScreen": {
+      "streakCard": {
+        "daysStreak": "racha de días"
+      },
+      "brushingTimeCard": {
+        "minutes": "minutos"
+      },
+      "toothbrushCard": {
+        "replaceSoon": "Debes reemplazarlo pronto",
+        "daysUnit": "días"
+      }
+    },
+    "chatOverlay": {
+      "smileTeamName": "Equipo Smile",
+      "welcomeMessage": "¡Bienvenido a tu viaje personal de sonrisa! ¿Cómo podemos ayudarte hoy?",
+      "justNow": "Justo ahora",
+      "typeMessagePlaceholder": "Escribe tu mensaje...",
+      "sendButton": "Enviar"
+    },
+    "menuOverlay": {
+      "title": "Menú",
+      "profile": {
+        "name": "Perfil",
+        "description": "Gestiona tu perfil y ajustes"
+      },
+      "statistics": {
+        "name": "Estadísticas",
+        "description": "Ver tus estadísticas de cepillado"
+      },
+      "reminders": {
+        "name": "Recordatorios",
+        "description": "Configura tus recordatorios de cepillado"
+      },
+      "achievements": {
+        "name": "Logros",
+        "description": "Revisa tus logros de cepillado"
+      },
+      "settings": {
+        "name": "Configuración",
+        "description": "Ajustes y preferencias de la app"
+      }
+    },
+    "timerOverlay": {
+      "start": "Iniciar",
+      "pause": "Pausar",
+      "resume": "Reanudar",
+      "stop": "Detener",
+      "done": "Hecho",
+      "skip": "Saltar",
+      "next": "Siguiente",
+      "finishBrushing": "Terminar cepillado",
+      "songMenuTitle": "Elige una canción",
+      "selectSong": "Seleccionar canción",
+      "restart": "Reiniciar",
+      "brushed": "Cepillado",
+      "songMenu": {
+        "rainyMood": "Ambiente lluvioso",
+        "forestAmbience": "Ambiente de bosque",
+        "cafeSounds": "Sonidos de café",
+        "selectASound": "Seleccionar un sonido",
+        "noSound": "Sin sonido"
+      }
+    },
+    "toothbrushOverlay": {
+      "title": "Tu cepillo",
+      "daysInUseText": "días en uso",
+      "healthStatusGood": "Bueno",
+      "healthStatusReplaceSoon": "Reemplazar pronto",
+      "healthStatusFair": "Regular",
+      "brushingTrackerTitle": "Seguimiento de cepillado",
+      "brushesOnThisToothbrushText": "Eso son {{count}} cepillados con este cepillo",
+      "replaceHistoryTitle": "Historial de reemplazos",
+      "replaceHistorySubtitle": "Sigue la línea de tiempo de cambios de tu cepillo",
+      "replacedOnDate": "Reemplazado el: {{date}}",
+      "whyReplaceTitle": "¿Por qué reemplazarlo?",
+      "whyReplaceText": "Las cerdas se desgastan y atrapan bacterias. Cámbialo cada 3 meses para una boca más saludable.",
+      "toothbrushHealthTitle": "Salud del cepillo",
+      "gotNewBrushButton": "Tengo un nuevo cepillo",
+      "lastReplaced": "Último reemplazo: {{date}}",
+      "replaceButton": "Reemplazar ahora",
+      "confirmReplaceTitle": "Confirmar reemplazo",
+      "confirmReplaceMessage": "¿Estás seguro de marcar tu cepillo como reemplazado? Esto reiniciará los días de uso.",
+      "showHistory": "Mostrar historial",
+      "hideHistory": "Ocultar historial"
+    },
+    "streakOverlay": {
+      "title": "Racha de {{count}} días",
+      "subtitle": "¡Estás en llamas!",
+      "achievementsTitle": "Logros",
+      "achievementsDescription": "Mira tus insignias y metas alcanzadas",
+      "shareStreakTitle": "Compartir racha",
+      "shareStreakDescription": "Comparte tu racha de cepillado con amigos",
+      "streakGoalsTitle": "Metas de racha",
+      "streakGoalsDescription": "Establece metas personales de racha",
+      "continuousBrushingsTitle": "¡Sigue así!",
+      "continuousBrushingsText": "Mantuvimos la racha {{count}} veces",
+      "streakHistoryTitle": "Mejores rachas",
+      "streakHistorySubtitle": "Tus mejores rachas de todos los tiempos",
+      "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}} día{{duration, plural, one {} other {s}}})",
+      "setReminderTitle": "Configurar recordatorio",
+      "setReminderSubtitle": "Deja que Nubo te dé un empujón",
+      "nuboMotivationTitle": "¡El ascenso de Nubo!",
+      "nuboMotivationText": "Cada día que mantengas tu racha, Nubo sube más alto en la montaña",
+      "nextSummitTitle": "Próxima cima",
+      "daysToGoText": "¡Faltan {{count}} días!",
+      "showHistory": "Mostrar historial",
+      "hideHistory": "Ocultar historial",
+      "noHistory": "Aún no tienes rachas anteriores. ¡Sigue así!"
+    },
+    "brushingTimeOverlay": {
+      "title": "Tiempo de cepillado",
+      "timeProgressFormat": "{{currentTime}} / {{targetTime}} min",
+      "averageTimeImproving": "El tiempo promedio de cepillado está mejorando 🌟",
+      "averageTimeDeclining": "¡Vamos a aumentar ese tiempo de cepillado! 💪",
+      "brushingTrendTitle": "Tendencia de cepillado",
+      "targetTitle": "Establecer tiempo objetivo",
+      "targetDescriptionFormat": "Meta actual: {{targetMinutes}} min",
+      "targetOptionFormat": "{{option}} min",
+      "whyTimeMattersTitle": "Por qué importa el tiempo",
+      "whyTimeMattersText": "Cepillarse menos de 2 minutos deja placa. Apunta a 2–3 minutos para una limpieza completa.",
+      "targetProgressTitle": "Progreso de la meta",
+      "timeToGoFormat": "¡Faltan {{time}}!",
+      "shareStatsButton": "Compartir estadísticas",
+      "setTargetButton": "Establecer nueva meta",
+      "editTargetButton": "Editar meta",
+      "customTargetPrompt": "Ingresa el objetivo en minutos (ej.: 2.5 para 2m 30s)",
+      "saveTargetButton": "Guardar meta",
+      "cancelButton": "Cancelar",
+      "targetUpdatedAlert": "¡Tiempo objetivo actualizado a {{newTarget}} minutos!",
+      "invalidInputAlert": "Por favor ingresa un número válido de minutos.",
+      "chooseTargetPrompt": "O elige entre objetivos comunes:"
+    },
+    "brushingResultsScreen": {
+    "title": "¡Cepillado completo!",
+    "message": "¡Gran trabajo cepillándote los dientes!",
+    "timeSpentCardTitle": "Tiempo de cepillado",
+    "pointsCardLabel": "Puntos",
+    "bonusCardLabel": "Bono",
+    "motivationalText": "¡Sigue brillando! Cada cepillado cuenta.",
+    "goHomeButton": "Ir al inicio",
+    "revertModalTitle": "¿Revertir cepillado?",
+    "revertModalMessage": "¿Quieres revertir este cepillado?\nSerá como si nunca hubiera sucedido.",
+    "revertModalConfirmButton": "Revertir",
+    "revertModalCancelButton": "Cancelar"
+  }
+}
+  

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { View, StyleSheet, Animated, Pressable, FlatList, Dimensions, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../ThemeProvider';
@@ -8,18 +8,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import PrimaryButton from '../ui/PrimaryButton';
+import { useTranslation } from 'react-i18next';
 
 const TOOTHBRUSH_DURATION_KEY = 'toothbrush_duration';
-
-// Toothbrush duration options
-const DURATION_OPTIONS = [
-  { id: 'less_than_1_week', label: 'Less than 1 week', value: 0 },
-  { id: '1_2_weeks', label: '1–2 weeks ago', value: 1 },
-  { id: '3_4_weeks', label: '3–4 weeks ago', value: 2 },
-  { id: '2_months', label: 'About 2 months ago', value: 3 },
-  { id: '3_months', label: 'About 3 months ago', value: 4 },
-  { id: 'dont_remember', label: "I don't remember", value: 5 }
-];
 
 interface ToothbrushDurationScreenProps {
   title: string;
@@ -44,6 +35,7 @@ export default function ToothbrushDurationScreen({
 }: ToothbrushDurationScreenProps) {
   const { theme } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const [selectedDuration, setSelectedDuration] = useState<number>(2); // Default to 3-4 weeks
   const flatListRef = useRef<FlatList>(null);
   const insets = useSafeAreaInsets();
@@ -57,6 +49,15 @@ export default function ToothbrushDurationScreen({
   // Animation values
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const slideAnim = React.useRef(new Animated.Value(50)).current;
+  
+  const DURATION_OPTIONS = useMemo(() => [
+    { id: 'less_than_1_week', label: t('onboarding.toothbrushDurationScreen.options.lessThan1Week'), value: 0 },
+    { id: '1_2_weeks', label: t('onboarding.toothbrushDurationScreen.options.oneToTwoWeeks'), value: 1 },
+    { id: '3_4_weeks', label: t('onboarding.toothbrushDurationScreen.options.threeToFourWeeks'), value: 2 },
+    { id: '2_months', label: t('onboarding.toothbrushDurationScreen.options.about2Months'), value: 3 },
+    { id: '3_months', label: t('onboarding.toothbrushDurationScreen.options.about3Months'), value: 4 },
+    { id: 'dont_remember', label: t('onboarding.toothbrushDurationScreen.options.dontRemember'), value: 5 }
+  ], [t]);
   
   useEffect(() => {
     // Run animations when the component mounts
@@ -190,7 +191,7 @@ export default function ToothbrushDurationScreen({
             styles.questionText,
             { fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined }
           ]}>
-            Current toothbrush age:
+            {t('onboarding.toothbrushDurationScreen.question')}
           </ThemedText>
         </View>
       </View>
@@ -226,7 +227,7 @@ export default function ToothbrushDurationScreen({
       {/* Action buttons - positioned at bottom */}
       <View style={styles.buttonsContainer}>
         <PrimaryButton 
-          label={isLastScreen ? 'Start Now' : 'Continue'}
+          label={isLastScreen ? t('onboarding.toothbrushDurationScreen.startButton') : t('common.Continue')}
           onPress={handleNext}
           width={width * 0.85}
           useDisplayFont={true}

@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { useTheme } from '../ThemeProvider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 interface Song {
   id: string;
@@ -20,21 +21,26 @@ interface SongMenuProps {
   opacity?: Animated.Value | Animated.AnimatedAddition<string | number>;
 }
 
-const DEFAULT_SONGS: Song[] = [
-  { id: 'song1', name: 'Rainy Mood' },
-  { id: 'song2', name: 'Forest Ambience' },
-  { id: 'song3', name: 'Cafe Sounds' },
-];
-
 export const SongMenu: React.FC<SongMenuProps> = ({
-  currentSongName = "Select a sound",
+  currentSongName,
   isPlaying = false,
   onPlayPause,
   onSelectSong,
-  songs = DEFAULT_SONGS,
+  songs,
   onSelectNoSound,
   opacity,
 }) => {
+  const { t } = useTranslation();
+
+  const DEFAULT_SONGS_DATA: Song[] = [
+    { id: 'song1', name: t('timerOverlay.songMenu.rainyMood') },
+    { id: 'song2', name: t('timerOverlay.songMenu.forestAmbience') },
+    { id: 'song3', name: t('timerOverlay.songMenu.cafeSounds') },
+  ];
+
+  const actualCurrentSongName = currentSongName ?? t('timerOverlay.songMenu.selectASound');
+  const actualSongs = songs ?? DEFAULT_SONGS_DATA;
+
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -54,7 +60,7 @@ export const SongMenu: React.FC<SongMenuProps> = ({
 
   const menuHeight = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, (songs.length + 1) * 50], 
+    outputRange: [0, (actualSongs.length + 1) * 50], 
   });
 
   const renderVisualizer = () => {
@@ -99,7 +105,7 @@ export const SongMenu: React.FC<SongMenuProps> = ({
               />
             </TouchableOpacity>
             <View style={styles.songInfoContainer}>
-              <Text style={styles.songNameText} numberOfLines={1}>{currentSongName}</Text>
+              <Text style={styles.songNameText} numberOfLines={1}>{actualCurrentSongName}</Text>
               {renderVisualizer()}
             </View>
             <TouchableOpacity onPress={toggleMenu} style={styles.toggleButton}>
@@ -122,7 +128,7 @@ export const SongMenu: React.FC<SongMenuProps> = ({
             style={styles.blurViewOptionsStyle}
           > 
             <View style={styles.menuOptionsContainer}>
-              {songs.map((song) => (
+              {actualSongs.map((song) => (
                 <TouchableOpacity
                   key={song.id}
                   style={styles.menuItem}
@@ -144,7 +150,7 @@ export const SongMenu: React.FC<SongMenuProps> = ({
                 }}
               >
                 <MaterialCommunityIcons name="volume-off" size={20} color={theme.colorScheme === 'dark' ? theme.colors.primary[200] : theme.colors.primary[800]} />
-                <Text style={styles.menuItemText}>No Sound</Text>
+                <Text style={styles.menuItemText}>{t('timerOverlay.songMenu.noSound')}</Text>
               </TouchableOpacity>
             </View>
           </BlurView>

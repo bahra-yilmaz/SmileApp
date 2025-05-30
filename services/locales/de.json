@@ -1,0 +1,285 @@
+{
+    "mascotGreetings": {
+      "defaultHello": "Hallo!",
+      "smileJourney": "Hallo! 👋 Lass uns deine Smile-Reise starten!",
+      "welcomeBack": "Willkommen zurück! Bereit, deinen Tag zu erhellen?",
+      "pearlyWhites": "Zeit für einen Check! Wie geht’s deinen weißen Zähnen?",
+      "nuboHelp": "Nubo ist hier, um dir beim Lächeln zu helfen!",
+      "wavingWithGlassesPP": {
+        "greeting1": "Hey! Nubo hier, winke mit meiner coolen Brille!",
+        "greeting2": "Nur kurz vorbeigewinkt!",
+        "tip1": "Denk dran: Ein freundliches Winken kann den Tag von jemandem verschönern!"
+      },
+      "brushingTime": {
+        "reminder1": "Es ist Putz-Zeit! Lass uns deine Zähne glänzen lassen.",
+        "fact1": "Wusstest du, dass 2 Minuten Bürsten genau richtig sind?",
+        "encouragement1": "Mach weiter so mit dem guten Putzverhalten!"
+      },
+      "generalGreetings": {
+        "niceDay": "Ich hoffe, du hast einen fantastischen Tag!",
+        "keepSmiling": "Lächle weiter, es steht dir gut!"
+      },
+      "playfulReminders": {
+        "hollywoodSmile": "Gib mir eine Minute und komm deinem Hollywood-Lächeln näher! 🎬😁",
+        "toothFairyResigning": "Wenn du heute nicht putzt… kündigt die Zahnfee. Ernsthaft. 🧚‍♀️❌",
+        "breakAlgorithm": "Wenn du heute aussetzt, zerstöre ich den Algorithmus. Du bekommst für immer zufällige Benachrichtigungen um 19:37 Uhr 😈",
+        "notTherapist": "Ich bin deine Mascotte, nicht dein Therapeut. Meine Geduld ist begrenzt 😶‍🌫️",
+        "boringMascot": "Kein Glanz heute? Na gut. Ich gehe und schicke eine langweilige Mascotte 💅",
+        "brushDanceTrade": "Du putzt, ich tanze. Fairer Deal.",
+        "cleanedSneakers": "Ich habe meine Sneaker für dich geputzt. Lass mich nicht am Waschbecken warten.",
+        "brushWantsAction": "Diese Bürste will Action. Kein Smalltalk.",
+        "shineBragPartnership": "Du glänzt, ich prahle. Lass uns diese Partnerschaft stark halten.",
+        "mirrorLosesRespect": "Einen Tag auslassen und dein Spiegel verliert den Respekt vor dir. Vertrau mir."
+      }
+    },
+    "common": {
+      "ok": "OK",
+      "cancel": "Abbrechen",
+      "Continue": "Weiter"
+    },
+    "languages": {
+      "en": "English",
+      "es": "Español",
+      "de": "Deutsch",
+      "fr": "Français"
+    },
+    "onboarding": {
+      "welcomeMascotGreeting": "(Begrüßung Onboarding)",
+      "mascotNextGreeting": "(Nächster Schritt Onboarding)",
+      "mascotFinalGreeting": "(Letzter Schritt Onboarding)",
+      "actions": {
+        "skip": "Überspringen",
+        "next": "Weiter",
+        "getStarted": "Los geht’s"
+      },
+      "welcomeScreen": {
+        "mainTitle": "Willkommen bei Smile App!",
+        "mainTitleApp": "Willkommen in\ndeiner App",
+        "journeyTitle": "Personalisieren deine Smile-Reise",
+        "checkpoint1": "Wähle deine Sprache",
+        "checkpoint2": "Lerne deine Mascotte kennen",
+        "checkpoint3": "Setze deine Ziele",
+        "letsGoButton": "Los geht’s"
+      },
+      "ageSelectionScreen": {
+        "title": "Wie alt bist du?",
+        "description": "So können wir die Workouts für dich anpassen",
+        "ageRange0_5": "0–5",
+        "ageRange6_12": "6–12",
+        "ageRange13_18": "13–18",
+        "ageRange19_29": "19–29",
+        "ageRange30_45": "30–45",
+        "ageRange46_60": "46–60",
+        "ageRange60_plus": "60+",
+        "question": "Wie alt bist du?",
+        "useForChildButton": "Für ein Kind verwenden",
+        "continueButton": "Weiter"
+      },
+      "brushingGoalScreen": {
+        "title": "Setze dein Putz-Ziel",
+        "description": "Wie oft möchtest du dir täglich die Zähne putzen? Zahnärzte empfehlen mindestens zweimal täglich.",
+        "optionsLabel_one": "{{count}} Mal pro Tag",
+        "optionsLabel_other": "{{count}} Mal pro Tag",
+        "question": "Dein tägliches Putz-Ziel:",
+        "startButton": "Jetzt starten"
+      },
+      "toothbrushDurationScreen": {
+        "title": "Bürstendauer",
+        "description": "Wann hast du zuletzt deine Zahnbürste gewechselt?",
+        "options": {
+          "lessThan1Week": "Weniger als 1 Woche",
+          "oneToTwoWeeks": "Vor 1–2 Wochen",
+          "threeToFourWeeks": "Vor 3–4 Wochen",
+          "about2Months": "Vor etwa 2 Monaten",
+          "about3Months": "Vor etwa 3 Monaten",
+          "dontRemember": "Ich weiß es nicht mehr"
+        },
+        "question": "Alter der aktuellen Zahnbürste:",
+        "startButton": "Jetzt starten"
+      },
+      "nuboToneScreen": {
+        "title": "Nubos Ton",
+        "description": "Wähle, wie Nubo mit dir interagieren soll",
+        "options": {
+          "playful_label": "Verspielt",
+          "playful_description": "Spaßig und motivierend",
+          "supportive_label": "Unterstützend",
+          "supportive_description": "Sanft und hilfsbereit",
+          "motivational_label": "Motivierend",
+          "motivational_description": "Energiegeladen und inspirierend",
+          "educational_label": "Lehrreich",
+          "educational_description": "Informativ und detailliert"
+        },
+        "question": "Wähle Nubos Ton",
+        "startButton": "Jetzt starten"
+      },
+      "signinScreen": {
+        "title": "Willkommen in\ndeinem Konto",
+        "emailPlaceholder": "E-Mail",
+        "passwordPlaceholder": "Passwort",
+        "submitButton": "Einloggen",
+        "orDivider": "oder",
+        "googleButton": "Mit Google anmelden",
+        "noAccountText": "Noch kein Konto? ",
+        "signUpLink": "Registrieren"
+      },
+      "signupScreen": {
+        "title": "Neues Konto\nerstellen",
+        "usernamePlaceholder": "Benutzername",
+        "emailPlaceholder": "E-Mail",
+        "submitButton": "Reise starten",
+        "googleButton": "Mit Google registrieren",
+        "hasAccountText": "Schon ein Konto? ",
+        "signInLink": "Einloggen"
+      }
+    },
+    "toothbrush": {
+      "days": "Tage in Benutzung: {{count}}"
+    },
+    "homeScreen": {
+      "streakCard": {
+        "daysStreak": "Tage in Folge"
+      },
+      "brushingTimeCard": {
+        "minutes": "Minuten"
+      },
+      "toothbrushCard": {
+        "replaceSoon": "Bald ersetzen",
+        "daysUnit": "Tage"
+      }
+    },
+    "chatOverlay": {
+      "smileTeamName": "Smile-Team",
+      "welcomeMessage": "Willkommen zu deiner persönlichen Smile-Reise! Wie können wir dir helfen?",
+      "justNow": "Gerade eben",
+      "typeMessagePlaceholder": "Nachricht schreiben...",
+      "sendButton": "Senden"
+    },
+    "menuOverlay": {
+      "title": "Menü",
+      "profile": {
+        "name": "Profil",
+        "description": "Profil und Einstellungen verwalten"
+      },
+      "statistics": {
+        "name": "Statistiken",
+        "description": "Putz-Statistiken ansehen"
+      },
+      "reminders": {
+        "name": "Erinnerungen",
+        "description": "Putz-Erinnerungen einstellen"
+      },
+      "achievements": {
+        "name": "Erfolge",
+        "description": "Deine Putz-Erfolge prüfen"
+      },
+      "settings": {
+        "name": "Einstellungen",
+        "description": "App-Einstellungen und Präferenzen"
+      }
+    },
+    "timerOverlay": {
+      "start": "Start",
+      "pause": "Pause",
+      "resume": "Fortsetzen",
+      "stop": "Stopp",
+      "done": "Fertig",
+      "skip": "Überspringen",
+      "next": "Weiter",
+      "finishBrushing": "Bürsten beenden",
+      "songMenuTitle": "Wähle ein Lied",
+      "selectSong": "Lied auswählen",
+      "restart": "Neustart",
+      "brushed": "Geputzt",
+      "songMenu": {
+        "rainyMood": "Regentöne",
+        "forestAmbience": "Waldklänge",
+        "cafeSounds": "Café-Geräusche",
+        "selectASound": "Ton auswählen",
+        "noSound": "Kein Ton"
+      }
+    },
+    "toothbrushOverlay": {
+      "title": "Deine Zahnbürste",
+      "daysInUseText": "Tage in Benutzung",
+      "healthStatusGood": "Gut",
+      "healthStatusReplaceSoon": "Bald ersetzen",
+      "healthStatusFair": "Mittel",
+      "brushingTrackerTitle": "Putz-Tracker",
+      "brushesOnThisToothbrushText": "{{count}} Bürstungen mit dieser Bürste",
+      "replaceHistoryTitle": "Wechselhistorie",
+      "replaceHistorySubtitle": "Verlauf deiner Bürstenwechsel",
+      "replacedOnDate": "Gewechselt am: {{date}}",
+      "whyReplaceTitle": "Warum ersetzen?",
+      "whyReplaceText": "Die Borsten nutzen sich ab und sammeln Bakterien. Alle 3 Monate ersetzen.",
+      "toothbrushHealthTitle": "Bürstenzustand",
+      "gotNewBrushButton": "Neue Bürste bekommen",
+      "lastReplaced": "Zuletzt gewechselt: {{date}}",
+      "replaceButton": "Jetzt ersetzen",
+      "confirmReplaceTitle": "Wechsel bestätigen",
+      "confirmReplaceMessage": "Möchtest du wirklich als ersetzt markieren? Nutzung wird zurückgesetzt.",
+      "showHistory": "Historie anzeigen",
+      "hideHistory": "Historie verbergen"
+    },
+    "streakOverlay": {
+      "title": "{{count}} Tage in Folge",
+      "subtitle": "Du bist on fire!",
+      "achievementsTitle": "Erfolge",
+      "achievementsDescription": "Deine verdienten Abzeichen & Meilensteine",
+      "shareStreakTitle": "Serie teilen",
+      "shareStreakDescription": "Deine Serie mit Freunden teilen",
+      "streakGoalsTitle": "Serienziele",
+      "streakGoalsDescription": "Persönliche Serienziele setzen",
+      "continuousBrushingsTitle": "Weiter so!",
+      "continuousBrushingsText": "{{count}} Mal durchgezogen",
+      "streakHistoryTitle": "Beste Serien",
+      "streakHistorySubtitle": "Deine besten Serien",
+      "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}} Tag{{duration, plural, one {} other {e}}})",
+      "setReminderTitle": "Erinnerung einstellen",
+      "setReminderSubtitle": "Nubo erinnert dich gerne",
+      "nuboMotivationTitle": "Nubos Aufstieg!",
+      "nuboMotivationText": "Jeden Tag den du dranbleibst, klettert Nubo höher!",
+      "nextSummitTitle": "Nächster Gipfel",
+      "daysToGoText": "Noch {{count}} Tage!",
+      "showHistory": "Historie anzeigen",
+      "hideHistory": "Historie verbergen",
+      "noHistory": "Noch keine Serie. Los geht's!"
+    },
+    "brushingTimeOverlay": {
+      "title": "Putzzeit",
+      "timeProgressFormat": "{{currentTime}} / {{targetTime}} Min",
+      "averageTimeImproving": "Durchschnittliche Zeit wird besser 🌟",
+      "averageTimeDeclining": "Lass uns deine Putzzeit steigern 💪",
+      "brushingTrendTitle": "Putz-Trend",
+      "targetTitle": "Zielzeit setzen",
+      "targetDescriptionFormat": "Aktuelles Ziel: {{targetMinutes}} Min",
+      "targetOptionFormat": "{{option}} Min",
+      "whyTimeMattersTitle": "Warum Zeit wichtig ist",
+      "whyTimeMattersText": "Weniger als 2 Minuten lässt Plaque zurück. 2–3 Minuten sind optimal.",
+      "targetProgressTitle": "Ziel-Fortschritt",
+      "timeToGoFormat": "{{time}} verbleibend!",
+      "shareStatsButton": "Statistik teilen",
+      "setTargetButton": "Neues Ziel setzen",
+      "editTargetButton": "Ziel bearbeiten",
+      "customTargetPrompt": "Ziel in Minuten eingeben (z.B. 2.5 für 2:30 Min)",
+      "saveTargetButton": "Speichern",
+      "cancelButton": "Abbrechen",
+      "targetUpdatedAlert": "Zielzeit auf {{newTarget}} Minuten aktualisiert!",
+      "invalidInputAlert": "Bitte eine gültige Minutenanzahl eingeben.",
+      "chooseTargetPrompt": "Oder wähle aus häufigen Zielen:"
+    },
+    "brushingResultsScreen": {
+      "title": "Bürsten beendet!",
+      "message": "Gut gemacht beim Zähneputzen!",
+      "timeSpentCardTitle": "Putzzeit",
+      "pointsCardLabel": "Punkte",
+      "bonusCardLabel": "Bonus",
+      "motivationalText": "Weiter so! Jeder Putzgang zählt.",
+      "goHomeButton": "Zur Startseite",
+      "revertModalTitle": "Bürsten zurücknehmen?",
+      "revertModalMessage": "Möchtest du dieses Bürsten rückgängig machen? \nEs wäre, als hätte es nie stattgefunden.",
+      "revertModalConfirmButton": "Zurücknehmen",
+      "revertModalCancelButton": "Abbrechen"
+    }
+  }
+  

@@ -21,6 +21,7 @@ import { useFonts } from 'expo-font';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ThemedText from '../ThemedText';
 import DonutChart from '../ui/DonutChart';
+import { useTranslation } from 'react-i18next';
 
 interface BrushingTimeOverlayProps {
   isVisible: boolean;
@@ -42,6 +43,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   targetMinutes = 3,
   onTargetTimeUpdate,
 }) => {
+  const { t } = useTranslation();
   const { theme } = useTheme();
   const { activeColors } = theme;
   
@@ -132,7 +134,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   
   // Placeholder for trend data - replace with actual logic
   const trendIcon = 'trending-up'; // or 'trending-down' or 'trending-neutral'
-  const trendText = 'Average brushing time is improving 🌟'; // Updated text
+  const trendText = t('brushingTimeOverlay.averageTimeImproving');
   
   // Calculate remaining time
   const totalSecondsBrushed = minutes * 60 + seconds;
@@ -239,10 +241,10 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
                   lightColor={Colors.primary[700]}
                   darkColor={Colors.primary[400]}
                 >
-                  Brushing Time
+                  {t('brushingTimeOverlay.title')}
                 </ThemedText>
                 <ThemedText style={styles.timeText}>
-                  {minutes}:{seconds < 10 ? `0${seconds}` : seconds} / {targetMinutes}:00 min
+                  {t('brushingTimeOverlay.timeProgressFormat', { currentTime: `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`, targetTime: `${targetMinutes}:00` })}
                 </ThemedText>
               </View>
             </View>
@@ -261,7 +263,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
               </View>
               <View style={styles.usageTextContainer}>
                 <ThemedText style={styles.usageTitle}>
-                  Brushing Trend
+                  {t('brushingTimeOverlay.brushingTrendTitle')}
                 </ThemedText>
                 <ThemedText style={styles.usageText}>
                   {trendText}
@@ -283,10 +285,10 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
               </View>
               <View style={styles.usageTextContainer}>
                 <ThemedText style={styles.usageTitle}>
-                  Set Target Time
+                  {t('brushingTimeOverlay.targetTitle')}
                 </ThemedText>
                 <ThemedText style={styles.usageText}>
-                  Current goal: {targetMinutes} min
+                  {t('brushingTimeOverlay.targetDescriptionFormat', { targetMinutes })}
                 </ThemedText>
               </View>
               {/* Removed chevron icon as row itself is not interactive */}
@@ -321,7 +323,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
                           isSelected && { color: '#FFFFFF' } // White text when selected
                         ]}
                       >
-                        {option} min
+                        {t('brushingTimeOverlay.targetOptionFormat', { option })}
                       </ThemedText>
                     </Pressable>
                   );
@@ -340,10 +342,10 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
             ]}>
               <View style={styles.infoBoxTextContainer}>
                 <ThemedText style={styles.usageTitle}> 
-                  Why Time Matters
+                  {t('brushingTimeOverlay.whyTimeMattersTitle')}
                 </ThemedText>
                 <ThemedText style={styles.usageText}> 
-                  Brushing under 2 minutes leaves plaque behind. Aim for 2–3 minutes for a full clean.
+                  {t('brushingTimeOverlay.whyTimeMattersText')}
                 </ThemedText>
               </View>
             </View>
@@ -351,7 +353,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
             {/* Progress Bar Section - Added */}
             <View style={styles.progressContainer}>
               <View style={styles.progressLabelContainer}>
-                <ThemedText style={styles.usageTitle}>Target Progress</ThemedText>
+                <ThemedText style={styles.usageTitle}>{t('brushingTimeOverlay.targetProgressTitle')}</ThemedText>
                 <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
                   {remainingSeconds > 0 && (
                     <ThemedText style={[
@@ -361,7 +363,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
                          fontFamily: theme.typography.fonts.medium
                        }
                      ]}>
-                       {remainingTimeString} to go!
+                       {t('brushingTimeOverlay.timeToGoFormat', { time: remainingTimeString })}
                      </ThemedText>
                   )}
                   <ThemedText style={[styles.usageText, { marginLeft: remainingSeconds > 0 ? 4 : 0 }]}> 
@@ -410,7 +412,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
                   style={{ marginRight: 8 }} 
               />
               <ThemedText style={styles.buttonText}>
-                Share Stats
+                {t('brushingTimeOverlay.shareStatsButton')}
               </ThemedText>
             </Pressable>
           </View>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { View, StyleSheet, Animated, Pressable, FlatList, Dimensions, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../ThemeProvider';
@@ -8,17 +8,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import PrimaryButton from '../ui/PrimaryButton';
+import { useTranslation } from 'react-i18next';
 
 const BRUSHING_GOAL_KEY = 'brushing_goal';
 
-// Brushing frequency options
-const BRUSHING_OPTIONS = [
-  { value: 1, label: '1 time per day' },
-  { value: 2, label: '2 times per day' },
-  { value: 3, label: '3 times per day' },
-  { value: 4, label: '4 times per day' },
-  { value: 5, label: '5 times per day' }
-];
+// Brushing frequency options will be defined inside the component using t() and useMemo
 
 interface BrushingGoalScreenProps {
   title: string;
@@ -43,9 +37,19 @@ export default function BrushingGoalScreen({
 }: BrushingGoalScreenProps) {
   const { theme } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const [selectedGoal, setSelectedGoal] = useState<number>(2); // Default to 2 times per day
   const flatListRef = useRef<FlatList>(null);
   const insets = useSafeAreaInsets();
+  
+  // Define BRUSHING_OPTIONS inside the component using useMemo
+  const BRUSHING_OPTIONS = useMemo(() => [
+    { value: 1, label: t('onboarding.brushingGoalScreen.optionsLabel', { count: 1 }) },
+    { value: 2, label: t('onboarding.brushingGoalScreen.optionsLabel', { count: 2 }) },
+    { value: 3, label: t('onboarding.brushingGoalScreen.optionsLabel', { count: 3 }) },
+    { value: 4, label: t('onboarding.brushingGoalScreen.optionsLabel', { count: 4 }) },
+    { value: 5, label: t('onboarding.brushingGoalScreen.optionsLabel', { count: 5 }) }
+  ], [t]);
   
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -192,7 +196,7 @@ export default function BrushingGoalScreen({
             styles.questionText,
             { fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined }
           ]}>
-            Your daily brushing target:
+            {t('onboarding.brushingGoalScreen.question')}
           </ThemedText>
         </View>
       </View>
@@ -228,7 +232,7 @@ export default function BrushingGoalScreen({
       {/* Action buttons - positioned at bottom */}
       <View style={styles.buttonsContainer}>
         <PrimaryButton 
-          label={isLastScreen ? 'Start Now' : 'Continue'}
+          label={isLastScreen ? t('onboarding.brushingGoalScreen.startButton') : t('common.Continue')}
           onPress={handleNext}
           width={width * 0.85}
           useDisplayFont={true}

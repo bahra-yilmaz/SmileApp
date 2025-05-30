@@ -8,6 +8,7 @@ import { BlurView } from 'expo-blur';
 import GlassmorphicCard from '../ui/GlassmorphicCard';
 import ThemedText from '../ThemedText';
 import { Colors } from '../../constants/Colors';
+import { useTranslation } from 'react-i18next';
 
 interface TimerCircleProps {
   progress?: number; // 0 to 1
@@ -24,6 +25,7 @@ const TimerCircle: React.FC<TimerCircleProps> = ({
   initialMinutes = 2,
   initialSeconds = 0
 }) => {
+  const { t } = useTranslation();
   const { theme } = useTheme();
   const [isStartPressed, setIsStartPressed] = useState(false);
   const [isBrushedPressed, setIsBrushedPressed] = useState(false);
@@ -409,7 +411,7 @@ const TimerCircle: React.FC<TimerCircleProps> = ({
                   }
                 ]}
               >
-                {isRunning ? "Restart" : "Start"}
+                {isRunning ? t('timerOverlay.restart') : t('timerOverlay.start')}
               </ThemedText>
             </View>
           </TouchableOpacity>
@@ -442,7 +444,7 @@ const TimerCircle: React.FC<TimerCircleProps> = ({
                   }
                 ]}
               >
-                {isRunning ? "Done" : "Brushed"}
+                {isRunning ? t('timerOverlay.done') : t('timerOverlay.brushed')}
               </ThemedText>
             </View>
           </TouchableOpacity>
