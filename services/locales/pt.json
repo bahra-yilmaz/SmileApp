@@ -1,3 +1,289 @@
 {
-
-} 
+    "mascotGreetings": {
+      "defaultHello": "Olá!",
+      "smileJourney": "Ei! 👋 Vamos começar sua jornada do sorriso!",
+      "welcomeBack": "Bem-vindo de volta! Pronto para iluminar o seu dia?",
+      "pearlyWhites": "Hora de conferir! Como estão seus dentes brilhantes?",
+      "nuboHelp": "O Nubo está aqui para te ajudar a sorrir ainda mais!",
+      "wavingWithGlassesPP": {
+        "greeting1": "Oi! Nubo aqui, acenando com meus óculos estilosos!",
+        "greeting2": "Só passando para dar um oi!",
+        "tip1": "Lembre-se: um simples aceno pode alegrar o dia de alguém!"
+      },
+      "brushingTime": {
+        "reminder1": "Hora de escovar os dentes! Vamos deixá-los brilhando.",
+        "fact1": "Você sabia que escovar por dois minutos é o ideal?",
+        "encouragement1": "Continue com esses ótimos hábitos de escovação!"
+      },
+      "generalGreetings": {
+        "niceDay": "Espero que esteja tendo um dia incrível!",
+        "keepSmiling": "Continue sorrindo, fica ótimo em você!"
+      },
+      "playfulReminders": {
+        "hollywoodSmile": "Me dê um minuto e chegue mais perto daquele sorriso de Hollywood 🎬😁",
+        "toothFairyResigning": "Se você pular hoje… a fada do dente vai se demitir. De verdade. 🧚‍♀️❌",
+        "breakAlgorithm": "Se você pular hoje, vou bagunçar o algoritmo. Alertas aleatórios às 19:37 para sempre 😈",
+        "notTherapist": "Sou seu mascote, não seu terapeuta. Minha paciência tem limite 😶‍🌫️",
+        "boringMascot": "Sem brilho hoje? Tudo bem. Vou sair e mandar um mascote sem graça 💅",
+        "brushDanceTrade": "Você escova, eu danço. Acordo justo.",
+        "cleanedSneakers": "Limpei meus tênis para isso. Não me deixe esperando na pia.",
+        "brushWantsAction": "Esta escova quer ação. Sem papo furado.",
+        "shineBragPartnership": "Você brilha, eu me gabo. Vamos manter essa parceria saudável.",
+        "mirrorLosesRespect": "Se perder um dia, seu espelho vai perder o respeito por você. Confia."
+      }
+    },
+    "common": {
+      "ok": "OK",
+      "cancel": "Cancelar",
+      "Continue": "Continuar"
+    },
+    "languages": {
+      "en": "English",
+      "es": "Español",
+      "de": "Deutsch",
+      "fr": "Français",
+      "tr": "Türkçe",
+      "pt": "Português",
+      "ja": "日本語",
+      "hi": "हिन्दी"
+    },
+    "onboarding": {
+      "welcomeMascotGreeting": "(Mensagem de boas-vindas do onboarding)",
+      "mascotNextGreeting": "(Próxima etapa do onboarding)",
+      "mascotFinalGreeting": "(Mensagem final do onboarding)",
+      "actions": {
+        "skip": "Pular",
+        "next": "Próximo",
+        "getStarted": "Começar"
+      },
+      "welcomeScreen": {
+        "mainTitle": "Bem-vindo ao Smile App!",
+        "mainTitleApp": "Bem-vindo ao\nseu aplicativo",
+        "journeyTitle": "Personalize sua jornada do sorriso",
+        "checkpoint1": "Escolha seu idioma",
+        "checkpoint2": "Conheça seu mascote",
+        "checkpoint3": "Defina suas metas",
+        "letsGoButton": "Vamos lá"
+      },
+      "ageSelectionScreen": {
+        "title": "Qual a sua idade?",
+        "description": "Isso nos ajuda a personalizar o conteúdo para você",
+        "ageRange0_5": "0–5",
+        "ageRange6_12": "6–12",
+        "ageRange13_18": "13–18",
+        "ageRange19_29": "19–29",
+        "ageRange30_45": "30–45",
+        "ageRange46_60": "46–60",
+        "ageRange60_plus": "60+",
+        "question": "Qual a sua idade?",
+        "useForChildButton": "Usar para criança",
+        "continueButton": "Continuar"
+      },
+      "brushingGoalScreen": {
+        "title": "Defina sua meta de escovação",
+        "description": "Quantas vezes por dia você quer escovar? Dentistas recomendam pelo menos duas vezes.",
+        "optionsLabel_one": "{{count}} vez por dia",
+        "optionsLabel_other": "{{count}} vezes por dia",
+        "question": "Sua meta diária de escovação:",
+        "startButton": "Começar agora"
+      },
+      "toothbrushDurationScreen": {
+        "title": "Tempo da escova",
+        "description": "Quando foi a última vez que trocou sua escova?",
+        "options": {
+          "lessThan1Week": "Menos de 1 semana",
+          "oneToTwoWeeks": "Há 1–2 semanas",
+          "threeToFourWeeks": "Há 3–4 semanas",
+          "about2Months": "Há cerca de 2 meses",
+          "about3Months": "Há cerca de 3 meses",
+          "dontRemember": "Não me lembro"
+        },
+        "question": "Tempo atual de uso da escova:",
+        "startButton": "Começar agora"
+      },
+      "nuboToneScreen": {
+        "title": "Tom do Nubo",
+        "description": "Escolha como o Nubo interage com você",
+        "options": {
+          "playful_label": "Divertido",
+          "playful_description": "Engraçado e motivador",
+          "supportive_label": "Acolhedor",
+          "supportive_description": "Gentil e prestativo",
+          "motivational_label": "Motivador",
+          "motivational_description": "Energético e inspirador",
+          "educational_label": "Educativo",
+          "educational_description": "Informativo e detalhado"
+        },
+        "question": "Escolha o tom do Nubo",
+        "startButton": "Começar agora"
+      },
+      "signinScreen": {
+        "title": "Bem-vindo à\nsua conta",
+        "emailPlaceholder": "E-mail",
+        "passwordPlaceholder": "Senha",
+        "submitButton": "Entrar",
+        "orDivider": "ou",
+        "googleButton": "Entrar com Google",
+        "noAccountText": "Não tem conta? ",
+        "signUpLink": "Cadastre-se"
+      },
+      "signupScreen": {
+        "title": "Criar uma\nnova conta",
+        "usernamePlaceholder": "Nome de usuário",
+        "emailPlaceholder": "E-mail",
+        "submitButton": "Começar a jornada",
+        "googleButton": "Cadastre-se com Google",
+        "hasAccountText": "Já tem conta? ",
+        "signInLink": "Entrar"
+      }
+    },
+    "toothbrush": {
+      "days": "Dias de uso: {{count}}"
+    },
+    "homeScreen": {
+      "streakCard": {
+        "daysStreak": "dias de sequência"
+      },
+      "brushingTimeCard": {
+        "minutes": "minutos"
+      },
+      "toothbrushCard": {
+        "replaceSoon": "Será necessário trocar em breve",
+        "daysUnit": "dias"
+      }
+    },
+    "chatOverlay": {
+      "smileTeamName": "Equipe Smile",
+      "welcomeMessage": "Bem-vindo à sua jornada personalizada do sorriso! Como podemos te ajudar hoje?",
+      "justNow": "Agora mesmo",
+      "typeMessagePlaceholder": "Digite sua mensagem...",
+      "sendButton": "Enviar"
+    },
+    "menuOverlay": {
+      "title": "Menu",
+      "profile": {
+        "name": "Perfil",
+        "description": "Gerencie seu perfil e configurações"
+      },
+      "statistics": {
+        "name": "Estatísticas",
+        "description": "Veja suas estatísticas de escovação"
+      },
+      "reminders": {
+        "name": "Lembretes",
+        "description": "Configure seus lembretes de escovação"
+      },
+      "achievements": {
+        "name": "Conquistas",
+        "description": "Veja suas conquistas de escovação"
+      },
+      "settings": {
+        "name": "Configurações",
+        "description": "Configurações e preferências do app"
+      }
+    },
+    "timerOverlay": {
+      "start": "Iniciar",
+      "pause": "Pausar",
+      "resume": "Retomar",
+      "stop": "Parar",
+      "done": "Concluído",
+      "skip": "Pular",
+      "next": "Próximo",
+      "finishBrushing": "Finalizar escovação",
+      "songMenuTitle": "Escolha uma música",
+      "selectSong": "Selecionar música",
+      "restart": "Reiniciar",
+      "brushed": "Escovado",
+      "songMenu": {
+        "rainyMood": "Som de chuva",
+        "forestAmbience": "Ambiente de floresta",
+        "cafeSounds": "Sons de café",
+        "selectASound": "Selecione um som",
+        "noSound": "Sem som"
+      }
+    },
+  "toothbrushOverlay": {
+    "title": "Sua Escova",
+    "daysInUseText": "dias de uso",
+    "healthStatusGood": "Boa",
+    "healthStatusReplaceSoon": "Trocar em breve",
+    "healthStatusFair": "Regular",
+    "brushingTrackerTitle": "Registro de Escovação",
+    "brushesOnThisToothbrushText": "Foram {{count}} escovações com esta escova",
+    "replaceHistoryTitle": "Histórico de Trocas",
+    "replaceHistorySubtitle": "Acompanhe as trocas da sua escova",
+    "replacedOnDate": "Trocada em: {{date}}",
+    "whyReplaceTitle": "Por que trocar?",
+    "whyReplaceText": "As cerdas desgastam e acumulam bactérias. Troque a cada 3 meses para uma boca saudável.",
+    "toothbrushHealthTitle": "Estado da Escova",
+    "gotNewBrushButton": "Peguei uma nova escova",
+    "lastReplaced": "Última troca: {{date}}",
+    "replaceButton": "Trocar agora",
+    "confirmReplaceTitle": "Confirmar troca",
+    "confirmReplaceMessage": "Tem certeza que deseja marcar como trocada? O contador de dias será zerado.",
+    "showHistory": "Mostrar histórico",
+    "hideHistory": "Ocultar histórico"
+  },
+  "streakOverlay": {
+    "title": "{{count}} Dias de Sequência",
+    "subtitle": "Você está mandando bem!",
+    "achievementsTitle": "Conquistas",
+    "achievementsDescription": "Veja suas medalhas e marcos conquistados",
+    "shareStreakTitle": "Compartilhar sequência",
+    "shareStreakDescription": "Compartilhe sua sequência de escovação com seus amigos",
+    "streakGoalsTitle": "Metas de sequência",
+    "streakGoalsDescription": "Defina metas pessoais de sequência",
+    "continuousBrushingsTitle": "Continue assim!",
+    "continuousBrushingsText": "Sequência mantida {{count}} vezes",
+    "streakHistoryTitle": "Melhores Sequências",
+    "streakHistorySubtitle": "Suas melhores sequências até agora",
+    "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}} Dia{{duration, plural, one {} other {s}}})",
+    "setReminderTitle": "Definir lembrete",
+    "setReminderSubtitle": "Deixe o Nubo te lembrar",
+    "nuboMotivationTitle": "A Subida do Nubo!",
+    "nuboMotivationText": "A cada dia de sequência, o Nubo sobe mais alto na montanha!",
+    "nextSummitTitle": "Próximo Pico",
+    "daysToGoText": "Faltam {{count}} dias!",
+    "showHistory": "Mostrar histórico",
+    "hideHistory": "Ocultar histórico",
+    "noHistory": "Ainda sem sequências. Continue assim!"
+  },
+  "brushingTimeOverlay": {
+    "title": "Tempo de Escovação",
+    "timeProgressFormat": "{{currentTime}} / {{targetTime}} min",
+    "averageTimeImproving": "O tempo médio está melhorando 🌟",
+    "averageTimeDeclining": "Vamos aumentar esse tempo! 💪",
+    "brushingTrendTitle": "Tendência de escovação",
+    "targetTitle": "Definir tempo-alvo",
+    "targetDescriptionFormat": "Meta atual: {{targetMinutes}} min",
+    "targetOptionFormat": "{{option}} min",
+    "whyTimeMattersTitle": "Por que o tempo importa",
+    "whyTimeMattersText": "Escovar por menos de 2 minutos deixa placa. Mire em 2–3 minutos para uma limpeza completa.",
+    "targetProgressTitle": "Progresso da meta",
+    "timeToGoFormat": "{{time}} restantes!",
+    "shareStatsButton": "Compartilhar estatísticas",
+    "setTargetButton": "Definir nova meta",
+    "editTargetButton": "Editar meta",
+    "customTargetPrompt": "Informe o tempo em minutos (ex.: 2.5 para 2min30s)",
+    "saveTargetButton": "Salvar meta",
+    "cancelButton": "Cancelar",
+    "targetUpdatedAlert": "Meta atualizada para {{newTarget}} minutos!",
+    "invalidInputAlert": "Por favor, insira um número válido de minutos.",
+    "chooseTargetPrompt": "Ou escolha um alvo comum:"
+  },
+  "brushingResultsScreen": {
+    "title": "Escovação Concluída!",
+    "message": "Ótimo trabalho ao escovar os dentes!",
+    "timeSpentCardTitle": "Tempo de Escovação",
+    "pointsCardLabel": "Pontos",
+    "bonusCardLabel": "Bônus",
+    "motivationalText": "Continue brilhando! Cada escovação conta.",
+    "goHomeButton": "Voltar ao início",
+    "revertModalTitle": "Reverter escovação?",
+    "revertModalMessage": "Deseja reverter esta escovação? \nSerá como se nunca tivesse acontecido.",
+    "revertModalConfirmButton": "Reverter",
+    "revertModalCancelButton": "Cancelar"
+  }
+}
+  

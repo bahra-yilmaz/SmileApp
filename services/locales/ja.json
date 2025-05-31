@@ -1,3 +1,288 @@
 {
-
-} 
+    "mascotGreetings": {
+      "defaultHello": "こんにちは！",
+      "smileJourney": "やあ！👋 笑顔の旅を始めましょう！",
+      "welcomeBack": "お帰りなさい！今日も素敵な一日を！",
+      "pearlyWhites": "チェックの時間です！歯の輝きはどう？",
+      "nuboHelp": "ヌボがあなたの笑顔をサポートします！",
+      "wavingWithGlassesPP": {
+        "greeting1": "やあ！ヌボです。カッコいい眼鏡で手を振ってます！",
+        "greeting2": "ちょっと挨拶に来ただけだよ！",
+        "tip1": "ちょっとした挨拶が誰かの一日を明るくしますよ！"
+      },
+      "brushingTime": {
+        "reminder1": "歯磨きの時間です！ピカピカにしよう！",
+        "fact1": "2分間のブラッシングがちょうどいいって知ってました？",
+        "encouragement1": "素晴らしい歯磨き習慣を続けましょう！"
+      },
+      "generalGreetings": {
+        "niceDay": "素晴らしい一日をお過ごしください！",
+        "keepSmiling": "その笑顔、素敵ですよ！"
+      },
+      "playfulReminders": {
+        "hollywoodSmile": "1分だけ時間を取って、ハリウッドスマイルに一歩近づこう🎬😁",
+        "toothFairyResigning": "今日歯磨きしないと…歯の妖精が辞めちゃうよ🧚‍♀️❌",
+        "breakAlgorithm": "サボったらアルゴリズム壊します。毎日19:37にランダム通知が届きます😈",
+        "notTherapist": "私はマスコットであって、セラピストじゃありません。忍耐にも限界があります😶‍🌫️",
+        "boringMascot": "今日輝かない？じゃあつまらないマスコットに交代します💅",
+        "brushDanceTrade": "あなたが磨けば、私が踊ります。公平な取引！",
+        "cleanedSneakers": "このためにスニーカーもピカピカにしたんだ。シンクで待たせないで！",
+        "brushWantsAction": "このブラシは行動を求めてる。おしゃべりはいいから！",
+        "shineBragPartnership": "あなたが輝けば、私は自慢します。このパートナーシップを続けよう！",
+        "mirrorLosesRespect": "1日サボると鏡があなたへの敬意を失います。信じて！"
+      }
+    },
+    "common": {
+      "ok": "OK",
+      "cancel": "キャンセル",
+      "Continue": "続ける"
+    },
+    "languages": {
+      "en": "English",
+      "es": "Español",
+      "de": "Deutsch",
+      "fr": "Français",
+      "tr": "Türkçe",
+      "pt": "Português",
+      "ja": "日本語",
+      "hi": "हिन्दी"
+    },
+    "onboarding": {
+      "welcomeMascotGreeting": "(オンボーディング開始挨拶)",
+      "mascotNextGreeting": "(次のオンボーディング挨拶)",
+      "mascotFinalGreeting": "(オンボーディング終了挨拶)",
+      "actions": {
+        "skip": "スキップ",
+        "next": "次へ",
+        "getStarted": "はじめる"
+      },
+      "welcomeScreen": {
+        "mainTitle": "Smile Appへようこそ！",
+        "mainTitleApp": "あなたのアプリへ\nようこそ",
+        "journeyTitle": "笑顔の旅をカスタマイズしよう",
+        "checkpoint1": "言語を選択",
+        "checkpoint2": "マスコットに会おう",
+        "checkpoint3": "目標を設定",
+        "letsGoButton": "はじめよう"
+      },
+      "ageSelectionScreen": {
+        "title": "あなたの年齢は？",
+        "description": "年齢に合わせて最適化します",
+        "ageRange0_5": "0–5",
+        "ageRange6_12": "6–12",
+        "ageRange13_18": "13–18",
+        "ageRange19_29": "19–29",
+        "ageRange30_45": "30–45",
+        "ageRange46_60": "46–60",
+        "ageRange60_plus": "60+",
+        "question": "年齢は？",
+        "useForChildButton": "子供用に設定",
+        "continueButton": "続ける"
+      },
+      "brushingGoalScreen": {
+        "title": "ブラッシング目標を設定",
+        "description": "1日に何回磨きますか？歯科医は少なくとも1日2回を推奨しています。",
+        "optionsLabel_one": "{{count}} 回/日",
+        "optionsLabel_other": "{{count}} 回/日",
+        "question": "1日のブラッシング目標：",
+        "startButton": "今すぐ開始"
+      },
+      "toothbrushDurationScreen": {
+        "title": "歯ブラシの使用期間",
+        "description": "最後に交換したのはいつ？",
+        "options": {
+          "lessThan1Week": "1週間未満",
+          "oneToTwoWeeks": "1〜2週間前",
+          "threeToFourWeeks": "3〜4週間前",
+          "about2Months": "約2ヶ月前",
+          "about3Months": "約3ヶ月前",
+          "dontRemember": "覚えていない"
+        },
+        "question": "現在の歯ブラシ使用期間：",
+        "startButton": "今すぐ開始"
+      },
+      "nuboToneScreen": {
+        "title": "Nuboのトーン",
+        "description": "Nuboの話し方を選択",
+        "options": {
+          "playful_label": "遊び心あり",
+          "playful_description": "楽しく励まし",
+          "supportive_label": "サポート型",
+          "supportive_description": "優しく親切に",
+          "motivational_label": "モチベーション型",
+          "motivational_description": "元気でやる気を出させる",
+          "educational_label": "教育的",
+          "educational_description": "情報が豊富で丁寧"
+        },
+        "question": "Nuboのスタイルを選ぼう",
+        "startButton": "今すぐ開始"
+      },
+      "signinScreen": {
+        "title": "あなたのアカウントへ\nようこそ",
+        "emailPlaceholder": "メールアドレス",
+        "passwordPlaceholder": "パスワード",
+        "submitButton": "ログイン",
+        "orDivider": "または",
+        "googleButton": "Googleでログイン",
+        "noAccountText": "アカウントがありませんか？ ",
+        "signUpLink": "新規登録"
+      },
+      "signupScreen": {
+        "title": "新しいアカウントを作成",
+        "usernamePlaceholder": "ユーザー名",
+        "emailPlaceholder": "メールアドレス",
+        "submitButton": "旅を始める",
+        "googleButton": "Googleで登録",
+        "hasAccountText": "すでにアカウントがありますか？ ",
+        "signInLink": "ログイン"
+      }
+    },
+    "toothbrush": {
+      "days": "使用日数: {{count}}"
+    },
+    "homeScreen": {
+      "streakCard": {
+        "daysStreak": "日連続"
+      },
+      "brushingTimeCard": {
+        "minutes": "分"
+      },
+      "toothbrushCard": {
+        "replaceSoon": "そろそろ交換が必要です",
+        "daysUnit": "日"
+      }
+    },
+    "chatOverlay": {
+      "smileTeamName": "スマイルチーム",
+      "welcomeMessage": "あなたのスマイル旅へようこそ！今日は何をお手伝いしましょう？",
+      "justNow": "たった今",
+      "typeMessagePlaceholder": "メッセージを入力...",
+      "sendButton": "送信"
+    },
+    "menuOverlay": {
+      "title": "メニュー",
+      "profile": {
+        "name": "プロフィール",
+        "description": "プロフィールと設定を管理"
+      },
+      "statistics": {
+        "name": "統計",
+        "description": "ブラッシング統計を確認"
+      },
+      "reminders": {
+        "name": "リマインダー",
+        "description": "ブラッシングの通知を設定"
+      },
+      "achievements": {
+        "name": "実績",
+        "description": "獲得した実績を確認"
+      },
+      "settings": {
+        "name": "設定",
+        "description": "アプリの設定と好み"
+      }
+    },
+    "timerOverlay": {
+      "start": "開始",
+      "pause": "一時停止",
+      "resume": "再開",
+      "stop": "停止",
+      "done": "完了",
+      "skip": "スキップ",
+      "next": "次へ",
+      "finishBrushing": "ブラッシング完了",
+      "songMenuTitle": "音楽を選択",
+      "selectSong": "曲を選択",
+      "restart": "再スタート",
+      "brushed": "磨いた",
+      "songMenu": {
+        "rainyMood": "雨の音",
+        "forestAmbience": "森の音",
+        "cafeSounds": "カフェの音",
+        "selectASound": "サウンドを選択",
+        "noSound": "サウンドなし"
+      }
+    },
+  "toothbrushOverlay": {
+    "title": "あなたの歯ブラシ",
+    "daysInUseText": "使用日数",
+    "healthStatusGood": "良好",
+    "healthStatusReplaceSoon": "交換が必要",
+    "healthStatusFair": "普通",
+    "brushingTrackerTitle": "ブラッシング履歴",
+    "brushesOnThisToothbrushText": "このブラシで {{count}} 回磨きました",
+    "replaceHistoryTitle": "交換履歴",
+    "replaceHistorySubtitle": "歯ブラシ交換の履歴を確認",
+    "replacedOnDate": "交換日: {{date}}",
+    "whyReplaceTitle": "なぜ交換が必要？",
+    "whyReplaceText": "毛先は摩耗し、細菌が溜まります。健康のため3ヶ月ごとに交換しましょう。",
+    "toothbrushHealthTitle": "ブラシの状態",
+    "gotNewBrushButton": "新しいブラシを入手しました",
+    "lastReplaced": "最後の交換日: {{date}}",
+    "replaceButton": "今すぐ交換",
+    "confirmReplaceTitle": "交換を確認",
+    "confirmReplaceMessage": "本当に交換しますか？ 使用日数がリセットされます。",
+    "showHistory": "履歴を表示",
+    "hideHistory": "履歴を非表示"
+  },
+  "streakOverlay": {
+    "title": "{{count}}日連続達成",
+    "subtitle": "素晴らしい！",
+    "achievementsTitle": "実績",
+    "achievementsDescription": "獲得したバッジとマイルストーンを見る",
+    "shareStreakTitle": "連続記録を共有",
+    "shareStreakDescription": "友達と連続記録を共有しよう",
+    "streakGoalsTitle": "連続目標",
+    "streakGoalsDescription": "個人の目標を設定",
+    "continuousBrushingsTitle": "続けていこう！",
+    "continuousBrushingsText": "{{count}}回連続成功",
+    "streakHistoryTitle": "最高記録",
+    "streakHistorySubtitle": "過去最高の連続記録",
+    "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}}日)",
+    "setReminderTitle": "リマインダーを設定",
+    "setReminderSubtitle": "Nuboに通知させよう",
+    "nuboMotivationTitle": "Nuboの登山！",
+    "nuboMotivationText": "毎日続けるたびにNuboは山を登ります！",
+    "nextSummitTitle": "次の山頂",
+    "daysToGoText": "あと{{count}}日！",
+    "showHistory": "履歴を表示",
+    "hideHistory": "履歴を非表示",
+    "noHistory": "まだ記録がありません。続けましょう！"
+  },
+  "brushingTimeOverlay": {
+    "title": "ブラッシング時間",
+    "timeProgressFormat": "{{currentTime}} / {{targetTime}}分",
+    "averageTimeImproving": "平均時間が向上中 🌟",
+    "averageTimeDeclining": "もっと長く磨こう 💪",
+    "brushingTrendTitle": "ブラッシングの傾向",
+    "targetTitle": "目標時間を設定",
+    "targetDescriptionFormat": "現在の目標: {{targetMinutes}}分",
+    "targetOptionFormat": "{{option}}分",
+    "whyTimeMattersTitle": "なぜ時間が大切？",
+    "whyTimeMattersText": "2分未満では歯垢が残ります。2〜3分を目指しましょう。",
+    "targetProgressTitle": "目標の進捗",
+    "timeToGoFormat": "残り{{time}}！",
+    "shareStatsButton": "統計を共有",
+    "setTargetButton": "新しい目標を設定",
+    "editTargetButton": "目標を編集",
+    "customTargetPrompt": "目標時間を分で入力 (例: 2.5は2分30秒)",
+    "saveTargetButton": "保存",
+    "cancelButton": "キャンセル",
+    "targetUpdatedAlert": "目標が{{newTarget}}分に更新されました！",
+    "invalidInputAlert": "有効な分数を入力してください。",
+    "chooseTargetPrompt": "よく使う目標から選ぶ："
+  },
+  "brushingResultsScreen": {
+    "title": "ブラッシング完了！",
+    "message": "歯磨きお疲れ様でした！",
+    "timeSpentCardTitle": "ブラッシング時間",
+    "pointsCardLabel": "ポイント",
+    "bonusCardLabel": "ボーナス",
+    "motivationalText": "輝きを続けよう！毎回のブラッシングが大切です。",
+    "goHomeButton": "ホームへ戻る",
+    "revertModalTitle": "ブラッシングを取り消しますか？",
+    "revertModalMessage": "このブラッシングを取り消しますか？\n無かったことになります。",
+    "revertModalConfirmButton": "取り消す",
+    "revertModalCancelButton": "キャンセル"
+  }
+}  
