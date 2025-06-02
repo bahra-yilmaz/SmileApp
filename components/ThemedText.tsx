@@ -11,7 +11,7 @@ export type ThemedTextProps = TextProps & {
   useDisplayFont?: boolean;
 };
 
-export function ThemedText({
+export default function ThemedText({
   style,
   lightColor,
   darkColor,
@@ -155,8 +155,6 @@ export function ThemedText({
     />
   );
 }
-
-export default ThemedText;
 
 const styles = StyleSheet.create({
   default: {

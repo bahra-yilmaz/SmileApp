@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Dimensions, Animated, Text, FlatLis
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { Theme } from '../../constants/Theme';
-import { ThemedText } from '../../components/ThemedText';
+import ThemedText from '../../components/ThemedText';
 import { LANGUAGES, LanguageItem } from '../../services/languageConfig';
 import { useFonts } from 'expo-font';
 import { GlassmorphicCard } from '../../components/ui/GlassmorphicCard';
