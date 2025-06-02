@@ -52,7 +52,7 @@ const BrushingResultsScreen = () => {
     // screenAppearAnim is already 1, so background and container are instantly visible
     Animated.timing(contentAppearAnim, {
       toValue: 1,
-      duration: 600, // Relatively slow fade-in for content
+      duration: 400, // Was 600ms
       useNativeDriver: true,
     }).start();
   }, [contentAppearAnim]); // Run once on mount, only depends on contentAppearAnim
@@ -84,17 +84,17 @@ const BrushingResultsScreen = () => {
     Animated.parallel([
       Animated.timing(screenAppearAnim, { // Use screenAppearAnim for background/container
         toValue: 0,
-        duration: 600,
+        duration: 400, // Was 600ms 
         useNativeDriver: true,
       }),
       Animated.timing(contentAppearAnim, { // Use contentAppearAnim for content
         toValue: 0,
-        duration: 600,
+        duration: 400, // Was 600ms
         useNativeDriver: true,
       }),
       Animated.timing(gestureAnim, {
-        toValue: 1, 
-        duration: 600,
+        toValue: 0, 
+        duration: 400, // Was 600ms
         useNativeDriver: true,
       }),
     ]).start(animateCloseComplete);
@@ -140,17 +140,17 @@ const BrushingResultsScreen = () => {
           Animated.parallel([
             Animated.timing(screenAppearAnim, { // Use screenAppearAnim
               toValue: 0,
-              duration: 600,
+              duration: 400, // Was 600ms
               useNativeDriver: true,
             }),
             Animated.timing(contentAppearAnim, { // Use contentAppearAnim
               toValue: 0,
-              duration: 600,
+              duration: 400, // Was 600ms
               useNativeDriver: true,
             }),
             Animated.timing(gestureAnim, {
-              toValue: 1, // Ensure gesture is marked complete
-              duration: 600,
+              toValue: 0, // Ensure gestureAnim goes to 0 for symmetrical scaling
+              duration: 400, // Was 600ms
               useNativeDriver: true,
             }),
           ]).start(animateCloseComplete);
@@ -184,17 +184,17 @@ const BrushingResultsScreen = () => {
     Animated.parallel([
       Animated.timing(screenAppearAnim, { // Use screenAppearAnim
         toValue: 0,
-        duration: 600,
+        duration: 400, // Was 600ms
         useNativeDriver: true,
       }),
       Animated.timing(contentAppearAnim, { // Use contentAppearAnim
         toValue: 0,
-        duration: 600,
+        duration: 400, // Was 600ms
         useNativeDriver: true,
       }),
       Animated.timing(gestureAnim, {
-        toValue: 1, // Mark gesture as complete to match opacity logic
-        duration: 600,
+        toValue: 0, // Ensure gestureAnim goes to 0 for symmetrical scaling
+        duration: 400, // Was 600ms
         useNativeDriver: true,
       }),
     ]).start(animateCloseComplete);

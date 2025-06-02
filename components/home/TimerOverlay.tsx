@@ -10,7 +10,10 @@ import {
   Animated,
   Dimensions,
   PanResponder,
-  Pressable
+  Pressable,
+  Easing,
+  GestureResponderEvent,
+  useWindowDimensions
 } from 'react-native';
 import { useTheme } from '../ThemeProvider';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -28,11 +31,12 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
   // Animation values
   const expandAnim = useRef(new Animated.Value(0)).current;
   const gestureAnim = useRef(new Animated.Value(0)).current;
-  const transitioningContentOpacity = useRef(new Animated.Value(1)).current; // Added for content fade before nav
+  const transitioningContentOpacity = useRef(new Animated.Value(1)).current;
   
   // Track animation completion and current gesture value
   const [animationComplete, setAnimationComplete] = useState(false);
-  const currentGestureValue = useRef(0);
+  const [isInteractionActive, setIsInteractionActive] = useState(false);
+  const currentGestureMaxDy = useRef(0); // To store max dy during the current gesture
   
   // Get safe area insets for proper positioning
   const insets = useSafeAreaInsets();
@@ -41,120 +45,111 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
   const { theme } = useTheme();
   const backgroundColor = theme.colorScheme === 'dark' ? '#1F2933' : '#F3F9FF';
   
-  // Get screen dimensions
-  const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+  // Get screen dimensions using the hook for dynamic updates
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
   
   // Calculate the maximum scale needed to cover the screen from a small circle
   const buttonSize = 70; // Size of the action button
   const maxScale = Math.max(screenWidth, screenHeight) * 2 / buttonSize;
   
-  // Closure thresholds - modified to require more deliberate input
-  const minCloseThreshold = 0.35; // 35% scrolled to consider it as closing intent (up from 10%)
+  // Closure thresholds (now apply to raw scroll progress within sensitive area)
+  const minCloseThreshold = 0.07; // Raw scroll progress for slow drags (~7%). Was eased progress with pow(1.1).
   const minVelocity = 0.5; // Minimum velocity to consider for quick flick gestures
+  const velocityAssistedCloseThreshold = 0.04; // Raw scroll progress for flicks (~4%).
   
-  // Listen for changes in the gesture animation value
-  useEffect(() => {
-    // Set up listener for gesture animation value
-    const gestureListener = gestureAnim.addListener(({ value }) => {
-      currentGestureValue.current = value;
-    });
-    
-    // Clean up listener when component unmounts
-    return () => {
-      gestureAnim.removeListener(gestureListener);
-    };
-  }, [gestureAnim]);
-  
-  // Configure pan responder for scrolling gesture
+  // Configure pan responder for scrolling gesture - REVERT TO useRef
   const panResponder = useRef(
     PanResponder.create({
-      onStartShouldSetPanResponder: () => false, // Don't capture taps
-      onStartShouldSetPanResponderCapture: () => false, // Don't capture taps
-      onMoveShouldSetPanResponder: (_, gestureState) => {
-        // Only respond to significant vertical gestures
-        return Math.abs(gestureState.dy) > 10 && Math.abs(gestureState.dy) > Math.abs(gestureState.dx * 2);
+      onStartShouldSetPanResponder: () => true,
+      onStartShouldSetPanResponderCapture: (_, gestureState) => {
+        return gestureState.dy > 1 && Math.abs(gestureState.dy) > Math.abs(gestureState.dx * 1.5);
       },
+      onMoveShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponderCapture: (_, gestureState) => {
-        // Only capture significant vertical gestures
-        return Math.abs(gestureState.dy) > 10 && Math.abs(gestureState.dy) > Math.abs(gestureState.dx * 2);
+        return gestureState.dy > 0;
       },
       onPanResponderGrant: () => {
-        // When gesture starts, make sure we're starting from 0
-        gestureAnim.setValue(0);
-        // Stop any running animations
+        gestureAnim.setValue(0); // Restore this reset for visual consistency
         gestureAnim.stopAnimation();
         expandAnim.stopAnimation();
+        setIsInteractionActive(true);
+        currentGestureMaxDy.current = 0; // Reset max dy for the new gesture
       },
       onPanResponderMove: (_, gestureState) => {
-        // Only allow downward movement (positive dy values)
         if (gestureState.dy > 0) {
-          // Calculate gesture progress (0 to 1)
-          // Adjust sensitivity - require more scrolling (40% of screen height instead of 20%)
-          const gestureProgress = Math.min(1, gestureState.dy / (screenHeight * 0.4));
-          
-          // Apply easing to make the initial movement less sensitive
-          // This creates a more gradual effect at the beginning
-          const easedProgress = Math.pow(gestureProgress, 1.5);
+          currentGestureMaxDy.current = Math.max(currentGestureMaxDy.current, gestureState.dy); // Track max dy
+          const gestureProgress = Math.min(1, gestureState.dy / (screenHeight * 0.25));
+          const easedProgress = Math.pow(gestureProgress, 1.0);
           gestureAnim.setValue(easedProgress);
         }
       },
       onPanResponderRelease: (_, gestureState) => {
-        // Use the tracked value and include velocity for better feel
         const velocity = gestureState.vy; // Vertical velocity of gesture
+        const finalSwipeDy = currentGestureMaxDy.current; // Use the max dy recorded during move
+
+        const gestureProgressAtRelease = Math.min(1, finalSwipeDy / (screenHeight * 0.25));
+        const easedProgressAtRelease = gestureProgressAtRelease; // Linear progress
         
-        // Determine if we should close based on:
-        // 1. Enough distance scrolled (above threshold)
-        // 2. OR enough scrolling with sufficient velocity
         const shouldClose = 
-          currentGestureValue.current > minCloseThreshold || // Scrolled enough
-          (currentGestureValue.current > 0.2 && velocity > minVelocity); // Or medium scroll with good velocity
+          easedProgressAtRelease > minCloseThreshold || 
+          (easedProgressAtRelease > velocityAssistedCloseThreshold && velocity > minVelocity);
         
         if (shouldClose) {
-          // Animate expandAnim to 0 to mirror the opening animation's primary driver.
-          // The current value of gestureAnim (from the swipe) will modulate
-          // the scale and opacity as expandAnim animates.
-          Animated.timing(expandAnim, {
-            toValue: 0,
-            duration: 400, // Match opening duration
-            useNativeDriver: true,
-          }).start(() => {
+          Animated.parallel([
+            Animated.timing(expandAnim, {
+              toValue: 0,
+              duration: 300,
+              easing: Easing.linear,
+              useNativeDriver: true,
+            }),
+            Animated.timing(gestureAnim, {
+              toValue: 0,
+              duration: 300,
+              easing: Easing.linear,
+              useNativeDriver: true,
+            })
+          ]).start(() => {
             onClose();
           });
         } else {
-          // Otherwise reset the gesture animation with a bounce
           Animated.spring(gestureAnim, {
             toValue: 0,
             friction: 5,
             tension: 40,
             useNativeDriver: true,
-          }).start();
+          }).start(() => {
+            setIsInteractionActive(false);
+          });
         }
       }
     })
   ).current;
   
-  // Animation effects for opening
   useEffect(() => {
     if (isVisible) {
+      // Animation and state resets for when overlay becomes visible
       setAnimationComplete(true);
-      gestureAnim.setValue(0);
-      // Reset to zero first
-      expandAnim.setValue(0);
-      transitioningContentOpacity.setValue(1); // Reset content opacity for transition
-      // Then animate to full scale
+      gestureAnim.setValue(0); // Reset gesture animation
+      transitioningContentOpacity.setValue(1);
+      setIsInteractionActive(true);
+      expandAnim.setValue(0); // Reset to zero first
       Animated.timing(expandAnim, {
         toValue: 1,
         duration: 400,
         useNativeDriver: true,
-      }).start();
+      }).start(() => {
+        setIsInteractionActive(false);
+      });
     } else {
-      // When hiding, reset the animation completion state
       setAnimationComplete(false);
+      setIsInteractionActive(false);
     }
-  }, [isVisible, expandAnim, gestureAnim, transitioningContentOpacity]);
+    // Restore original dependencies, removing screenHeight, screenWidth if not strictly needed for THIS effect
+  }, [isVisible, expandAnim, gestureAnim, transitioningContentOpacity, onClose /* ensure all actual dependencies are listed if any logic using them remains in this effect */]);
   
   // Function to handle close button press with animation
   const handleClosePress = () => {
+    setIsInteractionActive(true); // Interaction starts with button press
     // Ensure gestureAnim is at 0 if the button is pressed directly,
     // so it doesn't interfere with expandAnim driving the main fade-out.
     gestureAnim.setValue(0);
@@ -162,7 +157,8 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
     // Animate expandAnim to 0 to mirror the opening animation
     Animated.timing(expandAnim, {
       toValue: 0, // Animate fully to 0
-      duration: 400, // Match opening duration
+      duration: 300, // Was 400ms
+      easing: Easing.linear,
       useNativeDriver: true,
     }).start(() => {
       onClose(); // Call the onClose callback when animation is done
@@ -222,7 +218,7 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
   const handleInitiateNavigateToResults = () => {
     Animated.timing(transitioningContentOpacity, {
       toValue: 0,
-      duration: 200, // Quick fade for content
+      duration: 100, // Was 200ms, for a quicker content fade before navigation
       useNativeDriver: true,
     }).start(() => {
       onNavigateToResults(); // Call original prop to navigate
@@ -233,12 +229,13 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
     <View 
       style={styles.container} 
       pointerEvents={isVisible ? 'auto' : 'none'}
+      {...(isVisible ? panResponder.panHandlers : {})} // Apply panHandlers from ref
     >
       <Animated.View
         style={[
           styles.expandingCircle,
           {
-            backgroundColor,
+            backgroundColor, // Restore original background color
             opacity, // Keep original opacity for background
             transform: [{ scale: finalScale }],
           }
@@ -277,6 +274,7 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
           pointerEvents="box-none"
         >
           <Pressable
+            disabled={isInteractionActive} // Disable Pressable based on interaction state
             style={({ pressed }) => [
               styles.closeButton,
               {
@@ -295,13 +293,13 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
         </Animated.View>
       )}
       
-      {/* Overlay area for gestures and taps */}
-      {isVisible && (
+      {/* Overlay area for gestures and taps - This View will be removed */}
+      {/* {isVisible && (
         <View 
           style={styles.touchableArea}
           {...panResponder.panHandlers}
         />
-      )}
+      )} */}
     </View>
   );
 };
