@@ -1,6 +1,6 @@
-import { Colors } from './Colors';
+import Colors from '../../constants/Colors';
 import { Platform, Dimensions } from 'react-native';
-import { ThemeVariations, ThemeVariationKey } from './Colors';
+import { ThemeVariations, type ThemeVariationKey } from '../../constants/Colors';
 
 const { width, height } = Dimensions.get('window');
 
