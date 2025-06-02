@@ -12,8 +12,8 @@ import ptTranslations from './locales/pt.json';
 import jaTranslations from './locales/ja.json';
 import hiTranslations from './locales/hi.json';
 
-console.log('[i18n Service DEBUG] Imported enTranslations:', JSON.stringify(enTranslations, null, 2));
-console.log('[i18n Service DEBUG] Imported esTranslations:', JSON.stringify(esTranslations, null, 2)); // Log Spanish translations
+// console.log('[i18n Service DEBUG] Imported enTranslations:', JSON.stringify(enTranslations, null, 2));
+// console.log('[i18n Service DEBUG] Imported esTranslations:', JSON.stringify(esTranslations, null, 2)); // Log Spanish translations
 // Add logs for other new languages as needed
 
 // Later, you would add other languages like this:
@@ -23,7 +23,7 @@ console.log('[i18n Service DEBUG] Imported esTranslations:', JSON.stringify(esTr
 i18next
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
-    debug: true, // Enable i18next debug logging
+    debug: false, // Disable i18next debug logging
     compatibilityJSON: 'v4',
     resources: {
       en: { translation: enTranslations }, // Use the imported JSON
@@ -44,8 +44,8 @@ i18next
       useSuspense: false, // Set to true if you want to use Suspense for translation loading
     },
   }, (err, t) => {
-    if (err) return console.error('[i18n Service DEBUG] Error initializing i18next:', err);
-    console.log('[i18n Service DEBUG] i18next initialized successfully.');
+    if (err) return console.error('[i18n Service DEBUG] Error initializing i18next (this log can be removed if not debugging):', err);
+    // console.log('[i18n Service DEBUG] i18next initialized successfully (this log can be removed if not debugging).');
     // You can try a test translation here too
     // console.log('[i18n Service DEBUG] Test translation from init callback for common.ok:', t('common.ok'));
   });
