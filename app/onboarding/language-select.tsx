@@ -92,7 +92,7 @@ export default function LanguageSelectScreen() {
       <View style={styles.contentContainer}>
         <View style={styles.titleContainer}>
           <ThemedText style={[styles.title, { fontFamily: fontFamilyTitle }]}>
-            Choose Your{'\n'}Language
+            {t('onboarding.languageSelectScreen.title')}
           </ThemedText>
         </View>
 

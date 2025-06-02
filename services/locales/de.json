@@ -3,7 +3,7 @@
       "defaultHello": "Hallo!",
       "smileJourney": "Hallo! 👋 Lass uns deine Smile-Reise starten!",
       "welcomeBack": "Willkommen zurück! Bereit, deinen Tag zu erhellen?",
-      "pearlyWhites": "Zeit für einen Check! Wie geht’s deinen weißen Zähnen?",
+      "pearlyWhites": "Zeit für einen Check! Wie geht's deinen weißen Zähnen?",
       "nuboHelp": "Nubo ist hier, um dir beim Lächeln zu helfen!",
       "wavingWithGlassesPP": {
         "greeting1": "Hey! Nubo hier, winke mit meiner coolen Brille!",
@@ -50,16 +50,19 @@
       "actions": {
         "skip": "Überspringen",
         "next": "Weiter",
-        "getStarted": "Los geht’s"
+        "getStarted": "Los geht's"
       },
       "welcomeScreen": {
-        "mainTitle": "Willkommen bei Smile App!",
+        "mainTitle": "Willkommen bei der Smile App!",
         "mainTitleApp": "Willkommen in\ndeiner App",
-        "journeyTitle": "Personalisieren deine Smile-Reise",
+        "journeyTitle": "Personalisiere deine Smile-Reise",
         "checkpoint1": "Wähle deine Sprache",
         "checkpoint2": "Lerne deine Mascotte kennen",
         "checkpoint3": "Setze deine Ziele",
-        "letsGoButton": "Los geht’s"
+        "letsGoButton": "Los geht's"
+      },
+      "languageSelectScreen": {
+        "title": "Wähle deine\nSprache"
       },
       "ageSelectionScreen": {
         "title": "Wie alt bist du?",
@@ -280,6 +283,9 @@
       "revertModalMessage": "Möchtest du dieses Bürsten rückgängig machen? \nEs wäre, als hätte es nie stattgefunden.",
       "revertModalConfirmButton": "Zurücknehmen",
       "revertModalCancelButton": "Abbrechen"
+    },
+    "languageSelectScreen": {
+      "title": "Choose Your\nLanguage"
     }
   }
   

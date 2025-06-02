@@ -231,7 +231,7 @@ const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
                     justifyContent: 'center',
                     alignItems: 'center',
                     transform: [
-                      { translateX: mascotPosition.translateX },
+                      { translateX: mascotPosition.translateX - 6 },
                       { translateY: mascotPosition.translateY },
                       { scale: mascotPosition.scale }
                     ]
@@ -275,7 +275,7 @@ const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
                       fontSize: 15,
                       fontWeight: '500',
                       fontFamily: 'Quicksand-Medium',
-                      lineHeight: 18,
+                      lineHeight: 20,
                     }}
                   >
                     {typedText}

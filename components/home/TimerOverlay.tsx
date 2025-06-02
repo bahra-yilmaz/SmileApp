@@ -28,6 +28,7 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
   // Animation values
   const expandAnim = useRef(new Animated.Value(0)).current;
   const gestureAnim = useRef(new Animated.Value(0)).current;
+  const transitioningContentOpacity = useRef(new Animated.Value(1)).current; // Added for content fade before nav
   
   // Track animation completion and current gesture value
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -109,10 +110,12 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
           (currentGestureValue.current > 0.2 && velocity > minVelocity); // Or medium scroll with good velocity
         
         if (shouldClose) {
-          // Animate the rest of the way to closed with timing
-          Animated.timing(gestureAnim, {
-            toValue: 1,
-            duration: 200,
+          // Animate expandAnim to 0 to mirror the opening animation's primary driver.
+          // The current value of gestureAnim (from the swipe) will modulate
+          // the scale and opacity as expandAnim animates.
+          Animated.timing(expandAnim, {
+            toValue: 0,
+            duration: 400, // Match opening duration
             useNativeDriver: true,
           }).start(() => {
             onClose();
@@ -137,6 +140,7 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
       gestureAnim.setValue(0);
       // Reset to zero first
       expandAnim.setValue(0);
+      transitioningContentOpacity.setValue(1); // Reset content opacity for transition
       // Then animate to full scale
       Animated.timing(expandAnim, {
         toValue: 1,
@@ -147,27 +151,21 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
       // When hiding, reset the animation completion state
       setAnimationComplete(false);
     }
-  }, [isVisible, expandAnim, gestureAnim]);
+  }, [isVisible, expandAnim, gestureAnim, transitioningContentOpacity]);
   
   // Function to handle close button press with animation
   const handleClosePress = () => {
-    // Animate closing
-    Animated.parallel([
-      // Animate gesture progress to 1 (fully closed)
-      Animated.timing(gestureAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      // Simultaneously animate expand to 0 for a more dramatic effect
-      Animated.timing(expandAnim, {
-        toValue: 0.5, // Don't go all the way to 0 since gestureAnim handles part of it
-        duration: 300,
-        useNativeDriver: true,
-      })
-    ]).start(() => {
-      // Call the onClose callback when animation is done
-      onClose();
+    // Ensure gestureAnim is at 0 if the button is pressed directly,
+    // so it doesn't interfere with expandAnim driving the main fade-out.
+    gestureAnim.setValue(0);
+
+    // Animate expandAnim to 0 to mirror the opening animation
+    Animated.timing(expandAnim, {
+      toValue: 0, // Animate fully to 0
+      duration: 400, // Match opening duration
+      useNativeDriver: true,
+    }).start(() => {
+      onClose(); // Call the onClose callback when animation is done
     });
   };
   
@@ -203,7 +201,7 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
   
   // Content opacity animation - fades out more quickly with gesture
   // This will make content disappear faster than the background
-  const contentOpacity = Animated.add(
+  const baseContentOpacity = Animated.add(
     // Base opacity from expand animation
     expandAnim.interpolate({
       inputRange: [0, 1],
@@ -217,6 +215,20 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
     })
   );
   
+  // Multiply base content opacity with the transitioning opacity
+  const finalContentOpacity = Animated.multiply(baseContentOpacity, transitioningContentOpacity);
+
+  // Handler to initiate navigation: fade out content, then call original onNavigateToResults
+  const handleInitiateNavigateToResults = () => {
+    Animated.timing(transitioningContentOpacity, {
+      toValue: 0,
+      duration: 200, // Quick fade for content
+      useNativeDriver: true,
+    }).start(() => {
+      onNavigateToResults(); // Call original prop to navigate
+    });
+  };
+
   return (
     <View 
       style={styles.container} 
@@ -239,18 +251,18 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
           style={[
             styles.contentContainer,
             {
-              opacity: contentOpacity, // Apply the faster fading opacity
+              opacity: finalContentOpacity, // Apply the combined final content opacity
             }
           ]}
           pointerEvents="box-none"
         >
           {/* Timer Circle Component */}
-          <TimerCircle onBrushedPress={onNavigateToResults} />
+          <TimerCircle onBrushedPress={handleInitiateNavigateToResults} />
         </Animated.View>
       )}
       
       {/* Song Menu */}
-      {isVisible && <SongMenu opacity={contentOpacity} />}
+      {isVisible && <SongMenu opacity={finalContentOpacity} />}
       
       {/* Close Button in top right corner */}
       {isVisible && (
@@ -258,7 +270,7 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
           style={[
             styles.closeButtonContainer, 
             { 
-              opacity: contentOpacity, // Use content opacity for button too
+              opacity: finalContentOpacity, // Use final combined content opacity for button too
               top: insets.top + 10 // Reduced from 20 to 10 to move it higher
             }
           ]}

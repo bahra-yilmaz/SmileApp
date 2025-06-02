@@ -65,6 +65,9 @@
         "checkpoint3": "Establece tus metas",
         "letsGoButton": "Vamos"
       },
+      "languageSelectScreen": {
+        "title": "Elige tu\nidioma"
+      },
       "ageSelectionScreen": {
         "title": "¿Cuál es tu edad?",
         "description": "Esto nos ayuda a filtrar los entrenamientos para ti",

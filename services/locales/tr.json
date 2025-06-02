@@ -22,7 +22,7 @@
       "playfulReminders": {
         "hollywoodSmile": "Bir dakikanı ayır ve Hollywood gülüşüne yaklaş 🎬😁",
         "toothFairyResigning": "Bugün fırçalamazsan… diş perisi istifa ediyor. Cidden. 🧚‍♀️❌",
-        "breakAlgorithm": "Bugün atlarsan algoritmayı bozarım. Sonsuza kadar 19:37’de bildirim alırsın 😈",
+        "breakAlgorithm": "Bugün atlarsan algoritmayı bozarım. Sonsuza kadar 19:37'de bildirim alırsın 😈",
         "notTherapist": "Ben maskotum, terapist değilim. Sabır sınırım var 😶‍🌫️",
         "boringMascot": "Parlama yok mu? Tamam. Giderim ve sıkıcı bir maskot gönderirim 💅",
         "brushDanceTrade": "Sen fırçala, ben dans edeyim. Adil anlaşma.",
@@ -57,13 +57,16 @@
         "getStarted": "Başla"
       },
       "welcomeScreen": {
-        "mainTitle": "Smile App’e Hoş Geldin!",
+        "mainTitle": "Smile App'e Hoş Geldin!",
         "mainTitleApp": "Uygulamana\nhoş geldin",
         "journeyTitle": "Gülümseme Yolculuğunu Kişiselleştir",
         "checkpoint1": "Dilini Seç",
         "checkpoint2": "Maskotunla Tanış",
         "checkpoint3": "Hedeflerini Belirle",
         "letsGoButton": "Hadi Başlayalım"
+      },
+      "languageSelectScreen": {
+        "title": "Dilini Seç"
       },
       "ageSelectionScreen": {
         "title": "Kaç yaşındasın?",
@@ -102,8 +105,8 @@
         "startButton": "Hemen Başla"
       },
       "nuboToneScreen": {
-        "title": "Nubo’nun Tarzı",
-        "description": "Nubo’nun seninle nasıl iletişim kurmasını istersin?",
+        "title": "Nubo'nun Tarzı",
+        "description": "Nubo'nun seninle nasıl iletişim kurmasını istersin?",
         "options": {
           "playful_label": "Neşeli",
           "playful_description": "Eğlenceli ve teşvik edici",
@@ -114,7 +117,7 @@
           "educational_label": "Eğitici",
           "educational_description": "Bilgilendirici ve detaylı"
         },
-        "question": "Nubo’nun tarzını seç",
+        "question": "Nubo'nun tarzını seç",
         "startButton": "Hemen Başla"
       },
       "signinScreen": {
@@ -240,8 +243,8 @@
     "streakHistorySubtitle": "Tüm zamanların en iyi serilerin",
     "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}} Gün{{duration, plural, one {} other {}}})",
     "setReminderTitle": "Hatırlatıcı Ayarla",
-    "setReminderSubtitle": "Nubo’nun seni dürtmesine izin ver",
-    "nuboMotivationTitle": "Nubo’nun Tırmanışı!",
+    "setReminderSubtitle": "Nubo'nun seni dürtmesine izin ver",
+    "nuboMotivationTitle": "Nubo'nun Tırmanışı!",
     "nuboMotivationText": "Her seri günüyle birlikte Nubo dağda daha yükseğe tırmanıyor!",
     "nextSummitTitle": "Sonraki Zirve",
     "daysToGoText": "{{count}} gün kaldı!",

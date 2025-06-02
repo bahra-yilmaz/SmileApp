@@ -65,6 +65,9 @@
         "checkpoint3": "Defina suas metas",
         "letsGoButton": "Vamos lá"
       },
+      "languageSelectScreen": {
+        "title": "Escolha seu\nidioma"
+      },
       "ageSelectionScreen": {
         "title": "Qual a sua idade?",
         "description": "Isso nos ajuda a personalizar o conteúdo para você",

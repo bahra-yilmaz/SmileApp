@@ -65,6 +65,9 @@
         "checkpoint3": "目標を設定",
         "letsGoButton": "はじめよう"
       },
+      "languageSelectScreen": {
+        "title": "言語を選択"
+      },
       "ageSelectionScreen": {
         "title": "あなたの年齢は？",
         "description": "年齢に合わせて最適化します",

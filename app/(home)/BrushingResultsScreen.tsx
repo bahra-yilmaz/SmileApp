@@ -35,7 +35,8 @@ const BrushingResultsScreen = () => {
   });
 
   // Animation values
-  const visibilityAnim = useRef(new Animated.Value(1)).current; // 1 = visible, 0 = hidden/shrunk
+  const screenAppearAnim = useRef(new Animated.Value(1)).current; // Start at 1 for immediate background visibility
+  const contentAppearAnim = useRef(new Animated.Value(0)).current; // Content fades in slowly
   const gestureAnim = useRef(new Animated.Value(0)).current;    // 0 = no gesture, 1 = full gesture
   const currentGestureValue = useRef(0);
 
@@ -45,6 +46,16 @@ const BrushingResultsScreen = () => {
 
   // Themed background for the scaler, like TimerOverlay's expandingCircle
   const themedScalerBackgroundColor = theme.colorScheme === 'dark' ? '#1F2933' : '#F3F9FF';
+
+  useEffect(() => {
+    // Animate in content when the component mounts
+    // screenAppearAnim is already 1, so background and container are instantly visible
+    Animated.timing(contentAppearAnim, {
+      toValue: 1,
+      duration: 600, // Relatively slow fade-in for content
+      useNativeDriver: true,
+    }).start();
+  }, [contentAppearAnim]); // Run once on mount, only depends on contentAppearAnim
 
   useEffect(() => {
     const gestureListener = gestureAnim.addListener(({ value }) => {
@@ -71,14 +82,19 @@ const BrushingResultsScreen = () => {
     setIsConfirmModalVisible(false);
     // Start the close animation and navigate back
     Animated.parallel([
-      Animated.timing(visibilityAnim, {
+      Animated.timing(screenAppearAnim, { // Use screenAppearAnim for background/container
         toValue: 0,
-        duration: 300, 
+        duration: 600,
+        useNativeDriver: true,
+      }),
+      Animated.timing(contentAppearAnim, { // Use contentAppearAnim for content
+        toValue: 0,
+        duration: 600,
         useNativeDriver: true,
       }),
       Animated.timing(gestureAnim, {
         toValue: 1, 
-        duration: 300,
+        duration: 600,
         useNativeDriver: true,
       }),
     ]).start(animateCloseComplete);
@@ -96,7 +112,8 @@ const BrushingResultsScreen = () => {
       },
       onPanResponderGrant: () => {
         gestureAnim.setValue(0);
-        visibilityAnim.stopAnimation();
+        screenAppearAnim.stopAnimation();
+        contentAppearAnim.stopAnimation();
         gestureAnim.stopAnimation();
       },
       onPanResponderMove: (_, gestureState) => {
@@ -105,7 +122,12 @@ const BrushingResultsScreen = () => {
           const easedProgress = Math.pow(gestureProgress, 1.5);
           gestureAnim.setValue(easedProgress);
           // Link gesture progress to visibility animation directly for responsive scaling
-          visibilityAnim.setValue(1 - easedProgress); 
+          // visibilityAnim.setValue(1 - easedProgress); 
+          // For gestures, primarily affect content and let the release handle full closure
+          contentAppearAnim.setValue(1 - easedProgress); 
+          if (easedProgress > 0.5) { // Start fading screen container if gesture is significant
+            screenAppearAnim.setValue(1 - (easedProgress - 0.5) * 2);
+          }
         }
       },
       onPanResponderRelease: (_, gestureState) => {
@@ -116,20 +138,31 @@ const BrushingResultsScreen = () => {
 
         if (shouldClose) {
           Animated.parallel([
-            Animated.timing(visibilityAnim, {
+            Animated.timing(screenAppearAnim, { // Use screenAppearAnim
               toValue: 0,
-              duration: 200,
+              duration: 600,
+              useNativeDriver: true,
+            }),
+            Animated.timing(contentAppearAnim, { // Use contentAppearAnim
+              toValue: 0,
+              duration: 600,
               useNativeDriver: true,
             }),
             Animated.timing(gestureAnim, {
               toValue: 1, // Ensure gesture is marked complete
-              duration: 200,
+              duration: 600,
               useNativeDriver: true,
             }),
           ]).start(animateCloseComplete);
         } else {
           Animated.parallel([
-            Animated.spring(visibilityAnim, { // Spring visibility back to full
+            Animated.spring(screenAppearAnim, { // Spring screen container back to full
+              toValue: 1,
+              friction: 5,
+              tension: 40,
+              useNativeDriver: true,
+            }),
+            Animated.spring(contentAppearAnim, { // Spring content back to full
               toValue: 1,
               friction: 5,
               tension: 40,
@@ -149,27 +182,27 @@ const BrushingResultsScreen = () => {
 
   const handleChevronClosePress = () => {
     Animated.parallel([
-      Animated.timing(visibilityAnim, {
+      Animated.timing(screenAppearAnim, { // Use screenAppearAnim
         toValue: 0,
-        duration: 300,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+      Animated.timing(contentAppearAnim, { // Use contentAppearAnim
+        toValue: 0,
+        duration: 600,
         useNativeDriver: true,
       }),
       Animated.timing(gestureAnim, {
         toValue: 1, // Mark gesture as complete to match opacity logic
-        duration: 300,
+        duration: 600,
         useNativeDriver: true,
       }),
     ]).start(animateCloseComplete);
   };
 
   // Animation style calculations (adapted from TimerOverlay)
-  const baseScale = visibilityAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0.01, MAX_SCALE_ANIM],
-  });
-
   const finalTransformScale = Animated.multiply(
-    baseScale,
+    MAX_SCALE_ANIM, // Use fixed MAX_SCALE_ANIM for the base scale
     Animated.subtract(1, gestureAnim.interpolate({ // Gesture reduces scale more directly
       inputRange: [0, 1],
       outputRange: [0, 0.7], // Max 70% reduction from gesture before visibilityAnim takes over fully
@@ -177,10 +210,10 @@ const BrushingResultsScreen = () => {
     }))
   );
 
-  const overallOpacity = visibilityAnim; // Simpler opacity tied to visibility
+  const overallOpacity = screenAppearAnim; // Screen container opacity
 
   const animatedContentOpacity = Animated.add(
-    visibilityAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 1] }),
+    contentAppearAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 1] }), // Content opacity
     gestureAnim.interpolate({ inputRange: [0, 0.3, 1], outputRange: [0, -0.7, -1], extrapolate: 'clamp' })
   );
 
@@ -222,7 +255,7 @@ const BrushingResultsScreen = () => {
           styles.animatedCircularScaler,
           {
             backgroundColor: themedScalerBackgroundColor,
-            opacity: overallOpacity, 
+            opacity: overallOpacity, // Background circle also uses screenAppearAnim for opacity
             transform: [{ scale: finalTransformScale }],
           }
         ]}

@@ -65,6 +65,9 @@
       "checkpoint3": "Set Your Goals",
       "letsGoButton": "Lets Go"
     },
+    "languageSelectScreen": {
+      "title": "Choose Your\nLanguage"
+    },
     "ageSelectionScreen": {
       "title": "What is your age?",
       "description": "This helps us filter out workouts for you",

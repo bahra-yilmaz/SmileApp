@@ -65,6 +65,9 @@
         "checkpoint3": "अपने लक्ष्य निर्धारित करें",
         "letsGoButton": "शुरू करें"
       },
+      "languageSelectScreen": {
+        "title": "अपनी भाषा चुनें"
+      },
       "ageSelectionScreen": {
         "title": "आपकी उम्र क्या है?",
         "description": "हम आपके लिए कंटेंट को फिल्टर करेंगे",
