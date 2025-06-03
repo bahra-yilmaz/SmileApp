@@ -34,7 +34,7 @@ interface ExpandableMascotCardProps {
   enablePulse: boolean;
 }
 
-const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
+export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
   collapsedMascotVariant,
   expandedMascotVariant,
   mascotPosition,
@@ -303,6 +303,4 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     alignSelf: 'center',
   },
-});
-
-export default ExpandableMascotCard; 
+}); 
