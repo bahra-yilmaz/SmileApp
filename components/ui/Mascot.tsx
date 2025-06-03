@@ -39,9 +39,9 @@ export default function Mascot({
       case 'waving':
         return require('../../assets/mascot/nubo-waving-1.png');
       case 'glasses':
-        return require('../../assets/mascot/nubo-glasses-1.png');
+        return require('../../assets/mascot/nubo-wise-1.png');
       case 'glasses-1-pp':
-        return require('../../assets/mascot/nubo-glasses-1-pp.png');
+        return require('../../assets/mascot/nubo-wise-1-pp.png');
       case 'brushing':
         return require('../../assets/mascot/nubo-brushing-1.png');
       case 'welcoming':

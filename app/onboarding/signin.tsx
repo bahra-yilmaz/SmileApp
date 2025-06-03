@@ -170,7 +170,7 @@ export default function SigninScreen() {
           />
           
           <Image
-            source={require('../../assets/mascot/nubo-glasses-1.png')}
+            source={require('../../assets/mascot/nubo-welcoming-1.png')}
             style={styles.mascotImage}
           />
           
@@ -285,10 +285,10 @@ const styles = StyleSheet.create({
   },
   mascotImage: {
     position: 'absolute',
-    width: 170,
-    height: 170,
-    right: 0,
-    bottom: 385,
+    width: 185,
+    height: 185,
+    right: 10,
+    bottom: 377,
     zIndex: 1,
     resizeMode: 'contain',
   },
