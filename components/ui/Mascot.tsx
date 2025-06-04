@@ -59,21 +59,25 @@ export default function Mascot({
       // case 'nubo-welcoming-wave-pp':
       //   return require('../../assets/mascot/nubo-welcoming-wave-pp.png');
 
-      // --- Playful Category (Assets not provided for these examples) ---
-      // case 'nubo-playful-dance':
-      //   return require('../../assets/mascot/nubo-playful-dance.png');
-      // case 'nubo-playful-dance-pp':
-      //   return require('../../assets/mascot/nubo-playful-dance-pp.png');
-      // case 'nubo-playful-peek':
-      //   return require('../../assets/mascot/nubo-playful-peek.png');
-      // case 'nubo-playful-peek-pp':
-      //   return require('../../assets/mascot/nubo-playful-peek-pp.png');
+      // --- Cool Category ---
+      case 'nubo-cool-2': // New for stage 3 Expanded (nubo-cool-2.png)
+        return require('../../assets/mascot/nubo-cool-2.png');
+      case 'nubo-cool-3-pp': // New for stage 3 PP (nubo-cool-3-pp.png)
+        return require('../../assets/mascot/nubo-cool-3-pp.png');
 
       // --- Daily Routine Category ---
-      case 'nubo-daily-brush':
+      case 'nubo-daily-brush': // For nubo-brushing-1.png
         return require('../../assets/mascot/nubo-brushing-1.png');
-      // case 'nubo-daily-brush-pp':
-      //   return require('../../assets/mascot/nubo-daily-brush-pp.png');
+      case 'nubo-brushing-1-pp': // For stage 2 PP (nubo-brushing-1-pp.png)
+        return require('../../assets/mascot/nubo-brushing-1-pp.png');
+      case 'nubo-daily-brush-2': // For stage 2 Expanded (nubo-brushing-2.png)
+        return require('../../assets/mascot/nubo-brushing-2.png');
+      // case 'nubo-brushing-2-pp': // Removed
+      //  return require('../../assets/mascot/nubo-brushing-2-pp.png');
+
+      // --- Timer Category ---
+      // case 'nubo-timer-1': // Removed
+      //   return require('../../assets/mascot/nubo-timer-1.png');
 
       // --- Generic / Accessory Focused (Assets not provided for these examples) ---
       // case 'nubo-generic-glasses':

@@ -42,19 +42,21 @@ export default function OnboardingWelcome() {
 
   // Mascot card configuration state
   const initialStageConfig = {
-    greetingText: "This is a science-based app to help you shine with your smile",
+    greetingText: "This is a science-based app to help you shine with your smile ✨",
     collapsedVariant: 'nubo-wise-1-pp' as MascotVariant,
     expandedVariant: 'nubo-wise-1' as MascotVariant,
   };
-  const nextStageText = t('onboarding.mascotNextGreeting');
-  const finalStageText = t('onboarding.mascotFinalGreeting');
+  // Define text for the second stage directly
+  const secondStageGreetingText = "Just a few minutes a day can make a big difference for your smile. ⏱️";
+  const finalStageGreetingText = "Nubo will be with you on this journey, let's get to know you! 🤝✨";
 
-  // Placeholder variants for next/final stages - updated to new valid variants
-  const nextStageCollapsedVariant: MascotVariant = 'nubo-wise-1-pp';
-  const nextStageExpandedVariant: MascotVariant = 'nubo-wise-1';
-  const finalStageCollapsedVariant: MascotVariant = 'nubo-wise-1-pp';
-  const finalStageExpandedVariant: MascotVariant = 'nubo-wise-1';
+  // Define variants for the second stage
+  const secondStageCollapsedVariant: MascotVariant = 'nubo-brushing-1-pp';
+  const secondStageExpandedVariant: MascotVariant = 'nubo-daily-brush-2';
 
+  // Define text and variants for the final stage (stage 3)
+  const finalStageCollapsedVariant: MascotVariant = 'nubo-cool-3-pp';
+  const finalStageExpandedVariant: MascotVariant = 'nubo-cool-2';
 
   const [mascotCardConfig, setMascotCardConfig] = useState(initialStageConfig);
 
@@ -274,13 +276,13 @@ export default function OnboardingWelcome() {
               setMascotCardConfig(initialStageConfig);
             } else if (!isCheckpoint2Done) {
               setMascotCardConfig({
-                greetingText: nextStageText,
-                collapsedVariant: nextStageCollapsedVariant,
-                expandedVariant: nextStageExpandedVariant,
+                greetingText: secondStageGreetingText,
+                collapsedVariant: secondStageCollapsedVariant,
+                expandedVariant: secondStageExpandedVariant,
               });
             } else {
               setMascotCardConfig({
-                greetingText: finalStageText,
+                greetingText: finalStageGreetingText,
                 collapsedVariant: finalStageCollapsedVariant,
                 expandedVariant: finalStageExpandedVariant,
               });
@@ -313,21 +315,21 @@ export default function OnboardingWelcome() {
                 } else if (!isCheckpoint2Done) {
                   setIsCheckpoint2Done(true);
                   setMascotCardConfig({
-                    greetingText: nextStageText,
-                    collapsedVariant: nextStageCollapsedVariant,
-                    expandedVariant: nextStageExpandedVariant,
+                    greetingText: secondStageGreetingText,
+                    collapsedVariant: secondStageCollapsedVariant,
+                    expandedVariant: secondStageExpandedVariant,
                   });
                 } else if (!isCheckpoint3Done) {
                   setIsCheckpoint3Done(true);
                   setMascotCardConfig({
-                    greetingText: finalStageText,
+                    greetingText: finalStageGreetingText,
                     collapsedVariant: finalStageCollapsedVariant,
                     expandedVariant: finalStageExpandedVariant,
                   });
                 } else {
                   // All checkpoints done, card remains expanded with final greeting
                   setMascotCardConfig({
-                    greetingText: finalStageText,
+                    greetingText: finalStageGreetingText,
                     collapsedVariant: finalStageCollapsedVariant,
                     expandedVariant: finalStageExpandedVariant,
                   });

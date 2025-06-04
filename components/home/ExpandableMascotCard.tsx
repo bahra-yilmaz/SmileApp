@@ -252,7 +252,7 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
                       fontSize: 15,
                       fontWeight: '500',
                       fontFamily: 'Quicksand-Bold',
-                      lineHeight: 20,
+                      lineHeight: 22,
                     }}
                   >
                     {typedText}
