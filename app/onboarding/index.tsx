@@ -7,8 +7,8 @@ import ThemedText from '../../components/ThemedText';
 import { useFonts } from 'expo-font';
 import { GlassmorphicCard } from '../../components/ui/GlassmorphicCard';
 import PrimaryButton from '../../components/ui/PrimaryButton';
-import { ExpandableMascotCard } from '../../components/home/ExpandableMascotCard';
-import { useRandomMascot } from '../../utils/mascotUtils';
+import { ExpandableMascotCard } from '../../components/home';
+import type { MascotVariant } from '../../types/mascot';
 import Reanimated, { 
   useSharedValue,
   useAnimatedStyle,
@@ -39,14 +39,31 @@ export default function OnboardingWelcome() {
   const [isCheckpoint2Done, setIsCheckpoint2Done] = useState(false);
   const [isCheckpoint3Done, setIsCheckpoint3Done] = useState(false);
   const [isContinueButtonEnabled, setIsContinueButtonEnabled] = useState(false);
-  // State for mascot greeting text
-  const initialGreeting = t('onboarding.welcomeMascotGreeting');
-  const nextGreeting = t('onboarding.mascotNextGreeting');
-  const finalGreeting = t('onboarding.mascotFinalGreeting');
-  const [mascotGreeting, setMascotGreeting] = useState(initialGreeting);
 
-  // Get a random mascot and its positioning for the new card
-  const { variant: randomMascotVariant, position: mascotPosition } = useRandomMascot();
+  // Mascot card configuration state
+  const initialStageConfig = {
+    greetingText: "This is a science-based app to help you shine with your smile",
+    collapsedVariant: 'nubo-wise-1-pp' as MascotVariant,
+    expandedVariant: 'nubo-wise-1' as MascotVariant,
+  };
+  const nextStageText = t('onboarding.mascotNextGreeting');
+  const finalStageText = t('onboarding.mascotFinalGreeting');
+
+  // Placeholder variants for next/final stages - updated to new valid variants
+  const nextStageCollapsedVariant: MascotVariant = 'nubo-wise-1-pp';
+  const nextStageExpandedVariant: MascotVariant = 'nubo-wise-1';
+  const finalStageCollapsedVariant: MascotVariant = 'nubo-wise-1-pp';
+  const finalStageExpandedVariant: MascotVariant = 'nubo-wise-1';
+
+
+  const [mascotCardConfig, setMascotCardConfig] = useState(initialStageConfig);
+
+  // Define a fixed mascot position for stability
+  const mascotPosition = {
+    translateX: -4, // Base X for 'glasses' like variants
+    translateY: 1,  // Base Y for 'glasses' like variants
+    scale: 1,       // Base scale (though overridden for collapsed in card)
+  };
 
   // Animation for Circle 1 (fill and show checkmark)
   const circle1BackgroundColor = useSharedValue('transparent');
@@ -253,9 +270,21 @@ export default function OnboardingWelcome() {
           onPress={() => {
             setIsMascotCardExpanded(false);
             // Determine next greeting based on which checkpoint is next
-            if (!isCheckpoint1Done) setMascotGreeting(initialGreeting);
-            else if (!isCheckpoint2Done) setMascotGreeting(nextGreeting);
-            else setMascotGreeting(finalGreeting);
+            if (!isCheckpoint1Done) {
+              setMascotCardConfig(initialStageConfig);
+            } else if (!isCheckpoint2Done) {
+              setMascotCardConfig({
+                greetingText: nextStageText,
+                collapsedVariant: nextStageCollapsedVariant,
+                expandedVariant: nextStageExpandedVariant,
+              });
+            } else {
+              setMascotCardConfig({
+                greetingText: finalStageText,
+                collapsedVariant: finalStageCollapsedVariant,
+                expandedVariant: finalStageExpandedVariant,
+              });
+            }
           }}
         />
       )}
@@ -270,26 +299,38 @@ export default function OnboardingWelcome() {
         {/* Expandable Mascot Card */}
         <View style={styles.mascotCardContainer}>
           <ExpandableMascotCard 
-            collapsedMascotVariant={randomMascotVariant}
-            expandedMascotVariant={randomMascotVariant}
+            collapsedMascotVariant={mascotCardConfig.collapsedVariant}
+            expandedMascotVariant={mascotCardConfig.expandedVariant}
             mascotPosition={mascotPosition}
-            greetingText={mascotGreeting}
+            greetingText={mascotCardConfig.greetingText}
             isExpanded={isMascotCardExpanded}
             onPress={() => {
               if (!isMascotCardExpanded) {
                 setIsMascotCardExpanded(true);
                 if (!isCheckpoint1Done) {
                   setIsCheckpoint1Done(true);
-                  setMascotGreeting(initialGreeting);
+                  setMascotCardConfig(initialStageConfig);
                 } else if (!isCheckpoint2Done) {
                   setIsCheckpoint2Done(true);
-                  setMascotGreeting(nextGreeting);
+                  setMascotCardConfig({
+                    greetingText: nextStageText,
+                    collapsedVariant: nextStageCollapsedVariant,
+                    expandedVariant: nextStageExpandedVariant,
+                  });
                 } else if (!isCheckpoint3Done) {
                   setIsCheckpoint3Done(true);
-                  setMascotGreeting(finalGreeting);
+                  setMascotCardConfig({
+                    greetingText: finalStageText,
+                    collapsedVariant: finalStageCollapsedVariant,
+                    expandedVariant: finalStageExpandedVariant,
+                  });
                 } else {
                   // All checkpoints done, card remains expanded with final greeting
-                  setMascotGreeting(finalGreeting);
+                  setMascotCardConfig({
+                    greetingText: finalStageText,
+                    collapsedVariant: finalStageCollapsedVariant,
+                    expandedVariant: finalStageExpandedVariant,
+                  });
                 }
               }
             }}

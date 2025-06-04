@@ -121,10 +121,10 @@ export function GlassmorphicCard({
 
 const styles = StyleSheet.create({
   container: {
-    overflow: 'hidden',
+    // overflow: 'hidden', // Remains commented out to allow overlay content from parent components
   },
   blurView: {
-    overflow: 'hidden',
+    overflow: 'hidden', // Re-added to clip BlurView's own content (the blur effect) to its borderRadius
   },
 });
 

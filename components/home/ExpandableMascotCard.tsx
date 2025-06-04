@@ -58,6 +58,8 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
   const mascotSize = circleHeight * 0.8;
   // Slightly larger mascot size for non-expanded state
   const nonExpandedMascotSize = circleHeight * 0.9;
+  // Define a new size for the mascot in its expanded state
+  const expandedStateMascotActualSize = mascotSize * 1.2; // User updated to 1.5x
   // Calculate expanded width (45% of screen width)
   const expandedWidth = screenWidth * 0.52;
   
@@ -171,100 +173,75 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
     Animated.parallel(animations).start();
   }, [isExpanded, widthAnim, mascotPositionAnim, cornerRadiusAnim, notExpandedMascotOpacityAnim, expandedMascotOpacityAnim, expandedWidth, circleSize]);
   
+  // Define styles for card and internal mascot container to calculate offsets
+  const glassmorphicCardStyle = {
+    height: circleHeight,
+    width: isExpanded ? animatedWidth : circleHeight,
+    borderRadius: animatedRadius,
+    alignItems: 'center' as 'center',
+    justifyContent: 'center' as 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    flexDirection: 'row' as 'row',
+    paddingHorizontal: isExpanded ? 8 : 15,
+  };
+
+  const internalMascotContainerStyle = {
+    // This container is for the collapsed mascot, inside the card
+    transform: [{ translateX: mascotPositionAnim }],
+    width: mascotSize, 
+    height: circleHeight,
+    alignItems: 'center' as 'center',
+    justifyContent: 'center' as 'center',
+    position: 'relative' as 'relative',
+    marginLeft: isExpanded ? 8 : 12,
+  };
+
+  // Calculate the left offset for the expanded mascot overlay
+  // This is card's paddingLeft + original internal mascot container's marginLeft when expanded
+  const expandedMascotOverlayLeft = glassmorphicCardStyle.paddingHorizontal + internalMascotContainerStyle.marginLeft;
+
   return (
     <Reanimated.View style={pulseAnimatedStyle}>
       <View style={styles.cardContainer}>
-        <View 
-          style={{
-            alignItems: 'center',
-          }}
-        >
+        <View style={{ alignItems: 'center' }}>
           <Pressable
             onPress={onPress}
             disabled={isExpanded}
-            style={({ pressed }) => ({
-              opacity: (!isExpanded && pressed) ? 0.95 : 1 
-            })}
+            style={({ pressed }) => ({ opacity: (!isExpanded && pressed) ? 0.95 : 1 })}
           >
             <GlassmorphicCard
-              width={animatedWidth}
+              width={animatedWidth} // Use animatedWidth directly for the card's container
               borderRadius="none"
               intensity={70}
               shadow="lg"
               containerStyle={{
                 height: circleHeight,
-                width: isExpanded ? animatedWidth : circleHeight,
+                width: isExpanded ? animatedWidth : circleHeight, // Outer container matches animated size
                 borderRadius: animatedRadius,
               }}
-              style={{
-                height: circleHeight,
-                width: isExpanded ? animatedWidth : circleHeight,
-                borderRadius: animatedRadius,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                flexDirection: 'row',
-                paddingHorizontal: isExpanded ? 8 : 15,
-              }}
+              style={glassmorphicCardStyle} // Apply the defined styles to the card content area
             >
-              {/* Nubo Mascot with fade transition */}
-              <Animated.View
-                style={{
-                  transform: [{ translateX: mascotPositionAnim }],
-                  width: mascotSize,
-                  height: circleHeight,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'relative',
-                  marginLeft: isExpanded ? 8 : 12,
-                }}
-              >
-                {/* Regular Glasses Nubo (starts visible, hidden when expanded) */}
+              {/* Collapsed Mascot Container (inside the card) */}
+              <Animated.View style={internalMascotContainerStyle}>
                 <Animated.View 
-                  style={{ 
+                  style={{
                     opacity: notExpandedMascotOpacityAnim, 
                     position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
+                    top: 0, left: 0, right: 0, bottom: 0,
                     justifyContent: 'center',
                     alignItems: 'center',
                     transform: [
-                      { translateX: mascotPosition.translateX - 6 },
-                      { translateY: mascotPosition.translateY },
-                      { scale: mascotPosition.scale }
+                      { translateX: mascotPosition.translateX - 2 },
+                      { translateY: mascotPosition.translateY - 2 },
+                      { scale: 1 }
                     ]
                   }}
                 >
-                  <Mascot 
-                    variant={collapsedMascotVariant} 
-                    size={nonExpandedMascotSize}
-                  />
-                </Animated.View>
-                
-                {/* PP Glasses Nubo (hidden initially, shown when expanded) */}
-                <Animated.View 
-                  style={{ 
-                    opacity: expandedMascotOpacityAnim, 
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    transform: [{ translateX: 15 }],
-                  }}
-                >
-                  <Mascot 
-                    variant={expandedMascotVariant} 
-                    size={mascotSize}
-                  />
+                  <Mascot variant={collapsedMascotVariant} size={nonExpandedMascotSize} />
                 </Animated.View>
               </Animated.View>
               
-              {/* Content that appears on expansion */}
+              {/* Text Content (inside the card) */}
               {isExpanded && (
                 <View style={styles.expandedContent}>
                   <ThemedText 
@@ -274,7 +251,7 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
                       marginLeft: 0, 
                       fontSize: 15,
                       fontWeight: '500',
-                      fontFamily: 'Quicksand-Medium',
+                      fontFamily: 'Quicksand-Bold',
                       lineHeight: 20,
                     }}
                   >
@@ -283,6 +260,36 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
                 </View>
               )}
             </GlassmorphicCard>
+
+            {/* Expanded Mascot Overlay (sibling to GlassmorphicCard, rendered on top) */}
+            {isExpanded && (
+              <Animated.View
+                style={{
+                  position: 'absolute',
+                  top: 0, // Align with the top of the Pressable/GlassmorphicCard
+                  left: expandedMascotOverlayLeft, // Calculated offset from card's left content edge
+                  width: mascotSize, // Slot width, same as internalMascotContainerStyle.width
+                  height: circleHeight, // Slot height
+                  opacity: expandedMascotOpacityAnim, // Fade in/out with expansion
+                  zIndex: 10, // Ensure it's on top
+                  transform: [{ translateX: -20 }, { translateY: 1 }], // Apply the overall slide animation
+                  // pointerEvents: 'none', // If it should not intercept touches meant for card
+                }}
+              >
+                {/* Actual Expanded Mascot with its internal offset and new size */}
+                <Animated.View 
+                  style={{ 
+                    position: 'absolute',
+                    top: 0, left: 0, right: 0, bottom: 0,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    transform: [{ translateX: 15 }], // User set this to 15
+                  }}
+                >
+                  <Mascot variant={expandedMascotVariant} size={expandedStateMascotActualSize}/>
+                </Animated.View>
+              </Animated.View>
+            )}
           </Pressable>
         </View>
       </View>
@@ -294,7 +301,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: '100%',
     alignItems: 'center',
-    zIndex: 5,
+    zIndex: 5, // Card container zIndex, expanded mascot overlay will be zIndex 10
   },
   expandedContent: {
     flex: 1,
@@ -303,4 +310,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     alignSelf: 'center',
   },
-}); 
+});
+
+export default ExpandableMascotCard; 
