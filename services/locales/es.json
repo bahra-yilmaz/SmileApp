@@ -48,9 +48,9 @@
       "hi": "हिन्दी"
     },
     "onboarding": {
-      "welcomeMascotGreeting": "(Saludo de bienvenida en onboarding)",
-      "mascotNextGreeting": "(Saludo para el siguiente paso en onboarding)",
-      "mascotFinalGreeting": "(Saludo final de onboarding)",
+      "mascotGreetingStage1": "Esta es una aplicación basada en ciencia para ayudarte a brillar con tu sonrisa ✨",
+      "mascotGreetingStage2": "Solo unos minutos al día pueden hacer una gran diferencia en tu sonrisa. ⏱️",
+      "mascotGreetingStage3": "Nubo estará contigo en este viaje, ¡conozcámonos! 🤝✨",
       "actions": {
         "skip": "Omitir",
         "next": "Siguiente",

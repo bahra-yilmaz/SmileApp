@@ -42,13 +42,13 @@ export default function OnboardingWelcome() {
 
   // Mascot card configuration state
   const initialStageConfig = {
-    greetingText: "This is a science-based app to help you shine with your smile ✨",
+    greetingText: t('onboarding.mascotGreetingStage1'),
     collapsedVariant: 'nubo-wise-1-pp' as MascotVariant,
     expandedVariant: 'nubo-wise-1' as MascotVariant,
   };
   // Define text for the second stage directly
-  const secondStageGreetingText = "Just a few minutes a day can make a big difference for your smile. ⏱️";
-  const finalStageGreetingText = "Nubo will be with you on this journey, let's get to know you! 🤝✨";
+  const secondStageGreetingText = t('onboarding.mascotGreetingStage2');
+  const finalStageGreetingText = t('onboarding.mascotGreetingStage3');
 
   // Define variants for the second stage
   const secondStageCollapsedVariant: MascotVariant = 'nubo-brushing-1-pp';
@@ -260,6 +260,57 @@ export default function OnboardingWelcome() {
     </TouchableOpacity>
   );
 
+  // Memoized function to handle collapsing the card and setting appropriate config
+  const handleCollapseCard = useCallback(() => {
+    setIsMascotCardExpanded(false);
+    if (!isCheckpoint1Done) {
+      setMascotCardConfig(initialStageConfig);
+    } else if (!isCheckpoint2Done) {
+      setMascotCardConfig({
+        greetingText: secondStageGreetingText,
+        collapsedVariant: secondStageCollapsedVariant,
+        expandedVariant: secondStageExpandedVariant,
+      });
+    } else { // Covers checkpoint 2 done, or checkpoint 3 done (or all done)
+      setMascotCardConfig({
+        greetingText: finalStageGreetingText,
+        collapsedVariant: finalStageCollapsedVariant,
+        expandedVariant: finalStageExpandedVariant,
+      });
+    }
+  }, [isCheckpoint1Done, isCheckpoint2Done, initialStageConfig, secondStageGreetingText, secondStageCollapsedVariant, secondStageExpandedVariant, finalStageGreetingText, finalStageCollapsedVariant, finalStageExpandedVariant]);
+
+  // Memoized function to handle expanding the card and progressing checkpoints
+  const handleExpandAndProgressCard = useCallback(() => {
+    if (!isMascotCardExpanded) {
+      setIsMascotCardExpanded(true);
+      if (!isCheckpoint1Done) {
+        setIsCheckpoint1Done(true);
+        setMascotCardConfig(initialStageConfig);
+      } else if (!isCheckpoint2Done) {
+        setIsCheckpoint2Done(true);
+        setMascotCardConfig({
+          greetingText: secondStageGreetingText,
+          collapsedVariant: secondStageCollapsedVariant,
+          expandedVariant: secondStageExpandedVariant,
+        });
+      } else if (!isCheckpoint3Done) {
+        setIsCheckpoint3Done(true);
+        setMascotCardConfig({
+          greetingText: finalStageGreetingText,
+          collapsedVariant: finalStageCollapsedVariant,
+          expandedVariant: finalStageExpandedVariant,
+        });
+      } else {
+        setMascotCardConfig({
+          greetingText: finalStageGreetingText,
+          collapsedVariant: finalStageCollapsedVariant,
+          expandedVariant: finalStageExpandedVariant,
+        });
+      }
+    }
+  }, [isMascotCardExpanded, isCheckpoint1Done, isCheckpoint2Done, isCheckpoint3Done, initialStageConfig, secondStageGreetingText, secondStageCollapsedVariant, secondStageExpandedVariant, finalStageGreetingText, finalStageCollapsedVariant, finalStageExpandedVariant]);
+
   return (
     <Animated.View style={[
       styles.container, 
@@ -269,25 +320,7 @@ export default function OnboardingWelcome() {
       {isMascotCardExpanded && !isCheckpoint3Done && (
         <Pressable
           style={styles.backdropPressable} 
-          onPress={() => {
-            setIsMascotCardExpanded(false);
-            // Determine next greeting based on which checkpoint is next
-            if (!isCheckpoint1Done) {
-              setMascotCardConfig(initialStageConfig);
-            } else if (!isCheckpoint2Done) {
-              setMascotCardConfig({
-                greetingText: secondStageGreetingText,
-                collapsedVariant: secondStageCollapsedVariant,
-                expandedVariant: secondStageExpandedVariant,
-              });
-            } else {
-              setMascotCardConfig({
-                greetingText: finalStageGreetingText,
-                collapsedVariant: finalStageCollapsedVariant,
-                expandedVariant: finalStageExpandedVariant,
-              });
-            }
-          }}
+          onPress={handleCollapseCard}
         />
       )}
 
@@ -306,36 +339,8 @@ export default function OnboardingWelcome() {
             mascotPosition={mascotPosition}
             greetingText={mascotCardConfig.greetingText}
             isExpanded={isMascotCardExpanded}
-            onPress={() => {
-              if (!isMascotCardExpanded) {
-                setIsMascotCardExpanded(true);
-                if (!isCheckpoint1Done) {
-                  setIsCheckpoint1Done(true);
-                  setMascotCardConfig(initialStageConfig);
-                } else if (!isCheckpoint2Done) {
-                  setIsCheckpoint2Done(true);
-                  setMascotCardConfig({
-                    greetingText: secondStageGreetingText,
-                    collapsedVariant: secondStageCollapsedVariant,
-                    expandedVariant: secondStageExpandedVariant,
-                  });
-                } else if (!isCheckpoint3Done) {
-                  setIsCheckpoint3Done(true);
-                  setMascotCardConfig({
-                    greetingText: finalStageGreetingText,
-                    collapsedVariant: finalStageCollapsedVariant,
-                    expandedVariant: finalStageExpandedVariant,
-                  });
-                } else {
-                  // All checkpoints done, card remains expanded with final greeting
-                  setMascotCardConfig({
-                    greetingText: finalStageGreetingText,
-                    collapsedVariant: finalStageCollapsedVariant,
-                    expandedVariant: finalStageExpandedVariant,
-                  });
-                }
-              }
-            }}
+            onPress={handleExpandAndProgressCard}
+            onPressWhenExpanded={handleCollapseCard}
             enablePulse={!isMascotCardExpanded && (!isCheckpoint1Done || (isCheckpoint1Done && !isCheckpoint2Done) || (isCheckpoint1Done && isCheckpoint2Done && !isCheckpoint3Done))}
           />
         </View>

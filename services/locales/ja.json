@@ -48,9 +48,9 @@
       "hi": "हिन्दी"
     },
     "onboarding": {
-      "welcomeMascotGreeting": "(オンボーディング開始挨拶)",
-      "mascotNextGreeting": "(次のオンボーディング挨拶)",
-      "mascotFinalGreeting": "(オンボーディング終了挨拶)",
+      "mascotGreetingStage1": "これは科学に基づいたアプリで、あなたの笑顔を輝かせます ✨",
+      "mascotGreetingStage2": "1日たった数分であなたの笑顔に大きな違いが生まれます。⏱️",
+      "mascotGreetingStage3": "この旅にNuboが寄り添います。まずはあなたを知りましょう！🤝✨",
       "actions": {
         "skip": "スキップ",
         "next": "次へ",

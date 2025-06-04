@@ -44,9 +44,9 @@
       "fr": "Français"
     },
     "onboarding": {
-      "welcomeMascotGreeting": "(Begrüßung Onboarding)",
-      "mascotNextGreeting": "(Nächster Schritt Onboarding)",
-      "mascotFinalGreeting": "(Letzter Schritt Onboarding)",
+      "mascotGreetingStage1": "Dies ist eine wissenschaftlich basierte App, um Ihr Lächeln zum Strahlen zu bringen ✨",
+      "mascotGreetingStage2": "Nur ein paar Minuten am Tag können einen großen Unterschied für Ihr Lächeln machen. ⏱️",
+      "mascotGreetingStage3": "Nubo wird Sie auf dieser Reise begleiten, lernen wir Sie kennen! 🤝✨",
       "actions": {
         "skip": "Überspringen",
         "next": "Weiter",

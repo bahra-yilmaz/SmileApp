@@ -44,9 +44,9 @@
       "fr": "Français"
     },
     "onboarding": {
-      "welcomeMascotGreeting": "(Message de bienvenue Onboarding)",
-      "mascotNextGreeting": "(Message suivant Onboarding)",
-      "mascotFinalGreeting": "(Message final Onboarding)",
+      "mascotGreetingStage1": "Ceci est une application scientifique pour vous aider à illuminer votre sourire ✨",
+      "mascotGreetingStage2": "Quelques minutes par jour peuvent faire une grande différence pour votre sourire. ⏱️",
+      "mascotGreetingStage3": "Nubo sera avec vous dans ce voyage, faisons connaissance ! 🤝✨",
       "actions": {
         "skip": "Passer",
         "next": "Suivant",
