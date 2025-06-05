@@ -71,7 +71,7 @@ export default function HomeScreen() {
   const [isHomeMascotExpanded, setIsHomeMascotExpanded] = useState(false); // Changed from true to false
   
   // Get a random mascot and its positioning
-  const [selectedMascotConfig] = useState(() => getRandomMascotConfig()); // Get random config on mount
+  const [selectedMascotConfig, setSelectedMascotConfig] = useState(() => getRandomMascotConfig()); // Make it updatable
   
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -156,13 +156,15 @@ export default function HomeScreen() {
         {/* Expandable Circular Glassmorphic Card - positioned just below header */}
         <View style={styles.mascotContainer}>
           <ExpandableMascotCard 
-            collapsedMascotVariant={selectedMascotConfig.collapsedVariant}
-            expandedMascotVariant={selectedMascotConfig.expandedVariant}
-            mascotPosition={selectedMascotConfig.mascotPosition}
+            config={selectedMascotConfig}
             greetingText={greeting}
             isExpanded={isHomeMascotExpanded}
             onPress={toggleHomeMascotExpansion}
-            enablePulse={false} // No pulse on home screen by default
+            onPressWhenExpanded={() => {
+              setSelectedMascotConfig(getRandomMascotConfig());
+              setIsHomeMascotExpanded(false);
+            }}
+            enablePulse={!isHomeMascotExpanded}
           />
         </View>
         

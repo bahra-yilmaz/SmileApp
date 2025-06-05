@@ -8,7 +8,7 @@ import { useFonts } from 'expo-font';
 import { GlassmorphicCard } from '../../components/ui/GlassmorphicCard';
 import PrimaryButton from '../../components/ui/PrimaryButton';
 import { ExpandableMascotCard } from '../../components/home';
-import type { MascotVariant } from '../../types/mascot';
+import type { MascotVariant, PpMascotVariant, NonPpMascotVariant, MascotConfig } from '../../types/mascot';
 import Reanimated, { 
   useSharedValue,
   useAnimatedStyle,
@@ -43,29 +43,22 @@ export default function OnboardingWelcome() {
   // Mascot card configuration state
   const initialStageConfig = {
     greetingText: t('onboarding.mascotGreetingStage1'),
-    collapsedVariant: 'nubo-wise-1-pp' as MascotVariant,
-    expandedVariant: 'nubo-wise-1' as MascotVariant,
+    collapsedVariant: 'nubo-wise-1-pp' as PpMascotVariant,
+    expandedVariant: 'nubo-wise-1' as NonPpMascotVariant,
   };
   // Define text for the second stage directly
   const secondStageGreetingText = t('onboarding.mascotGreetingStage2');
   const finalStageGreetingText = t('onboarding.mascotGreetingStage3');
 
   // Define variants for the second stage
-  const secondStageCollapsedVariant: MascotVariant = 'nubo-brushing-1-pp';
-  const secondStageExpandedVariant: MascotVariant = 'nubo-daily-brush-2';
+  const secondStageCollapsedVariant: PpMascotVariant = 'nubo-brushing-1-pp';
+  const secondStageExpandedVariant: NonPpMascotVariant = 'nubo-daily-brush-2';
 
   // Define text and variants for the final stage (stage 3)
-  const finalStageCollapsedVariant: MascotVariant = 'nubo-cool-3-pp';
-  const finalStageExpandedVariant: MascotVariant = 'nubo-cool-2';
+  const finalStageCollapsedVariant: PpMascotVariant = 'nubo-cool-3-pp';
+  const finalStageExpandedVariant: NonPpMascotVariant = 'nubo-cool-2';
 
   const [mascotCardConfig, setMascotCardConfig] = useState(initialStageConfig);
-
-  // Define a fixed mascot position for stability
-  const mascotPosition = {
-    translateX: -4, // Base X for 'glasses' like variants
-    translateY: 1,  // Base Y for 'glasses' like variants
-    scale: 1,       // Base scale (though overridden for collapsed in card)
-  };
 
   // Animation for Circle 1 (fill and show checkmark)
   const circle1BackgroundColor = useSharedValue('transparent');
@@ -311,6 +304,14 @@ export default function OnboardingWelcome() {
     }
   }, [isMascotCardExpanded, isCheckpoint1Done, isCheckpoint2Done, isCheckpoint3Done, initialStageConfig, secondStageGreetingText, secondStageCollapsedVariant, secondStageExpandedVariant, finalStageGreetingText, finalStageCollapsedVariant, finalStageExpandedVariant]);
 
+  const preparedConfigForCard: MascotConfig = {
+    id: `onboarding-${mascotCardConfig.collapsedVariant}-${mascotCardConfig.expandedVariant}`, // Unique enough ID for onboarding
+    collapsedVariant: mascotCardConfig.collapsedVariant,
+    expandedVariant: mascotCardConfig.expandedVariant,
+    greetingTextKey: 'onboarding.mascotGreeting', // Placeholder, actual text supplied by greetingText prop
+    probability: 1, // Default probability for static onboarding card
+  };
+
   return (
     <Animated.View style={[
       styles.container, 
@@ -334,9 +335,7 @@ export default function OnboardingWelcome() {
         {/* Expandable Mascot Card */}
         <View style={styles.mascotCardContainer}>
           <ExpandableMascotCard 
-            collapsedMascotVariant={mascotCardConfig.collapsedVariant}
-            expandedMascotVariant={mascotCardConfig.expandedVariant}
-            mascotPosition={mascotPosition}
+            config={preparedConfigForCard}
             greetingText={mascotCardConfig.greetingText}
             isExpanded={isMascotCardExpanded}
             onPress={handleExpandAndProgressCard}

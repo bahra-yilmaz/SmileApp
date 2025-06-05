@@ -15,19 +15,13 @@ import Reanimated, {
   Easing,
   cancelAnimation,
 } from 'react-native-reanimated';
-import type { MascotVariant } from '../../types/mascot';
+import type { MascotConfig, MascotVariant } from '../../types/mascot';
 
 // Use the same variant types as the Mascot component
 // type MascotVariant = 'waving' | 'glasses' | 'brushing' | 'welcoming' | 'glasses-1-pp'; // Remove or comment out local definition
 
 interface ExpandableMascotCardProps {
-  collapsedMascotVariant: MascotVariant;
-  expandedMascotVariant: MascotVariant;
-  mascotPosition: {
-    translateX: number;
-    translateY: number;
-    scale: number;
-  };
+  config: MascotConfig;
   greetingText: string;
   isExpanded: boolean;
   onPress?: () => void;
@@ -36,9 +30,7 @@ interface ExpandableMascotCardProps {
 }
 
 export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
-  collapsedMascotVariant,
-  expandedMascotVariant,
-  mascotPosition,
+  config,
   greetingText,
   isExpanded,
   onPress,
@@ -239,14 +231,9 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
                     top: 0, left: 0, right: 0, bottom: 0,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    transform: [
-                      { translateX: mascotPosition.translateX - 2 },
-                      { translateY: mascotPosition.translateY - 2 },
-                      { scale: 1 }
-                    ]
                   }}
                 >
-                  <Mascot variant={collapsedMascotVariant} size={nonExpandedMascotSize} />
+                  <Mascot variant={config.collapsedVariant} size={nonExpandedMascotSize} />
                 </Animated.View>
               </Animated.View>
               
@@ -288,10 +275,9 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
                     top: 0, left: 0, right: 0, bottom: 0,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    transform: [{ translateX: 15 }],
                   }}
                 >
-                  <Mascot variant={expandedMascotVariant} size={expandedStateMascotActualSize}/>
+                  <Mascot variant={config.expandedVariant} size={expandedStateMascotActualSize}/>
                 </Animated.View>
               </Animated.View>
             )}

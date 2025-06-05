@@ -4,7 +4,9 @@ export type PpMascotVariant =
   | 'nubo-wise-1-pp'
   | 'nubo-welcoming-1-pp'
   | 'nubo-brushing-1-pp'
-  | 'nubo-cool-3-pp';
+  | 'nubo-cool-3-pp'
+  | 'nubo-cool-1-pp'
+  | 'nubo-cool-2-pp';
 
 // Define your Non-PP (Expanded/Other) Mascot Variants here
 export type NonPpMascotVariant = 
@@ -14,7 +16,11 @@ export type NonPpMascotVariant =
   | 'nubo-welcoming-wave'
   | 'nubo-daily-brush'
   | 'nubo-daily-brush-2'
-  | 'nubo-cool-2';
+  | 'nubo-cool-2'
+  | 'nubo-cool-1'
+  | 'nubo-cool-3'
+  | 'nubo-cool-4'
+  | 'nubo-cool-5';
 
 // Combined type for general use, e.g., in the Mascot component itself
 export type MascotVariant = PpMascotVariant | NonPpMascotVariant;
@@ -23,4 +29,31 @@ export interface MascotPositioning {
   translateX: number;
   translateY: number;
   scale: number;
+} 
+
+// Added MascotProfile interface
+export interface MascotProfile {
+  id: string;
+  profilePictureVariant: PpMascotVariant; // Uses existing type for profile pictures
+  poseVariant: NonPpMascotVariant;       // Uses existing type for poses/expanded states
+  greetings: string[];                  // Array of possible texts for this profile
+  // Optional: Consider adding mascotPosition?: MascotPositioning; if it should be tied to the profile
+} 
+
+// Added MascotConfig interface (moved from constants/mascotConfig.ts)
+export interface MascotConfig {
+  id: string;
+  collapsedVariant: PpMascotVariant;    // Use specific PP type
+  expandedVariant: NonPpMascotVariant;   // Use specific Non-PP type
+  greetingTextKey: string; // Key for i18n
+  probability: number; // For weighted randomness
+} 
+
+// NEW Interface for defining dynamic themes
+export interface DynamicMascotTheme {
+  themeId: string; // e.g., 'cool', 'wise', 'friendly'
+  profilePictureVariants: PpMascotVariant[]; // Pool of PPs for this theme
+  poseVariants: NonPpMascotVariant[];       // Pool of poses for this theme
+  greetingTextKeys: string[];               // Pool of greeting text keys for this theme
+  selectionWeight: number; 
 } 

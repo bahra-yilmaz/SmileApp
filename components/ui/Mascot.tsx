@@ -60,8 +60,20 @@ export default function Mascot({
       //   return require('../../assets/mascot/nubo-welcoming-wave-pp.png');
 
       // --- Cool Category ---
+      case 'nubo-cool-1': // New for stage 3 Expanded (nubo-cool-1.png)
+        return require('../../assets/mascot/nubo-cool-1.png');
       case 'nubo-cool-2': // New for stage 3 Expanded (nubo-cool-2.png)
         return require('../../assets/mascot/nubo-cool-2.png');
+      case 'nubo-cool-3': // New for stage 3 Expanded (nubo-cool-3.png)
+        return require('../../assets/mascot/nubo-cool-3.png');
+      case 'nubo-cool-4': // New for stage 3 Expanded (nubo-cool-4.png)
+        return require('../../assets/mascot/nubo-cool-4.png');
+      case 'nubo-cool-5': // New for stage 3 Expanded (nubo-cool-5.png)
+        return require('../../assets/mascot/nubo-cool-5.png');
+      case 'nubo-cool-1-pp': // New for stage 3 PP (nubo-cool-1-pp.png)
+        return require('../../assets/mascot/nubo-cool-1-pp.png');
+      case 'nubo-cool-2-pp': // New for stage 3 PP (nubo-cool-2-pp.png)
+        return require('../../assets/mascot/nubo-cool-2-pp.png');
       case 'nubo-cool-3-pp': // New for stage 3 PP (nubo-cool-3-pp.png)
         return require('../../assets/mascot/nubo-cool-3-pp.png');
 
