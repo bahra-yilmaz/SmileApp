@@ -151,13 +151,13 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     elevation: 4,
     marginVertical: 6,
+    marginHorizontal: 6,
   },
   button: {
     padding: 16,
     alignItems: 'center',
     justifyContent: 'center',
     height: 60,
-    overflow: 'hidden',
   },
   buttonText: {
     fontSize: 18,

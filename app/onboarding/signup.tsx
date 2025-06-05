@@ -158,6 +158,7 @@ export default function SignupScreen() {
             autoCapitalize="none"
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
+            width={width * 0.75}
           />
           
           <InputField 
@@ -166,6 +167,7 @@ export default function SignupScreen() {
             autoCapitalize="none"
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
+            width={width * 0.75}
           />
           
           <Image
@@ -178,6 +180,7 @@ export default function SignupScreen() {
             onPress={handleSignup}
             useDisplayFont={true}
             isLoading={isSubmitting}
+            width={width * 0.75}
           />
           
           <View style={styles.dividerContainer}>
@@ -191,6 +194,7 @@ export default function SignupScreen() {
             onPress={handleContinue}
             isLoading={isGuestLoading}
             icon={<SvgXml xml={googleIcon} width={20} height={20} />}
+            width={width * 0.75}
           />
         </Animated.View>
         

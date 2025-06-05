@@ -8,7 +8,7 @@ const BASE_SHADOW_RADIUS = 4;    // Default shadow radius from PrimaryButton
 const GLOW_SHADOW_RADIUS = 10;   // Enhanced shadow radius for the glow effect
 
 export const useButtonPulseAnimation = (isClickable: boolean) => {
-  const scaleAnim = useRef(new Animated.Value(0.95)).current;
+  const scaleAnim = useRef(new Animated.Value(1)).current;
   // glowAnim: 0 represents base shadow, 1 represents peak glow
   const glowAnim = useRef(new Animated.Value(0)).current;
   const pulseAnimationRef = useRef<Animated.CompositeAnimation | null>(null);
@@ -33,7 +33,7 @@ export const useButtonPulseAnimation = (isClickable: boolean) => {
       if (pulseAnimationRef.current) pulseAnimationRef.current.stop();
 
       // 1. Scale-up with bounce animation
-      scaleAnim.setValue(0.95);
+      scaleAnim.setValue(1);
       scaleUpAnimationRef.current = Animated.spring(scaleAnim, {
         toValue: 1,
         friction: 7,
@@ -73,7 +73,7 @@ export const useButtonPulseAnimation = (isClickable: boolean) => {
       if (pulseAnimationRef.current) pulseAnimationRef.current.stop();
       
       Animated.timing(scaleAnim, { // Reset scale
-        toValue: 0.95,
+        toValue: 1,
         duration: 200,
         easing: Easing.out(Easing.ease),
         useNativeDriver: false,

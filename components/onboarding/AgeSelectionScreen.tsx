@@ -229,7 +229,6 @@ export default function AgeSelectionScreen({
           <SecondaryButton
             label={t('onboarding.ageSelectionScreen.useForChildButton')}
             onPress={() => {}}
-            width={160}
             textStyle={{ 
               fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined,
               fontSize: 16

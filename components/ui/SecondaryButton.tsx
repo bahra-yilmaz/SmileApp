@@ -39,7 +39,7 @@ interface SecondaryButtonProps {
   /**
    * Optional width override
    */
-  width?: number;
+  width?: number | 'auto';
   
   /**
    * Whether the button is in loading state
@@ -63,7 +63,7 @@ export default function SecondaryButton({
   textStyle,
   useDisplayFont = false,
   disabled = false,
-  width = 260,
+  width = 'auto',
   isLoading = false,
   icon,
 }: SecondaryButtonProps) {
@@ -85,7 +85,7 @@ export default function SecondaryButton({
   return (
     <View style={[
       styles.shadowContainer,
-      { width: width },
+      { width: width === 'auto' ? undefined : width },
       style,
     ]}>
       <TouchableOpacity
@@ -93,7 +93,7 @@ export default function SecondaryButton({
         disabled={disabled || isLoading}
         style={[
           styles.button,
-          { width: width, borderRadius: 30 },
+          width === 'auto' ? { paddingHorizontal: 24 } : { width: width },
           buttonStyle,
         ]}
       >
@@ -133,11 +133,8 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   button: {
-    padding: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingVertical: 16,
     height: 60,
-    overflow: 'hidden',
     borderRadius: 30,
   },
   contentContainer: {
@@ -154,6 +151,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 8,
     paddingVertical: 0,
-    flexShrink: 1,
   },
 }); 

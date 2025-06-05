@@ -159,6 +159,7 @@ export default function SigninScreen() {
             autoCapitalize="none"
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
+            width={width * 0.75}
           />
           
           <InputField 
@@ -167,10 +168,11 @@ export default function SigninScreen() {
             autoCapitalize="none"
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
+            width={width * 0.75}
           />
           
           <Image
-            source={require('../../assets/mascot/nubo-welcoming-1.png')}
+            source={require('../../assets/mascot/nubo-welcoming-3.png')}
             style={styles.mascotImage}
           />
           
@@ -179,6 +181,7 @@ export default function SigninScreen() {
             onPress={handleSignin}
             useDisplayFont={true}
             isLoading={isSubmitting}
+            width={width * 0.75}
           />
           
           <View style={styles.dividerContainer}>
@@ -192,6 +195,7 @@ export default function SigninScreen() {
             onPress={handleContinue}
             isLoading={isGuestLoading}
             icon={<SvgXml xml={googleIcon} width={20} height={20} />}
+            width={width * 0.75}
           />
         </Animated.View>
         
