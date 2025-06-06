@@ -267,7 +267,7 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
                   height: circleHeight,
                   opacity: expandedMascotOpacityAnim,
                   zIndex: 10,
-                  transform: [{ translateX: -3 }, { translateY: 0 }],
+                  transform: [{ translateX: -5 }, { translateY: 0 }],
                 }}
               >
                 <Animated.View 

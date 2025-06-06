@@ -1,26 +1,26 @@
 // constants/mascotGreetingKeys.ts
 
 export const coolGreetingKeys: string[] = [
-  "mascotGreetings.cool.riskyMove",
-  "mascotGreetings.cool.shinyTeeth",
-  "mascotGreetings.cool.brushNow",
-  "mascotGreetings.cool.lessTalk",
-  "mascotGreetings.cool.skippingToday",
+  "mascotGreetings.cool.routineLocked",
+  "mascotGreetings.cool.sharpenTheSmile",
   "mascotGreetings.cool.smileInsurance",
-  "mascotGreetings.cool.iBrag",
-  "mascotGreetings.cool.toothbrushMissesYou",
-  "mascotGreetings.cool.dontGhostPlaque",
   "mascotGreetings.cool.mirrorsWaiting",
-  "mascotGreetings.cool.oneMinuteConfidence",
-  "mascotGreetings.cool.shadesForShine",
   "mascotGreetings.cool.brushingBigFlex",
+  "mascotGreetings.cool.shadesForShine",
   "mascotGreetings.cool.lessCavitiesMoreConfidence",
   "mascotGreetings.cool.brushGameStrong",
   "mascotGreetings.cool.dentistJealous",
   "mascotGreetings.cool.dullTeethCouldnBeUs",
-  "mascotGreetings.cool.noPlaqueDrama",
   "mascotGreetings.cool.goodHabitsShinyStats",
-  "mascotGreetings.cool.ifSkipShadesOff",
+  "mascotGreetings.cool.toothbrushReady",
+  "mascotGreetings.cool.morningFlex",
+  "mascotGreetings.cool.noPlaqueZone",
+  "mascotGreetings.cool.futureSmile",
+  "mascotGreetings.cool.confidenceLoaded",
+  "mascotGreetings.cool.shineProtocol",
+  "mascotGreetings.cool.nextLevelSmile",
+  "mascotGreetings.cool.tinyMoveBigWin",
+  "mascotGreetings.cool.sparkleUpgrade"
 ];
 
 // You can add other themed greeting key arrays here later, e.g.:

@@ -16,7 +16,6 @@ export const dynamicMascotThemes: DynamicMascotTheme[] = [
       'nubo-cool-2',
       'nubo-cool-3',
       'nubo-cool-4',
-      'nubo-cool-5',
     ],
     greetingTextKeys: coolGreetingKeys, // Using the imported array of 20 keys
     selectionWeight: 0.7, // Example weight: this theme is fairly likely to be picked if dynamic themes are chosen

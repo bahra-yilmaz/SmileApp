@@ -80,52 +80,7 @@ export const mascotConfigurations: MascotConfig[] = [
   // },
   
   // --- NEW Cool Category Configurations ---
-  {
-    id: 'cool_pp1_pose1_riskyMove',
-    collapsedVariant: 'nubo-cool-1-pp',
-    expandedVariant: 'nubo-cool-1',
-    greetingTextKey: 'mascotGreetings.cool.riskyMove',
-    probability: 0.01, // Assign probabilities as you see fit
-  },
-  {
-    id: 'cool_pp2_pose2_shinyTeeth',
-    collapsedVariant: 'nubo-cool-2-pp',
-    expandedVariant: 'nubo-cool-2',
-    greetingTextKey: 'mascotGreetings.cool.shinyTeeth',
-    probability: 0.01,
-  },
-  {
-    id: 'cool_pp3_pose3_brushNow',
-    collapsedVariant: 'nubo-cool-3-pp',
-    expandedVariant: 'nubo-cool-3',
-    greetingTextKey: 'mascotGreetings.cool.brushNow',
-    probability: 0.01,
-  },
-  {
-    id: 'cool_pp1_pose4_lessTalk',
-    collapsedVariant: 'nubo-cool-1-pp',
-    expandedVariant: 'nubo-cool-4',
-    greetingTextKey: 'mascotGreetings.cool.lessTalk',
-    probability: 0.01,
-  },
-  {
-    id: 'cool_pp2_pose5_skippingToday',
-    collapsedVariant: 'nubo-cool-2-pp',
-    expandedVariant: 'nubo-cool-5',
-    greetingTextKey: 'mascotGreetings.cool.skippingToday',
-    probability: 0.01,
-  },
-  // Add more combinations for the other 15 cool texts...
-  // Example for "I wear shades for your shine."
-  {
-    id: 'cool_pp3_pose1_shadesForShine',
-    collapsedVariant: 'nubo-cool-3-pp',
-    expandedVariant: 'nubo-cool-1',
-    greetingTextKey: 'mascotGreetings.cool.shadesForShine',
-    probability: 0.01,
-  },
-
-  // Add more configurations for other mascot pairs and texts as needed
+  // These are now handled by the dynamic theme in mascotThemes.ts
 ];
 
 const defaultStaticMascotConfig: MascotConfig = {
