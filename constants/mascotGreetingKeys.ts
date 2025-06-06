@@ -46,5 +46,28 @@ export const wiseGreetingKeys: string[] = [
   "mascotGreetings.wise.riseEveryDay"
 ];
 
+export const playfulGreetingKeys: string[] = [
+  "mascotGreetings.playful.letThePartyBegin",
+  "mascotGreetings.playful.dontLeaveMeHanging",
+  "mascotGreetings.playful.missionSparkle",
+  "mascotGreetings.playful.teethMissMe",
+  "mascotGreetings.playful.noPlaqueParty",
+  "mascotGreetings.playful.squadGoals",
+  "mascotGreetings.playful.toothFairtyProud",
+  "mascotGreetings.playful.shinyAttack",
+  "mascotGreetings.playful.plaqueWho",
+  "mascotGreetings.playful.timeToShine",
+  "mascotGreetings.playful.dailySmileQuest",
+  "mascotGreetings.playful.brushingRemix",
+  "mascotGreetings.playful.smileRecipe",
+  "mascotGreetings.playful.sparkleGame",
+  "mascotGreetings.playful.streakDance",
+  "mascotGreetings.playful.zeroBrushDrama",
+  "mascotGreetings.playful.partyStarter",
+  "mascotGreetings.playful.shineChampion",
+  "mascotGreetings.playful.toothbrushHype",
+  "mascotGreetings.playful.tinyMovesBigSmile"
+];
+
 // You can add other themed greeting key arrays here later, e.g.:
 // export const friendlyGreetingKeys: string[] = [ ... ]; 

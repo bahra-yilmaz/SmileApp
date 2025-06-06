@@ -87,6 +87,26 @@ export default function Mascot({
       case 'nubo-cool-3-pp': // New for stage 3 PP (nubo-cool-3-pp.png)
         return require('../../assets/mascot/nubo-cool-3-pp.png');
 
+      // --- Playful Category ---
+      case 'nubo-playful-1':
+        return require('../../assets/mascot/nubo-playful-1.png');
+      case 'nubo-playful-2':
+        return require('../../assets/mascot/nubo-playful-2.png');
+      case 'nubo-playful-3':
+        return require('../../assets/mascot/nubo-playful-3.png');
+      case 'nubo-playful-4':
+        return require('../../assets/mascot/nubo-playful-4.png');
+      case 'nubo-playful-5':
+        return require('../../assets/mascot/nubo-playful-5.png');
+      case 'nubo-playful-1-pp':
+        return require('../../assets/mascot/nubo-playful-1-pp.png');
+      case 'nubo-playful-2-pp':
+        return require('../../assets/mascot/nubo-playful-2-pp.png');
+      case 'nubo-playful-3-pp':
+        return require('../../assets/mascot/nubo-playful-3-pp.png');
+      case 'nubo-playful-4-pp':
+        return require('../../assets/mascot/nubo-playful-4-pp.png');
+        
       // --- Daily Routine Category ---
       case 'nubo-daily-brush': // For nubo-brushing-1.png
         return require('../../assets/mascot/nubo-brushing-1.png');
