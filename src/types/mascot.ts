@@ -39,7 +39,6 @@ export type MascotVariant =
   | 'nubo-playful-3-pp'
   | 'nubo-playful-4-pp'
   // Supportive
-  | 'nubo-supportive-1'
   | 'nubo-supportive-2'
   | 'nubo-supportive-3'
   | 'nubo-supportive-4'
@@ -48,6 +47,7 @@ export type MascotVariant =
   | 'nubo-supportive-1-pp'
   | 'nubo-supportive-2-pp'
   | 'nubo-supportive-3-pp'
+  | 'nubo-supportive-4-pp'
   // Legacy/Unused (examples)
   | 'waving'
   | 'glasses'
@@ -86,7 +86,8 @@ export type PpMascotVariant =
   | 'nubo-playful-4-pp'
   | 'nubo-supportive-1-pp'
   | 'nubo-supportive-2-pp'
-  | 'nubo-supportive-3-pp';
+  | 'nubo-supportive-3-pp'
+  | 'nubo-supportive-4-pp';
 
 // All variants NOT ending with '-pp', used for expanded states and dynamic themes.
 export type NonPpMascotVariant =
@@ -109,7 +110,6 @@ export type NonPpMascotVariant =
   | 'nubo-playful-3'
   | 'nubo-playful-4'
   | 'nubo-playful-5'
-  | 'nubo-supportive-1'
   | 'nubo-supportive-2'
   | 'nubo-supportive-3'
   | 'nubo-supportive-4'

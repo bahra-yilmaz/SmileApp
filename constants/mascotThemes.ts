@@ -60,9 +60,9 @@ export const dynamicMascotThemes: DynamicMascotTheme[] = [
       'nubo-supportive-1-pp',
       'nubo-supportive-2-pp',
       'nubo-supportive-3-pp',
+      'nubo-supportive-4-pp',
     ],
     poseVariants: [
-      'nubo-supportive-1',
       'nubo-supportive-2',
       'nubo-supportive-3',
       'nubo-supportive-4',

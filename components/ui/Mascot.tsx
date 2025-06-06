@@ -50,10 +50,6 @@ export default function Mascot({
         return require('../../assets/mascot/nubo-wise-2-pp.png');
       case 'nubo-wise-3-pp':
         return require('../../assets/mascot/nubo-wise-3-pp.png');
-      // case 'nubo-wise-book':
-      //   return require('../../assets/mascot/nubo-wise-book.png');
-      // case 'nubo-wise-book-pp':
-      //   return require('../../assets/mascot/nubo-wise-book-pp.png');
 
       // --- Welcoming Category ---
       case 'nubo-welcoming-1':
@@ -62,29 +58,25 @@ export default function Mascot({
         return require('../../assets/mascot/nubo-welcoming-1-pp.png');
       case 'nubo-welcoming-2':
         return require('../../assets/mascot/nubo-welcoming-2.png');
-      // case 'nubo-welcoming-2-pp':
-      //  return require('../../assets/mascot/nubo-welcoming-2-pp.png');
       case 'nubo-welcoming-wave':
         return require('../../assets/mascot/nubo-waving-1.png');
-      // case 'nubo-welcoming-wave-pp':
-      //   return require('../../assets/mascot/nubo-welcoming-wave-pp.png');
 
       // --- Cool Category ---
-      case 'nubo-cool-1': // New for stage 3 Expanded (nubo-cool-1.png)
+      case 'nubo-cool-1':
         return require('../../assets/mascot/nubo-cool-1.png');
-      case 'nubo-cool-2': // New for stage 3 Expanded (nubo-cool-2.png)
+      case 'nubo-cool-2':
         return require('../../assets/mascot/nubo-cool-2.png');
-      case 'nubo-cool-3': // New for stage 3 Expanded (nubo-cool-3.png)
+      case 'nubo-cool-3':
         return require('../../assets/mascot/nubo-cool-3.png');
-      case 'nubo-cool-4': // New for stage 3 Expanded (nubo-cool-4.png)
+      case 'nubo-cool-4':
         return require('../../assets/mascot/nubo-cool-4.png');
-      case 'nubo-cool-5': // New for stage 3 Expanded (nubo-cool-5.png)
+      case 'nubo-cool-5':
         return require('../../assets/mascot/nubo-cool-5.png');
-      case 'nubo-cool-1-pp': // New for stage 3 PP (nubo-cool-1-pp.png)
+      case 'nubo-cool-1-pp':
         return require('../../assets/mascot/nubo-cool-1-pp.png');
-      case 'nubo-cool-2-pp': // New for stage 3 PP (nubo-cool-2-pp.png)
+      case 'nubo-cool-2-pp':
         return require('../../assets/mascot/nubo-cool-2-pp.png');
-      case 'nubo-cool-3-pp': // New for stage 3 PP (nubo-cool-3-pp.png)
+      case 'nubo-cool-3-pp':
         return require('../../assets/mascot/nubo-cool-3-pp.png');
 
       // --- Playful Category ---
@@ -108,8 +100,6 @@ export default function Mascot({
         return require('../../assets/mascot/nubo-playful-4-pp.png');
         
       // --- Supportive Category ---
-      case 'nubo-supportive-1':
-        return require('../../assets/mascot/nubo-supportive-1.png');
       case 'nubo-supportive-2':
         return require('../../assets/mascot/nubo-supportive-2.png');
       case 'nubo-supportive-3':
@@ -126,26 +116,16 @@ export default function Mascot({
         return require('../../assets/mascot/nubo-supportive-2-pp.png');
       case 'nubo-supportive-3-pp':
         return require('../../assets/mascot/nubo-supportive-3-pp.png');
+      case 'nubo-supportive-4-pp':
+        return require('../../assets/mascot/nubo-supportive-4-pp.png');
         
       // --- Daily Routine Category ---
-      case 'nubo-daily-brush': // For nubo-brushing-1.png
+      case 'nubo-daily-brush':
         return require('../../assets/mascot/nubo-brushing-1.png');
-      case 'nubo-brushing-1-pp': // For stage 2 PP (nubo-brushing-1-pp.png)
+      case 'nubo-brushing-1-pp':
         return require('../../assets/mascot/nubo-brushing-1-pp.png');
-      case 'nubo-daily-brush-2': // For stage 2 Expanded (nubo-brushing-2.png)
+      case 'nubo-daily-brush-2':
         return require('../../assets/mascot/nubo-brushing-2.png');
-      // case 'nubo-brushing-2-pp': // Removed
-      //  return require('../../assets/mascot/nubo-brushing-2-pp.png');
-
-      // --- Timer Category ---
-      // case 'nubo-timer-1': // Removed
-      //   return require('../../assets/mascot/nubo-timer-1.png');
-
-      // --- Generic / Accessory Focused (Assets not provided for these examples) ---
-      // case 'nubo-generic-glasses':
-      //   return require('../../assets/mascot/nubo-generic-glasses.png');
-      // case 'nubo-generic-glasses-pp':
-      //   return require('../../assets/mascot/nubo-generic-glasses-pp.png');
 
       default:
         console.warn(`Mascot variant "${variant}" not found or asset missing, using default 'nubo-welcoming-1'.`);
