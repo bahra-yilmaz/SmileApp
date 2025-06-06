@@ -107,6 +107,26 @@ export default function Mascot({
       case 'nubo-playful-4-pp':
         return require('../../assets/mascot/nubo-playful-4-pp.png');
         
+      // --- Supportive Category ---
+      case 'nubo-supportive-1':
+        return require('../../assets/mascot/nubo-supportive-1.png');
+      case 'nubo-supportive-2':
+        return require('../../assets/mascot/nubo-supportive-2.png');
+      case 'nubo-supportive-3':
+        return require('../../assets/mascot/nubo-supportive-3.png');
+      case 'nubo-supportive-4':
+        return require('../../assets/mascot/nubo-supportive-4.png');
+      case 'nubo-supportive-5':
+        return require('../../assets/mascot/nubo-supportive-5.png');
+      case 'nubo-supportive-6':
+        return require('../../assets/mascot/nubo-supportive-6.png');
+      case 'nubo-supportive-1-pp':
+        return require('../../assets/mascot/nubo-supportive-1-pp.png');
+      case 'nubo-supportive-2-pp':
+        return require('../../assets/mascot/nubo-supportive-2-pp.png');
+      case 'nubo-supportive-3-pp':
+        return require('../../assets/mascot/nubo-supportive-3-pp.png');
+        
       // --- Daily Routine Category ---
       case 'nubo-daily-brush': // For nubo-brushing-1.png
         return require('../../assets/mascot/nubo-brushing-1.png');

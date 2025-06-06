@@ -69,5 +69,28 @@ export const playfulGreetingKeys: string[] = [
   "mascotGreetings.playful.tinyMovesBigSmile"
 ];
 
+export const supportiveGreetingKeys: string[] = [
+  "mascotGreetings.supportive.youShowedUp",
+  "mascotGreetings.supportive.smallWinsBigSmiles",
+  "mascotGreetings.supportive.littleByLittle",
+  "mascotGreetings.supportive.freshStart",
+  "mascotGreetings.supportive.rightHereWithYou",
+  "mascotGreetings.supportive.progressNotPerfection",
+  "mascotGreetings.supportive.tinyHabitsMatter",
+  "mascotGreetings.supportive.yourSmileDeservesThis",
+  "mascotGreetings.supportive.brighterStep",
+  "mascotGreetings.supportive.gentleReminder",
+  "mascotGreetings.supportive.strongerEachDay",
+  "mascotGreetings.supportive.kindToYourself",
+  "mascotGreetings.supportive.thisMatters",
+  "mascotGreetings.supportive.quietProgress",
+  "mascotGreetings.supportive.consistentCare",
+  "mascotGreetings.supportive.keepShowingUp",
+  "mascotGreetings.supportive.showingUpStrong",
+  "mascotGreetings.supportive.streakOrNoStreak",
+  "mascotGreetings.supportive.gentleVictory",
+  "mascotGreetings.supportive.todayCounts"
+];
+
 // You can add other themed greeting key arrays here later, e.g.:
 // export const friendlyGreetingKeys: string[] = [ ... ]; 
