@@ -104,14 +104,14 @@
         "title": "Nubos Ton",
         "description": "Wähle, wie Nubo mit dir interagieren soll",
         "options": {
-          "playful_label": "Verspielt",
-          "playful_description": "Spaßig und motivierend",
           "supportive_label": "Unterstützend",
           "supportive_description": "Sanft und hilfsbereit",
-          "motivational_label": "Motivierend",
-          "motivational_description": "Energiegeladen und inspirierend",
-          "educational_label": "Lehrreich",
-          "educational_description": "Informativ und detailliert"
+          "playful_label": "Verspielt",
+          "playful_description": "Spaßig und motivierend",
+          "cool_label": "Cool",
+          "cool_description": "Selbstbewusst und direkt",
+          "wise_label": "Weise",
+          "wise_description": "Einsichtsvoll und ruhig"
         },
         "question": "Wähle Nubos Ton",
         "startButton": "Jetzt starten"

@@ -108,14 +108,14 @@
         "title": "Tom do Nubo",
         "description": "Escolha como o Nubo interage com você",
         "options": {
-          "playful_label": "Divertido",
-          "playful_description": "Engraçado e motivador",
-          "supportive_label": "Acolhedor",
+          "supportive_label": "Apoiador",
           "supportive_description": "Gentil e prestativo",
-          "motivational_label": "Motivador",
-          "motivational_description": "Energético e inspirador",
-          "educational_label": "Educativo",
-          "educational_description": "Informativo e detalhado"
+          "playful_label": "Brincalhão",
+          "playful_description": "Divertido e encorajador",
+          "cool_label": "Legal",
+          "cool_description": "Confiante e direto",
+          "wise_label": "Sábio",
+          "wise_description": "Perspicaz e calmo"
         },
         "question": "Escolha o tom do Nubo",
         "startButton": "Começar agora"

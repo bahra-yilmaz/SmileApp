@@ -108,14 +108,14 @@
         "title": "Nubo'nun Tarzı",
         "description": "Nubo'nun seninle nasıl iletişim kurmasını istersin?",
         "options": {
-          "playful_label": "Neşeli",
-          "playful_description": "Eğlenceli ve teşvik edici",
           "supportive_label": "Destekleyici",
           "supportive_description": "Nazik ve yardımcı",
-          "motivational_label": "Motive Edici",
-          "motivational_description": "Enerjik ve ilham verici",
-          "educational_label": "Eğitici",
-          "educational_description": "Bilgilendirici ve detaylı"
+          "playful_label": "Neşeli",
+          "playful_description": "Eğlenceli ve teşvik edici",
+          "cool_label": "Havalı",
+          "cool_description": "Kendinden emin ve net",
+          "wise_label": "Bilge",
+          "wise_description": "Anlayışlı ve sakin"
         },
         "question": "Nubo'nun tarzını seç",
         "startButton": "Hemen Başla"

@@ -130,14 +130,14 @@
       "title": "Nubo's Tone",
       "description": "Choose how Nubo will interact with you",
       "options": {
-        "playful_label": "Playful",
-        "playful_description": "Fun and encouraging",
         "supportive_label": "Supportive",
         "supportive_description": "Gentle and helpful",
-        "motivational_label": "Motivational",
-        "motivational_description": "Energetic and inspiring",
-        "educational_label": "Educational",
-        "educational_description": "Informative and detailed"
+        "playful_label": "Playful",
+        "playful_description": "Fun and encouraging",
+        "cool_label": "Cool",
+        "cool_description": "Confident and direct",
+        "wise_label": "Wise",
+        "wise_description": "Insightful and calm"
       },
       "question": "Choose Nubo's tone",
       "startButton": "Start Now"

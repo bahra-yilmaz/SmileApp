@@ -108,14 +108,14 @@
         "title": "Nubo का टोन",
         "description": "Nubo आपसे कैसे बात करे इसे चुनें",
         "options": {
-          "playful_label": "मज़ेदार",
-          "playful_description": "मज़ेदार और प्रेरक",
-          "supportive_label": "सहायक",
+          "supportive_label": "सहयोगी",
           "supportive_description": "कोमल और मददगार",
-          "motivational_label": "प्रेरणादायक",
-          "motivational_description": "ऊर्जावान और उत्साही",
-          "educational_label": "शैक्षणिक",
-          "educational_description": "जानकारीपूर्ण और विस्तृत"
+          "playful_label": "चंचल",
+          "playful_description": "मज़ेदार और प्रेरक",
+          "cool_label": "कूल",
+          "cool_description": "आत्मविश्वासी और सीधा",
+          "wise_label": "समझदार",
+          "wise_description": "समझदार और शांत"
         },
         "question": "Nubo का टोन चुनें",
         "startButton": "अभी शुरू करें"

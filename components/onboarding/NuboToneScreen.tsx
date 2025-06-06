@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { View, StyleSheet, Animated, Pressable, Dimensions, Platform, ScrollView } from 'react-native';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { View, StyleSheet, Animated, Pressable, Dimensions, Platform, ScrollView, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '../ThemeProvider';
 import ThemedText from '../ThemedText';
@@ -42,6 +42,13 @@ export default function NuboToneScreen({
   const [selectedTone, setSelectedTone] = useState<string>('supportive'); // Default to supportive
   const insets = useSafeAreaInsets();
   
+  const scaleAnims = useRef<{ [key: string]: Animated.Value }>({
+    supportive: new Animated.Value(1.25),
+    playful: new Animated.Value(1),
+    cool: new Animated.Value(1),
+    wise: new Animated.Value(1),
+  }).current;
+
   // Load fonts
   const [fontsLoaded] = useFonts({
     'Quicksand-Bold': require('../../assets/fonts/Quicksand-Bold.ttf'),
@@ -91,6 +98,20 @@ export default function NuboToneScreen({
   };
 
   const handleSelectTone = (toneId: string) => {
+    if (selectedTone && selectedTone !== toneId) {
+      Animated.timing(scaleAnims[selectedTone], {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    }
+
+    Animated.timing(scaleAnims[toneId], {
+      toValue: 1.25,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+
     setSelectedTone(toneId);
   };
 
@@ -98,95 +119,106 @@ export default function NuboToneScreen({
   const headerHeight = insets.top + (Platform.OS === 'ios' ? 10 : 15) + 16 + 32; // SafeArea + additionalPadding + paddingVertical + fontSize
 
   const TONE_OPTIONS = useMemo(() => [
-    { id: 'playful', label: t('onboarding.nuboToneScreen.options.playful_label'), description: t('onboarding.nuboToneScreen.options.playful_description') },
-    { id: 'supportive', label: t('onboarding.nuboToneScreen.options.supportive_label'), description: t('onboarding.nuboToneScreen.options.supportive_description') },
-    { id: 'motivational', label: t('onboarding.nuboToneScreen.options.motivational_label'), description: t('onboarding.nuboToneScreen.options.motivational_description') },
-    { id: 'educational', label: t('onboarding.nuboToneScreen.options.educational_label'), description: t('onboarding.nuboToneScreen.options.educational_description') }
+    { id: 'supportive', label: t('onboarding.nuboToneScreen.options.supportive_label'), description: t('onboarding.nuboToneScreen.options.supportive_description'), image: require('../../assets/mascot/nubo-supportive-1.png') },
+    { id: 'playful', label: t('onboarding.nuboToneScreen.options.playful_label'), description: t('onboarding.nuboToneScreen.options.playful_description'), image: require('../../assets/mascot/nubo-playful-1.png') },
+    { id: 'cool', label: t('onboarding.nuboToneScreen.options.cool_label'), description: t('onboarding.nuboToneScreen.options.cool_description'), image: require('../../assets/mascot/nubo-cool-5.png') },
+    { id: 'wise', label: t('onboarding.nuboToneScreen.options.wise_label'), description: t('onboarding.nuboToneScreen.options.wise_description'), image: require('../../assets/mascot/nubo-wise-5.png') }
   ], [t]);
 
   return (
     <View style={styles.container}>
       {/* Progress indicators and question text */}
-      <View style={styles.topContainer}>
-        <View style={[styles.progressContainer, { marginTop: headerHeight + 10 }]}>
-          <View style={styles.indicators}>
-            {Array(totalScreens).fill(0).map((_, i) => (
-              <View 
-                key={i}
-                style={[
-                  styles.indicator,
-                  { 
-                    backgroundColor: i === index 
-                      ? theme.colors.primary[600] 
-                      : 'white',
-                    width: i === index ? 24 : 8,
-                    opacity: i === index ? 1 : 0.7
-                  }
-                ]}
-              />
-            ))}
-          </View>
-          
-          {/* Question text */}
-          <View style={styles.questionContainer}>
-            <ThemedText style={[
-              styles.questionText,
-              { fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined }
-            ]}>
-              {t('onboarding.nuboToneScreen.question')}
-            </ThemedText>
-          </View>
-        </View>
-        
-        {/* Tone selection cards */}
-        <ScrollView 
-          style={styles.cardsContainer}
-          contentContainerStyle={styles.cardsContentContainer}
-          showsVerticalScrollIndicator={false}
-        >
-          {TONE_OPTIONS.map((option) => (
-            <Pressable
-              key={option.id}
+      <View style={[styles.progressContainer, { marginTop: headerHeight + 10 }]}>
+        <View style={styles.indicators}>
+          {Array(totalScreens).fill(0).map((_, i) => (
+            <View 
+              key={i}
               style={[
-                styles.card,
+                styles.indicator,
                 { 
-                  borderColor: option.id === selectedTone 
-                    ? theme.colors.primary[500] 
-                    : 'rgba(255, 255, 255, 0.3)',
-                  backgroundColor: option.id === selectedTone 
-                    ? 'rgba(255, 255, 255, 0.1)' 
-                    : 'rgba(255, 255, 255, 0.05)'
+                  backgroundColor: i === index 
+                    ? theme.colors.primary[600] 
+                    : 'white',
+                  width: i === index ? 24 : 8,
+                  opacity: i === index ? 1 : 0.7
                 }
               ]}
-              onPress={() => handleSelectTone(option.id)}
-            >
-              <ThemedText style={[
-                styles.cardTitle,
-                { 
-                  fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined,
-                  color: option.id === selectedTone 
-                    ? theme.colors.primary[500] 
-                    : 'white'
-                }
-              ]}>
-                {option.label}
-              </ThemedText>
-              <ThemedText style={[
-                styles.cardDescription,
-                { 
-                  fontFamily: fontsLoaded ? 'Quicksand-Medium' : undefined,
-                  opacity: option.id === selectedTone ? 1 : 0.9,
-                  color: option.id === selectedTone 
-                    ? theme.colors.primary[500] 
-                    : 'white'
-                }
-              ]}>
-                {option.description}
-              </ThemedText>
-            </Pressable>
+            />
           ))}
-        </ScrollView>
+        </View>
+        
+        {/* Question text */}
+        <View style={styles.questionContainer}>
+          <ThemedText style={[
+            styles.questionText,
+            { fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined }
+          ]}>
+            {t('onboarding.nuboToneScreen.question')}
+          </ThemedText>
+        </View>
       </View>
+      
+      {/* Tone selection cards */}
+      <ScrollView 
+        style={styles.cardsContainer}
+        contentContainerStyle={styles.cardsContentContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        {TONE_OPTIONS.map((option) => (
+          <Pressable
+            key={option.id}
+            style={[
+              styles.card,
+              { 
+                borderColor: option.id === selectedTone 
+                  ? theme.colors.primary[500] 
+                  : 'rgba(255, 255, 255, 0.3)',
+                backgroundColor: option.id === selectedTone 
+                  ? 'rgba(255, 255, 255, 0.1)' 
+                  : 'rgba(255, 255, 255, 0.05)'
+              }
+            ]}
+            onPress={() => handleSelectTone(option.id)}
+          >
+            <View style={styles.cardContent}>
+              <View style={styles.textContainer}>
+                <ThemedText style={[
+                  styles.cardTitle,
+                  { 
+                    fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined,
+                    color: option.id === selectedTone 
+                      ? theme.colors.primary[500] 
+                      : 'white'
+                  }
+                ]}>
+                  {option.label}
+                </ThemedText>
+                <ThemedText style={[
+                  styles.cardDescription,
+                  { 
+                    fontFamily: fontsLoaded ? 'Quicksand-Medium' : undefined,
+                    opacity: option.id === selectedTone ? 1 : 0.9,
+                    color: option.id === selectedTone 
+                      ? theme.colors.primary[500] 
+                      : 'white'
+                  }
+                ]}>
+                  {option.description}
+                </ThemedText>
+              </View>
+              {option.image && (
+                <Animated.Image
+                  source={option.image}
+                  style={[
+                    styles.cardImage,
+                    { transform: [{ scale: scaleAnims[option.id] }] },
+                  ]}
+                />
+              )}
+            </View>
+          </Pressable>
+        ))}
+      </ScrollView>
       
       {/* Action buttons - positioned at bottom */}
       <View style={styles.buttonsContainer}>
@@ -204,13 +236,6 @@ export default function NuboToneScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingBottom: 40,
-  },
-  topContainer: {
-    flex: 1,
-    width: '100%',
     alignItems: 'center',
   },
   progressContainer: {
@@ -245,19 +270,33 @@ const styles = StyleSheet.create({
   },
   cardsContentContainer: {
     alignItems: 'center',
-    paddingBottom: 20,
+    paddingBottom: 120, // To make space for the button
   },
   card: {
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
     borderRadius: 20,
-    borderWidth: 2,
-    marginBottom: CARD_MARGIN,
+    borderWidth: 1,
     padding: 20,
+    marginVertical: CARD_MARGIN,
     justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  cardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textContainer: {
+    flex: 1,
+  },
+  cardImage: {
+    width: 80,
+    height: 80,
+    marginLeft: 10,
+    resizeMode: 'contain',
   },
   cardTitle: {
-    fontSize: 22,
+    fontSize: 18,
     marginBottom: 8,
   },
   cardDescription: {
@@ -265,8 +304,9 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   buttonsContainer: {
+    position: 'absolute',
+    bottom: 40,
     alignItems: 'center',
     width: '100%',
-    marginTop: 20,
   },
 }); 

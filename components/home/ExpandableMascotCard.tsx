@@ -231,6 +231,7 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
                     top: 0, left: 0, right: 0, bottom: 0,
                     justifyContent: 'center',
                     alignItems: 'center',
+                    transform: [{ translateX: -6 }, { translateY: -1 }],
                   }}
                 >
                   <Mascot variant={config.collapsedVariant} size={nonExpandedMascotSize} />
@@ -266,7 +267,7 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
                   height: circleHeight,
                   opacity: expandedMascotOpacityAnim,
                   zIndex: 10,
-                  transform: [{ translateX: -20 }, { translateY: 1 }],
+                  transform: [{ translateX: -3 }, { translateY: 0 }],
                 }}
               >
                 <Animated.View 

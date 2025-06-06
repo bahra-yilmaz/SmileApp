@@ -108,14 +108,14 @@
         "title": "Nuboのトーン",
         "description": "Nuboの話し方を選択",
         "options": {
+          "supportive_label": "協力的",
+          "supportive_description": "優しく親切に",
           "playful_label": "遊び心あり",
           "playful_description": "楽しく励まし",
-          "supportive_label": "サポート型",
-          "supportive_description": "優しく親切に",
-          "motivational_label": "モチベーション型",
-          "motivational_description": "元気でやる気を出させる",
-          "educational_label": "教育的",
-          "educational_description": "情報が豊富で丁寧"
+          "cool_label": "クール",
+          "cool_description": "自信に満ちた、直接的な",
+          "wise_label": "賢い",
+          "wise_description": "洞察力があり、穏やかな"
         },
         "question": "Nuboのスタイルを選ぼう",
         "startButton": "今すぐ開始"

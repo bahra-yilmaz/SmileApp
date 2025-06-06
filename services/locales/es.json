@@ -108,14 +108,14 @@
         "title": "Tono de Nubo",
         "description": "Elige cómo interactuará Nubo contigo",
         "options": {
-          "playful_label": "Divertido",
-          "playful_description": "Divertido y alentador",
           "supportive_label": "Apoyo",
-          "supportive_description": "Suave y servicial",
-          "motivational_label": "Motivador",
-          "motivational_description": "Enérgico e inspirador",
-          "educational_label": "Educativo",
-          "educational_description": "Informativo y detallado"
+          "supportive_description": "Amable y servicial",
+          "playful_label": "Juguetón",
+          "playful_description": "Divertido y alentador",
+          "cool_label": "Genial",
+          "cool_description": "Confiado y directo",
+          "wise_label": "Sabio",
+          "wise_description": "Perspicaz y tranquilo"
         },
         "question": "Elige el tono de Nubo",
         "startButton": "Comenzar ahora"
