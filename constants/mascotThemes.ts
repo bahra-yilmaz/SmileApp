@@ -1,5 +1,5 @@
 import type { DynamicMascotTheme, MascotPositioning, PpMascotVariant, NonPpMascotVariant } from '../types/mascot';
-import { coolGreetingKeys } from './mascotGreetingKeys';
+import { coolGreetingKeys, wiseGreetingKeys } from './mascotGreetingKeys';
 // Potentially import getMascotPositioning if needed for more dynamic positioning within a theme, though not used in this example.
 // import { getMascotPositioning } from '../utils/mascotUtils';
 
@@ -19,6 +19,22 @@ export const dynamicMascotThemes: DynamicMascotTheme[] = [
     ],
     greetingTextKeys: coolGreetingKeys, // Using the imported array of 20 keys
     selectionWeight: 0.7, // Example weight: this theme is fairly likely to be picked if dynamic themes are chosen
+  },
+  {
+    themeId: 'wise',
+    profilePictureVariants: [
+      'nubo-wise-1-pp',
+      'nubo-wise-2-pp',
+      'nubo-wise-3-pp',
+    ],
+    poseVariants: [
+      'nubo-wise-1',
+      'nubo-wise-2',
+      'nubo-wise-3',
+      'nubo-wise-4',
+    ],
+    greetingTextKeys: wiseGreetingKeys,
+    selectionWeight: 0.3,
   },
   // Example of another theme (you can add more later)
   // {

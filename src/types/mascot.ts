@@ -11,6 +11,13 @@ export type MascotVariant =
   | 'default-pose'
   | 'wise-pp'
   | 'wise-pose'
+  | 'nubo-wise-1'
+  | 'nubo-wise-2'
+  | 'nubo-wise-3'
+  | 'nubo-wise-4'
+  | 'nubo-wise-1-pp'
+  | 'nubo-wise-2-pp'
+  | 'nubo-wise-3-pp'
   | 'cool-pp'
   | 'cool-pose'
   | 'friendly-pp'
@@ -22,4 +29,25 @@ export interface MascotProfile {
   profilePictureVariant: MascotVariant; // Variant for the collapsed state
   poseVariant: MascotVariant;           // Variant for the expanded state
   greetings: string[];                  // Array of possible texts for this profile
-} 
+}
+
+export type PpMascotVariant = 
+  | 'nubo-wise-1-pp'
+  | 'nubo-wise-2-pp'
+  | 'nubo-wise-3-pp'
+  | 'nubo-welcoming-1-pp'
+  | 'nubo-brushing-1-pp'
+  | 'nubo-cool-3-pp'
+  | 'nubo-cool-1-pp'
+  | 'nubo-cool-2-pp';
+
+// Define your Non-PP (Expanded/Other) Mascot Variants here
+export type NonPpMascotVariant = 
+  | 'nubo-wise-1'
+  | 'nubo-wise-2'
+  | 'nubo-wise-3'
+  | 'nubo-wise-4'
+  | 'nubo-welcoming-1'
+  | 'nubo-welcoming-2'
+  | 'nubo-welcoming-wave'
+  | 'nubo-daily-brush' 

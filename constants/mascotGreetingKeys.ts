@@ -23,6 +23,28 @@ export const coolGreetingKeys: string[] = [
   "mascotGreetings.cool.sparkleUpgrade"
 ];
 
+export const wiseGreetingKeys: string[] = [
+  "mascotGreetings.wise.smallSteps",
+  "mascotGreetings.wise.dailyDiscipline",
+  "mascotGreetings.wise.foundationOfConfidence",
+  "mascotGreetings.wise.eachBrushMatters",
+  "mascotGreetings.wise.investInFuture",
+  "mascotGreetings.wise.quietProgress",
+  "mascotGreetings.wise.healthIsWealth",
+  "mascotGreetings.wise.showUpDaily",
+  "mascotGreetings.wise.patternsCreateDestiny",
+  "mascotGreetings.wise.strongRoots",
+  "mascotGreetings.wise.smallActOfMastery",
+  "mascotGreetings.wise.disciplineToday",
+  "mascotGreetings.wise.lastingResults",
+  "mascotGreetings.wise.precisionCreatesStrength",
+  "mascotGreetings.wise.habitsShapeYou",
+  "mascotGreetings.wise.disciplineSharpens",
+  "mascotGreetings.wise.neverWasteBrush",
+  "mascotGreetings.wise.controlWhatYouCan",
+  "mascotGreetings.wise.precisionMatters",
+  "mascotGreetings.wise.riseEveryDay"
+];
+
 // You can add other themed greeting key arrays here later, e.g.:
-// export const wiseGreetingKeys: string[] = [ ... ];
 // export const friendlyGreetingKeys: string[] = [ ... ]; 

@@ -38,8 +38,18 @@ export default function Mascot({
       // --- Wise Category ---
       case 'nubo-wise-1':
         return require('../../assets/mascot/nubo-wise-1.png');
+      case 'nubo-wise-2':
+        return require('../../assets/mascot/nubo-wise-2.png');
+      case 'nubo-wise-3':
+        return require('../../assets/mascot/nubo-wise-3.png');
+      case 'nubo-wise-4':
+        return require('../../assets/mascot/nubo-wise-4.png');
       case 'nubo-wise-1-pp':
         return require('../../assets/mascot/nubo-wise-1-pp.png');
+      case 'nubo-wise-2-pp':
+        return require('../../assets/mascot/nubo-wise-2-pp.png');
+      case 'nubo-wise-3-pp':
+        return require('../../assets/mascot/nubo-wise-3-pp.png');
       // case 'nubo-wise-book':
       //   return require('../../assets/mascot/nubo-wise-book.png');
       // case 'nubo-wise-book-pp':
