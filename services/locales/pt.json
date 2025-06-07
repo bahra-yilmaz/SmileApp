@@ -118,7 +118,30 @@
         "streakOrNoStreak": "Com sequência ou sem — você está aqui.",
         "gentleVictory": "Este momento é uma vitória suave.",
         "todayCounts": "Hoje conta. Sempre."
-      }
+      },
+      "neutral": {
+  "brushTime": "Hora da escovação novamente! 🕰️",
+  "sparkleLoading": "Carregando o brilho… ⏳✨",
+  "plaqueReminder": "Spoiler: A placa não tira folga.",
+  "freshFeeling": "Aquela sensação de frescor é única.",
+  "brushingCrew": "Bem-vindo de volta ao time da escovação! 🪥",
+  "mintyMission": "Missão mentol ativada.",
+  "shineReady": "Brilho do sorriso: pronto.",
+  "dailyBrushThing": "Só sua rotina diária de escovação. Nada demais.",
+  "tinyBrushingRitual": "Pequeno ritual. Grande frescor.",
+  "mirrorApproved": "O espelho vai aprovar com certeza.",
+  "happyTeethDance": "Os dentes já estão dançando de felicidade 💃",
+  "routineFeelsGood": "A rotina até que é boa, né?",
+  "brushingRoutineBack": "A rotina de escovação está de volta!",
+  "smileMaintenance": "Manutenção do sorriso em andamento 🛠️",
+  "clearedForShine": "Autorizado para máximo brilho ✨",
+  "dailyDefense": "Defesa diária: ativada 🛡️",
+  "fresherAlready": "Você já está mais fresco.",
+  "mintMode": "Modo menta: ATIVADO 🌿",
+  "quickWin": "Pequena vitória para o seu sorriso.",
+  "smallMoveBigFresh": "Pequeno gesto. Grande frescor."
+}
+
     },
     "common": {
       "ok": "OK",

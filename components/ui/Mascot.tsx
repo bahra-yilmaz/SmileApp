@@ -119,6 +119,32 @@ export default function Mascot({
       case 'nubo-supportive-4-pp':
         return require('../../assets/mascot/nubo-supportive-4-pp.png');
         
+      // --- Neutral Category ---
+      case 'nubo-neutral-1':
+        return require('../../assets/mascot/nubo-neutral-1.png');
+      case 'nubo-neutral-2':
+        return require('../../assets/mascot/nubo-neutral-2.png');
+      case 'nubo-neutral-3':
+        return require('../../assets/mascot/nubo-neutral-3.png');
+      case 'nubo-neutral-4':
+        return require('../../assets/mascot/nubo-neutral-4.png');
+      case 'nubo-neutral-5':
+        return require('../../assets/mascot/nubo-neutral-5.png');
+      case 'nubo-neutral-6':
+        return require('../../assets/mascot/nubo-neutral-6.png');
+      case 'nubo-neutral-7':
+        return require('../../assets/mascot/nubo-neutral-7.png');
+      case 'nubo-neutral-1-pp':
+        return require('../../assets/mascot/nubo-neutral-1-pp.png');
+      case 'nubo-neutral-2-pp':
+        return require('../../assets/mascot/nubo-neutral-2-pp.png');
+      case 'nubo-neutral-3-pp':
+        return require('../../assets/mascot/nubo-neutral-3-pp.png');
+      case 'nubo-neutral-4-pp':
+        return require('../../assets/mascot/nubo-neutral-4-pp.png');
+      case 'nubo-neutral-5-pp':
+        return require('../../assets/mascot/nubo-neutral-5-pp.png');
+        
       // --- Daily Routine Category ---
       case 'nubo-daily-brush':
         return require('../../assets/mascot/nubo-brushing-1.png');

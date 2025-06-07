@@ -118,7 +118,29 @@
         "streakOrNoStreak": "Streak olsun olmasın — buradasın.",
         "gentleVictory": "Bu an küçük bir zaferdir.",
         "todayCounts": "Bugün önemli. Her zaman."
-      }
+      },
+      "neutral": {
+  "brushTime": "Yine fırçalama zamanı! 🕰️",
+  "sparkleLoading": "Parıltı yükleniyor… ⏳✨",
+  "plaqueReminder": "Spoiler: Plak tatil yapmaz.",
+  "freshFeeling": "O ferahlık hissi bambaşka.",
+  "brushingCrew": "Fırçalama ekibine tekrar hoş geldin! 🪥",
+  "mintyMission": "Nane görevimiz başladı.",
+  "shineReady": "Gülüş parıltısı: hazır.",
+  "dailyBrushThing": "Günlük fırçalama rutini. Normal işler.",
+  "tinyBrushingRitual": "Minik ritüel. Büyük ferahlık.",
+  "mirrorApproved": "Ayna bunu kesinlikle onaylar.",
+  "happyTeethDance": "Dişler mutlu danslarını yapıyor 💃",
+  "routineFeelsGood": "Rutin güzel hissettiriyor, değil mi?",
+  "brushingRoutineBack": "Fırçalama rutini yeniden sahnede!",
+  "smileMaintenance": "Gülüş bakımı devam ediyor 🛠️",
+  "clearedForShine": "Maksimum parıltıya hazır ✨",
+  "dailyDefense": "Günlük koruma: aktif 🛡️",
+  "fresherAlready": "Şimdiden daha ferahsın.",
+  "mintMode": "Nane modu: AÇIK 🌿",
+  "quickWin": "Gülüş için hızlı bir kazanım.",
+  "smallMoveBigFresh": "Küçük hareket. Büyük ferahlık."
+}
     },
     "common": {
       "ok": "Tamam",

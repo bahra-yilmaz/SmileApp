@@ -48,6 +48,19 @@ export type MascotVariant =
   | 'nubo-supportive-2-pp'
   | 'nubo-supportive-3-pp'
   | 'nubo-supportive-4-pp'
+  // Neutral
+  | 'nubo-neutral-1'
+  | 'nubo-neutral-2'
+  | 'nubo-neutral-3'
+  | 'nubo-neutral-4'
+  | 'nubo-neutral-5'
+  | 'nubo-neutral-6'
+  | 'nubo-neutral-7'
+  | 'nubo-neutral-1-pp'
+  | 'nubo-neutral-2-pp'
+  | 'nubo-neutral-3-pp'
+  | 'nubo-neutral-4-pp'
+  | 'nubo-neutral-5-pp'
   // Legacy/Unused (examples)
   | 'waving'
   | 'glasses'
@@ -87,7 +100,12 @@ export type PpMascotVariant =
   | 'nubo-supportive-1-pp'
   | 'nubo-supportive-2-pp'
   | 'nubo-supportive-3-pp'
-  | 'nubo-supportive-4-pp';
+  | 'nubo-supportive-4-pp'
+  | 'nubo-neutral-1-pp'
+  | 'nubo-neutral-2-pp'
+  | 'nubo-neutral-3-pp'
+  | 'nubo-neutral-4-pp'
+  | 'nubo-neutral-5-pp';
 
 // All variants NOT ending with '-pp', used for expanded states and dynamic themes.
 export type NonPpMascotVariant =
@@ -114,7 +132,14 @@ export type NonPpMascotVariant =
   | 'nubo-supportive-3'
   | 'nubo-supportive-4'
   | 'nubo-supportive-5'
-  | 'nubo-supportive-6';
+  | 'nubo-supportive-6'
+  | 'nubo-neutral-1'
+  | 'nubo-neutral-2'
+  | 'nubo-neutral-3'
+  | 'nubo-neutral-4'
+  | 'nubo-neutral-5'
+  | 'nubo-neutral-6'
+  | 'nubo-neutral-7';
 
 export interface MascotPositioning {
   translateX: number;

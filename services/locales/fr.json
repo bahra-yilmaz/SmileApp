@@ -118,7 +118,29 @@
         "streakOrNoStreak": "Série ou pas — tu es là.",
         "gentleVictory": "Ce moment est une petite victoire.",
         "todayCounts": "Aujourd’hui compte. Toujours."
-      }
+      },
+      "neutral": {
+  "brushTime": "C’est l’heure du brossage ! 🕰️",
+  "sparkleLoading": "Chargement du scintillement… ⏳✨",
+  "plaqueReminder": "Spoiler : la plaque ne prend jamais de congé.",
+  "freshFeeling": "Cette sensation de fraîcheur est unique.",
+  "brushingCrew": "De retour dans l’équipe de brossage ! 🪥",
+  "mintyMission": "Mission mentholée activée.",
+  "shineReady": "Prêt pour faire briller ton sourire.",
+  "dailyBrushThing": "Juste ton brossage quotidien. Rien d'extra.",
+  "tinyBrushingRitual": "Petit rituel. Grand coup de frais.",
+  "mirrorApproved": "Le miroir va adorer.",
+  "happyTeethDance": "Tes dents dansent de joie 💃",
+  "routineFeelsGood": "Cette routine fait du bien, non ?",
+  "brushingRoutineBack": "La routine de brossage est de retour !",
+  "smileMaintenance": "Maintenance du sourire en cours 🛠️",
+  "clearedForShine": "Autorisé pour un maximum d’éclat ✨",
+  "dailyDefense": "Défense quotidienne activée 🛡️",
+  "fresherAlready": "Tu es déjà plus frais.",
+  "mintMode": "Mode menthe : ACTIVÉ 🌿",
+  "quickWin": "Petite victoire pour ton sourire.",
+  "smallMoveBigFresh": "Petit geste, grande fraîcheur."
+}
     },
     "common": {
       "ok": "OK",

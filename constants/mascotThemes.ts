@@ -1,5 +1,5 @@
 import type { DynamicMascotTheme, MascotPositioning, PpMascotVariant, NonPpMascotVariant } from '../types/mascot';
-import { coolGreetingKeys, wiseGreetingKeys, playfulGreetingKeys, supportiveGreetingKeys } from './mascotGreetingKeys';
+import { coolGreetingKeys, wiseGreetingKeys, playfulGreetingKeys, supportiveGreetingKeys, neutralGreetingKeys } from './mascotGreetingKeys';
 // Potentially import getMascotPositioning if needed for more dynamic positioning within a theme, though not used in this example.
 // import { getMascotPositioning } from '../utils/mascotUtils';
 
@@ -71,6 +71,27 @@ export const dynamicMascotThemes: DynamicMascotTheme[] = [
     ],
     greetingTextKeys: supportiveGreetingKeys,
     selectionWeight: 0.4,
+  },
+  {
+    themeId: 'neutral',
+    profilePictureVariants: [
+      'nubo-neutral-1-pp',
+      'nubo-neutral-2-pp',
+      'nubo-neutral-3-pp',
+      'nubo-neutral-4-pp',
+      'nubo-neutral-5-pp',
+    ],
+    poseVariants: [
+      'nubo-neutral-1',
+      'nubo-neutral-2',
+      'nubo-neutral-3',
+      'nubo-neutral-4',
+      'nubo-neutral-5',
+      'nubo-neutral-6',
+      'nubo-neutral-7',
+    ],
+    greetingTextKeys: neutralGreetingKeys,
+    selectionWeight: 2.0,
   },
   // Example of another theme (you can add more later)
   // {

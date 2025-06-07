@@ -118,6 +118,28 @@
       "streakOrNoStreak": "Streak or no streak — you're here.",
       "gentleVictory": "This moment is a gentle victory.",
       "todayCounts": "Today counts. Always."
+    },
+    "neutral": {
+      "brushTime": "It's that brush time again! 🕰️",
+      "sparkleLoading": "Sparkle loading… ⏳✨",
+      "plaqueReminder": "Spoiler: Plaque doesn't take days off.",
+      "freshFeeling": "That fresh feeling hits different.",
+      "brushingCrew": "Welcome back to the brushing crew! 🪥",
+      "mintyMission": "Minty mission activated.",
+      "shineReady": "Smile shine: standing by.",
+      "dailyBrushThing": "Just your daily brush thing. No big deal.",
+      "tinyBrushingRitual": "Tiny ritual. Big refresh.",
+      "mirrorApproved": "Mirror will definitely approve this.",
+      "happyTeethDance": "Teeth doing their happy dance 💃",
+      "routineFeelsGood": "Routine feels kinda good, right?",
+      "brushingRoutineBack": "The brushing routine strikes again!",
+      "smileMaintenance": "Smile maintenance in progress 🛠️",
+      "clearedForShine": "Cleared for maximum shine ✨",
+      "dailyDefense": "Daily defense: activated 🛡️",
+      "fresherAlready": "You're fresher already.",
+      "mintMode": "Mint mode: ON 🌿",
+      "quickWin": "Quick win for your smile.",
+      "smallMoveBigFresh": "Small move. Big fresh."
     }
   },
   "common": {

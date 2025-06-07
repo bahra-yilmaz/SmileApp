@@ -118,7 +118,29 @@
           "streakOrNoStreak": "Mit oder ohne Streak — du bist hier.",
           "gentleVictory": "Dieser Moment ist ein sanfter Sieg.",
           "todayCounts": "Heute zählt. Immer."
-        }      
+        },
+        "neutral": {
+  "brushTime": "Es ist wieder Putzzeit! 🕰️",
+  "sparkleLoading": "Glanz wird geladen… ⏳✨",
+  "plaqueReminder": "Spoiler: Plaque macht nie Urlaub.",
+  "freshFeeling": "Dieses Frischegefühl ist einfach anders.",
+  "brushingCrew": "Willkommen zurück im Putz-Team! 🪥",
+  "mintyMission": "Minz-Mission aktiviert.",
+  "shineReady": "Lächel-Glanz: bereit.",
+  "dailyBrushThing": "Nur deine tägliche Putz-Routine. Ganz normal.",
+  "tinyBrushingRitual": "Kleines Ritual. Große Frische.",
+  "mirrorApproved": "Der Spiegel wird das lieben.",
+  "happyTeethDance": "Die Zähne tanzen vor Freude 💃",
+  "routineFeelsGood": "Routine fühlt sich gut an, oder?",
+  "brushingRoutineBack": "Die Putz-Routine ist zurück!",
+  "smileMaintenance": "Lächelwartung läuft 🛠️",
+  "clearedForShine": "Freigabe für maximalen Glanz ✨",
+  "dailyDefense": "Täglicher Schutz aktiviert 🛡️",
+  "fresherAlready": "Schon jetzt frischer.",
+  "mintMode": "Minz-Modus: AN 🌿",
+  "quickWin": "Schneller Sieg für dein Lächeln.",
+  "smallMoveBigFresh": "Kleine Bewegung. Große Frische."
+}
     },
     "common": {
       "ok": "OK",

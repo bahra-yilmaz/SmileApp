@@ -118,7 +118,29 @@
           "streakOrNoStreak": "Con racha o sin ella — estás aquí.",
           "gentleVictory": "Este momento es una pequeña victoria.",
           "todayCounts": "Hoy cuenta. Siempre."
-        }
+        },
+        "neutral": {
+  "brushTime": "¡Hora de cepillar de nuevo! 🕰️",
+  "sparkleLoading": "Cargando el brillo… ⏳✨",
+  "plaqueReminder": "Spoiler: La placa no se toma días libres.",
+  "freshFeeling": "Esa sensación de frescura es única.",
+  "brushingCrew": "¡Bienvenido de nuevo al equipo de cepillado! 🪥",
+  "mintyMission": "Misión menta activada.",
+  "shineReady": "Brillo de sonrisa: listo.",
+  "dailyBrushThing": "Solo tu rutina diaria de cepillado. Nada complicado.",
+  "tinyBrushingRitual": "Pequeño ritual. Gran frescura.",
+  "mirrorApproved": "El espejo lo aprobará sin dudas.",
+  "happyTeethDance": "Los dientes están bailando felices 💃",
+  "routineFeelsGood": "La rutina se siente bien, ¿verdad?",
+  "brushingRoutineBack": "¡La rutina de cepillado ha vuelto!",
+  "smileMaintenance": "Mantenimiento de sonrisa en curso 🛠️",
+  "clearedForShine": "Aprobado para máximo brillo ✨",
+  "dailyDefense": "Defensa diaria: activada 🛡️",
+  "fresherAlready": "Ya estás más fresco.",
+  "mintMode": "Modo menta: ACTIVADO 🌿",
+  "quickWin": "Pequeña victoria para tu sonrisa.",
+  "smallMoveBigFresh": "Pequeño movimiento. Gran frescura."
+}
     },
     "common": {
       "ok": "OK",

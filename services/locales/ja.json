@@ -118,7 +118,29 @@
         "streakOrNoStreak": "ストリークあってもなくても、君はここにいる。",
         "gentleVictory": "この瞬間も小さな勝利。",
         "todayCounts": "今日という日が大事。いつでも。"
-      }
+      },
+      "neutral": {
+  "brushTime": "また歯磨きタイムだよ！🕰️",
+  "sparkleLoading": "キラキラ読み込み中… ⏳✨",
+  "plaqueReminder": "ネタバレ：プラークは休まない。",
+  "freshFeeling": "あのスッキリ感、たまらない。",
+  "brushingCrew": "おかえり！ブラッシング仲間へ 🪥",
+  "mintyMission": "ミント任務：スタート。",
+  "shineReady": "スマイルの輝き、スタンバイOK。",
+  "dailyBrushThing": "いつもの歯磨きルーティン。お手のもの。",
+  "tinyBrushingRitual": "小さな儀式。大きなリフレッシュ。",
+  "mirrorApproved": "鏡もきっと満足。",
+  "happyTeethDance": "歯がハッピーダンス中 💃",
+  "routineFeelsGood": "ルーティンって気持ちいいよね？",
+  "brushingRoutineBack": "ブラッシングルーティン再開！",
+  "smileMaintenance": "スマイルメンテナンス中 🛠️",
+  "clearedForShine": "最大限の輝きOK ✨",
+  "dailyDefense": "デイリーディフェンス発動 🛡️",
+  "fresherAlready": "もうスッキリしてきたね。",
+  "mintMode": "ミントモード：ON 🌿",
+  "quickWin": "スマイルの小さな勝利。",
+  "smallMoveBigFresh": "小さな動き、大きなスッキリ感。"
+}     
     },
     "common": {
       "ok": "OK",
