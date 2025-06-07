@@ -13,6 +13,8 @@ import { Colors } from '../../constants/Colors';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import ConfirmModal from '../../components/modals/ConfirmModal';
 import { useTranslation } from 'react-i18next';
+import { BlurView } from 'expo-blur';
+import MascotProgressBar from '../../components/ui/MascotProgressBar';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -233,8 +235,8 @@ const BrushingResultsScreen = () => {
   const cardWidth = screenWidth * 0.4;
   const cardHeight = 110;
 
-  const card1Data = { progress: 0.75, value: "150", label: "Points" };
-  const card2Data = { progress: 0.50, value: "+2", label: "Bonus" };
+  const card1Data = { progress: 75, value: "+90", label: "Points" };
+  const card2Data = { progress: 100, value: "+200", label: "Bonus" };
 
   const handleShare = () => {
     console.log('Share button pressed');
@@ -269,7 +271,6 @@ const BrushingResultsScreen = () => {
         />
         <View style={[styles.topContentContainerWrapper, { paddingTop: insets.top + 40 }]}>
           <ThemedText style={styles.title} variant="title">{t('brushingResultsScreen.title')}</ThemedText>
-          <ThemedText style={styles.message}>{t('brushingResultsScreen.message')}</ThemedText>
 
           <View style={styles.timeCardContainer}>
             <ThemedText style={[styles.cardText, { fontFamily: 'Merienda-Bold' }]}>
@@ -290,7 +291,7 @@ const BrushingResultsScreen = () => {
           ]}
         >
           <View style={styles.cardsRowContainer}>
-            <View style={styles.shadowWrapper}> 
+            <Pressable style={styles.shadowWrapper} onPress={() => console.log('Points card pressed')}> 
               <GlassmorphicCard
                 width={cardWidth}
                 borderRadius="md"
@@ -314,9 +315,9 @@ const BrushingResultsScreen = () => {
                   </View>
                 </View>
               </GlassmorphicCard>
-            </View>
+            </Pressable>
 
-            <View style={styles.shadowWrapper}>
+            <Pressable style={styles.shadowWrapper} onPress={() => console.log('Bonus card pressed')}>
               <GlassmorphicCard
                 width={cardWidth}
                 borderRadius="md"
@@ -327,11 +328,10 @@ const BrushingResultsScreen = () => {
               >
                 <View style={styles.metricContentContainer}>
                   <View style={styles.metricDonutContainer}>
-                    <DonutChart
-                      progress={card2Data.progress}
-                      size={60}
-                      thickness={10}
-                      progressColor={Colors.primary[500]}
+                    <MaterialCommunityIcons
+                      name="fire"
+                      size={65}
+                      color={Colors.primary[500]}
                     />
                   </View>
                   <View style={styles.metricTextContainer}>
@@ -340,44 +340,78 @@ const BrushingResultsScreen = () => {
                   </View>
                 </View>
               </GlassmorphicCard>
-            </View>
+            </Pressable>
           </View>
 
           <View style={styles.motivationalContainer}>
-            <ThemedText style={styles.motivationalText}>
-              {t('brushingResultsScreen.motivationalText')}
-            </ThemedText>
-            <Image
-              source={require('../../assets/mascot/nubo-welcoming-1.png')}
-              style={styles.motivationalMascotImage}
-            />
+            <View style={styles.textAndProgressContainer}>
+              <ThemedText style={styles.motivationalText}>
+                {t('brushingResultsScreen.motivationalText')}
+              </ThemedText>
+              <View style={styles.progressCard}>
+                <View style={styles.cardBlur}>
+                  <View style={styles.progressBar}>
+                    <View style={[styles.progressFill, { width: '75%' }]} />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View style={styles.mascotImageContainer}>
+              <Image
+                source={require('../../assets/mascot/nubo-welcoming-1.png')}
+                style={styles.motivationalMascotImage}
+              />
+            </View>
           </View>
 
           <View style={styles.buttonRowContainer}>
-            <View style={styles.leftActionButtonsContainer}> 
-              <Pressable onPress={handleOpenConfirmModal} style={[styles.actionButton, { backgroundColor: Colors.primary[200] }]}> 
-                <MaterialCommunityIcons name="history" size={28} color={'#FFFFFF'} />
-              </Pressable>
-              <Pressable onPress={handleShare} style={[styles.actionButton, { marginLeft: 10, backgroundColor: Colors.primary[500] }]}> 
-                <Feather name="share-2" size={24} color={'#FFFFFF'} />
-              </Pressable>
-            </View>
             <PrimaryButton
               label={t('brushingResultsScreen.goHomeButton')}
-              onPress={handleChevronClosePress} // Changed to use the animated close
-              width={styles.goHomeButton.width} // Pass width directly as a prop
-              style={{ // Keep other styles like marginLeft, paddingHorizontal (if still needed)
-                marginLeft: styles.goHomeButton.marginLeft,
-                paddingHorizontal: styles.goHomeButton.paddingHorizontal, 
-                minWidth: styles.goHomeButton.minWidth, // Keep minWidth if it was intentional for flex behavior, otherwise remove
-              }}
+              onPress={handleChevronClosePress}
+              width={screenWidth * 0.85}
               useDisplayFont={true}
             />
           </View>
         </LightContainer>
       </Animated.View>
 
-      {/* 3. The Chevron close button, also absolutely positioned */}
+      {/* 3. Top left action buttons (dismiss and share) */}
+      <Animated.View
+        style={[
+          styles.topLeftButtonsContainer,
+          {
+            opacity: animatedContentOpacity,
+            top: insets.top + 8, 
+          }
+        ]}
+      >
+                 <Pressable
+           style={({ pressed }) => [
+             styles.topActionButton,
+             {
+               opacity: pressed ? 0.7 : 1,
+               transform: [{ scale: pressed ? 0.90 : 1 }],
+             }
+           ]}
+           onPress={handleOpenConfirmModal}
+         >
+           <MaterialCommunityIcons name="history" size={26} color={theme.activeColors.text} />
+         </Pressable>
+         <Pressable
+           style={({ pressed }) => [
+             styles.topActionButton,
+             {
+               opacity: pressed ? 0.7 : 1,
+               transform: [{ scale: pressed ? 0.90 : 1 }],
+             }
+           ]}
+           onPress={handleShare}
+         >
+           <Feather name="share-2" size={22} color={theme.activeColors.text} />
+         </Pressable>
+      </Animated.View>
+
+      {/* 4. The Chevron close button, also absolutely positioned */}
       <Animated.View
         style={[
           styles.closeButtonContainer,
@@ -459,7 +493,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    marginTop: 20, 
+    marginTop: 40, 
     marginBottom: 10,
     textAlign: 'center',
     color: '#FFFFFF',
@@ -534,10 +568,18 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   metricDonutContainer: {
+    width: 55,
+    height: 65,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
     marginLeft: -15,
+  },
+  flameIconContainer: {
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   metricTextContainer: {
     alignItems: 'flex-start',
@@ -563,28 +605,66 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '90%',
     alignSelf: 'center',
-    marginVertical:25,
+    marginVertical: 10,
+    marginBottom: 5,
+  },
+  textAndProgressContainer: {
+    flex: 1,
+    marginRight: 15,
+  },
+  mascotImageContainer: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 10,
   },
   motivationalText: {
     fontSize: 16,
     color: Colors.neutral[800],
     fontFamily: 'Quicksand-Medium',
-    flex: 1,
     textAlign: 'left',
   },
   motivationalMascotImage: {
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     resizeMode: 'contain',
   },
-  buttonRowContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+  progressCard: {
+    width: '100%',
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    marginTop: 12,
+  },
+  cardBlur: {
+    padding: 8,
+    borderRadius: 12,
+    justifyContent: 'center',
     alignItems: 'center',
-    width: '90%',
-    alignSelf: 'center',
-    marginTop: 10,
-    marginBottom: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    overflow: 'hidden',
+  },
+  progressBar: {
+    height: 8,
+    width: '100%',
+    backgroundColor: 'rgba(200, 200, 220, 0.3)',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: Colors.primary[500],
+  },
+  buttonRowContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginTop: 20,
   },
   leftActionButtonsContainer: {
     flexDirection: 'row',
@@ -599,11 +679,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  goHomeButton: {
-    width: screenWidth * 0.48,
-    minWidth: 0,
-    marginLeft: 12,
-    paddingHorizontal: 0,
+
+  topLeftButtonsContainer: { 
+    position: 'absolute',
+    left: 18,
+    zIndex: 2000,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  topActionButton: { 
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   closeButtonContainer: { 
     position: 'absolute',
