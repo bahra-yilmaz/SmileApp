@@ -36,6 +36,16 @@ const BrushingResultsScreen = () => {
     'Quicksand-Medium': require('../../assets/fonts/Quicksand-Medium.ttf'),
   });
 
+  // Card view states
+  const [pointsCardView, setPointsCardView] = useState<'default' | 'details'>('default');
+  const [bonusCardView, setBonusCardView] = useState<'default' | 'details'>('default');
+
+  // Animation values for card content switching
+  const pointsCardAnim = useRef(new Animated.Value(1)).current;
+  const pointsCardScale = useRef(new Animated.Value(1)).current;
+  const bonusCardAnim = useRef(new Animated.Value(1)).current;
+  const bonusCardScale = useRef(new Animated.Value(1)).current;
+
   // Animation values
   const screenAppearAnim = useRef(new Animated.Value(1)).current; // Start at 1 for immediate background visibility
   const contentAppearAnim = useRef(new Animated.Value(0)).current; // Content fades in slowly
@@ -48,6 +58,73 @@ const BrushingResultsScreen = () => {
 
   // Themed background for the scaler, like TimerOverlay's expandingCircle
   const themedScalerBackgroundColor = theme.colorScheme === 'dark' ? '#1F2933' : '#F3F9FF';
+
+  // Card content switching handlers
+  const handlePointsCardPress = () => {
+    const newView = pointsCardView === 'default' ? 'details' : 'default';
+    
+    Animated.parallel([
+      Animated.timing(pointsCardAnim, {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+      Animated.timing(pointsCardScale, {
+        toValue: 0.95,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setPointsCardView(newView);
+      Animated.parallel([
+        Animated.spring(pointsCardAnim, {
+          toValue: 1,
+          friction: 6,
+          tension: 80,
+          useNativeDriver: true,
+        }),
+        Animated.spring(pointsCardScale, {
+          toValue: 1,
+          friction: 6,
+          tension: 80,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    });
+  };
+
+  const handleBonusCardPress = () => {
+    const newView = bonusCardView === 'default' ? 'details' : 'default';
+    
+    Animated.parallel([
+      Animated.timing(bonusCardAnim, {
+        toValue: 0,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+      Animated.timing(bonusCardScale, {
+        toValue: 0.95,
+        duration: 250,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setBonusCardView(newView);
+      Animated.parallel([
+        Animated.spring(bonusCardAnim, {
+          toValue: 1,
+          friction: 6,
+          tension: 80,
+          useNativeDriver: true,
+        }),
+        Animated.spring(bonusCardScale, {
+          toValue: 1,
+          friction: 6,
+          tension: 80,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    });
+  };
 
   useEffect(() => {
     // Animate in content when the component mounts
@@ -291,7 +368,7 @@ const BrushingResultsScreen = () => {
           ]}
         >
           <View style={styles.cardsRowContainer}>
-            <Pressable style={styles.shadowWrapper} onPress={() => console.log('Points card pressed')}> 
+            <Pressable style={styles.shadowWrapper} onPress={handlePointsCardPress}> 
               <GlassmorphicCard
                 width={cardWidth}
                 borderRadius="md"
@@ -300,24 +377,45 @@ const BrushingResultsScreen = () => {
                 containerStyle={[styles.resultCardContainer, { height: cardHeight }]}
                 style={styles.resultCardContent}
               >
-                <View style={styles.metricContentContainer}>
-                  <View style={styles.metricDonutContainer}>
-                    <DonutChart
-                      progress={card1Data.progress}
-                      size={60}
-                      thickness={10}
-                      progressColor={Colors.primary[500]}
-                    />
-                  </View>
-                  <View style={styles.metricTextContainer}>
-                    <ThemedText style={styles.metricValue}>{card1Data.value}</ThemedText>
-                    <ThemedText style={styles.metricLabel}>{t('brushingResultsScreen.pointsCardLabel')}</ThemedText>
-                  </View>
-                </View>
+                <Animated.View style={[styles.metricContentContainer, { 
+                  opacity: pointsCardAnim,
+                  transform: [{ scale: pointsCardScale }]
+                }]}>
+                  {pointsCardView === 'default' ? (
+                    <>
+                      <View style={styles.metricDonutContainer}>
+                        <DonutChart
+                          progress={card1Data.progress}
+                          size={60}
+                          thickness={10}
+                          progressColor={Colors.primary[500]}
+                        />
+                      </View>
+                      <View style={styles.metricTextContainer}>
+                        <ThemedText style={styles.metricValue}>{card1Data.value}</ThemedText>
+                        <ThemedText style={styles.metricLabel}>{t('brushingResultsScreen.pointsCardLabel')}</ThemedText>
+                      </View>
+                    </>
+                  ) : (
+                    <View style={styles.flippedCardLayout}>
+                      <View style={styles.flippedCardTop}>
+                        <View style={[styles.metricDonutContainer, styles.flippedNumberContainer]}>
+                          <ThemedText style={styles.flippedCardNumber}>0</ThemedText>
+                        </View>
+                        <View style={styles.metricTextContainer}>
+                          <ThemedText style={styles.flippedCardValue}>{t('brushingResultsScreen.pointsCardDetailsValue')}</ThemedText>
+                        </View>
+                      </View>
+                      <View style={styles.flippedCardBottom}>
+                        <ThemedText style={styles.flippedCardBottomLabel}>{t('brushingResultsScreen.pointsCardDetailsLabel')}</ThemedText>
+                      </View>
+                    </View>
+                  )}
+                </Animated.View>
               </GlassmorphicCard>
             </Pressable>
 
-            <Pressable style={styles.shadowWrapper} onPress={() => console.log('Bonus card pressed')}>
+            <Pressable style={styles.shadowWrapper} onPress={handleBonusCardPress}>
               <GlassmorphicCard
                 width={cardWidth}
                 borderRadius="md"
@@ -326,19 +424,40 @@ const BrushingResultsScreen = () => {
                 containerStyle={[styles.resultCardContainer, { height: cardHeight }]}
                 style={styles.resultCardContent}
               >
-                <View style={styles.metricContentContainer}>
-                  <View style={styles.metricDonutContainer}>
-                    <MaterialCommunityIcons
-                      name="fire"
-                      size={65}
-                      color={Colors.primary[500]}
-                    />
-                  </View>
-                  <View style={styles.metricTextContainer}>
-                    <ThemedText style={styles.metricValue}>{card2Data.value}</ThemedText>
-                    <ThemedText style={styles.metricLabel}>{t('brushingResultsScreen.bonusCardLabel')}</ThemedText>
-                  </View>
-                </View>
+                <Animated.View style={[styles.metricContentContainer, { 
+                  opacity: bonusCardAnim,
+                  transform: [{ scale: bonusCardScale }]
+                }]}>
+                  {bonusCardView === 'default' ? (
+                    <>
+                      <View style={styles.metricDonutContainer}>
+                        <MaterialCommunityIcons
+                          name="fire"
+                          size={65}
+                          color={Colors.primary[500]}
+                        />
+                      </View>
+                      <View style={styles.metricTextContainer}>
+                        <ThemedText style={styles.metricValue}>{card2Data.value}</ThemedText>
+                        <ThemedText style={styles.metricLabel}>{t('brushingResultsScreen.bonusCardLabel')}</ThemedText>
+                      </View>
+                    </>
+                  ) : (
+                    <View style={styles.flippedCardLayout}>
+                      <View style={styles.flippedCardTop}>
+                        <View style={[styles.metricDonutContainer, styles.flippedNumberContainer]}>
+                          <ThemedText style={styles.flippedCardNumber}>5</ThemedText>
+                        </View>
+                        <View style={styles.metricTextContainer}>
+                          <ThemedText style={styles.flippedCardValue}>{t('brushingResultsScreen.bonusCardDetailsValue')}</ThemedText>
+                        </View>
+                      </View>
+                      <View style={styles.flippedCardBottom}>
+                        <ThemedText style={styles.flippedCardBottomLabel}>{t('brushingResultsScreen.bonusCardDetailsLabel')}</ThemedText>
+                      </View>
+                    </View>
+                  )}
+                </Animated.View>
               </GlassmorphicCard>
             </Pressable>
           </View>
@@ -705,6 +824,58 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  flippedCardNumber: {
+    fontSize: 64,
+    fontWeight: '700',
+    color: Colors.primary[500],
+    fontFamily: 'Merienda-Bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    lineHeight: 72,
+    includeFontPadding: false,
+  },
+  flippedCardValue: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: Colors.primary[800],
+    fontFamily: 'Quicksand-Bold',
+    lineHeight: 24,
+  },
+  flippedNumberContainer: {
+    width: 70,
+    height: 85,
+    marginLeft: -10,
+    marginRight: -5,
+    paddingTop: 10,
+    overflow: 'visible',
+  },
+  flippedCardLayout: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  flippedCardTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    marginTop: -8,
+  },
+  flippedCardBottom: {
+    position: 'absolute',
+    bottom: 4,
+    right: 8,
+  },
+  flippedCardBottomLabel: {
+    fontSize: 11,
+    fontFamily: 'Quicksand-Medium',
+    opacity: 0.8,
+    color: Colors.primary[800],
+    textAlign: 'center',
   },
 });
 
