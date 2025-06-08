@@ -42,10 +42,12 @@ export default function OnboardingWelcome() {
   const [isContinueButtonEnabled, setIsContinueButtonEnabled] = useState(false);
 
   // Mascot card configuration state
-  const initialStageConfig = {
-    greetingText: t('onboarding.mascotGreetingStage1'),
-    collapsedVariant: 'nubo-wise-1-pp' as PpMascotVariant,
-    expandedVariant: 'nubo-wise-1' as NonPpMascotVariant,
+  const initialStageConfig: MascotConfig = {
+    id: 'onboarding-stage-1',
+    greetingTextKey: t('onboarding.mascotGreetingStage1'),
+    collapsedVariant: 'nubo-wise-1-pp',
+    expandedVariant: 'nubo-wise-1',
+    probability: 1, // Static probability for onboarding
   };
   // Define text for the second stage directly
   const secondStageGreetingText = t('onboarding.mascotGreetingStage2');
@@ -262,51 +264,63 @@ export default function OnboardingWelcome() {
   // Memoized function to handle collapsing the card and setting appropriate config
   const handleCollapseCard = useCallback(() => {
     setIsMascotCardExpanded(false);
-    if (!isCheckpoint1Done) {
-      setMascotCardConfig(initialStageConfig);
-    } else if (!isCheckpoint2Done) {
+    // Determine current state to show correct mascot
+    if (isCheckpoint2Done) { // This means we are at or past stage 3
       setMascotCardConfig({
-        greetingText: secondStageGreetingText,
-        collapsedVariant: secondStageCollapsedVariant,
-        expandedVariant: secondStageExpandedVariant,
-      });
-    } else { // Covers checkpoint 2 done, or checkpoint 3 done (or all done)
-      setMascotCardConfig({
-        greetingText: finalStageGreetingText,
+        id: 'onboarding-stage-3-collapsed',
+        greetingTextKey: finalStageGreetingText,
         collapsedVariant: finalStageCollapsedVariant,
         expandedVariant: finalStageExpandedVariant,
+        probability: 1,
+      });
+    } else if (isCheckpoint1Done) { // This means we are at or past stage 2
+      setMascotCardConfig({
+        id: 'onboarding-stage-2-collapsed',
+        greetingTextKey: secondStageGreetingText,
+        collapsedVariant: secondStageCollapsedVariant,
+        expandedVariant: secondStageExpandedVariant,
+        probability: 1,
       });
     }
+    // No need for an else, as the initial config is for stage 1.
   }, [isCheckpoint1Done, isCheckpoint2Done, initialStageConfig, secondStageGreetingText, secondStageCollapsedVariant, secondStageExpandedVariant, finalStageGreetingText, finalStageCollapsedVariant, finalStageExpandedVariant]);
 
   // Memoized function to handle expanding the card and progressing checkpoints
   const handleExpandAndProgressCard = useCallback(() => {
-    if (!isMascotCardExpanded) {
-      setIsMascotCardExpanded(true);
-      if (!isCheckpoint1Done) {
-        setIsCheckpoint1Done(true);
-        setMascotCardConfig(initialStageConfig);
-      } else if (!isCheckpoint2Done) {
-        setIsCheckpoint2Done(true);
-        setMascotCardConfig({
-          greetingText: secondStageGreetingText,
-          collapsedVariant: secondStageCollapsedVariant,
-          expandedVariant: secondStageExpandedVariant,
-        });
-      } else if (!isCheckpoint3Done) {
-        setIsCheckpoint3Done(true);
-        setMascotCardConfig({
-          greetingText: finalStageGreetingText,
-          collapsedVariant: finalStageCollapsedVariant,
-          expandedVariant: finalStageExpandedVariant,
-        });
-      } else {
-        setMascotCardConfig({
-          greetingText: finalStageGreetingText,
-          collapsedVariant: finalStageCollapsedVariant,
-          expandedVariant: finalStageExpandedVariant,
-        });
-      }
+    // Expand the card first
+    setIsMascotCardExpanded(true);
+    
+    // Logic to determine which checkpoint to mark as done
+    if (!isCheckpoint1Done) {
+      setIsCheckpoint1Done(true);
+      // After marking as done, update the config for the next stage
+      setMascotCardConfig({
+        id: 'onboarding-stage-2',
+        greetingTextKey: secondStageGreetingText,
+        collapsedVariant: secondStageCollapsedVariant,
+        expandedVariant: secondStageExpandedVariant,
+        probability: 1,
+      });
+    } else if (!isCheckpoint2Done) {
+      setIsCheckpoint2Done(true);
+      // Update config for the final stage
+      setMascotCardConfig({
+        id: 'onboarding-stage-3',
+        greetingTextKey: finalStageGreetingText,
+        collapsedVariant: finalStageCollapsedVariant,
+        expandedVariant: finalStageExpandedVariant,
+        probability: 1,
+      });
+    } else if (!isCheckpoint3Done) {
+      setIsCheckpoint3Done(true);
+      // Optionally, you can have a final config here or just enable the button
+      setMascotCardConfig({
+        id: 'onboarding-stage-final',
+        greetingTextKey: finalStageGreetingText,
+        collapsedVariant: finalStageCollapsedVariant,
+        expandedVariant: finalStageExpandedVariant,
+        probability: 1,
+      });
     }
   }, [isMascotCardExpanded, isCheckpoint1Done, isCheckpoint2Done, isCheckpoint3Done, initialStageConfig, secondStageGreetingText, secondStageCollapsedVariant, secondStageExpandedVariant, finalStageGreetingText, finalStageCollapsedVariant, finalStageExpandedVariant]);
 
@@ -338,17 +352,22 @@ export default function OnboardingWelcome() {
           </ThemedText>
         </View>
 
-        {/* Expandable Mascot Card */}
-        <View style={styles.mascotCardContainer}>
-          <ExpandableMascotCard 
-            config={preparedConfigForCard}
-            greetingText={mascotCardConfig.greetingText}
-            isExpanded={isMascotCardExpanded}
-            onPress={handleExpandAndProgressCard}
-            onPressWhenExpanded={handleCollapseCard}
-            enablePulse={!isMascotCardExpanded && (!isCheckpoint1Done || (isCheckpoint1Done && !isCheckpoint2Done) || (isCheckpoint1Done && isCheckpoint2Done && !isCheckpoint3Done))}
-          />
-        </View>
+        {/* Expandable Mascot Card - positioned below checkpoints */}
+        <ExpandableMascotCard
+          isExpanded={isMascotCardExpanded}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            setIsMascotCardExpanded(!isMascotCardExpanded);
+            // Additional logic for stage transition can go here if needed
+          }}
+          config={mascotCardConfig}
+          greetingText={t(mascotCardConfig.greetingTextKey)}
+          onPressWhenExpanded={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            setIsMascotCardExpanded(false);
+          }} // Simply collapse on second tap
+          enablePulse={!isMascotCardExpanded}
+        />
 
         {/* Mountain image container for relative positioning of circles */}
         <View style={styles.mountainImageContainer}>

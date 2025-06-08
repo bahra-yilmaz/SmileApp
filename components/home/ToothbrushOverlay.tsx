@@ -18,6 +18,7 @@ import { useFonts } from 'expo-font';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ThemedText from '../ThemedText';
 import { useTranslation } from 'react-i18next';
+import * as Haptics from 'expo-haptics';
 
 interface ToothbrushOverlayProps {
   isVisible: boolean;
@@ -250,7 +251,10 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
             {/* Replace History Section */}
             <Pressable 
               style={styles.usageContainer} 
-              onPress={() => setShowHistory(!showHistory)}
+              onPress={() => {
+                setShowHistory(!showHistory);
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
             >
               <View style={styles.usageIconContainer}>
                 <MaterialCommunityIcons
@@ -366,6 +370,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
               ]}
               onPress={() => {
                 console.log('New toothbrush button pressed');
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
               }}
             >
               <MaterialCommunityIcons

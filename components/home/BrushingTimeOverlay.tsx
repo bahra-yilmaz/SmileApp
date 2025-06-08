@@ -22,6 +22,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ThemedText from '../ThemedText';
 import DonutChart from '../ui/DonutChart';
 import { useTranslation } from 'react-i18next';
+import * as Haptics from 'expo-haptics';
 
 interface BrushingTimeOverlayProps {
   isVisible: boolean;
@@ -127,6 +128,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
       console.warn("BrushingTimeOverlay: onTargetTimeUpdate prop not provided. Target time not saved.");
     }
     setIsTargetOptionsVisible(false); // Collapse options after selection
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
   
   // If not visible and animation is complete, don't render anything
@@ -274,7 +276,10 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
             {/* Set Target Time Section - Now Expandable */}
             <Pressable 
               style={styles.usageContainer}
-              onPress={() => setIsTargetOptionsVisible(!isTargetOptionsVisible)} // Toggle visibility
+              onPress={() => {
+                setIsTargetOptionsVisible(!isTargetOptionsVisible);
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }} // Toggle visibility
             >
               <View style={styles.usageIconContainer}>
                 <MaterialCommunityIcons 
@@ -403,6 +408,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
               ]}
               onPress={() => {
                 console.log('Share stats button pressed');
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
               }}
             >
               <MaterialCommunityIcons

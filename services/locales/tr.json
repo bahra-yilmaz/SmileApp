@@ -318,7 +318,7 @@
     },
   "toothbrushOverlay": {
     "title": "Diş Fırçan",
-    "daysInUseText": "Kullanımda geçen gün",
+    "daysInUseText": "kullanım günü",
     "healthStatusGood": "İyi",
     "healthStatusReplaceSoon": "Yakında Değiştir",
     "healthStatusFair": "Orta",

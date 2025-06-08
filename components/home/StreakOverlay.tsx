@@ -18,6 +18,7 @@ import { useFonts } from 'expo-font';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ThemedText from '../ThemedText';
 import { useTranslation } from 'react-i18next';
+import * as Haptics from 'expo-haptics';
 
 interface StreakOverlayProps {
   isVisible: boolean;
@@ -267,7 +268,10 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
             {/* Best Streaks Section */}
             <Pressable 
               style={styles.usageContainer}
-              onPress={() => setShowHistory(!showHistory)}
+              onPress={() => {
+                setShowHistory(!showHistory);
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              }}
             >
               <View style={styles.usageIconContainer}> 
                 <MaterialCommunityIcons
@@ -414,6 +418,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
               ]}
               onPress={() => {
                 console.log('Share streak button pressed');
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                 // Add actual share logic here
               }}
             >

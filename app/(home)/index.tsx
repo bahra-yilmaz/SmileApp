@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import { BlurView } from 'expo-blur';
 import { Colors } from '../../constants/Colors';
 import { useTranslation } from 'react-i18next';
+import * as Haptics from 'expo-haptics';
 
 // Import home components using barrel imports
 import {
@@ -114,6 +115,7 @@ export default function HomeScreen() {
   
   // Toggle home mascot card expansion
   const toggleHomeMascotExpansion = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setIsHomeMascotExpanded(!isHomeMascotExpanded);
   };
   
@@ -161,6 +163,7 @@ export default function HomeScreen() {
             isExpanded={isHomeMascotExpanded}
             onPress={toggleHomeMascotExpansion}
             onPressWhenExpanded={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
               setSelectedMascotConfig(getRandomMascotConfig());
               setIsHomeMascotExpanded(false);
             }}
@@ -209,7 +212,9 @@ export default function HomeScreen() {
             {/* Calendar View */}
             <CalendarView 
               selectedDate={selectedDate}
-              onDateChange={setSelectedDate}
+              onDateChange={(date) => {
+                setSelectedDate(date);
+              }}
             />
           </LightContainer>
         </View>
