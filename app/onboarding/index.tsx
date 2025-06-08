@@ -42,11 +42,18 @@ export default function OnboardingWelcome() {
   const [isContinueButtonEnabled, setIsContinueButtonEnabled] = useState(false);
 
   // Mascot card configuration state
+  const mascotInitialVariant: NonPpMascotVariant = 'nubo-welcoming-2';
+  const firstStageExpandedVariant: NonPpMascotVariant = 'nubo-brushing-1';
+  const secondStageExpandedVariant: NonPpMascotVariant = 'nubo-brushing-2';
+  const thirdStageExpandedVariant: NonPpMascotVariant = 'nubo-cool-5';
+  const finalStageExpandedVariant: NonPpMascotVariant = 'nubo-cool-3';
+  const mascotFinalVariant: NonPpMascotVariant = 'nubo-welcoming-wave';
+
   const initialStageConfig: MascotConfig = {
     id: 'onboarding-stage-1',
     greetingTextKey: t('onboarding.mascotGreetingStage1'),
     collapsedVariant: 'nubo-wise-1-pp',
-    expandedVariant: 'nubo-wise-1',
+    expandedVariant: mascotInitialVariant,
     probability: 1, // Static probability for onboarding
   };
   // Define text for the second stage directly
@@ -55,11 +62,9 @@ export default function OnboardingWelcome() {
 
   // Define variants for the second stage
   const secondStageCollapsedVariant: PpMascotVariant = 'nubo-brushing-1-pp';
-  const secondStageExpandedVariant: NonPpMascotVariant = 'nubo-daily-brush-2';
 
   // Define text and variants for the final stage (stage 3)
   const finalStageCollapsedVariant: PpMascotVariant = 'nubo-cool-3-pp';
-  const finalStageExpandedVariant: NonPpMascotVariant = 'nubo-cool-2';
 
   const [mascotCardConfig, setMascotCardConfig] = useState(initialStageConfig);
 

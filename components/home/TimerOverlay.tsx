@@ -21,7 +21,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import TimerCircle from './TimerCircle';
 import SongMenu from './SongMenu';
 import * as Haptics from 'expo-haptics';
-import { Audio } from 'expo-av';
+import { useAudioPlayer } from 'expo-audio';
 
 interface OverlayProps {
   isVisible: boolean;
@@ -56,6 +56,7 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
   // Get theme color - use the same color as LightContainer
   const { theme } = useTheme();
   const backgroundColor = theme.colorScheme === 'dark' ? '#1F2933' : '#F3F9FF';
+  const successSoundPlayer = useAudioPlayer(require('../../assets/sounds/success.mp3'));
   
   // Get screen dimensions using the hook for dynamic updates
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
@@ -211,7 +212,7 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
               // Timer reaches 00:00 - Goal Met
               setHasCompleted(true);
               triggerCompletionHaptics();
-              playSound().catch(error => console.log("Error playing sound:", error)); // Play sound and log error if it fails
+              playSound();
               setIsOvertime(true); // Switch to overtime mode
               // Do NOT set isRunning to false here, let it keep running
               return 0;
@@ -235,11 +236,11 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
     setTimeout(() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy), 150);
   };
   
-  const playSound = async () => {
-    const { sound } = await Audio.Sound.createAsync(
-       require('../../assets/sounds/success.mp3')
-    );
-    await sound.playAsync();
+  const playSound = () => {
+    if (successSoundPlayer.isLoaded) {
+      successSoundPlayer.seekTo(0);
+      successSoundPlayer.play();
+    }
   }
 
   const resetTimer = (withHaptics = true) => {

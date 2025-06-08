@@ -4,6 +4,7 @@ export type PpMascotVariant =
   | 'nubo-wise-1-pp'
   | 'nubo-welcoming-1-pp'
   | 'nubo-brushing-1-pp'
+  | 'nubo-brushing-2-pp'
   | 'nubo-cool-3-pp'
   | 'nubo-cool-1-pp'
   | 'nubo-cool-2-pp';
@@ -14,8 +15,9 @@ export type NonPpMascotVariant =
   | 'nubo-welcoming-1'
   | 'nubo-welcoming-2'
   | 'nubo-welcoming-wave'
-  | 'nubo-daily-brush'
-  | 'nubo-daily-brush-2'
+  | 'nubo-brushing-1'
+  | 'nubo-brushing-2'
+  | 'nubo-brushing-3'
   | 'nubo-cool-2'
   | 'nubo-cool-1'
   | 'nubo-cool-3'
@@ -23,7 +25,13 @@ export type NonPpMascotVariant =
   | 'nubo-cool-5';
 
 // Combined type for general use, e.g., in the Mascot component itself
-export type MascotVariant = PpMascotVariant | NonPpMascotVariant;
+export type MascotVariant = 
+  | 'nubo-welcoming-1'
+  | 'nubo-happy-1'
+  | 'nubo-daily-brush-1'
+  | 'nubo-success-1'
+  | 'nubo-sad-1'
+  | 'nubo-bag-1';
 
 export interface MascotPositioning {
   translateX: number;

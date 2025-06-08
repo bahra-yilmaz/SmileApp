@@ -82,14 +82,16 @@ export const AppImages = {
   'nubo-wise-5': require('../assets/mascot/nubo-wise-5.png'),
 };
 
-function cacheImages(images: (string | number)[]): Promise<any[]> {
+function cacheImages(images: (string | number)[]): Promise<(void | boolean)[]> {
   return Promise.all(
     images.map((image) => {
       if (typeof image === 'string') {
+        // It's a remote image, prefetch it
         return Image.prefetch(image);
       } else {
+        // It's a local asset, resolve the URI and then prefetch it
         const asset = Asset.fromModule(image);
-        return asset.downloadAsync();
+        return Image.prefetch(asset.uri);
       }
     })
   );

@@ -183,7 +183,12 @@ export default function HomeScreen() {
             </View>
           </BlurView>
         </View>
-        <Image source={require('../../assets/mascot/nubo-bag-1.png')} style={styles.mascotImage} resizeMode="contain" />
+        <Image 
+          source={AppImages['nubo-bag-1']} 
+          style={styles.mascotImage} 
+          contentFit="contain" 
+          cachePolicy="disk" 
+        />
       </View>
       <Image 
         source={AppImages.mountain1} 
