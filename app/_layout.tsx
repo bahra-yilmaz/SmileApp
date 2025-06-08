@@ -10,6 +10,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import i18nInstance from '../services/i18n';
 import { I18nextProvider } from 'react-i18next';
 import { enableFreeze } from 'react-native-screens';
+import { loadAssets } from '../utils/loadAssets';
 
 // Get dimensions for background
 const { width, height } = Dimensions.get('window');
@@ -25,6 +26,7 @@ enableFreeze(true);
 export default function RootLayout() {
   // State to track if splash screen should be shown
   const [showSplash, setShowSplash] = useState(true);
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
   
   // Load custom fonts
   const [fontsLoaded, error] = useFonts({
@@ -40,17 +42,31 @@ export default function RootLayout() {
     'Quicksand-Bold': require('../assets/fonts/Quicksand-Bold.ttf'),
   });
 
-  const appReady = fontsLoaded || error;
+  useEffect(() => {
+    async function prepareApp() {
+      try {
+        await loadAssets();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAssetsLoaded(true);
+      }
+    }
+
+    prepareApp();
+  }, []);
+
+  const appReady = (fontsLoaded || error) && assetsLoaded;
 
   // Handle when assets loaded and splash can be hidden
   useEffect(() => {
-    if (fontsLoaded || error) {
+    if (appReady) {
       // Fonts are loaded, hide the native splash screen
       hideAsync().catch(() => {
         /* ignore error */
       });
     }
-  }, [fontsLoaded, error]);
+  }, [appReady]);
 
   // Handle splash screen finish
   const handleSplashFinish = () => {

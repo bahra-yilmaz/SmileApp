@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, Image, Text, Platform, TouchableOpacity, Pressable } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Platform, TouchableOpacity, Pressable } from 'react-native';
+import { Image } from 'expo-image';
 import { useTheme } from '../../components/ThemeProvider';
 import HeaderLogo from '../../components/ui/HeaderLogo';
 import LightContainer from '../../components/ui/LightContainer';
@@ -13,6 +14,7 @@ import { BlurView } from 'expo-blur';
 import { Colors } from '../../constants/Colors';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
+import { AppImages } from '../../utils/loadAssets';
 
 // Import home components using barrel imports
 import {
@@ -123,8 +125,10 @@ export default function HomeScreen() {
     <View style={styles.container}>
       {/* Home-specific background image */}
       <Image 
-        source={require('../../assets/images/homescreen-background.png')}
+        source={AppImages.homescreenBackground}
         style={styles.homeBackgroundImage}
+        contentFit="cover"
+        cachePolicy="disk"
       />
       
       <View style={styles.mainContainer}>
@@ -303,14 +307,13 @@ export default function HomeScreen() {
         />
       </View>
 
-      {/* Bottom mountain image */}
-      <View style={styles.bottomFixedContainer}>
-        <Image 
-          source={require('../../assets/images/mountain-1.png')} 
-          style={{width: '100%', height: '100%'}}
-          resizeMode="cover"
-        />
-      </View>
+      {/* Mountain Image - now using preloaded asset */}
+      <Image 
+        source={AppImages.mountain1}
+        style={styles.mountainImage}
+        contentFit="contain"
+        cachePolicy="disk"
+      />
     </View>
   );
 }
@@ -321,15 +324,15 @@ const styles = StyleSheet.create({
   },
   homeBackgroundImage: {
     position: 'absolute',
-    width: width,
-    height: height,
-    resizeMode: 'cover',
+    width: '100%',
+    height: '100%',
     left: 0,
     top: 0,
-    zIndex: -1,
+    zIndex: 0, // Ensure it is in the background
   },
   mainContainer: {
     flex: 1,
+    zIndex: 1,
     position: 'relative',
   },
   headerContainer: {
@@ -358,38 +361,6 @@ const styles = StyleSheet.create({
   },
   spacer: {
     height: 100, // Reduced spacer height to bring calendar higher
-  },
-  bottomFixedContainer: {
-    position: 'absolute',
-    bottom: 0, // Reduced from 20px to 10px to move the image lower
-    left: 0,
-    right: 0,
-    height: 280, // Increased height to show more of the top
-    zIndex: 999, // Lowered z-index to allow floating button to be above
-  },
-  floatingActionButton: {
-    position: 'absolute',
-    bottom: 45,
-    left: '50%',
-    marginLeft: -35, // Half of width to center properly
-    width: 70, // Slightly smaller
-    height: 70, // Slightly smaller
-    borderRadius: 35, // Half of width/height
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  gradientButton: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 35, // Half of width/height
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   bottomLeftMascot: {
     position: 'absolute',
@@ -450,5 +421,38 @@ const styles = StyleSheet.create({
   progressFill: {
     height: '100%',
     backgroundColor: Colors.primary[500],
+  },
+  mountainImage: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    width: '100%',
+    height: height * 0.4, // Adjust height as needed
+    zIndex: 20, // Ensure it is above the light container but below other elements
+  },
+  floatingActionButton: {
+    position: 'absolute',
+    bottom: 45,
+    left: '50%',
+    marginLeft: -35, // Half of width to center properly
+    width: 70, // Slightly smaller
+    height: 70, // Slightly smaller
+    borderRadius: 35, // Half of width/height
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  gradientButton: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 35, // Half of width/height
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
