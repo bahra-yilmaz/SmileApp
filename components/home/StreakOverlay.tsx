@@ -62,7 +62,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
   
   // Calculate dimensions to leave space around edges
   const overlayWidth = screenWidth * 0.9;
-  const overlayHeight = screenHeight * 0.75;
+  const overlayHeight = screenHeight * 0.7;
   
   // Handle animations when visibility changes
   useEffect(() => {
