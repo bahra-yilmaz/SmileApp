@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, Text, Platform, TouchableOpacity, Pressable } from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Platform, TouchableOpacity, Pressable, Animated } from 'react-native';
 import { Image } from 'expo-image';
 import { useTheme } from '../../components/ThemeProvider';
 import HeaderLogo from '../../components/ui/HeaderLogo';
@@ -71,10 +71,16 @@ export default function HomeScreen() {
   const [isBrushingTimeVisible, setIsBrushingTimeVisible] = useState(false);
   
   // State for home screen mascot card expansion
-  const [isHomeMascotExpanded, setIsHomeMascotExpanded] = useState(false); // Changed from true to false
+  const [isHomeMascotExpanded, setIsHomeMascotExpanded] = useState(false);
   
+  // A single state to track if any overlay is visible
+  const isOverlayVisible = isChatVisible || isMenuVisible || isTimerVisible || isToothbrushVisible || isStreakVisible || isBrushingTimeVisible;
+
+  // Calculate mountain height for responsive mascot positioning
+  const mountainHeight = height * 0.4;
+
   // Get a random mascot and its positioning
-  const [selectedMascotConfig, setSelectedMascotConfig] = useState(() => getRandomMascotConfig()); // Make it updatable
+  const [selectedMascotConfig, setSelectedMascotConfig] = useState(getRandomMascotConfig);
   
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -85,35 +91,17 @@ export default function HomeScreen() {
   // Font to use for displayed values
   const fontFamily = fontsLoaded ? 'Merienda-Bold' : undefined;
   
-  // Add these console.log lines:
-  const testTranslation = t('common.ok');
-  console.log('[i18n DEBUG] Test Translation for common.ok:', testTranslation);
-  
   // Prepare the greeting text using the translation key
   const greeting = t(selectedMascotConfig.greetingTextKey, { defaultValue: selectedMascotConfig.greetingTextKey });
-  console.log('[i18n DEBUG] Attempted greeting key:', selectedMascotConfig.greetingTextKey);
-  console.log('[i18n DEBUG] Resolved greeting:', greeting);
   
   // Toggle chat overlay visibility
-  const toggleChat = () => {
-    setIsChatVisible(!isChatVisible);
-  };
+  const toggleChat = () => setIsChatVisible(!isChatVisible);
   
   // Handle floating action button press
-  const handleActionButtonPress = () => {
-    // Show timer overlay
-    setIsTimerVisible(true);
-  };
-  
-  // Handle user profile press
-  const handleUserProfilePress = () => {
-    router.push('/settings');
-  };
+  const handleActionButtonPress = () => setIsTimerVisible(true);
   
   // Handle menu button press
-  const handleMenuPress = () => {
-    setIsMenuVisible(true);
-  };
+  const handleMenuPress = () => setIsMenuVisible(true);
   
   // Toggle home mascot card expansion
   const toggleHomeMascotExpansion = () => {
@@ -121,18 +109,15 @@ export default function HomeScreen() {
     setIsHomeMascotExpanded(!isHomeMascotExpanded);
   };
   
-  return (
-    <View style={styles.container}>
-      {/* Home-specific background image */}
+  const screenContent = (
+    <>
       <Image 
         source={AppImages.homescreenBackground}
         style={styles.homeBackgroundImage}
         contentFit="cover"
         cachePolicy="disk"
       />
-      
       <View style={styles.mainContainer}>
-        {/* Smile Header in safe area */}
         <SafeAreaView style={styles.headerContainer}>
           <Pressable
             onPress={handleMenuPress}
@@ -145,21 +130,12 @@ export default function HomeScreen() {
             ]}
           >
             <View style={styles.menuIconContainer}>
-              <MaterialCommunityIcons 
-                name="menu" 
-                size={32} 
-                color="white" 
-              />
+              <MaterialCommunityIcons name="menu" size={32} color="white" />
             </View>
           </Pressable>
           <HeaderLogo />
-          <ChatButton 
-            hasUnreadMessages={hasUnreadMessages}
-            onPress={toggleChat}
-          />
+          <ChatButton hasUnreadMessages={hasUnreadMessages} onPress={toggleChat} />
         </SafeAreaView>
-        
-        {/* Expandable Circular Glassmorphic Card - positioned just below header */}
         <View style={styles.mascotContainer}>
           <ExpandableMascotCard 
             config={selectedMascotConfig}
@@ -174,8 +150,6 @@ export default function HomeScreen() {
             enablePulse={!isHomeMascotExpanded}
           />
         </View>
-        
-        {/* Light Container positioned with top margin to create space below mascot */}
         <View style={styles.contentWrapper}>
           <LightContainer 
             style={{
@@ -185,114 +159,23 @@ export default function HomeScreen() {
               paddingTop: 24,
               paddingBottom: insets.bottom > 0 ? insets.bottom : 24,
               flex: 0,
-              zIndex: 25, // Keep it consistently above other elements
+              zIndex: 25,
             }}
           >
-            {/* Streak Days Card */}
-            <StreakCard 
-              streakDays={7} 
-              fontFamily={fontFamily} 
-              onPress={() => setIsStreakVisible(true)}
-            />
-            
-            {/* Average Brushing Time Card */}
-            <BrushingTimeCard 
-              minutes={2}
-              seconds={30}
-              fontFamily={fontFamily}
-              onPress={() => setIsBrushingTimeVisible(true)}
-            />
-            
-            {/* Right Side Card (Toothbrush Card) */}
-            <ToothbrushCard 
-              daysInUse={45}
-              fontFamily={fontFamily}
-              onPress={() => setIsToothbrushVisible(true)}
-            />
-            
-            {/* Add medium spacer */}
+            <StreakCard streakDays={7} fontFamily={fontFamily} onPress={() => setIsStreakVisible(true)} />
+            <BrushingTimeCard minutes={2} seconds={30} fontFamily={fontFamily} onPress={() => setIsBrushingTimeVisible(true)} />
+            <ToothbrushCard daysInUse={45} fontFamily={fontFamily} onPress={() => setIsToothbrushVisible(true)} />
             <View style={styles.spacer} />
-            
-            {/* Calendar View */}
-            <CalendarView 
-              selectedDate={selectedDate}
-              onDateChange={(date) => {
-                setSelectedDate(date);
-              }}
-            />
+            <CalendarView selectedDate={selectedDate} onDateChange={setSelectedDate} />
           </LightContainer>
         </View>
-        
-        {/* Chat Overlay */}
-        <ChatOverlay 
-          isVisible={isChatVisible}
-          onClose={() => setIsChatVisible(false)}
-        />
-        
-        {/* Menu Overlay */}
-        <MenuOverlay
-          isVisible={isMenuVisible}
-          onClose={() => setIsMenuVisible(false)}
-        />
-        
-        {/* Timer Overlay */}
-        <TimerOverlay
-          isVisible={isTimerVisible}
-          onClose={() => {
-            setIsTimerVisible(false); // Hide the overlay
-          }}
-          onNavigateToResults={() => {
-            // First, hide the overlay.
-            setIsTimerVisible(false);
-            
-            // Then, navigate to the results screen.
-            // Using requestAnimationFrame ensures the state update happens before navigation.
-            requestAnimationFrame(() => {
-              router.push('./BrushingResultsScreen');
-            });
-          }}
-        />
-        
-        {/* Toothbrush Overlay */}
-        <ToothbrushOverlay
-          isVisible={isToothbrushVisible}
-          onClose={() => setIsToothbrushVisible(false)}
-          daysInUse={45}
-        />
-        
-        {/* Streak Overlay */}
-        <StreakOverlay
-          isVisible={isStreakVisible}
-          onClose={() => setIsStreakVisible(false)}
-          streakDays={7}
-        />
-        
-        {/* BrushingTime Overlay */}
-        <BrushingTimeOverlay
-          isVisible={isBrushingTimeVisible}
-          onClose={() => setIsBrushingTimeVisible(false)}
-          minutes={2}
-          seconds={30}
-        />
-        
-        {/* Floating Action Button */}
-        <TouchableOpacity 
-          style={styles.floatingActionButton}
-          onPress={handleActionButtonPress}
-          activeOpacity={0.8}
-        >
-          <LinearGradient
-            colors={[theme.colors.primary[500], theme.colors.primary[600]]}
-            style={styles.gradientButton}
-          >
-            <MaterialCommunityIcons name="tooth" size={36} color="white" />
-          </LinearGradient>
-        </TouchableOpacity>
       </View>
-      
-      {/* Bottom left mascot with card above it */}
-      <View style={styles.bottomLeftMascot}>
-        {/* Card above mascot */}
+      <TouchableOpacity style={styles.floatingActionButton} onPress={handleActionButtonPress} activeOpacity={0.8}>
+        <LinearGradient colors={[theme.colors.primary[500], theme.colors.primary[600]]} style={styles.gradientButton}>
+          <MaterialCommunityIcons name="tooth" size={36} color="white" />
+        </LinearGradient>
+      </TouchableOpacity>
+      <View style={[styles.bottomLeftMascot, { bottom: mountainHeight * 0.25 }]}>
         <View style={styles.mascotCard}>
           <BlurView intensity={70} tint="light" style={styles.cardBlur}>
             <View style={styles.progressBar}>
@@ -300,20 +183,48 @@ export default function HomeScreen() {
             </View>
           </BlurView>
         </View>
-        <Image 
-          source={require('../../assets/mascot/nubo-bag-1.png')}
-          style={styles.mascotImage}
-          resizeMode="contain"
-        />
+        <Image source={require('../../assets/mascot/nubo-bag-1.png')} style={styles.mascotImage} resizeMode="contain" />
       </View>
-
-      {/* Mountain Image - now using preloaded asset */}
       <Image 
-        source={AppImages.mountain1}
-        style={styles.mountainImage}
-        contentFit="contain"
-        cachePolicy="disk"
+        source={AppImages.mountain1} 
+        style={[styles.mountainImage, { bottom: -insets.bottom - 10 }]} 
+        contentFit="contain" 
+        cachePolicy="disk" 
       />
+    </>
+  );
+
+  return (
+    <View style={styles.container}>
+      <Animated.View 
+        style={[
+          styles.container,
+          {
+            opacity: isOverlayVisible ? 0.6 : 1,
+          }
+        ]}
+        pointerEvents={isOverlayVisible ? 'none' : 'auto'}
+      >
+        {screenContent}
+      </Animated.View>
+      
+      {isOverlayVisible && (
+        <>
+          <ChatOverlay isVisible={isChatVisible} onClose={() => setIsChatVisible(false)} />
+          <MenuOverlay isVisible={isMenuVisible} onClose={() => setIsMenuVisible(false)} />
+          <TimerOverlay
+            isVisible={isTimerVisible}
+            onClose={() => setIsTimerVisible(false)}
+            onNavigateToResults={() => {
+              setIsTimerVisible(false);
+              requestAnimationFrame(() => router.push('./BrushingResultsScreen'));
+            }}
+          />
+          <ToothbrushOverlay isVisible={isToothbrushVisible} onClose={() => setIsToothbrushVisible(false)} daysInUse={45} />
+          <StreakOverlay isVisible={isStreakVisible} onClose={() => setIsStreakVisible(false)} streakDays={7} />
+          <BrushingTimeOverlay isVisible={isBrushingTimeVisible} onClose={() => setIsBrushingTimeVisible(false)} minutes={2} seconds={30} />
+        </>
+      )}
     </View>
   );
 }
@@ -328,7 +239,7 @@ const styles = StyleSheet.create({
     height: '100%',
     left: 0,
     top: 0,
-    zIndex: 0, // Ensure it is in the background
+    zIndex: 0,
   },
   mainContainer: {
     flex: 1,
@@ -347,25 +258,24 @@ const styles = StyleSheet.create({
   },
   mascotContainer: {
     position: 'absolute',
-    top: 145, // Increased from 100 to move it further down
+    top: 145,
     width: '100%',
     zIndex: 5,
-    alignItems: 'center', // Changed from flex-start to center for horizontal centering
+    alignItems: 'center',
   },
   contentWrapper: {
     position: 'absolute',
     width: '100%',
-    top: 200, // Adjusted to accommodate new mascot position
-    marginTop: 100, // Add 100px margin below mascot
+    top: 200,
+    marginTop: 100,
     zIndex: 20,
   },
   spacer: {
-    height: 100, // Reduced spacer height to bring calendar higher
+    height: 100,
   },
   bottomLeftMascot: {
     position: 'absolute',
-    bottom: 95,
-    left: 20,
+    left: '5%',
     width: 100,
     height: 100,
     zIndex: 1001,
@@ -393,7 +303,7 @@ const styles = StyleSheet.create({
   },
   mascotCard: {
     position: 'absolute',
-    top: -35,
+    top: -25,
     left: 0,
     width: 100,
     borderRadius: 12,
@@ -424,21 +334,20 @@ const styles = StyleSheet.create({
   },
   mountainImage: {
     position: 'absolute',
-    bottom: 0,
     left: 0,
     right: 0,
     width: '100%',
-    height: height * 0.4, // Adjust height as needed
-    zIndex: 20, // Ensure it is above the light container but below other elements
+    height: height * 0.4,
+    zIndex: 20,
   },
   floatingActionButton: {
     position: 'absolute',
     bottom: 45,
     left: '50%',
-    marginLeft: -35, // Half of width to center properly
-    width: 70, // Slightly smaller
-    height: 70, // Slightly smaller
-    borderRadius: 35, // Half of width/height
+    marginLeft: -35,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
@@ -451,7 +360,7 @@ const styles = StyleSheet.create({
   gradientButton: {
     width: '100%',
     height: '100%',
-    borderRadius: 35, // Half of width/height
+    borderRadius: 35,
     justifyContent: 'center',
     alignItems: 'center',
   },
