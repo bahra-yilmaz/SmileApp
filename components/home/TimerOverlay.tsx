@@ -20,6 +20,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import TimerCircle from './TimerCircle';
 import SongMenu from './SongMenu';
+import * as Haptics from 'expo-haptics';
+import { Audio } from 'expo-av';
 
 interface OverlayProps {
   isVisible: boolean;
@@ -37,6 +39,16 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
   const [animationComplete, setAnimationComplete] = useState(false);
   const [isInteractionActive, setIsInteractionActive] = useState(false);
   const currentGestureMaxDy = useRef(0); // To store max dy during the current gesture
+  
+  // Timer state - lifted up from TimerCircle
+  const [isRunning, setIsRunning] = useState(false);
+  const [minutes, setMinutes] = useState(2); // Standard 2 minutes
+  const [seconds, setSeconds] = useState(0);
+  const [hasCompleted, setHasCompleted] = useState(false);
+  const [isOvertime, setIsOvertime] = useState(false);
+  const [overtimeCounter, setOvertimeCounter] = useState(0);
+  const timerRef = useRef<NodeJS.Timeout | number | null>(null);
+  const initialTimeInSeconds = useRef(2 * 60);
   
   // Get safe area insets for proper positioning
   const insets = useSafeAreaInsets();
@@ -95,6 +107,8 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
           (easedProgressAtRelease > velocityAssistedCloseThreshold && velocity > minVelocity);
         
         if (shouldClose) {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+          setIsRunning(false); // Stop timer when closing
           Animated.parallel([
             Animated.timing(expandAnim, {
               toValue: 0,
@@ -127,12 +141,17 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
   
   useEffect(() => {
     if (isVisible) {
+      // When the overlay becomes visible, reset the timer to its initial state
+      // This ensures a fresh start every time, unless we want to preserve state across closes
+      resetTimer(false); // Reset without haptics
+      
       // Animation and state resets for when overlay becomes visible
       setAnimationComplete(true);
       gestureAnim.setValue(0); // Reset gesture animation
       transitioningContentOpacity.setValue(1);
       setIsInteractionActive(true);
       expandAnim.setValue(0); // Reset to zero first
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       Animated.timing(expandAnim, {
         toValue: 1,
         duration: 400,
@@ -149,12 +168,14 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
   
   // Function to handle close button press with animation
   const handleClosePress = () => {
+    setIsRunning(false); // Stop timer
     setIsInteractionActive(true); // Interaction starts with button press
     // Ensure gestureAnim is at 0 if the button is pressed directly,
     // so it doesn't interfere with expandAnim driving the main fade-out.
     gestureAnim.setValue(0);
 
     // Animate expandAnim to 0 to mirror the opening animation
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Animated.timing(expandAnim, {
       toValue: 0, // Animate fully to 0
       duration: 300, // Was 400ms
@@ -165,6 +186,105 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
     });
   };
   
+  // Timer logic, moved from TimerCircle
+  useEffect(() => {
+    if (isRunning) {
+      timerRef.current = setInterval(() => {
+        if (isOvertime) {
+          // Overtime counting logic
+          setOvertimeCounter(c => {
+            const newCount = c + 1;
+            // Stop at 3 minutes of overtime (5 minutes total)
+            if (newCount >= 180) {
+              setIsRunning(false);
+            }
+            return newCount;
+          });
+        } else {
+          // Normal countdown logic
+          setSeconds(s => {
+            if (s > 0) return s - 1;
+            
+            setMinutes(m => {
+              if (m > 0) return m - 1;
+
+              // Timer reaches 00:00 - Goal Met
+              setHasCompleted(true);
+              triggerCompletionHaptics();
+              playSound().catch(error => console.log("Error playing sound:", error)); // Play sound and log error if it fails
+              setIsOvertime(true); // Switch to overtime mode
+              // Do NOT set isRunning to false here, let it keep running
+              return 0;
+            });
+            
+            return 59; // Reset seconds to 59 when minute ticks over
+          });
+        }
+      }, 1000);
+    } else if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [isRunning, isOvertime]); // Add isOvertime to dependency array
+
+  const triggerCompletionHaptics = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    setTimeout(() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy), 150);
+  };
+  
+  const playSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(
+       require('../../assets/sounds/success.mp3')
+    );
+    await sound.playAsync();
+  }
+
+  const resetTimer = (withHaptics = true) => {
+    if (withHaptics) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+    if (timerRef.current) clearInterval(timerRef.current);
+    setIsRunning(false);
+    setMinutes(2);
+    setSeconds(0);
+    setHasCompleted(false);
+    setIsOvertime(false);
+    setOvertimeCounter(0);
+  };
+  
+  const handleStartPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    if (isRunning) {
+      // This is a "Restart" action
+      resetTimer();
+    } else {
+      // This is a "Start" action
+      if (hasCompleted) {
+        // If starting after a full run, reset completely first
+        resetTimer(false); 
+      }
+      setIsRunning(true);
+    }
+  };
+  
+  // Handler for the "Brushed/Done" button
+  const handleBrushedPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (isRunning) {
+      // If timer is running, this is "Done"
+      resetTimer(false); // Stop and reset
+      handleInitiateNavigateToResults();
+    } else {
+      // If timer is not running, this is "Brushed"
+      // We can decide what this should do - for now, let's just navigate
+      handleInitiateNavigateToResults();
+    }
+  };
+
   // If not visible and animation is complete, don't render anything
   if (!isVisible && !animationComplete) return null;
   
@@ -256,7 +376,18 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
           pointerEvents="box-none"
         >
           {/* Timer Circle Component */}
-          <TimerCircle onBrushedPress={handleInitiateNavigateToResults} />
+          <TimerCircle 
+            minutes={minutes}
+            seconds={seconds}
+            isRunning={isRunning}
+            hasCompleted={hasCompleted}
+            isOvertime={isOvertime}
+            overtimeCounter={overtimeCounter}
+            initialTimeInSeconds={initialTimeInSeconds.current}
+            onStartPress={handleStartPress}
+            onBrushedPress={handleBrushedPress}
+            onResetPress={() => resetTimer()}
+          />
         </Animated.View>
       )}
       
