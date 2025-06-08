@@ -8,6 +8,7 @@ import { LANGUAGES, LanguageItem } from '../../services/languageConfig';
 import { useFonts } from 'expo-font';
 import { GlassmorphicCard } from '../../components/ui/GlassmorphicCard';
 import PrimaryButton from '../../components/ui/PrimaryButton';
+import * as Haptics from 'expo-haptics';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - (Theme.spacing.lg * 2) - Theme.spacing.md) / 2;
@@ -29,10 +30,12 @@ export default function LanguageSelectScreen() {
     await i18n.changeLanguage(langCode);
     // Update selected language
     setSelectedLanguage(langCode);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }, [i18n]);
 
   const handleContinue = useCallback(() => {
     // Fade out this screen
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 200,

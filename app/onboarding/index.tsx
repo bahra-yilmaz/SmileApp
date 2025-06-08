@@ -18,6 +18,7 @@ import Reanimated, {
   withDelay,
 } from 'react-native-reanimated';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - (Theme.spacing.lg * 2) - Theme.spacing.md) / 2;
@@ -89,6 +90,7 @@ export default function OnboardingWelcome() {
       checkmarkScale.value = withDelay(300, withTiming(1, { duration: 500, easing: Easing.elastic(1) }));
       // Reveal Circle 2
       circle2Opacity.value = withDelay(500, withTiming(1, { duration: 400 }));
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } else {
       // Reset Circle 1 to initial unfilled state
       circle1BackgroundColor.value = withTiming('transparent', { duration: 300 });
@@ -111,6 +113,7 @@ export default function OnboardingWelcome() {
       if (!isCheckpoint3Done) { 
         circle3Opacity.value = withDelay(500, withTiming(1, { duration: 400 }));
       }
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } else {
       circle2BackgroundColor.value = withTiming('transparent', { duration: 300 });
       circle2BorderWidth.value = withTiming(2, { duration: 300 });
@@ -132,6 +135,7 @@ export default function OnboardingWelcome() {
       checkmark3Opacity.value = withDelay(300, withTiming(1, { duration: 400, easing: Easing.out(Easing.quad) }));
       checkmark3Scale.value = withDelay(300, withTiming(1, { duration: 500, easing: Easing.elastic(1) }));
       setIsContinueButtonEnabled(true);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } else {
       circle3BackgroundColor.value = withTiming('transparent', { duration: 300 });
       circle3BorderWidth.value = withTiming(2, { duration: 300 });
@@ -197,10 +201,12 @@ export default function OnboardingWelcome() {
     await i18n.changeLanguage(langCode);
     // Update selected language
     setSelectedLanguage(langCode);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }, [i18n]);
 
   const handleContinue = useCallback(() => {
     // Fade out this screen
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 200,

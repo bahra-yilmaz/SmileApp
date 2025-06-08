@@ -9,6 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import PrimaryButton from '../ui/PrimaryButton';
 import { useTranslation } from 'react-i18next';
+import * as Haptics from 'expo-haptics';
 
 const TOOTHBRUSH_DURATION_KEY = 'toothbrush_duration';
 
@@ -38,6 +39,7 @@ export default function ToothbrushDurationScreen({
   const { t } = useTranslation();
   const [selectedDuration, setSelectedDuration] = useState<number>(2); // Default to 3-4 weeks
   const flatListRef = useRef<FlatList>(null);
+  const lastHapticIndex = useRef<number | null>(null);
   const insets = useSafeAreaInsets();
   
   // Load fonts
@@ -102,6 +104,7 @@ export default function ToothbrushDurationScreen({
       // If this is the last screen, mark onboarding as completed
       await OnboardingService.markOnboardingAsCompleted();
     }
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     router.push(nextScreenPath as any);
   };
 
@@ -150,13 +153,24 @@ export default function ToothbrushDurationScreen({
     index,
   });
 
-  const onScroll = (event: any) => {
+  const onMomentumScrollEnd = (event: any) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
     const index = Math.round(scrollPosition / ITEM_HEIGHT);
     const option = DURATION_OPTIONS[index];
-    
+
     if (option !== undefined && option.value !== selectedDuration) {
       setSelectedDuration(option.value);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+  };
+
+  const onScroll = (event: any) => {
+    const scrollPosition = event.nativeEvent.contentOffset.y;
+    const index = Math.round(scrollPosition / ITEM_HEIGHT);
+
+    if (index >= 0 && index < DURATION_OPTIONS.length && index !== lastHapticIndex.current) {
+      lastHapticIndex.current = index;
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
   };
 
@@ -216,7 +230,9 @@ export default function ToothbrushDurationScreen({
           snapToInterval={ITEM_HEIGHT}
           decelerationRate="fast"
           getItemLayout={getItemLayout}
-          onMomentumScrollEnd={onScroll}
+          onMomentumScrollEnd={onMomentumScrollEnd}
+          onScroll={onScroll}
+          scrollEventThrottle={16}
           style={styles.durationList}
           contentContainerStyle={{
             paddingVertical: (VISIBLE_ITEMS - 1) * ITEM_HEIGHT / 2,

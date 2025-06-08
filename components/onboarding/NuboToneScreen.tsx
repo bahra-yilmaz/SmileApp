@@ -9,6 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import PrimaryButton from '../ui/PrimaryButton';
 import { useTranslation } from 'react-i18next';
+import * as Haptics from 'expo-haptics';
 
 const NUBO_TONE_KEY = 'nubo_tone';
 
@@ -94,10 +95,12 @@ export default function NuboToneScreen({
       // If this is the last screen, mark onboarding as completed
       await OnboardingService.markOnboardingAsCompleted();
     }
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     router.push(nextScreenPath as any);
   };
 
   const handleSelectTone = (toneId: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (selectedTone && selectedTone !== toneId) {
       Animated.timing(scaleAnims[selectedTone], {
         toValue: 1,

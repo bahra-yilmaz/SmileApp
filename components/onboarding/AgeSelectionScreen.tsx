@@ -9,6 +9,7 @@ import { useFonts } from 'expo-font';
 import PrimaryButton from '../ui/PrimaryButton';
 import SecondaryButton from '../ui/SecondaryButton';
 import { useTranslation } from 'react-i18next';
+import * as Haptics from 'expo-haptics';
 
 const USER_AGE_KEY = 'user_age';
 
@@ -37,6 +38,7 @@ export default function AgeSelectionScreen({
   const { t } = useTranslation();
   const [selectedAge, setSelectedAge] = useState<number>(24); // Default to 19-29 range
   const flatListRef = useRef<FlatList>(null);
+  const lastHapticIndex = useRef<number | null>(null);
   const insets = useSafeAreaInsets();
   
   // Load fonts
@@ -151,13 +153,26 @@ export default function AgeSelectionScreen({
     index,
   });
 
-  const onScroll = (event: any) => {
+  const onMomentumScrollEnd = (event: any) => {
     const scrollPosition = event.nativeEvent.contentOffset.y;
     const index = Math.round(scrollPosition / ITEM_HEIGHT);
     const age = AGES[index];
     
     if (age !== undefined && age.value !== selectedAge) {
       setSelectedAge(age.value);
+      // Add a medium-impact haptic for selection confirmation
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+  };
+
+  const onScroll = (event: any) => {
+    const scrollPosition = event.nativeEvent.contentOffset.y;
+    const index = Math.round(scrollPosition / ITEM_HEIGHT);
+
+    // Trigger a light-impact haptic every time the wheel passes over a new item
+    if (index >= 0 && index < AGES.length && index !== lastHapticIndex.current) {
+      lastHapticIndex.current = index;
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
   };
 
@@ -217,7 +232,9 @@ export default function AgeSelectionScreen({
           snapToInterval={ITEM_HEIGHT}
           decelerationRate="fast"
           getItemLayout={getItemLayout}
-          onMomentumScrollEnd={onScroll}
+          onMomentumScrollEnd={onMomentumScrollEnd}
+          onScroll={onScroll}
+          scrollEventThrottle={16}
           style={styles.ageList}
           contentContainerStyle={{
             paddingVertical: (VISIBLE_ITEMS - 1) * ITEM_HEIGHT / 2,
