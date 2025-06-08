@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { 
   View, 
   StyleSheet, 
@@ -48,8 +48,8 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   const { activeColors } = theme;
   
   // Animation values for container
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.95)).current;
+  const [fadeAnim] = useState(() => new Animated.Value(0));
+  const [scaleAnim] = useState(() => new Animated.Value(0.95));
   
   // State to track if animation is completed
   const [animationComplete, setAnimationComplete] = useState(false);

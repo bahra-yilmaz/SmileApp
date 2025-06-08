@@ -3,7 +3,7 @@
  * Closes simultaneously with scrolling gesture.
  */
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { 
   View, 
   StyleSheet,
@@ -28,10 +28,10 @@ interface OverlayProps {
 }
 
 export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNavigateToResults }) => {
-  // Animation values
-  const expandAnim = useRef(new Animated.Value(0)).current;
-  const gestureAnim = useRef(new Animated.Value(0)).current;
-  const transitioningContentOpacity = useRef(new Animated.Value(1)).current;
+  // Animation values - Use useState with lazy initializer for React 19 compatibility
+  const [expandAnim] = useState(() => new Animated.Value(0));
+  const [gestureAnim] = useState(() => new Animated.Value(0));
+  const [transitioningContentOpacity] = useState(() => new Animated.Value(1));
   
   // Track animation completion and current gesture value
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -57,8 +57,8 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
   const minVelocity = 0.5; // Minimum velocity to consider for quick flick gestures
   const velocityAssistedCloseThreshold = 0.04; // Raw scroll progress for flicks (~4%).
   
-  // Configure pan responder for scrolling gesture - REVERT TO useRef
-  const panResponder = useRef(
+  // Configure pan responder for scrolling gesture - React 19 compatible
+  const [panResponder] = useState(() => 
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onStartShouldSetPanResponderCapture: (_, gestureState) => {
@@ -123,7 +123,7 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
         }
       }
     })
-  ).current;
+  );
   
   useEffect(() => {
     if (isVisible) {
@@ -214,15 +214,17 @@ export const TimerOverlay: React.FC<OverlayProps> = ({ isVisible, onClose, onNav
   // Multiply base content opacity with the transitioning opacity
   const finalContentOpacity = Animated.multiply(baseContentOpacity, transitioningContentOpacity);
 
-  // Handler to initiate navigation: fade out content, then call original onNavigateToResults
+  // Handler to initiate navigation: immediate navigation for React 19 compatibility
   const handleInitiateNavigateToResults = () => {
+    // Fade out content
     Animated.timing(transitioningContentOpacity, {
       toValue: 0,
-      duration: 100, // Was 200ms, for a quicker content fade before navigation
+      duration: 100,
       useNativeDriver: true,
-    }).start(() => {
-      onNavigateToResults(); // Call original prop to navigate
-    });
+    }).start();
+    
+    // Navigate immediately instead of waiting for animation
+    onNavigateToResults();
   };
 
   return (

@@ -2,7 +2,7 @@
  * ChatOverlay component for displaying chat functionality in the home screen.
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, Image, Text, Dimensions, Animated, TouchableWithoutFeedback, TextInput, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -81,11 +81,9 @@ export const ChatOverlay: React.FC<ChatOverlayProps> = ({ isVisible, onClose }) 
   const [isConversationMode, setIsConversationMode] = useState(false);
   
   // Animation values for container
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.95)).current;
-  
-  // Animation values for transition between modes
-  const modeAnim = useRef(new Animated.Value(0)).current;
+  const [fadeAnim] = useState(() => new Animated.Value(0));
+  const [scaleAnim] = useState(() => new Animated.Value(0.95));
+  const [modeAnim] = useState(() => new Animated.Value(0));
   
   // Load Merienda font for header
   const [fontsLoaded] = useFonts({

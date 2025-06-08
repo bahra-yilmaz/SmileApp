@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, AppState, Animated, Easing } from 'react-native';
 import { useTheme } from '../ThemeProvider';
 import Svg, { Circle } from 'react-native-svg';
@@ -35,7 +35,7 @@ const TimerCircle: React.FC<TimerCircleProps> = ({
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(initialSeconds);
   const [progress, setProgress] = useState(initialProgress);
-  const animatedProgressValue = useRef(new Animated.Value(initialProgress)).current;
+  const [animatedProgressValue] = useState(() => new Animated.Value(initialProgress));
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const appState = useRef(AppState.currentState);
   const totalInitialTimeInSeconds = useRef(initialMinutes * 60 + initialSeconds);

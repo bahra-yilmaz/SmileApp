@@ -9,6 +9,7 @@ import SplashScreen from '../components/SplashScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import i18nInstance from '../services/i18n';
 import { I18nextProvider } from 'react-i18next';
+import { enableFreeze } from 'react-native-screens';
 
 // Get dimensions for background
 const { width, height } = Dimensions.get('window');
@@ -17,6 +18,9 @@ const { width, height } = Dimensions.get('window');
 preventAutoHideAsync().catch(() => {
   /* ignore error */
 });
+
+// Enable react-freeze for automatic screen state management
+enableFreeze(true);
 
 export default function RootLayout() {
   // State to track if splash screen should be shown

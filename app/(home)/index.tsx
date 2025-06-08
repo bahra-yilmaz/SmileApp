@@ -230,14 +230,17 @@ export default function HomeScreen() {
         <TimerOverlay
           isVisible={isTimerVisible}
           onClose={() => {
-            router.push('/(home)'); // Navigate to home screen
             setIsTimerVisible(false); // Hide the overlay
           }}
           onNavigateToResults={() => {
-            router.push('./BrushingResultsScreen');
-            setTimeout(() => {
-              setIsTimerVisible(false);
-            }, 300);
+            // First, hide the overlay.
+            setIsTimerVisible(false);
+            
+            // Then, navigate to the results screen.
+            // Using requestAnimationFrame ensures the state update happens before navigation.
+            requestAnimationFrame(() => {
+              router.push('./BrushingResultsScreen');
+            });
           }}
         />
         

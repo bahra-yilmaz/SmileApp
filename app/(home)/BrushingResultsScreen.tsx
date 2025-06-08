@@ -40,16 +40,16 @@ const BrushingResultsScreen = () => {
   const [pointsCardView, setPointsCardView] = useState<'default' | 'details'>('default');
   const [bonusCardView, setBonusCardView] = useState<'default' | 'details'>('default');
 
-  // Animation values for card content switching
-  const pointsCardAnim = useRef(new Animated.Value(1)).current;
-  const pointsCardScale = useRef(new Animated.Value(1)).current;
-  const bonusCardAnim = useRef(new Animated.Value(1)).current;
-  const bonusCardScale = useRef(new Animated.Value(1)).current;
+  // Animation values for card content switching - React 19 compatible
+  const [pointsCardAnim] = useState(() => new Animated.Value(1));
+  const [pointsCardScale] = useState(() => new Animated.Value(1));
+  const [bonusCardAnim] = useState(() => new Animated.Value(1));
+  const [bonusCardScale] = useState(() => new Animated.Value(1));
 
-  // Animation values
-  const screenAppearAnim = useRef(new Animated.Value(1)).current; // Start at 1 for immediate background visibility
-  const contentAppearAnim = useRef(new Animated.Value(0)).current; // Content fades in slowly
-  const gestureAnim = useRef(new Animated.Value(0)).current;    // 0 = no gesture, 1 = full gesture
+  // Animation values - React 19 compatible
+  const [screenAppearAnim] = useState(() => new Animated.Value(1)); // Start at 1 for immediate background visibility
+  const [contentAppearAnim] = useState(() => new Animated.Value(0)); // Content fades in slowly
+  const [gestureAnim] = useState(() => new Animated.Value(0));    // 0 = no gesture, 1 = full gesture
   const currentGestureValue = useRef(0);
 
   // State to control final rendering

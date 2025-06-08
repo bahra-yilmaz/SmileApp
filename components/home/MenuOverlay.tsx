@@ -2,7 +2,7 @@
  * MenuOverlay component for displaying menu functionality in the home screen.
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Pressable, Text, Dimensions, Animated, TouchableWithoutFeedback, Platform, KeyboardAvoidingView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -84,8 +84,8 @@ export const MenuOverlay: React.FC<MenuOverlayProps> = ({ isVisible, onClose }) 
   const [animationComplete, setAnimationComplete] = useState(false);
   
   // Animation values for container
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.95)).current;
+  const [fadeAnim] = useState(() => new Animated.Value(0));
+  const [scaleAnim] = useState(() => new Animated.Value(0.95));
   
   // Load Merienda font for header
   const [fontsLoaded] = useFonts({

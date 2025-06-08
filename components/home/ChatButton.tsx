@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet, Pressable, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -16,7 +16,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
   const insets = useSafeAreaInsets();
   
   // Animation for badge pulsing
-  const badgePulse = useRef(new Animated.Value(1)).current;
+  const [badgePulse] = useState(() => new Animated.Value(1));
   
   // Setup badge pulsing animation
   useEffect(() => {
