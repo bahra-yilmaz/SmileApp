@@ -22,16 +22,15 @@ export type NonPpMascotVariant =
   | 'nubo-cool-1'
   | 'nubo-cool-3'
   | 'nubo-cool-4'
-  | 'nubo-cool-5';
-
-// Combined type for general use, e.g., in the Mascot component itself
-export type MascotVariant = 
-  | 'nubo-welcoming-1'
+  | 'nubo-cool-5'
   | 'nubo-happy-1'
   | 'nubo-daily-brush-1'
   | 'nubo-success-1'
   | 'nubo-sad-1'
   | 'nubo-bag-1';
+
+// Combined type for general use, e.g., in the Mascot component itself
+export type MascotVariant = PpMascotVariant | NonPpMascotVariant;
 
 export interface MascotPositioning {
   translateX: number;

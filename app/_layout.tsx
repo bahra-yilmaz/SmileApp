@@ -56,7 +56,7 @@ export default function RootLayout() {
     prepareApp();
   }, []);
 
-  const appReady = (fontsLoaded || error) && assetsLoaded;
+  const appReady = !!((fontsLoaded || error) && assetsLoaded);
 
   // Handle when assets loaded and splash can be hidden
   useEffect(() => {
@@ -67,11 +67,6 @@ export default function RootLayout() {
       });
     }
   }, [appReady]);
-
-  // Handle splash screen finish
-  const handleSplashFinish = () => {
-    setShowSplash(false);
-  };
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -87,7 +82,12 @@ export default function RootLayout() {
           <Slot />
           
           {/* Show custom splash screen until fonts are loaded, then trigger fade out */}
-          {(showSplash || !appReady) && <SplashScreen onFinish={handleSplashFinish} />}
+          {showSplash && (
+            <SplashScreen
+              isAppReady={appReady}
+              onFinish={() => setShowSplash(false)}
+            />
+          )}
         </ThemeProvider>
       </I18nextProvider>
     </GestureHandlerRootView>

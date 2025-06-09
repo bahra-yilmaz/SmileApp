@@ -136,12 +136,15 @@ export default function HomeScreen() {
           <HeaderLogo />
           <ChatButton hasUnreadMessages={hasUnreadMessages} onPress={toggleChat} />
         </SafeAreaView>
-        <View style={styles.mascotContainer}>
+        <Pressable 
+          style={styles.mascotContainer}
+          onPress={!isHomeMascotExpanded ? toggleHomeMascotExpansion : undefined}
+        >
           <ExpandableMascotCard 
             config={selectedMascotConfig}
             greetingText={greeting}
             isExpanded={isHomeMascotExpanded}
-            onPress={toggleHomeMascotExpansion}
+            onPress={() => {}}
             onPressWhenExpanded={() => {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
               setSelectedMascotConfig(getRandomMascotConfig());
@@ -149,7 +152,7 @@ export default function HomeScreen() {
             }}
             enablePulse={!isHomeMascotExpanded}
           />
-        </View>
+        </Pressable>
         <View style={styles.contentWrapper}>
           <LightContainer 
             style={{
