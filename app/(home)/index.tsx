@@ -74,21 +74,10 @@ export default function HomeScreen() {
   // State for home screen mascot card expansion
   const [isHomeMascotExpanded, setIsHomeMascotExpanded] = useState(false);
   
-  // State to track if we've already processed the first visit
-  const [hasCheckedFirstVisit, setHasCheckedFirstVisit] = useState(false);
-  
   // Check if this is the first visit after onboarding
   useEffect(() => {
-    // Only check once and add a delay to ensure proper navigation state
-    if (!hasCheckedFirstVisit) {
-      const timeout = setTimeout(() => {
-        checkFirstVisit();
-        setHasCheckedFirstVisit(true);
-      }, 500); // Longer delay to ensure navigation is stable
-
-      return () => clearTimeout(timeout);
-    }
-  }, [hasCheckedFirstVisit]);
+    checkFirstVisit();
+  }, []);
   
   const checkFirstVisit = async () => {
     try {

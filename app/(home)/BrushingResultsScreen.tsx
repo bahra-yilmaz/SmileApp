@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions, Pressable, Animated } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import { useRouter } from 'expo-router';
@@ -13,8 +13,7 @@ import { Colors } from '../../constants/Colors';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import ConfirmModal from '../../components/modals/ConfirmModal';
 import { useTranslation } from 'react-i18next';
-import { BlurView } from 'expo-blur';
-import MascotProgressBar from '../../components/ui/MascotProgressBar';
+import { eventBus } from '../../utils/EventBus';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -23,196 +22,126 @@ const BrushingResultsScreen = () => {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
+  
+  // State for animations and modal visibility. Start fadeAnim at 0 (invisible).
+  const [fadeAnim] = useState(() => new Animated.Value(0));
+  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false);
+
+  // Add a useEffect to run the fade-in animation on mount
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300, // A nice, smooth fade-in
+      useNativeDriver: true,
+    }).start();
+  }, []); // Empty dependency array ensures this runs only once on mount
+
+  // --- NAVIGATION HANDLERS ---
+  const handleNavigateHome = () => {
+    eventBus.emit('close-timer');
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 400,
+      useNativeDriver: true,
+    }).start(() => router.back());
+  };
+
+  const handleConfirmRevert = () => {
+    setIsConfirmModalVisible(false);
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => router.back());
+  };
 
   const [fontsLoaded] = useFonts({
     'Merienda-Bold': require('../../assets/fonts/Merienda-Bold.ttf'),
     'Quicksand-Medium': require('../../assets/fonts/Quicksand-Medium.ttf'),
   });
 
-  // Card view states
+  // Card view states and animations
   const [pointsCardView, setPointsCardView] = useState<'default' | 'details'>('default');
   const [bonusCardView, setBonusCardView] = useState<'default' | 'details'>('default');
-
-  // Animation values for card content switching
   const [pointsCardAnim] = useState(() => new Animated.Value(1));
   const [pointsCardScale] = useState(() => new Animated.Value(1));
   const [bonusCardAnim] = useState(() => new Animated.Value(1));
   const [bonusCardScale] = useState(() => new Animated.Value(1));
-
-  // Simple screen fade animation
-  const [screenOpacity] = useState(() => new Animated.Value(0));
   
-  // Modal state
-  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false);
+  const handleOpenConfirmModal = () => setIsConfirmModalVisible(true);
+  const handleCancelRevert = () => setIsConfirmModalVisible(false);
+  const handleShare = () => console.log('Share button pressed');
 
   // Card content switching handlers
   const handlePointsCardPress = () => {
     const newView = pointsCardView === 'default' ? 'details' : 'default';
-    
     Animated.parallel([
-      Animated.timing(pointsCardAnim, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.timing(pointsCardScale, {
-        toValue: 0.95,
-        duration: 250,
-        useNativeDriver: true,
-      }),
+      Animated.timing(pointsCardAnim, { toValue: 0, duration: 250, useNativeDriver: true }),
+      Animated.timing(pointsCardScale, { toValue: 0.95, duration: 250, useNativeDriver: true }),
     ]).start(() => {
       setPointsCardView(newView);
       Animated.parallel([
-        Animated.spring(pointsCardAnim, {
-          toValue: 1,
-          friction: 6,
-          tension: 80,
-          useNativeDriver: true,
-        }),
-        Animated.spring(pointsCardScale, {
-          toValue: 1,
-          friction: 6,
-          tension: 80,
-          useNativeDriver: true,
-        }),
+        Animated.spring(pointsCardAnim, { toValue: 1, friction: 6, tension: 80, useNativeDriver: true }),
+        Animated.spring(pointsCardScale, { toValue: 1, friction: 6, tension: 80, useNativeDriver: true }),
       ]).start();
     });
   };
 
   const handleBonusCardPress = () => {
     const newView = bonusCardView === 'default' ? 'details' : 'default';
-    
     Animated.parallel([
-      Animated.timing(bonusCardAnim, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
-      }),
-      Animated.timing(bonusCardScale, {
-        toValue: 0.95,
-        duration: 250,
-        useNativeDriver: true,
-      }),
+      Animated.timing(bonusCardAnim, { toValue: 0, duration: 250, useNativeDriver: true }),
+      Animated.timing(bonusCardScale, { toValue: 0.95, duration: 250, useNativeDriver: true }),
     ]).start(() => {
       setBonusCardView(newView);
       Animated.parallel([
-        Animated.spring(bonusCardAnim, {
-          toValue: 1,
-          friction: 6,
-          tension: 80,
-          useNativeDriver: true,
-        }),
-        Animated.spring(bonusCardScale, {
-          toValue: 1,
-          friction: 6,
-          tension: 80,
-          useNativeDriver: true,
-        }),
+        Animated.spring(bonusCardAnim, { toValue: 1, friction: 6, tension: 80, useNativeDriver: true }),
+        Animated.spring(bonusCardScale, { toValue: 1, friction: 6, tension: 80, useNativeDriver: true }),
       ]).start();
     });
   };
 
-  // Simple fade in animation on mount
-  useEffect(() => {
-    Animated.timing(screenOpacity, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  }, []);
-
-  // Simple navigation functions
-  const navigateToHome = () => {
-    Animated.timing(screenOpacity, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start(() => {
-      router.back();
-    });
-  };
-
-  const navigateToTimer = () => {
-    Animated.timing(screenOpacity, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start(() => {
-      router.back();
-    });
-  };
-
-  // Button handlers
-  const handleClosePress = () => {
-    navigateToHome();
-  };
-
-  const handleGoHome = () => {
-    navigateToHome();
-  };
-
-  const handleOpenConfirmModal = () => {
-    setIsConfirmModalVisible(true);
-  };
-
-  const handleConfirmRevert = () => {
-    setIsConfirmModalVisible(false);
-    navigateToTimer();
-  };
-
-  const handleCancelRevert = () => {
-    setIsConfirmModalVisible(false);
-  };
-
-  const handleShare = () => {
-    console.log('Share button pressed');
-  };
+  const brushingMinutes = 2;
+  const brushingSeconds = 30;
 
   if (!fontsLoaded) {
     return null;
   }
-
+  
   const cardWidth = screenWidth * 0.4;
   const cardHeight = 110;
-  const brushingMinutes = 2;
-  const brushingSeconds = 30;
-
   const card1Data = { progress: 75, value: "+90", label: "Points" };
   const card2Data = { progress: 100, value: "+200", label: "Bonus" };
 
   return (
-    <Animated.View style={[styles.container, { opacity: screenOpacity }]}>
+    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
       <Image
         source={require('../../assets/images/meshgradient-light-default.png')}
-        style={styles.backgroundImage} 
+        style={styles.backgroundImage}
       />
-      
-      <View style={[styles.topContentContainer, { paddingTop: insets.top + 40 }]}>
-        <ThemedText style={styles.title} variant="title">
-          {t('brushingResultsScreen.title')}
-        </ThemedText>
+      <View style={[styles.topContentContainerWrapper, { paddingTop: insets.top + 40 }]}>
+        <ThemedText style={styles.title} variant="title">{t('brushingResultsScreen.title')}</ThemedText>
 
         <View style={styles.timeCardContainer}>
           <ThemedText style={[styles.cardText, { fontFamily: 'Merienda-Bold' }]}>
             {String(brushingMinutes).padStart(2, '0')}:{String(brushingSeconds).padStart(2, '0')}
           </ThemedText>
-          <ThemedText style={styles.cardTitle}>
-            {t('brushingResultsScreen.timeSpentCardTitle')}
-          </ThemedText>
+          <ThemedText style={styles.cardTitle}>{t('brushingResultsScreen.timeSpentCardTitle')}</ThemedText>
         </View>
       </View>
 
       <LightContainer
         style={[
-          styles.bottomContainer,
+          styles.bottomLightContainer,
           {
             height: screenHeight / 2.3,
             paddingBottom: insets.bottom + 10,
+            flex: 0,
           }
         ]}
       >
         <View style={styles.cardsRowContainer}>
-          <Pressable style={styles.shadowWrapper} onPress={handlePointsCardPress}> 
+          <Pressable style={styles.shadowWrapper} onPress={handlePointsCardPress}>
             <GlassmorphicCard
               width={cardWidth}
               borderRadius="md"
@@ -221,7 +150,7 @@ const BrushingResultsScreen = () => {
               containerStyle={[styles.resultCardContainer, { height: cardHeight }]}
               style={styles.resultCardContent}
             >
-              <Animated.View style={[styles.metricContentContainer, { 
+              <Animated.View style={[styles.metricContentContainer, {
                 opacity: pointsCardAnim,
                 transform: [{ scale: pointsCardScale }]
               }]}>
@@ -237,9 +166,7 @@ const BrushingResultsScreen = () => {
                     </View>
                     <View style={styles.metricTextContainer}>
                       <ThemedText style={styles.metricValue}>{card1Data.value}</ThemedText>
-                      <ThemedText style={styles.metricLabel}>
-                        {t('brushingResultsScreen.pointsCardLabel')}
-                      </ThemedText>
+                      <ThemedText style={styles.metricLabel}>{t('brushingResultsScreen.pointsCardLabel')}</ThemedText>
                     </View>
                   </>
                 ) : (
@@ -249,15 +176,11 @@ const BrushingResultsScreen = () => {
                         <ThemedText style={styles.flippedCardNumber}>0</ThemedText>
                       </View>
                       <View style={styles.metricTextContainer}>
-                        <ThemedText style={styles.flippedCardValue}>
-                          {t('brushingResultsScreen.pointsCardDetailsValue')}
-                        </ThemedText>
+                        <ThemedText style={styles.flippedCardValue}>{t('brushingResultsScreen.pointsCardDetailsValue')}</ThemedText>
                       </View>
                     </View>
                     <View style={styles.flippedCardBottom}>
-                      <ThemedText style={styles.flippedCardBottomLabel}>
-                        {t('brushingResultsScreen.pointsCardDetailsLabel')}
-                      </ThemedText>
+                      <ThemedText style={styles.flippedCardBottomLabel}>{t('brushingResultsScreen.pointsCardDetailsLabel')}</ThemedText>
                     </View>
                   </View>
                 )}
@@ -274,7 +197,7 @@ const BrushingResultsScreen = () => {
               containerStyle={[styles.resultCardContainer, { height: cardHeight }]}
               style={styles.resultCardContent}
             >
-              <Animated.View style={[styles.metricContentContainer, { 
+              <Animated.View style={[styles.metricContentContainer, {
                 opacity: bonusCardAnim,
                 transform: [{ scale: bonusCardScale }]
               }]}>
@@ -289,9 +212,7 @@ const BrushingResultsScreen = () => {
                     </View>
                     <View style={styles.metricTextContainer}>
                       <ThemedText style={styles.metricValue}>{card2Data.value}</ThemedText>
-                      <ThemedText style={styles.metricLabel}>
-                        {t('brushingResultsScreen.bonusCardLabel')}
-                      </ThemedText>
+                      <ThemedText style={styles.metricLabel}>{t('brushingResultsScreen.bonusCardLabel')}</ThemedText>
                     </View>
                   </>
                 ) : (
@@ -301,15 +222,11 @@ const BrushingResultsScreen = () => {
                         <ThemedText style={styles.flippedCardNumber}>5</ThemedText>
                       </View>
                       <View style={styles.metricTextContainer}>
-                        <ThemedText style={styles.flippedCardValue}>
-                          {t('brushingResultsScreen.bonusCardDetailsValue')}
-                        </ThemedText>
+                        <ThemedText style={styles.flippedCardValue}>{t('brushingResultsScreen.bonusCardDetailsValue')}</ThemedText>
                       </View>
                     </View>
                     <View style={styles.flippedCardBottom}>
-                      <ThemedText style={styles.flippedCardBottomLabel}>
-                        {t('brushingResultsScreen.bonusCardDetailsLabel')}
-                      </ThemedText>
+                      <ThemedText style={styles.flippedCardBottomLabel}>{t('brushingResultsScreen.bonusCardDetailsLabel')}</ThemedText>
                     </View>
                   </View>
                 )}
@@ -342,15 +259,21 @@ const BrushingResultsScreen = () => {
         <View style={styles.buttonRowContainer}>
           <PrimaryButton
             label={t('brushingResultsScreen.goHomeButton')}
-            onPress={handleGoHome}
+            onPress={handleNavigateHome}
             width={screenWidth * 0.85}
             useDisplayFont={true}
           />
         </View>
       </LightContainer>
 
-      {/* Top left action buttons (dismiss and share) */}
-      <View style={[styles.topLeftButtonsContainer, { top: insets.top + 8 }]}>
+      <View
+        style={[
+          styles.topLeftButtonsContainer,
+          {
+            top: insets.top + 8,
+          }
+        ]}
+      >
         <Pressable
           style={({ pressed }) => [
             styles.topActionButton,
@@ -377,8 +300,14 @@ const BrushingResultsScreen = () => {
         </Pressable>
       </View>
 
-      {/* Top right close button */}
-      <View style={[styles.closeButtonContainer, { top: insets.top + 8 }]}>
+      <View
+        style={[
+          styles.closeButtonContainer,
+          {
+            top: insets.top + 8,
+          }
+        ]}
+      >
         <Pressable
           style={({ pressed }) => [
             styles.closeButton,
@@ -387,7 +316,7 @@ const BrushingResultsScreen = () => {
               transform: [{ scale: pressed ? 0.90 : 1 }],
             }
           ]}
-          onPress={handleClosePress}
+          onPress={handleNavigateHome}
         >
           <MaterialCommunityIcons
             name="chevron-down"
@@ -421,7 +350,7 @@ const styles = StyleSheet.create({
     height: screenHeight,
     resizeMode: 'cover',
   },
-  topContentContainer: {
+  topContentContainerWrapper: {
     alignItems: 'center',
     paddingHorizontal: 20,
   },
@@ -457,7 +386,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 3,
     lineHeight: 76,
   },
-  bottomContainer: {
+  bottomLightContainer: {
     width: '100%',
     paddingHorizontal: 20,
     justifyContent: 'space-between',
@@ -501,93 +430,77 @@ const styles = StyleSheet.create({
     height: 65,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 8,
+    marginRight: 10,
+    marginLeft: -15,
   },
   metricTextContainer: {
-    flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'center',
   },
   metricValue: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    lineHeight: 24,
+    fontSize: 26,
+    fontWeight: '700',
+    color: Colors.primary[800],
+    fontFamily: 'Merienda-Bold',
+    lineHeight: 34,
   },
   metricLabel: {
-    fontSize: 14,
-    color: '#FFFFFF',
-    opacity: 0.8,
-    lineHeight: 16,
-  },
-  flippedCardLayout: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'space-between',
-  },
-  flippedCardTop: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  flippedNumberContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 30,
-    width: 50,
-    height: 50,
-    marginRight: 8,
-  },
-  flippedCardNumber: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-  flippedCardValue: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    lineHeight: 18,
-  },
-  flippedCardBottom: {
-    paddingTop: 8,
-  },
-  flippedCardBottomLabel: {
     fontSize: 12,
-    color: '#FFFFFF',
-    opacity: 0.7,
-    textAlign: 'center',
+    fontFamily: 'Quicksand-Medium',
+    opacity: 0.8,
+    color: Colors.primary[800],
+    marginTop: 2,
   },
   motivationalContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginBottom: 20,
-    paddingHorizontal: 10,
+    justifyContent: 'center',
+    width: '90%',
+    alignSelf: 'center',
+    marginVertical: 10,
+    marginBottom: 5,
   },
   textAndProgressContainer: {
     flex: 1,
     marginRight: 15,
   },
+  mascotImageContainer: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 10,
+  },
   motivationalText: {
     fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 10,
-    lineHeight: 22,
+    color: Colors.neutral[800],
+    fontFamily: 'Quicksand-Medium',
+    textAlign: 'left',
+  },
+  motivationalMascotImage: {
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
   },
   progressCard: {
+    width: '100%',
     borderRadius: 12,
-    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 3,
+    marginTop: 12,
   },
   cardBlur: {
-    padding: 12,
+    padding: 8,
     borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    overflow: 'hidden',
   },
   progressBar: {
     height: 8,
@@ -600,59 +513,88 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: Colors.primary[500],
   },
-  mascotImageContainer: {
-    width: 60,
-    height: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  motivationalMascotImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'contain',
-  },
   buttonRowContainer: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 20,
   },
-  topLeftButtonsContainer: {
+  topLeftButtonsContainer: { 
     position: 'absolute',
-    left: 20,
+    left: 18,
+    zIndex: 2000,
     flexDirection: 'row',
-    gap: 10,
-    zIndex: 1000,
+    alignItems: 'center',
   },
-  topActionButton: {
+  topActionButton: { 
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
   },
-  closeButtonContainer: {
+  closeButtonContainer: { 
     position: 'absolute',
-    right: 20,
-    zIndex: 1000,
+    right: 18,
+    zIndex: 2000, 
   },
-  closeButton: {
+  closeButton: { 
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
+  },
+  flippedCardNumber: {
+    fontSize: 64,
+    fontWeight: '700',
+    color: Colors.primary[500],
+    fontFamily: 'Merienda-Bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    lineHeight: 72,
+    includeFontPadding: false,
+  },
+  flippedCardValue: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: Colors.primary[800],
+    fontFamily: 'Quicksand-Bold',
+    lineHeight: 24,
+  },
+  flippedNumberContainer: {
+    width: 70,
+    height: 85,
+    marginLeft: -10,
+    marginRight: -5,
+    paddingTop: 10,
+    overflow: 'visible',
+  },
+  flippedCardLayout: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  flippedCardTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    marginTop: -8,
+  },
+  flippedCardBottom: {
+    position: 'absolute',
+    bottom: 4,
+    right: 8,
+  },
+  flippedCardBottomLabel: {
+    fontSize: 11,
+    fontFamily: 'Quicksand-Medium',
+    opacity: 0.8,
+    color: Colors.primary[800],
+    textAlign: 'center',
   },
 });
 

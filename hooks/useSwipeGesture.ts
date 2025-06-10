@@ -49,6 +49,12 @@ interface UseSwipeGestureConfig {
    * Whether to play the opening animation when screen appears. Default: true
    */
   shouldPlayOpeningAnimation?: boolean;
+  
+  /**
+   * If true, the hook will not play its default close animation and will call onClose immediately.
+   * Useful for screens that need a custom close animation. Default: false
+   */
+  overrideCloseAnimation?: boolean;
 }
 
 interface UseSwipeGestureReturn {
@@ -70,7 +76,7 @@ interface UseSwipeGestureReturn {
   isAnimatingIn: boolean;
   
   // Methods
-  handleClose: () => void;
+  handleClose: (onComplete?: () => void) => void;
   
   // Style helpers
   getScalerStyle: (backgroundColor: string) => any;
@@ -110,6 +116,7 @@ interface UseSwipeGestureReturn {
  *   animationDuration: 300, // Faster animations
  *   enableHaptics: false, // Disable haptics
  *   shouldPlayOpeningAnimation: true, // FAB-to-screen expand animation
+ *   overrideCloseAnimation: true, // Use a custom close animation
  * });
  * ```
  */
@@ -123,6 +130,7 @@ export const useSwipeGesture = ({
   fabButtonSize = 70,
   enableHaptics = true,
   shouldPlayOpeningAnimation = true,
+  overrideCloseAnimation = false,
 }: UseSwipeGestureConfig): UseSwipeGestureReturn => {
   // Animation constants
   const MAX_SCALE_ANIM = Math.max(screenWidth, screenHeight) * 2 / fabButtonSize;
@@ -181,7 +189,7 @@ export const useSwipeGesture = ({
   };
   
   // Programmatic close handler
-  const handleClose = () => {
+  const handleClose = (onComplete?: () => void) => {
     if (enableHaptics) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
@@ -206,7 +214,12 @@ export const useSwipeGesture = ({
       }),
     ]).start(() => {
       onSwipeEnd?.();
-      animateCloseComplete();
+      if (onComplete) {
+        setIsFullyHidden(true);
+        requestAnimationFrame(onComplete);
+      } else {
+        animateCloseComplete();
+      }
     });
   };
   
@@ -242,6 +255,13 @@ export const useSwipeGesture = ({
           (currentGestureValue.current > 0.2 && velocity > velocityThreshold);
 
         if (shouldClose) {
+          // If override is enabled, just call onClose and let the component handle the animation
+          if (overrideCloseAnimation) {
+            onClose();
+            onSwipeEnd?.();
+            return;
+          }
+          
           if (enableHaptics) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
           }

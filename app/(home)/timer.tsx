@@ -19,6 +19,7 @@ import * as Haptics from 'expo-haptics';
 import { useAudioPlayer } from 'expo-audio';
 import { useRouter } from 'expo-router';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
+import { eventBus } from '../../utils/EventBus';
 
 export default function TimerScreen() {
   // Timer state management
@@ -50,6 +51,21 @@ export default function TimerScreen() {
     enableHaptics: true,
   });
   
+  // Listen for the close event from other screens
+  useEffect(() => {
+    const unsubscribe = eventBus.on('close-timer', () => {
+      // Ensure the swipeGesture and its handleClose method are available
+      if (swipeGesture?.handleClose) {
+        swipeGesture.handleClose();
+      }
+    });
+    
+    // Clean up the subscription when the component unmounts
+    return () => {
+      unsubscribe();
+    };
+  }, [swipeGesture]); // Rerun if swipeGesture object changes
+
   // Timer countdown logic
   useEffect(() => {
     if (isRunning) {
@@ -150,6 +166,7 @@ export default function TimerScreen() {
 
   // Handler for navigation to results
   const handleNavigateToResults = () => {
+    // Navigate directly to the results screen. It will handle its own fade-in.
     router.push('./BrushingResultsScreen');
   };
 
