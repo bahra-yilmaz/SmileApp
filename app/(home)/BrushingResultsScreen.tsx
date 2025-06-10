@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, Pressable, Animated, PanResponder } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, Pressable, Animated } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -18,13 +18,6 @@ import MascotProgressBar from '../../components/ui/MascotProgressBar';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-// Constants for animation (mirroring TimerOverlay)
-const FAB_BUTTON_SIZE = 70;
-const FAB_BOTTOM_POSITION = 45;
-const MAX_SCALE_ANIM = Math.max(screenWidth, screenHeight) * 2 / FAB_BUTTON_SIZE;
-const MIN_CLOSE_THRESHOLD = 0.35; 
-const MIN_VELOCITY = 0.5;
-
 const BrushingResultsScreen = () => {
   const { theme } = useTheme();
   const router = useRouter();
@@ -40,24 +33,17 @@ const BrushingResultsScreen = () => {
   const [pointsCardView, setPointsCardView] = useState<'default' | 'details'>('default');
   const [bonusCardView, setBonusCardView] = useState<'default' | 'details'>('default');
 
-  // Animation values for card content switching - React 19 compatible
+  // Animation values for card content switching
   const [pointsCardAnim] = useState(() => new Animated.Value(1));
   const [pointsCardScale] = useState(() => new Animated.Value(1));
   const [bonusCardAnim] = useState(() => new Animated.Value(1));
   const [bonusCardScale] = useState(() => new Animated.Value(1));
 
-  // Animation values - React 19 compatible
-  const [screenAppearAnim] = useState(() => new Animated.Value(1)); // Start at 1 for immediate background visibility
-  const [contentAppearAnim] = useState(() => new Animated.Value(0)); // Content fades in slowly
-  const [gestureAnim] = useState(() => new Animated.Value(0));    // 0 = no gesture, 1 = full gesture
-  const currentGestureValue = useRef(0);
-
-  // State to control final rendering
-  const [isFullyHidden, setIsFullyHidden] = useState(false); // New state
-  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false); // State for modal visibility
-
-  // Themed background for the scaler, like TimerOverlay's expandingCircle
-  const themedScalerBackgroundColor = theme.colorScheme === 'dark' ? '#1F2933' : '#F3F9FF';
+  // Simple screen fade animation
+  const [screenOpacity] = useState(() => new Animated.Value(0));
+  
+  // Modal state
+  const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false);
 
   // Card content switching handlers
   const handlePointsCardPress = () => {
@@ -126,31 +112,43 @@ const BrushingResultsScreen = () => {
     });
   };
 
+  // Simple fade in animation on mount
   useEffect(() => {
-    // Animate in content when the component mounts
-    // screenAppearAnim is already 1, so background and container are instantly visible
-    Animated.timing(contentAppearAnim, {
+    Animated.timing(screenOpacity, {
       toValue: 1,
-      duration: 400, // Was 600ms
+      duration: 300,
       useNativeDriver: true,
     }).start();
-  }, [contentAppearAnim]); // Run once on mount, only depends on contentAppearAnim
+  }, []);
 
-  useEffect(() => {
-    const gestureListener = gestureAnim.addListener(({ value }) => {
-      currentGestureValue.current = value;
+  // Simple navigation functions
+  const navigateToHome = () => {
+    Animated.timing(screenOpacity, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => {
+      router.replace('/(home)');
     });
-    return () => {
-      gestureAnim.removeListener(gestureListener);
-    };
-  }, [gestureAnim]);
+  };
 
-  const animateCloseComplete = () => {
-    setIsFullyHidden(true); // Set to hidden
-    // Delay navigation slightly to allow React to render null first
-    requestAnimationFrame(() => { 
-      router.back(); // Correct method for expo-router
+  const navigateToTimer = () => {
+    Animated.timing(screenOpacity, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => {
+      router.replace('/(home)/timer');
     });
+  };
+
+  // Button handlers
+  const handleClosePress = () => {
+    navigateToHome();
+  };
+
+  const handleGoHome = () => {
+    navigateToHome();
   };
 
   const handleOpenConfirmModal = () => {
@@ -159,396 +157,237 @@ const BrushingResultsScreen = () => {
 
   const handleConfirmRevert = () => {
     setIsConfirmModalVisible(false);
-    // Start the close animation and navigate back
-    Animated.parallel([
-      Animated.timing(screenAppearAnim, { // Use screenAppearAnim for background/container
-        toValue: 0,
-        duration: 400, // Was 600ms 
-        useNativeDriver: true,
-      }),
-      Animated.timing(contentAppearAnim, { // Use contentAppearAnim for content
-        toValue: 0,
-        duration: 400, // Was 600ms
-        useNativeDriver: true,
-      }),
-      Animated.timing(gestureAnim, {
-        toValue: 0, 
-        duration: 400, // Was 600ms
-        useNativeDriver: true,
-      }),
-    ]).start(animateCloseComplete);
+    navigateToTimer();
   };
 
   const handleCancelRevert = () => {
     setIsConfirmModalVisible(false);
   };
 
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: (_, gestureState) => {
-        return Math.abs(gestureState.dy) > 10 && Math.abs(gestureState.dy) > Math.abs(gestureState.dx * 2);
-      },
-      onPanResponderGrant: () => {
-        gestureAnim.setValue(0);
-        screenAppearAnim.stopAnimation();
-        contentAppearAnim.stopAnimation();
-        gestureAnim.stopAnimation();
-      },
-      onPanResponderMove: (_, gestureState) => {
-        if (gestureState.dy > 0) { // Only allow downward movement
-          const gestureProgress = Math.min(1, gestureState.dy / (screenHeight * 0.4));
-          const easedProgress = Math.pow(gestureProgress, 1.5);
-          gestureAnim.setValue(easedProgress);
-          // Link gesture progress to visibility animation directly for responsive scaling
-          // visibilityAnim.setValue(1 - easedProgress); 
-          // For gestures, primarily affect content and let the release handle full closure
-          contentAppearAnim.setValue(1 - easedProgress); 
-          if (easedProgress > 0.5) { // Start fading screen container if gesture is significant
-            screenAppearAnim.setValue(1 - (easedProgress - 0.5) * 2);
-          }
-        }
-      },
-      onPanResponderRelease: (_, gestureState) => {
-        const velocity = gestureState.vy;
-        const shouldClose = 
-          currentGestureValue.current > MIN_CLOSE_THRESHOLD ||
-          (currentGestureValue.current > 0.2 && velocity > MIN_VELOCITY);
-
-        if (shouldClose) {
-          Animated.parallel([
-            Animated.timing(screenAppearAnim, { // Use screenAppearAnim
-              toValue: 0,
-              duration: 400, // Was 600ms
-              useNativeDriver: true,
-            }),
-            Animated.timing(contentAppearAnim, { // Use contentAppearAnim
-              toValue: 0,
-              duration: 400, // Was 600ms
-              useNativeDriver: true,
-            }),
-            Animated.timing(gestureAnim, {
-              toValue: 0, // Ensure gestureAnim goes to 0 for symmetrical scaling
-              duration: 400, // Was 600ms
-              useNativeDriver: true,
-            }),
-          ]).start(animateCloseComplete);
-        } else {
-          Animated.parallel([
-            Animated.spring(screenAppearAnim, { // Spring screen container back to full
-              toValue: 1,
-              friction: 5,
-              tension: 40,
-              useNativeDriver: true,
-            }),
-            Animated.spring(contentAppearAnim, { // Spring content back to full
-              toValue: 1,
-              friction: 5,
-              tension: 40,
-              useNativeDriver: true,
-            }),
-            Animated.spring(gestureAnim, { // Spring gesture back to 0
-              toValue: 0,
-              friction: 5,
-              tension: 40,
-              useNativeDriver: true,
-            }),
-          ]).start();
-        }
-      },
-    })
-  ).current;
-
-  const handleChevronClosePress = () => {
-    Animated.parallel([
-      Animated.timing(screenAppearAnim, { // Use screenAppearAnim
-        toValue: 0,
-        duration: 400, // Was 600ms
-        useNativeDriver: true,
-      }),
-      Animated.timing(contentAppearAnim, { // Use contentAppearAnim
-        toValue: 0,
-        duration: 400, // Was 600ms
-        useNativeDriver: true,
-      }),
-      Animated.timing(gestureAnim, {
-        toValue: 0, // Ensure gestureAnim goes to 0 for symmetrical scaling
-        duration: 400, // Was 600ms
-        useNativeDriver: true,
-      }),
-    ]).start(animateCloseComplete);
+  const handleShare = () => {
+    console.log('Share button pressed');
   };
-
-  // Animation style calculations (adapted from TimerOverlay)
-  const finalTransformScale = Animated.multiply(
-    MAX_SCALE_ANIM, // Use fixed MAX_SCALE_ANIM for the base scale
-    Animated.subtract(1, gestureAnim.interpolate({ // Gesture reduces scale more directly
-      inputRange: [0, 1],
-      outputRange: [0, 0.7], // Max 70% reduction from gesture before visibilityAnim takes over fully
-      extrapolate: 'clamp',
-    }))
-  );
-
-  const overallOpacity = screenAppearAnim; // Screen container opacity
-
-  const animatedContentOpacity = Animated.add(
-    contentAppearAnim.interpolate({ inputRange: [0, 1], outputRange: [0, 1] }), // Content opacity
-    gestureAnim.interpolate({ inputRange: [0, 0.3, 1], outputRange: [0, -0.7, -1], extrapolate: 'clamp' })
-  );
-
-  // Add these back
-  const brushingMinutes = 2;
-  const brushingSeconds = 30;
 
   if (!fontsLoaded) {
     return null;
   }
 
-  // Conditional rendering based on isFullyHidden
-  if (isFullyHidden) {
-    return null;
-  }
-
   const cardWidth = screenWidth * 0.4;
   const cardHeight = 110;
+  const brushingMinutes = 2;
+  const brushingSeconds = 30;
 
   const card1Data = { progress: 75, value: "+90", label: "Points" };
   const card2Data = { progress: 100, value: "+200", label: "Bonus" };
 
-  const handleShare = () => {
-    console.log('Share button pressed');
-  };
-
-  const handleGoHome = () => {
-    router.push('/(home)');
-  };
-
   return (
-    <Animated.View 
-      style={[styles.panGestureContainer, { opacity: overallOpacity }]}
-      {...panResponder.panHandlers}
-    >
-      {/* 1. The scaling circular background */}
-      <Animated.View
+    <Animated.View style={[styles.container, { opacity: screenOpacity }]}>
+      <Image
+        source={require('../../assets/images/meshgradient-light-default.png')}
+        style={styles.backgroundImage} 
+      />
+      
+      <View style={[styles.topContentContainer, { paddingTop: insets.top + 40 }]}>
+        <ThemedText style={styles.title} variant="title">
+          {t('brushingResultsScreen.title')}
+        </ThemedText>
+
+        <View style={styles.timeCardContainer}>
+          <ThemedText style={[styles.cardText, { fontFamily: 'Merienda-Bold' }]}>
+            {String(brushingMinutes).padStart(2, '0')}:{String(brushingSeconds).padStart(2, '0')}
+          </ThemedText>
+          <ThemedText style={styles.cardTitle}>
+            {t('brushingResultsScreen.timeSpentCardTitle')}
+          </ThemedText>
+        </View>
+      </View>
+
+      <LightContainer
         style={[
-          styles.animatedCircularScaler,
+          styles.bottomContainer,
           {
-            backgroundColor: themedScalerBackgroundColor,
-            opacity: overallOpacity, // Background circle also uses screenAppearAnim for opacity
-            transform: [{ scale: finalTransformScale }],
+            height: screenHeight / 2.3,
+            paddingBottom: insets.bottom + 10,
           }
         ]}
-      />
+      >
+        <View style={styles.cardsRowContainer}>
+          <Pressable style={styles.shadowWrapper} onPress={handlePointsCardPress}> 
+            <GlassmorphicCard
+              width={cardWidth}
+              borderRadius="md"
+              intensity={60}
+              shadow="none"
+              containerStyle={[styles.resultCardContainer, { height: cardHeight }]}
+              style={styles.resultCardContent}
+            >
+              <Animated.View style={[styles.metricContentContainer, { 
+                opacity: pointsCardAnim,
+                transform: [{ scale: pointsCardScale }]
+              }]}>
+                {pointsCardView === 'default' ? (
+                  <>
+                    <View style={styles.metricDonutContainer}>
+                      <DonutChart
+                        progress={card1Data.progress}
+                        size={60}
+                        thickness={10}
+                        progressColor={Colors.primary[500]}
+                      />
+                    </View>
+                    <View style={styles.metricTextContainer}>
+                      <ThemedText style={styles.metricValue}>{card1Data.value}</ThemedText>
+                      <ThemedText style={styles.metricLabel}>
+                        {t('brushingResultsScreen.pointsCardLabel')}
+                      </ThemedText>
+                    </View>
+                  </>
+                ) : (
+                  <View style={styles.flippedCardLayout}>
+                    <View style={styles.flippedCardTop}>
+                      <View style={[styles.metricDonutContainer, styles.flippedNumberContainer]}>
+                        <ThemedText style={styles.flippedCardNumber}>0</ThemedText>
+                      </View>
+                      <View style={styles.metricTextContainer}>
+                        <ThemedText style={styles.flippedCardValue}>
+                          {t('brushingResultsScreen.pointsCardDetailsValue')}
+                        </ThemedText>
+                      </View>
+                    </View>
+                    <View style={styles.flippedCardBottom}>
+                      <ThemedText style={styles.flippedCardBottomLabel}>
+                        {t('brushingResultsScreen.pointsCardDetailsLabel')}
+                      </ThemedText>
+                    </View>
+                  </View>
+                )}
+              </Animated.View>
+            </GlassmorphicCard>
+          </Pressable>
 
-      {/* 2. The screen's actual content, absolutely positioned OVER the scaler */}
-      <Animated.View style={[styles.screenContentWrapper, { opacity: animatedContentOpacity }]}>
-        <Image
-          source={require('../../assets/images/meshgradient-light-default.png')}
-          style={styles.backgroundImage} 
-        />
-        <View style={[styles.topContentContainerWrapper, { paddingTop: insets.top + 40 }]}>
-          <ThemedText style={styles.title} variant="title">{t('brushingResultsScreen.title')}</ThemedText>
-
-          <View style={styles.timeCardContainer}>
-            <ThemedText style={[styles.cardText, { fontFamily: 'Merienda-Bold' }]}>
-              {String(brushingMinutes).padStart(2, '0')}:{String(brushingSeconds).padStart(2, '0')}
-            </ThemedText>
-            <ThemedText style={styles.cardTitle}>{t('brushingResultsScreen.timeSpentCardTitle')}</ThemedText>
-          </View>
+          <Pressable style={styles.shadowWrapper} onPress={handleBonusCardPress}>
+            <GlassmorphicCard
+              width={cardWidth}
+              borderRadius="md"
+              intensity={60}
+              shadow="none"
+              containerStyle={[styles.resultCardContainer, { height: cardHeight }]}
+              style={styles.resultCardContent}
+            >
+              <Animated.View style={[styles.metricContentContainer, { 
+                opacity: bonusCardAnim,
+                transform: [{ scale: bonusCardScale }]
+              }]}>
+                {bonusCardView === 'default' ? (
+                  <>
+                    <View style={styles.metricDonutContainer}>
+                      <MaterialCommunityIcons
+                        name="fire"
+                        size={65}
+                        color={Colors.primary[500]}
+                      />
+                    </View>
+                    <View style={styles.metricTextContainer}>
+                      <ThemedText style={styles.metricValue}>{card2Data.value}</ThemedText>
+                      <ThemedText style={styles.metricLabel}>
+                        {t('brushingResultsScreen.bonusCardLabel')}
+                      </ThemedText>
+                    </View>
+                  </>
+                ) : (
+                  <View style={styles.flippedCardLayout}>
+                    <View style={styles.flippedCardTop}>
+                      <View style={[styles.metricDonutContainer, styles.flippedNumberContainer]}>
+                        <ThemedText style={styles.flippedCardNumber}>5</ThemedText>
+                      </View>
+                      <View style={styles.metricTextContainer}>
+                        <ThemedText style={styles.flippedCardValue}>
+                          {t('brushingResultsScreen.bonusCardDetailsValue')}
+                        </ThemedText>
+                      </View>
+                    </View>
+                    <View style={styles.flippedCardBottom}>
+                      <ThemedText style={styles.flippedCardBottomLabel}>
+                        {t('brushingResultsScreen.bonusCardDetailsLabel')}
+                      </ThemedText>
+                    </View>
+                  </View>
+                )}
+              </Animated.View>
+            </GlassmorphicCard>
+          </Pressable>
         </View>
 
-        <LightContainer
-          style={[
-            styles.bottomLightContainer,
-            {
-              height: screenHeight / 2.3,
-              paddingBottom: insets.bottom + 10,
-              flex: 0,
-            }
-          ]}
-        >
-          <View style={styles.cardsRowContainer}>
-            <Pressable style={styles.shadowWrapper} onPress={handlePointsCardPress}> 
-              <GlassmorphicCard
-                width={cardWidth}
-                borderRadius="md"
-                intensity={60}
-                shadow="none"
-                containerStyle={[styles.resultCardContainer, { height: cardHeight }]}
-                style={styles.resultCardContent}
-              >
-                <Animated.View style={[styles.metricContentContainer, { 
-                  opacity: pointsCardAnim,
-                  transform: [{ scale: pointsCardScale }]
-                }]}>
-                  {pointsCardView === 'default' ? (
-                    <>
-                      <View style={styles.metricDonutContainer}>
-                        <DonutChart
-                          progress={card1Data.progress}
-                          size={60}
-                          thickness={10}
-                          progressColor={Colors.primary[500]}
-                        />
-                      </View>
-                      <View style={styles.metricTextContainer}>
-                        <ThemedText style={styles.metricValue}>{card1Data.value}</ThemedText>
-                        <ThemedText style={styles.metricLabel}>{t('brushingResultsScreen.pointsCardLabel')}</ThemedText>
-                      </View>
-                    </>
-                  ) : (
-                    <View style={styles.flippedCardLayout}>
-                      <View style={styles.flippedCardTop}>
-                        <View style={[styles.metricDonutContainer, styles.flippedNumberContainer]}>
-                          <ThemedText style={styles.flippedCardNumber}>0</ThemedText>
-                        </View>
-                        <View style={styles.metricTextContainer}>
-                          <ThemedText style={styles.flippedCardValue}>{t('brushingResultsScreen.pointsCardDetailsValue')}</ThemedText>
-                        </View>
-                      </View>
-                      <View style={styles.flippedCardBottom}>
-                        <ThemedText style={styles.flippedCardBottomLabel}>{t('brushingResultsScreen.pointsCardDetailsLabel')}</ThemedText>
-                      </View>
-                    </View>
-                  )}
-                </Animated.View>
-              </GlassmorphicCard>
-            </Pressable>
-
-            <Pressable style={styles.shadowWrapper} onPress={handleBonusCardPress}>
-              <GlassmorphicCard
-                width={cardWidth}
-                borderRadius="md"
-                intensity={60}
-                shadow="none"
-                containerStyle={[styles.resultCardContainer, { height: cardHeight }]}
-                style={styles.resultCardContent}
-              >
-                <Animated.View style={[styles.metricContentContainer, { 
-                  opacity: bonusCardAnim,
-                  transform: [{ scale: bonusCardScale }]
-                }]}>
-                  {bonusCardView === 'default' ? (
-                    <>
-                      <View style={styles.metricDonutContainer}>
-                        <MaterialCommunityIcons
-                          name="fire"
-                          size={65}
-                          color={Colors.primary[500]}
-                        />
-                      </View>
-                      <View style={styles.metricTextContainer}>
-                        <ThemedText style={styles.metricValue}>{card2Data.value}</ThemedText>
-                        <ThemedText style={styles.metricLabel}>{t('brushingResultsScreen.bonusCardLabel')}</ThemedText>
-                      </View>
-                    </>
-                  ) : (
-                    <View style={styles.flippedCardLayout}>
-                      <View style={styles.flippedCardTop}>
-                        <View style={[styles.metricDonutContainer, styles.flippedNumberContainer]}>
-                          <ThemedText style={styles.flippedCardNumber}>5</ThemedText>
-                        </View>
-                        <View style={styles.metricTextContainer}>
-                          <ThemedText style={styles.flippedCardValue}>{t('brushingResultsScreen.bonusCardDetailsValue')}</ThemedText>
-                        </View>
-                      </View>
-                      <View style={styles.flippedCardBottom}>
-                        <ThemedText style={styles.flippedCardBottomLabel}>{t('brushingResultsScreen.bonusCardDetailsLabel')}</ThemedText>
-                      </View>
-                    </View>
-                  )}
-                </Animated.View>
-              </GlassmorphicCard>
-            </Pressable>
-          </View>
-
-          <View style={styles.motivationalContainer}>
-            <View style={styles.textAndProgressContainer}>
-              <ThemedText style={styles.motivationalText}>
-                {t('brushingResultsScreen.motivationalText')}
-              </ThemedText>
-              <View style={styles.progressCard}>
-                <View style={styles.cardBlur}>
-                  <View style={styles.progressBar}>
-                    <View style={[styles.progressFill, { width: '75%' }]} />
-                  </View>
+        <View style={styles.motivationalContainer}>
+          <View style={styles.textAndProgressContainer}>
+            <ThemedText style={styles.motivationalText}>
+              {t('brushingResultsScreen.motivationalText')}
+            </ThemedText>
+            <View style={styles.progressCard}>
+              <View style={styles.cardBlur}>
+                <View style={styles.progressBar}>
+                  <View style={[styles.progressFill, { width: '75%' }]} />
                 </View>
               </View>
             </View>
-            <View style={styles.mascotImageContainer}>
-              <Image
-                source={require('../../assets/mascot/nubo-welcoming-1.png')}
-                style={styles.motivationalMascotImage}
-              />
-            </View>
           </View>
-
-          <View style={styles.buttonRowContainer}>
-            <PrimaryButton
-              label={t('brushingResultsScreen.goHomeButton')}
-              onPress={handleChevronClosePress}
-              width={screenWidth * 0.85}
-              useDisplayFont={true}
+          <View style={styles.mascotImageContainer}>
+            <Image
+              source={require('../../assets/mascot/nubo-welcoming-1.png')}
+              style={styles.motivationalMascotImage}
             />
           </View>
-        </LightContainer>
-      </Animated.View>
+        </View>
 
-      {/* 3. Top left action buttons (dismiss and share) */}
-      <Animated.View
-        style={[
-          styles.topLeftButtonsContainer,
-          {
-            opacity: animatedContentOpacity,
-            top: insets.top + 8, 
-          }
-        ]}
-      >
-                 <Pressable
-           style={({ pressed }) => [
-             styles.topActionButton,
-             {
-               opacity: pressed ? 0.7 : 1,
-               transform: [{ scale: pressed ? 0.90 : 1 }],
-             }
-           ]}
-           onPress={handleOpenConfirmModal}
-         >
-           <MaterialCommunityIcons name="history" size={26} color={theme.activeColors.text} />
-         </Pressable>
-         <Pressable
-           style={({ pressed }) => [
-             styles.topActionButton,
-             {
-               opacity: pressed ? 0.7 : 1,
-               transform: [{ scale: pressed ? 0.90 : 1 }],
-             }
-           ]}
-           onPress={handleShare}
-         >
-           <Feather name="share-2" size={22} color={theme.activeColors.text} />
-         </Pressable>
-      </Animated.View>
+        <View style={styles.buttonRowContainer}>
+          <PrimaryButton
+            label={t('brushingResultsScreen.goHomeButton')}
+            onPress={handleGoHome}
+            width={screenWidth * 0.85}
+            useDisplayFont={true}
+          />
+        </View>
+      </LightContainer>
 
-      {/* 4. The Chevron close button, also absolutely positioned */}
-      <Animated.View
-        style={[
-          styles.closeButtonContainer,
-          {
-            opacity: animatedContentOpacity,
-            top: insets.top + 8, 
-          }
-        ]}
-      >
+      {/* Top left action buttons (dismiss and share) */}
+      <View style={[styles.topLeftButtonsContainer, { top: insets.top + 8 }]}>
         <Pressable
           style={({ pressed }) => [
-            styles.closeButton, // This is the Pressable's direct style
+            styles.topActionButton,
             {
               opacity: pressed ? 0.7 : 1,
               transform: [{ scale: pressed ? 0.90 : 1 }],
             }
           ]}
-          onPress={handleChevronClosePress}
+          onPress={handleOpenConfirmModal}
+        >
+          <MaterialCommunityIcons name="history" size={26} color={theme.activeColors.text} />
+        </Pressable>
+        <Pressable
+          style={({ pressed }) => [
+            styles.topActionButton,
+            {
+              opacity: pressed ? 0.7 : 1,
+              transform: [{ scale: pressed ? 0.90 : 1 }],
+            }
+          ]}
+          onPress={handleShare}
+        >
+          <Feather name="share-2" size={22} color={theme.activeColors.text} />
+        </Pressable>
+      </View>
+
+      {/* Top right close button */}
+      <View style={[styles.closeButtonContainer, { top: insets.top + 8 }]}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.closeButton,
+            {
+              opacity: pressed ? 0.7 : 1,
+              transform: [{ scale: pressed ? 0.90 : 1 }],
+            }
+          ]}
+          onPress={handleClosePress}
         >
           <MaterialCommunityIcons
             name="chevron-down"
@@ -556,7 +395,7 @@ const BrushingResultsScreen = () => {
             color={theme.activeColors.text}
           />
         </Pressable>
-      </Animated.View>
+      </View>
 
       <ConfirmModal
         visible={isConfirmModalVisible}
@@ -572,28 +411,7 @@ const BrushingResultsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  panGestureContainer: {
-    flex: 1,
-    backgroundColor: 'transparent', // Important: Pan container itself should be transparent
-  },
-  animatedCircularScaler: { // Renamed from animatedScaler
-    position: 'absolute',
-    left: screenWidth / 2 - FAB_BUTTON_SIZE / 2,
-    bottom: FAB_BOTTOM_POSITION,
-    width: FAB_BUTTON_SIZE,
-    height: FAB_BUTTON_SIZE,
-    borderRadius: FAB_BUTTON_SIZE / 2,
-    // backgroundColor is set inline via themedScalerBackgroundColor
-    // opacity and transform are set inline
-  },
-  screenContentWrapper: { // New style for the actual content
-    ...StyleSheet.absoluteFillObject, // Makes it cover the screen
-    justifyContent: 'space-between', // Ensures top content is at top, bottom content (LightContainer) is at bottom
-    // opacity is set inline
-    // This view will contain the original layout, so no specific flexbox here unless needed
-  },
-  // contentWrapper is removed as a style name, its purpose is now screenContentWrapper
-  container: { // This was the original root, now might be redundant or apply to screenContentWrapper if needed
+  container: {
     flex: 1,
     justifyContent: 'space-between',
   },
@@ -602,12 +420,10 @@ const styles = StyleSheet.create({
     width: screenWidth, 
     height: screenHeight,
     resizeMode: 'cover',
-    // zIndex might be needed if there are overlapping issues within screenContentWrapper
   },
-  topContentContainerWrapper: {
+  topContentContainer: {
     alignItems: 'center',
     paddingHorizontal: 20,
-    // paddingTop is now dynamic via insets and props
   },
   title: {
     fontSize: 28,
@@ -615,12 +431,6 @@ const styles = StyleSheet.create({
     marginTop: 40, 
     marginBottom: 10,
     textAlign: 'center',
-    color: '#FFFFFF',
-  },
-  message: {
-    fontSize: 18,
-    textAlign: 'center',
-    marginBottom: 20,
     color: '#FFFFFF',
   },
   timeCardContainer: {
@@ -647,7 +457,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 3,
     lineHeight: 76,
   },
-  bottomLightContainer: {
+  bottomContainer: {
     width: '100%',
     paddingHorizontal: 20,
     justifyContent: 'space-between',
@@ -691,83 +501,93 @@ const styles = StyleSheet.create({
     height: 65,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
-    marginLeft: -15,
-  },
-  flameIconContainer: {
-    width: 60,
-    height: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginRight: 8,
   },
   metricTextContainer: {
+    flex: 1,
     alignItems: 'flex-start',
     justifyContent: 'center',
   },
   metricValue: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: Colors.primary[800],
-    fontFamily: 'Merienda-Bold',
-    lineHeight: 34,
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    lineHeight: 24,
   },
   metricLabel: {
-    fontSize: 12,
-    fontFamily: 'Quicksand-Medium',
+    fontSize: 14,
+    color: '#FFFFFF',
     opacity: 0.8,
-    color: Colors.primary[800],
-    marginTop: 2,
+    lineHeight: 16,
+  },
+  flippedCardLayout: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'space-between',
+  },
+  flippedCardTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  flippedNumberContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 30,
+    width: 50,
+    height: 50,
+    marginRight: 8,
+  },
+  flippedCardNumber: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  flippedCardValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    lineHeight: 18,
+  },
+  flippedCardBottom: {
+    paddingTop: 8,
+  },
+  flippedCardBottomLabel: {
+    fontSize: 12,
+    color: '#FFFFFF',
+    opacity: 0.7,
+    textAlign: 'center',
   },
   motivationalContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    width: '90%',
-    alignSelf: 'center',
-    marginVertical: 10,
-    marginBottom: 5,
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 20,
+    paddingHorizontal: 10,
   },
   textAndProgressContainer: {
     flex: 1,
     marginRight: 15,
   },
-  mascotImageContainer: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-    elevation: 10,
-  },
   motivationalText: {
     fontSize: 16,
-    color: Colors.neutral[800],
-    fontFamily: 'Quicksand-Medium',
-    textAlign: 'left',
-  },
-  motivationalMascotImage: {
-    width: 100,
-    height: 100,
-    resizeMode: 'contain',
+    fontWeight: '600',
+    marginBottom: 10,
+    lineHeight: 22,
   },
   progressCard: {
-    width: '100%',
     borderRadius: 12,
+    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.15,
     shadowRadius: 4,
-    elevation: 3,
-    marginTop: 12,
+    elevation: 5,
   },
   cardBlur: {
-    padding: 8,
+    padding: 12,
     borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.85)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-    overflow: 'hidden',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   progressBar: {
     height: 8,
@@ -780,102 +600,59 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: Colors.primary[500],
   },
+  mascotImageContainer: {
+    width: 60,
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  motivationalMascotImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+  },
   buttonRowContainer: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 10,
   },
-  leftActionButtonsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  actionButton: {
-    width: 56,
-    height: 56,
-    borderRadius: 25,
-    borderWidth: 0,
-    // backgroundColor is overridden by inline styles
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  topLeftButtonsContainer: { 
+  topLeftButtonsContainer: {
     position: 'absolute',
-    left: 18,
-    zIndex: 2000,
+    left: 20,
     flexDirection: 'row',
-    alignItems: 'center',
+    gap: 10,
+    zIndex: 1000,
   },
-  topActionButton: { 
+  topActionButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     alignItems: 'center',
     justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
   },
-  closeButtonContainer: { 
+  closeButtonContainer: {
     position: 'absolute',
-    right: 18,
-    zIndex: 2000, 
+    right: 20,
+    zIndex: 1000,
   },
-  closeButton: { 
+  closeButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  flippedCardNumber: {
-    fontSize: 64,
-    fontWeight: '700',
-    color: Colors.primary[500],
-    fontFamily: 'Merienda-Bold',
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    lineHeight: 72,
-    includeFontPadding: false,
-  },
-  flippedCardValue: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: Colors.primary[800],
-    fontFamily: 'Quicksand-Bold',
-    lineHeight: 24,
-  },
-  flippedNumberContainer: {
-    width: 70,
-    height: 85,
-    marginLeft: -10,
-    marginRight: -5,
-    paddingTop: 10,
-    overflow: 'visible',
-  },
-  flippedCardLayout: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
-  },
-  flippedCardTop: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    marginTop: -8,
-  },
-  flippedCardBottom: {
-    position: 'absolute',
-    bottom: 4,
-    right: 8,
-  },
-  flippedCardBottomLabel: {
-    fontSize: 11,
-    fontFamily: 'Quicksand-Medium',
-    opacity: 0.8,
-    color: Colors.primary[800],
-    textAlign: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 4,
   },
 });
 

@@ -42,7 +42,7 @@ export default function TimerScreen() {
   
   // Use the swipe gesture hook
   const swipeGesture = useSwipeGesture({
-    onClose: () => router.back(),
+    onClose: () => router.replace('/(home)'),
     onSwipeStart: () => setIsRunning(false), // Stop timer when starting to swipe
     threshold: 0.35,
     velocityThreshold: 0.5,
@@ -150,7 +150,7 @@ export default function TimerScreen() {
 
   // Handler for navigation to results
   const handleNavigateToResults = () => {
-    router.push('./BrushingResultsScreen');
+    router.replace('./BrushingResultsScreen');
   };
 
   // Handler for close button (uses the hook's handleClose with swipe gesture)
