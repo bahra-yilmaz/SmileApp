@@ -26,7 +26,6 @@ import {
   ToothbrushCard,
   CalendarView,
   ChatOverlay,
-  MenuOverlay,
   ToothbrushOverlay,
   StreakOverlay,
   BrushingTimeOverlay
@@ -56,11 +55,6 @@ export default function HomeScreen() {
   
   // State for chat overlay visibility
   const [isChatVisible, setIsChatVisible] = useState(false);
-  
-  // State for menu overlay visibility
-  const [isMenuVisible, setIsMenuVisible] = useState(false);
-  
-
   
   // State for toothbrush overlay visibility
   const [isToothbrushVisible, setIsToothbrushVisible] = useState(false);
@@ -97,7 +91,7 @@ export default function HomeScreen() {
   };
   
   // A single state to track if any overlay is visible
-  const isOverlayVisible = isChatVisible || isMenuVisible || isToothbrushVisible || isStreakVisible || isBrushingTimeVisible;
+  const isOverlayVisible = isChatVisible || isToothbrushVisible || isStreakVisible || isBrushingTimeVisible;
 
   // Calculate mountain height for responsive mascot positioning
   const mountainHeight = height * 0.4;
@@ -124,7 +118,7 @@ export default function HomeScreen() {
   const handleActionButtonPress = () => router.push('./timer');
   
   // Handle menu button press
-  const handleMenuPress = () => setIsMenuVisible(true);
+  const handleMenuPress = () => router.push('/(home)/settings');
   
   // Toggle home mascot card expansion
   const toggleHomeMascotExpansion = () => {
@@ -239,7 +233,6 @@ export default function HomeScreen() {
       {isOverlayVisible && (
         <>
           <ChatOverlay isVisible={isChatVisible} onClose={() => setIsChatVisible(false)} />
-          <MenuOverlay isVisible={isMenuVisible} onClose={() => setIsMenuVisible(false)} />
           <ToothbrushOverlay isVisible={isToothbrushVisible} onClose={() => setIsToothbrushVisible(false)} daysInUse={45} />
           <StreakOverlay isVisible={isStreakVisible} onClose={() => setIsStreakVisible(false)} streakDays={7} />
           <BrushingTimeOverlay isVisible={isBrushingTimeVisible} onClose={() => setIsBrushingTimeVisible(false)} minutes={2} seconds={30} />

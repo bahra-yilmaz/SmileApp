@@ -9,4 +9,3 @@ export { default as BrushingTimeOverlay } from './BrushingTimeOverlay';
 export { default as AchievementsOverlay } from './AchievementsOverlay';
 export { default as CalendarView } from './CalendarView';
 export { default as ChatOverlay } from './ChatOverlay';
-export { default as MenuOverlay } from './MenuOverlay';
