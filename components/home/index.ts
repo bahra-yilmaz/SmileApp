@@ -10,4 +10,3 @@ export { default as AchievementsOverlay } from './AchievementsOverlay';
 export { default as CalendarView } from './CalendarView';
 export { default as ChatOverlay } from './ChatOverlay';
 export { default as MenuOverlay } from './MenuOverlay';
-export { default as TimerOverlay } from './TimerOverlay';

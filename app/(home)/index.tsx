@@ -27,7 +27,6 @@ import {
   CalendarView,
   ChatOverlay,
   MenuOverlay,
-  TimerOverlay,
   ToothbrushOverlay,
   StreakOverlay,
   BrushingTimeOverlay
@@ -61,8 +60,7 @@ export default function HomeScreen() {
   // State for menu overlay visibility
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   
-  // State for timer overlay visibility
-  const [isTimerVisible, setIsTimerVisible] = useState(false);
+
   
   // State for toothbrush overlay visibility
   const [isToothbrushVisible, setIsToothbrushVisible] = useState(false);
@@ -99,7 +97,7 @@ export default function HomeScreen() {
   };
   
   // A single state to track if any overlay is visible
-  const isOverlayVisible = isChatVisible || isMenuVisible || isTimerVisible || isToothbrushVisible || isStreakVisible || isBrushingTimeVisible;
+  const isOverlayVisible = isChatVisible || isMenuVisible || isToothbrushVisible || isStreakVisible || isBrushingTimeVisible;
 
   // Calculate mountain height for responsive mascot positioning
   const mountainHeight = height * 0.4;
@@ -242,14 +240,6 @@ export default function HomeScreen() {
         <>
           <ChatOverlay isVisible={isChatVisible} onClose={() => setIsChatVisible(false)} />
           <MenuOverlay isVisible={isMenuVisible} onClose={() => setIsMenuVisible(false)} />
-          <TimerOverlay
-            isVisible={isTimerVisible}
-            onClose={() => setIsTimerVisible(false)}
-            onNavigateToResults={() => {
-              setIsTimerVisible(false);
-              requestAnimationFrame(() => router.push('./BrushingResultsScreen'));
-            }}
-          />
           <ToothbrushOverlay isVisible={isToothbrushVisible} onClose={() => setIsToothbrushVisible(false)} daysInUse={45} />
           <StreakOverlay isVisible={isStreakVisible} onClose={() => setIsStreakVisible(false)} streakDays={7} />
           <BrushingTimeOverlay isVisible={isBrushingTimeVisible} onClose={() => setIsBrushingTimeVisible(false)} minutes={2} seconds={30} />

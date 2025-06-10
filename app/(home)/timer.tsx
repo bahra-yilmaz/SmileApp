@@ -1,6 +1,6 @@
 /**
  * Timer Screen - A dedicated screen for the brushing timer experience
- * Based on TimerOverlay but designed as a full screen for better onboarding flow
+ * Replaces the previous overlay approach with a full screen implementation
  */
 
 import React, { useRef, useEffect, useState } from 'react';
@@ -21,7 +21,7 @@ import { useRouter } from 'expo-router';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
 
 export default function TimerScreen() {
-  // Timer state - same as TimerOverlay
+  // Timer state management
   const [isRunning, setIsRunning] = useState(false);
   const [minutes, setMinutes] = useState(2); // Standard 2 minutes
   const [seconds, setSeconds] = useState(0);
@@ -50,7 +50,7 @@ export default function TimerScreen() {
     enableHaptics: true,
   });
   
-  // Timer logic, same as TimerOverlay
+  // Timer countdown logic
   useEffect(() => {
     if (isRunning) {
       timerRef.current = setInterval(() => {
@@ -153,9 +153,9 @@ export default function TimerScreen() {
     router.push('./BrushingResultsScreen');
   };
 
-  // Handler for back button (uses the hook's handleClose)
-  const handleBackPress = () => {
-    setIsRunning(false); // Stop timer when going back
+  // Handler for close button (uses the hook's handleClose with swipe gesture)
+  const handleClosePress = () => {
+    setIsRunning(false); // Stop timer when closing
     swipeGesture.handleClose();
   };
 
@@ -193,10 +193,10 @@ export default function TimerScreen() {
         {/* Song Menu */}
         <SongMenu />
         
-        {/* Back Button in top left corner */}
+        {/* Close Button in top right corner */}
         <View 
           style={[
-            styles.backButtonContainer, 
+            styles.closeButtonContainer, 
             { 
               top: insets.top + 10 
             }
@@ -204,16 +204,16 @@ export default function TimerScreen() {
         >
           <Pressable
             style={({ pressed }) => [
-              styles.backButton,
+              styles.closeButton,
               {
                 opacity: pressed ? 0.7 : 1,
                 transform: [{ scale: pressed ? 0.90 : 1 }]
               }
             ]}
-            onPress={handleBackPress}
+            onPress={handleClosePress}
           >
             <MaterialCommunityIcons 
-              name="chevron-left" 
+              name="chevron-down" 
               size={28} 
               color={theme.activeColors.text} 
             />
@@ -230,15 +230,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
-    paddingTop: 60, // Allow space for back button
+    paddingTop: 60, // Allow space for close button
     paddingBottom: 20,
   },
-  backButtonContainer: {
+  closeButtonContainer: {
     position: 'absolute',
-    left: 20,
+    right: 20,
     zIndex: 2000,
   },
-  backButton: {
+  closeButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
