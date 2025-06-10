@@ -128,7 +128,7 @@ const BrushingResultsScreen = () => {
       duration: 200,
       useNativeDriver: true,
     }).start(() => {
-      router.replace('/(home)');
+      router.back();
     });
   };
 
@@ -138,7 +138,7 @@ const BrushingResultsScreen = () => {
       duration: 200,
       useNativeDriver: true,
     }).start(() => {
-      router.replace('/(home)/timer');
+      router.back();
     });
   };
 
