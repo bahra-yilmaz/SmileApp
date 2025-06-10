@@ -326,6 +326,13 @@
       },
       "appVersion": {
         "name": "Uygulama Sürümü"
+      },
+      "brushingSettings": {
+        "title": "Fırçalama Ayarları",
+        "reminderTime": "Hatırlatıcı Saati",
+        "frequency": "Fırçalama Sıklığı",
+        "targetTime": "Hedef Fırçalama Süresi",
+        "notifications": "Fırçalama Bildirimleri"
       }
     }
     },

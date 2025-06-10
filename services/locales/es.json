@@ -326,6 +326,13 @@
       },
       "appVersion": {
         "name": "Versión de la app"
+      },
+      "brushingSettings": {
+        "title": "Configuración de cepillado",
+        "reminderTime": "Hora de recordatorio",
+        "frequency": "Frecuencia de cepillado",
+        "targetTime": "Tiempo objetivo de cepillado",
+        "notifications": "Notificaciones de cepillado"
       }
     }
     },

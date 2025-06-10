@@ -326,6 +326,13 @@
     },
     "appVersion": {
       "name": "App Version"
+    },
+    "brushingSettings": {
+      "title": "Brushing Settings",
+      "reminderTime": "Reminder Time",
+      "frequency": "Brushing Frequency",
+      "targetTime": "Target Brushing Time",
+      "notifications": "Brushing Notifications"
     }
   }
   },

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, Pressable, Alert, Text, Dimensions, Modal, FlatList } from 'react-native';
+import { View, StyleSheet, ScrollView, Pressable, Alert, Text, Dimensions, Modal, FlatList, Image } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import ThemedText from '../../components/ThemedText';
 import GlassmorphicCard from '../../components/ui/GlassmorphicCard';
+import GlassmorphicHeader from '../../components/ui/GlassmorphicHeader';
 import BottomSheetModal from '../../components/ui/BottomSheetModal';
 import { OnboardingService } from '../../services/OnboardingService';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Image } from 'expo-image';
+import { Image as ExpoImage } from 'expo-image';
 import { AppImages } from '../../utils/loadAssets';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import Animated, { 
@@ -23,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import { LANGUAGES, LanguageItem } from '../../services/languageConfig';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BlurView } from 'expo-blur';
 
 const { width: screenWidth } = Dimensions.get('window');
 const NUBO_TONE_KEY = 'nubo_tone';
@@ -33,6 +35,7 @@ interface MascotTone {
   label: string;
   description: string;
   icon?: string;
+  image: any;
 }
 
 export default function SettingsScreen() {
@@ -45,6 +48,7 @@ export default function SettingsScreen() {
   // Animation values
   const translateX = useSharedValue(screenWidth);
   const opacity = useSharedValue(0);
+  const scrollY = useSharedValue(0);
   
   // Language selection state
   const [isLanguageModalVisible, setIsLanguageModalVisible] = useState(false);
@@ -60,25 +64,29 @@ export default function SettingsScreen() {
       id: 'supportive', 
       label: t('onboarding.nuboToneScreen.options.supportive_label', 'Supportive'), 
       description: t('onboarding.nuboToneScreen.options.supportive_description', 'Gentle and helpful'),
-      icon: 'heart-outline'
+      icon: 'heart-outline',
+      image: require('../../assets/mascot/nubo-supportive-1.png')
     },
     { 
       id: 'playful', 
       label: t('onboarding.nuboToneScreen.options.playful_label', 'Playful'), 
       description: t('onboarding.nuboToneScreen.options.playful_description', 'Fun and encouraging'),
-      icon: 'happy-outline'
+      icon: 'happy-outline',
+      image: require('../../assets/mascot/nubo-playful-1.png')
     },
     { 
       id: 'cool', 
       label: t('onboarding.nuboToneScreen.options.cool_label', 'Cool'), 
       description: t('onboarding.nuboToneScreen.options.cool_description', 'Confident and direct'),
-      icon: 'sunglasses-outline'
+      icon: 'sunglasses-outline',
+      image: require('../../assets/mascot/nubo-cool-5.png')
     },
     { 
       id: 'wise', 
       label: t('onboarding.nuboToneScreen.options.wise_label', 'Wise'), 
       description: t('onboarding.nuboToneScreen.options.wise_description', 'Insightful and calm'),
-      icon: 'library-outline'
+      icon: 'library-outline',
+      image: require('../../assets/mascot/nubo-wise-5.png')
     }
   ];
   
@@ -198,7 +206,6 @@ export default function SettingsScreen() {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       await i18n.changeLanguage(langCode);
       setCurrentLanguage(langCode);
-      setIsLanguageModalVisible(false);
     } catch (error) {
       console.error('Error changing language:', error);
       Alert.alert(
@@ -223,7 +230,6 @@ export default function SettingsScreen() {
       };
       await AsyncStorage.setItem(NUBO_TONE_KEY, JSON.stringify(toneData));
       setCurrentTone(tone);
-      setIsToneModalVisible(false);
     } catch (error) {
       console.error('Error changing mascot tone:', error);
       Alert.alert(
@@ -270,70 +276,71 @@ export default function SettingsScreen() {
     <Pressable
       key={tone.id}
       onPress={() => handleToneSelect(tone)}
-      style={[
-        styles.toneModalItem,
-        {
-          backgroundColor: currentTone?.id === tone.id 
-            ? 'rgba(0, 100, 255, 0.3)' 
-            : 'rgba(255, 255, 255, 0.1)'
-        }
-      ]}
+              style={[
+          styles.toneCard,
+          { 
+            borderColor: currentTone?.id === tone.id 
+              ? activeColors.tint 
+              : 'rgba(255, 255, 255, 0.3)',
+            backgroundColor: currentTone?.id === tone.id 
+              ? 'rgba(255, 255, 255, 0.1)' 
+              : 'rgba(0, 0, 0, 0.05)'
+          }
+        ]}
     >
-      <Ionicons 
-        name={tone.icon as any} 
-        size={28} 
-        color={currentTone?.id === tone.id ? 'white' : activeColors.tint} 
-        style={styles.toneModalIcon}
-      />
-      <View style={styles.toneModalTextContainer}>
-        <ThemedText style={[
-          styles.toneModalTitle,
-          {
-            color: currentTone?.id === tone.id ? 'white' : activeColors.text
-          }
-        ]}>
-          {tone.label}
-        </ThemedText>
-        <ThemedText style={[
-          styles.toneModalDescription,
-          {
-            color: currentTone?.id === tone.id ? 'rgba(255,255,255,0.8)' : activeColors.textSecondary
-          }
-        ]}>
-          {tone.description}
-        </ThemedText>
+      <View style={styles.toneCardContent}>
+        <View style={styles.toneTextContainer}>
+          <ThemedText style={[
+            styles.toneCardTitle,
+            {
+              color: currentTone?.id === tone.id ? activeColors.tint : 'white'
+            }
+          ]}>
+            {tone.label}
+          </ThemedText>
+          <ThemedText style={[
+            styles.toneCardDescription,
+            {
+              color: currentTone?.id === tone.id ? activeColors.tint : 'white',
+              opacity: currentTone?.id === tone.id ? 1 : 0.9
+            }
+          ]}>
+            {tone.description}
+          </ThemedText>
+        </View>
+        <ExpoImage 
+          source={tone.image}
+          style={styles.toneCardImage}
+          resizeMode="contain"
+        />
       </View>
-      {currentTone?.id === tone.id && (
-        <Ionicons name="checkmark" size={24} color="white" style={styles.checkmarkIcon} />
-      )}
     </Pressable>
   );
   
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
       <Animated.View style={[styles.container, animatedStyle]}>
-        <Image 
+        <ExpoImage 
           source={require('../../assets/images/meshgradient-light-default.png')}
           style={styles.backgroundImage}
           contentFit="cover"
           cachePolicy="disk"
         />
         
-        <View style={[styles.header, { top: insets.top, paddingHorizontal: spacing.md }]}>
-          <Pressable onPress={handleBackPress} style={styles.backButton}>
-            <Ionicons name="chevron-back" size={28} color={activeColors.text} />
-          </Pressable>
-          <Text style={styles.headerText}>{t('settings.name', 'settings')}</Text>
-          <View style={styles.backButton} />
-        </View>
-        
         <ScrollView 
-          style={{ flex: 1, marginTop: 60 + insets.top }}
-          contentContainerStyle={{ 
-            paddingTop: spacing.lg,
-            paddingBottom: spacing.lg,
-            alignItems: 'center'
+          style={styles.scrollView}
+          contentContainerStyle={[
+            styles.scrollContent,
+            { 
+              paddingTop: 60 + insets.top + spacing.lg,
+              paddingBottom: spacing.lg,
+            }
+          ]}
+          showsVerticalScrollIndicator={false}
+          onScroll={(event) => {
+            scrollY.value = event.nativeEvent.contentOffset.y;
           }}
+          scrollEventThrottle={16}
         >
           <GlassmorphicCard style={styles.settingsCard} width={screenWidth * 0.9}>
             <ThemedText variant="subtitle" style={styles.sectionTitle}>
@@ -400,7 +407,61 @@ export default function SettingsScreen() {
             </Pressable>
           </GlassmorphicCard>
           
-          <View style={{ height: spacing.md }} />
+          <View style={{ height: spacing.sm }} />
+          
+          <GlassmorphicCard style={styles.settingsCard} width={screenWidth * 0.9}>
+            <ThemedText variant="subtitle" style={styles.sectionTitle}>
+              {t('settings.brushingSettings.title', 'Brushing Settings')}
+            </ThemedText>
+            
+            <Pressable style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Ionicons name="timer-outline" size={24} color={activeColors.tint} />
+                <ThemedText style={styles.settingText}>
+                  {t('settings.brushingSettings.reminderTime', 'Reminder Time')}
+                </ThemedText>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+            </Pressable>
+            
+            <View style={styles.divider} />
+            
+            <Pressable style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Ionicons name="calendar-outline" size={24} color={activeColors.tint} />
+                <ThemedText style={styles.settingText}>
+                  {t('settings.brushingSettings.frequency', 'Brushing Frequency')}
+                </ThemedText>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+            </Pressable>
+            
+            <View style={styles.divider} />
+            
+            <Pressable style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Ionicons name="stopwatch-outline" size={24} color={activeColors.tint} />
+                <ThemedText style={styles.settingText}>
+                  {t('settings.brushingSettings.targetTime', 'Target Brushing Time')}
+                </ThemedText>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+            </Pressable>
+            
+            <View style={styles.divider} />
+            
+            <Pressable style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Ionicons name="notifications-outline" size={24} color={activeColors.tint} />
+                <ThemedText style={styles.settingText}>
+                  {t('settings.brushingSettings.notifications', 'Brushing Notifications')}
+                </ThemedText>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+            </Pressable>
+          </GlassmorphicCard>
+          
+          <View style={{ height: spacing.sm }} />
           
           <GlassmorphicCard style={styles.settingsCard} width={screenWidth * 0.9}>
             <ThemedText variant="subtitle" style={styles.sectionTitle}>
@@ -418,6 +479,15 @@ export default function SettingsScreen() {
             </Pressable>
           </GlassmorphicCard>
         </ScrollView>
+        
+        {/* Glassmorphic Header */}
+        <GlassmorphicHeader
+          title={t('settings.name', 'settings')}
+          onBackPress={handleBackPress}
+          textColor="white"
+          scrollY={scrollY}
+          fadeThreshold={30}
+        />
         
         {/* Language Selection Modal */}
         <BottomSheetModal
@@ -455,29 +525,7 @@ const styles = StyleSheet.create({
     top: 0,
     zIndex: 0,
   },
-  header: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    zIndex: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: 60,
-  },
-  headerText: {
-    fontSize: 32,
-    color: 'white',
-    letterSpacing: 1.6,
-    textAlign: 'center',
-    fontFamily: 'Merienda-Medium',
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+
   settingsCard: {
     padding: 20,
     marginBottom: 16,
@@ -539,27 +587,44 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   // Tone Modal Styles
-  toneModalItem: {
+  // Tone Card Styles (matching NuboToneScreen)
+  toneCard: {
+    width: screenWidth * 0.85,
+    height: 120,
+    borderRadius: 20,
+    borderWidth: 1,
+    padding: 20,
+    marginVertical: 10,
+    justifyContent: 'center',
+    overflow: 'hidden',
+    alignSelf: 'center',
+  },
+  toneCardContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    marginBottom: 12,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
-  toneModalIcon: {
-    marginRight: 16,
-  },
-  toneModalTextContainer: {
+  toneTextContainer: {
     flex: 1,
   },
-  toneModalTitle: {
-    fontSize: 16,
+  toneCardTitle: {
+    fontSize: 18,
+    marginBottom: 8,
     fontFamily: 'Quicksand-Bold',
   },
-  toneModalDescription: {
-    fontSize: 14,
-    opacity: 0.7,
+  toneCardDescription: {
+    fontSize: 16,
+  },
+  toneCardImage: {
+    width: 80,
+    height: 80,
+    marginLeft: 10,
+    backgroundColor: 'transparent',
+  },
+
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    alignItems: 'center',
   },
 }); 

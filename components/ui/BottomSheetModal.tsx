@@ -57,6 +57,7 @@ export default function BottomSheetModal<T>({
           keyExtractor={keyExtractor}
           style={styles.list}
           contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     </Modal>
@@ -98,9 +99,11 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
+    backgroundColor: 'transparent',
   },
   listContent: {
     paddingHorizontal: 20,
     paddingBottom: 40,
+    backgroundColor: 'transparent',
   },
 }); 
