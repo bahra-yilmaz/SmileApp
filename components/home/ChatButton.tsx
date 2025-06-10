@@ -48,13 +48,13 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
       style={({ pressed }) => [
         styles.chatButton,
         {
-          top: insets.top + 13, // Positioned slightly higher
+          top: insets.top + 13,
           transform: [{ scale: pressed ? 0.95 : 1 }]
         }
       ]}
     >
       <View style={styles.chatButtonContainer}>
-        <Ionicons name="mail" size={28} color="white" />
+        <Ionicons name="people" size={28} color="white" />
         
         {/* Notification Badge */}
         {hasUnreadMessages && (
@@ -82,7 +82,7 @@ export const ChatButton: React.FC<ChatButtonProps> = ({
 const styles = StyleSheet.create({
   chatButton: {
     position: 'absolute',
-    right: 20,
+    left: 20,
     zIndex: 15,
   },
   chatButtonContainer: {

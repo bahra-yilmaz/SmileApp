@@ -47,7 +47,10 @@ export default function HomeLayout() {
         name="settings"
         options={{
           title: 'Settings',
-          headerShown: false, // We handle our own header in the settings screen
+          headerShown: false,
+          presentation: 'transparentModal',
+          animation: 'none',
+          gestureEnabled: false,
         }}
       />
       <Stack.Screen

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Pressable, Alert, Text, Dimensions } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import ThemedText from '../../components/ThemedText';
@@ -7,6 +7,17 @@ import { OnboardingService } from '../../services/OnboardingService';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Image } from 'expo-image';
+import { AppImages } from '../../utils/loadAssets';
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
+import Animated, { 
+  useSharedValue, 
+  useAnimatedStyle, 
+  withTiming, 
+  Easing,
+  runOnJS,
+  useAnimatedGestureHandler
+} from 'react-native-reanimated';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -15,6 +26,68 @@ export default function SettingsScreen() {
   const { spacing, activeColors } = theme;
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  
+  // Animation values
+  const translateX = useSharedValue(screenWidth);
+  const opacity = useSharedValue(0);
+  
+  useEffect(() => {
+    // Animate in from the right
+    translateX.value = withTiming(0, {
+      duration: 300,
+      easing: Easing.out(Easing.quad),
+    });
+    opacity.value = withTiming(1, {
+      duration: 200,
+      easing: Easing.out(Easing.quad),
+    });
+  }, []);
+  
+  const handleBackPress = () => {
+    // Animate out to the right
+    translateX.value = withTiming(screenWidth, {
+      duration: 250,
+      easing: Easing.in(Easing.quad),
+    }, () => {
+      runOnJS(router.back)();
+    });
+    opacity.value = withTiming(0, {
+      duration: 200,
+      easing: Easing.in(Easing.quad),
+    });
+  };
+  
+  // Gesture handler for swipe-to-go-back
+  const gestureHandler = useAnimatedGestureHandler({
+    onStart: (_, context) => {
+      context.startX = translateX.value;
+    },
+    onActive: (event, context) => {
+      // Only allow swiping to the right and only if gesture starts from left edge
+      if (event.translationX > 0 && event.x < 50) {
+        translateX.value = Math.max(0, event.translationX);
+      }
+    },
+    onEnd: (event) => {
+      // If user swiped more than 100 pixels to the right, trigger back navigation
+      if (event.translationX > 100 && event.velocityX > 0) {
+        runOnJS(handleBackPress)();
+      } else {
+        // Snap back to original position
+        translateX.value = withTiming(0, {
+          duration: 200,
+          easing: Easing.out(Easing.quad),
+        });
+      }
+    },
+  });
+  
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: translateX.value }],
+      opacity: opacity.value,
+    };
+  });
   
   const handleResetOnboarding = () => {
     Alert.alert(
@@ -38,79 +111,96 @@ export default function SettingsScreen() {
   };
   
   return (
-    <View style={styles.container}>
-      <View style={[styles.header, { top: insets.top, paddingHorizontal: spacing.md }]}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="chevron-back" size={28} color={activeColors.text} />
-        </Pressable>
-        <Text style={styles.headerText}>settings</Text>
-        <View style={styles.backButton} />
-      </View>
-      
-      <ScrollView 
-        style={{ flex: 1, marginTop: 60 + insets.top }}
-        contentContainerStyle={{ 
-          paddingTop: spacing.lg,
-          paddingBottom: spacing.lg,
-          alignItems: 'center'
-        }}
-      >
-        <GlassmorphicCard style={styles.settingsCard} width={screenWidth * 0.9}>
-          <ThemedText variant="subtitle" style={styles.sectionTitle}>App Settings</ThemedText>
-          
-          <Pressable 
-            style={styles.settingItem}
-            onPress={handleResetOnboarding}
-          >
-            <View style={styles.settingContent}>
-              <Ionicons name="refresh-circle-outline" size={24} color={activeColors.tint} />
-              <ThemedText style={styles.settingText}>Reset Onboarding</ThemedText>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
-          </Pressable>
-          
-          <View style={styles.divider} />
-          
-          <Pressable style={styles.settingItem}>
-            <View style={styles.settingContent}>
-              <Ionicons name="moon-outline" size={24} color={activeColors.tint} />
-              <ThemedText style={styles.settingText}>App Theme</ThemedText>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
-          </Pressable>
-          
-          <View style={styles.divider} />
-          
-          <Pressable style={styles.settingItem}>
-            <View style={styles.settingContent}>
-              <Ionicons name="language-outline" size={24} color={activeColors.tint} />
-              <ThemedText style={styles.settingText}>Language</ThemedText>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
-          </Pressable>
-        </GlassmorphicCard>
+    <PanGestureHandler onGestureEvent={gestureHandler}>
+      <Animated.View style={[styles.container, animatedStyle]}>
+        <Image 
+          source={require('../../assets/images/meshgradient-light-default.png')}
+          style={styles.backgroundImage}
+          contentFit="cover"
+          cachePolicy="disk"
+        />
         
-        <View style={{ height: spacing.md }} />
-        
-        <GlassmorphicCard style={styles.settingsCard} width={screenWidth * 0.9}>
-          <ThemedText variant="subtitle" style={styles.sectionTitle}>About</ThemedText>
-          
-          <Pressable style={styles.settingItem}>
-            <View style={styles.settingContent}>
-              <Ionicons name="information-circle-outline" size={24} color={activeColors.tint} />
-              <ThemedText style={styles.settingText}>App Version</ThemedText>
-            </View>
-            <ThemedText style={styles.versionText}>1.0.0</ThemedText>
+        <View style={[styles.header, { top: insets.top, paddingHorizontal: spacing.md }]}>
+          <Pressable onPress={handleBackPress} style={styles.backButton}>
+            <Ionicons name="chevron-back" size={28} color={activeColors.text} />
           </Pressable>
-        </GlassmorphicCard>
-      </ScrollView>
-    </View>
+          <Text style={styles.headerText}>settings</Text>
+          <View style={styles.backButton} />
+        </View>
+        
+        <ScrollView 
+          style={{ flex: 1, marginTop: 60 + insets.top }}
+          contentContainerStyle={{ 
+            paddingTop: spacing.lg,
+            paddingBottom: spacing.lg,
+            alignItems: 'center'
+          }}
+        >
+          <GlassmorphicCard style={styles.settingsCard} width={screenWidth * 0.9}>
+            <ThemedText variant="subtitle" style={styles.sectionTitle}>App Settings</ThemedText>
+            
+            <Pressable 
+              style={styles.settingItem}
+              onPress={handleResetOnboarding}
+            >
+              <View style={styles.settingContent}>
+                <Ionicons name="refresh-circle-outline" size={24} color={activeColors.tint} />
+                <ThemedText style={styles.settingText}>Reset Onboarding</ThemedText>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+            </Pressable>
+            
+            <View style={styles.divider} />
+            
+            <Pressable style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Ionicons name="moon-outline" size={24} color={activeColors.tint} />
+                <ThemedText style={styles.settingText}>App Theme</ThemedText>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+            </Pressable>
+            
+            <View style={styles.divider} />
+            
+            <Pressable style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Ionicons name="language-outline" size={24} color={activeColors.tint} />
+                <ThemedText style={styles.settingText}>Language</ThemedText>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+            </Pressable>
+          </GlassmorphicCard>
+          
+          <View style={{ height: spacing.md }} />
+          
+          <GlassmorphicCard style={styles.settingsCard} width={screenWidth * 0.9}>
+            <ThemedText variant="subtitle" style={styles.sectionTitle}>About</ThemedText>
+            
+            <Pressable style={styles.settingItem}>
+              <View style={styles.settingContent}>
+                <Ionicons name="information-circle-outline" size={24} color={activeColors.tint} />
+                <ThemedText style={styles.settingText}>App Version</ThemedText>
+              </View>
+              <ThemedText style={styles.versionText}>1.0.0</ThemedText>
+            </Pressable>
+          </GlassmorphicCard>
+        </ScrollView>
+      </Animated.View>
+    </PanGestureHandler>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  backgroundImage: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    left: 0,
+    top: 0,
+    zIndex: 0,
   },
   header: {
     position: 'absolute',

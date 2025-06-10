@@ -136,6 +136,8 @@ export default function HomeScreen() {
       />
       <View style={styles.mainContainer}>
         <SafeAreaView style={styles.headerContainer}>
+          <ChatButton hasUnreadMessages={hasUnreadMessages} onPress={toggleChat} />
+          <HeaderLogo />
           <Pressable
             onPress={handleMenuPress}
             style={({ pressed }) => [
@@ -150,8 +152,6 @@ export default function HomeScreen() {
               <MaterialCommunityIcons name="menu" size={32} color="white" />
             </View>
           </Pressable>
-          <HeaderLogo />
-          <ChatButton hasUnreadMessages={hasUnreadMessages} onPress={toggleChat} />
         </SafeAreaView>
         <View style={styles.mascotContainer}>
           <ExpandableMascotCard 
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
   },
   menuButton: {
     position: 'absolute',
-    left: 20,
+    right: 20,
     zIndex: 15,
   },
   menuIconContainer: {
