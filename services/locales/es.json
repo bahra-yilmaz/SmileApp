@@ -290,10 +290,36 @@
         "name": "Logros",
         "description": "Revisa tus logros de cepillado"
       },
-      "settings": {
-        "name": "Configuración",
-        "description": "Ajustes y preferencias de la app"
+          "settings": {
+      "name": "Configuración",
+      "description": "Ajustes y preferencias de la app",
+      "appSettings": {
+        "title": "Configuración de la app"
+      },
+      "resetOnboarding": {
+        "name": "Reiniciar presentación",
+        "title": "Reiniciar presentación",
+        "message": "¿Estás seguro de que quieres reiniciar el flujo de presentación? Serás redirigido a la pantalla de bienvenida.",
+        "confirm": "Reiniciar"
+      },
+      "theme": {
+        "name": "Tema de la app"
+      },
+      "language": {
+        "name": "Idioma",
+        "selectTitle": "Seleccionar idioma",
+        "error": {
+          "title": "Error de idioma",
+          "message": "No se pudo cambiar el idioma. Por favor intenta de nuevo."
+        }
+      },
+      "about": {
+        "title": "Acerca de"
+      },
+      "appVersion": {
+        "name": "Versión de la app"
       }
+    }
     },
     "timerOverlay": {
       "start": "Iniciar",

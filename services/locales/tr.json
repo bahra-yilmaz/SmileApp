@@ -290,10 +290,36 @@
         "name": "Başarılar",
         "description": "Fırçalama başarılarını kontrol et"
       },
-      "settings": {
-        "name": "Ayarlar",
-        "description": "Uygulama ayarları ve tercihler"
+          "settings": {
+      "name": "Ayarlar",
+      "description": "Uygulama ayarları ve tercihler",
+      "appSettings": {
+        "title": "Uygulama Ayarları"
+      },
+      "resetOnboarding": {
+        "name": "Tanıtımı Sıfırla",
+        "title": "Tanıtımı Sıfırla",
+        "message": "Tanıtım akışını sıfırlamak istediğinizden emin misiniz? Karşılama ekranına yönlendirileceksiniz.",
+        "confirm": "Sıfırla"
+      },
+      "theme": {
+        "name": "Uygulama Teması"
+      },
+      "language": {
+        "name": "Dil",
+        "selectTitle": "Dil Seçin",
+        "error": {
+          "title": "Dil Hatası",
+          "message": "Dil değiştirilemedi. Lütfen tekrar deneyin."
+        }
+      },
+      "about": {
+        "title": "Hakkında"
+      },
+      "appVersion": {
+        "name": "Uygulama Sürümü"
       }
+    }
     },
     "timerOverlay": {
       "start": "Başla",

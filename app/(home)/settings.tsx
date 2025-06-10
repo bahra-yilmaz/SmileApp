@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Pressable, Alert, Text, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, ScrollView, Pressable, Alert, Text, Dimensions, Modal, FlatList } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import ThemedText from '../../components/ThemedText';
 import GlassmorphicCard from '../../components/ui/GlassmorphicCard';
@@ -18,6 +18,9 @@ import Animated, {
   runOnJS,
   useAnimatedGestureHandler
 } from 'react-native-reanimated';
+import { useTranslation } from 'react-i18next';
+import { LANGUAGES, LanguageItem } from '../../services/languageConfig';
+import * as Haptics from 'expo-haptics';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -26,10 +29,15 @@ export default function SettingsScreen() {
   const { spacing, activeColors } = theme;
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t, i18n } = useTranslation();
   
   // Animation values
   const translateX = useSharedValue(screenWidth);
   const opacity = useSharedValue(0);
+  
+  // Language selection state
+  const [isLanguageModalVisible, setIsLanguageModalVisible] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState<string>(i18n.language || 'en');
   
   useEffect(() => {
     // Animate in from the right
@@ -42,6 +50,11 @@ export default function SettingsScreen() {
       easing: Easing.out(Easing.quad),
     });
   }, []);
+  
+  useEffect(() => {
+    // Update current language when i18n language changes
+    setCurrentLanguage(i18n.language);
+  }, [i18n.language]);
   
   const handleBackPress = () => {
     // Animate out to the right
@@ -91,15 +104,15 @@ export default function SettingsScreen() {
   
   const handleResetOnboarding = () => {
     Alert.alert(
-      "Reset Onboarding",
-      "Are you sure you want to reset the onboarding flow? You'll be redirected to the welcome screen.",
+      t('settings.resetOnboarding.title', 'Reset Onboarding'),
+      t('settings.resetOnboarding.message', "Are you sure you want to reset the onboarding flow? You'll be redirected to the welcome screen."),
       [
         {
-          text: "Cancel",
+          text: t('common.cancel', 'Cancel'),
           style: "cancel"
         },
         {
-          text: "Reset",
+          text: t('settings.resetOnboarding.confirm', 'Reset'),
           onPress: async () => {
             await OnboardingService.resetOnboardingStatus();
             router.replace('/');
@@ -109,6 +122,59 @@ export default function SettingsScreen() {
       ]
     );
   };
+  
+  const handleLanguagePress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setIsLanguageModalVisible(true);
+  };
+  
+  const handleLanguageSelect = async (langCode: string) => {
+    try {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      await i18n.changeLanguage(langCode);
+      setCurrentLanguage(langCode);
+      setIsLanguageModalVisible(false);
+    } catch (error) {
+      console.error('Error changing language:', error);
+      Alert.alert(
+        t('settings.language.error.title', 'Language Error'),
+        t('settings.language.error.message', 'Failed to change language. Please try again.')
+      );
+    }
+  };
+  
+  const getCurrentLanguageName = () => {
+    const language = LANGUAGES.find(lang => lang.code === currentLanguage);
+    return language ? t(`languages.${language.code}`, language.name) : t('languages.en', 'English');
+  };
+  
+  const renderLanguageItem = ({ item: lang }: { item: LanguageItem }) => (
+    <Pressable
+      key={lang.code}
+      onPress={() => handleLanguageSelect(lang.code)}
+      style={[
+        styles.languageModalItem,
+        {
+          backgroundColor: currentLanguage === lang.code 
+            ? 'rgba(0, 100, 255, 0.3)' 
+            : 'rgba(255, 255, 255, 0.1)'
+        }
+      ]}
+    >
+      <Text style={styles.languageModalFlag}>{lang.flag}</Text>
+      <ThemedText style={[
+        styles.languageModalText,
+        {
+          color: currentLanguage === lang.code ? 'white' : activeColors.text
+        }
+      ]}>
+        {t(`languages.${lang.code}`, lang.name)}
+      </ThemedText>
+      {currentLanguage === lang.code && (
+        <Ionicons name="checkmark" size={24} color="white" style={styles.checkmarkIcon} />
+      )}
+    </Pressable>
+  );
   
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
@@ -124,7 +190,7 @@ export default function SettingsScreen() {
           <Pressable onPress={handleBackPress} style={styles.backButton}>
             <Ionicons name="chevron-back" size={28} color={activeColors.text} />
           </Pressable>
-          <Text style={styles.headerText}>settings</Text>
+          <Text style={styles.headerText}>{t('settings.name', 'settings')}</Text>
           <View style={styles.backButton} />
         </View>
         
@@ -137,7 +203,9 @@ export default function SettingsScreen() {
           }}
         >
           <GlassmorphicCard style={styles.settingsCard} width={screenWidth * 0.9}>
-            <ThemedText variant="subtitle" style={styles.sectionTitle}>App Settings</ThemedText>
+            <ThemedText variant="subtitle" style={styles.sectionTitle}>
+              {t('settings.appSettings.title', 'App Settings')}
+            </ThemedText>
             
             <Pressable 
               style={styles.settingItem}
@@ -145,7 +213,9 @@ export default function SettingsScreen() {
             >
               <View style={styles.settingContent}>
                 <Ionicons name="refresh-circle-outline" size={24} color={activeColors.tint} />
-                <ThemedText style={styles.settingText}>Reset Onboarding</ThemedText>
+                <ThemedText style={styles.settingText}>
+                  {t('settings.resetOnboarding.name', 'Reset Onboarding')}
+                </ThemedText>
               </View>
               <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
             </Pressable>
@@ -155,36 +225,87 @@ export default function SettingsScreen() {
             <Pressable style={styles.settingItem}>
               <View style={styles.settingContent}>
                 <Ionicons name="moon-outline" size={24} color={activeColors.tint} />
-                <ThemedText style={styles.settingText}>App Theme</ThemedText>
+                <ThemedText style={styles.settingText}>
+                  {t('settings.theme.name', 'App Theme')}
+                </ThemedText>
               </View>
               <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
             </Pressable>
             
             <View style={styles.divider} />
             
-            <Pressable style={styles.settingItem}>
+            <Pressable style={styles.settingItem} onPress={handleLanguagePress}>
               <View style={styles.settingContent}>
                 <Ionicons name="language-outline" size={24} color={activeColors.tint} />
-                <ThemedText style={styles.settingText}>Language</ThemedText>
+                <ThemedText style={styles.settingText}>
+                  {t('settings.language.name', 'Language')}
+                </ThemedText>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+              <View style={styles.languageInfo}>
+                <ThemedText style={styles.currentLanguageText}>
+                  {getCurrentLanguageName()}
+                </ThemedText>
+                <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+              </View>
             </Pressable>
           </GlassmorphicCard>
           
           <View style={{ height: spacing.md }} />
           
           <GlassmorphicCard style={styles.settingsCard} width={screenWidth * 0.9}>
-            <ThemedText variant="subtitle" style={styles.sectionTitle}>About</ThemedText>
+            <ThemedText variant="subtitle" style={styles.sectionTitle}>
+              {t('settings.about.title', 'About')}
+            </ThemedText>
             
             <Pressable style={styles.settingItem}>
               <View style={styles.settingContent}>
                 <Ionicons name="information-circle-outline" size={24} color={activeColors.tint} />
-                <ThemedText style={styles.settingText}>App Version</ThemedText>
+                <ThemedText style={styles.settingText}>
+                  {t('settings.appVersion.name', 'App Version')}
+                </ThemedText>
               </View>
               <ThemedText style={styles.versionText}>1.0.0</ThemedText>
             </Pressable>
           </GlassmorphicCard>
         </ScrollView>
+        
+        {/* Language Selection Modal */}
+        <Modal
+          visible={isLanguageModalVisible}
+          animationType="slide"
+          presentationStyle="pageSheet"
+          onRequestClose={() => setIsLanguageModalVisible(false)}
+        >
+          <View style={styles.languageModalContainer}>
+            <Image 
+              source={require('../../assets/images/meshgradient-light-default.png')}
+              style={styles.backgroundImage}
+              contentFit="cover"
+              cachePolicy="disk"
+            />
+            
+            <View style={[styles.languageModalHeader, { paddingTop: insets.top + 5 }]}>
+              <View style={styles.modalCloseButton} />
+              <Text style={styles.languageModalTitle}>
+                {t('settings.language.selectTitle', 'Select Language')}
+              </Text>
+              <Pressable 
+                onPress={() => setIsLanguageModalVisible(false)}
+                style={styles.modalCloseButton}
+              >
+                <Ionicons name="chevron-down" size={28} color="white" />
+              </Pressable>
+            </View>
+            
+            <FlatList
+              data={LANGUAGES}
+              renderItem={renderLanguageItem}
+              keyExtractor={(item) => item.code}
+              style={styles.languageModalList}
+              contentContainerStyle={styles.languageModalListContent}
+            />
+          </View>
+        </Modal>
       </Animated.View>
     </PanGestureHandler>
   );
@@ -246,11 +367,74 @@ const styles = StyleSheet.create({
   settingText: {
     marginLeft: 12,
   },
+  languageInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  currentLanguageText: {
+    opacity: 0.7,
+    marginRight: 8,
+    fontSize: 14,
+  },
   versionText: {
     opacity: 0.6,
   },
   divider: {
     height: 1,
     backgroundColor: 'rgba(150, 150, 150, 0.2)',
+  },
+  // Language Modal Styles
+  languageModalContainer: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  languageModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    zIndex: 10,
+  },
+  languageModalTitle: {
+    fontSize: 24,
+    color: 'white',
+    fontFamily: 'Quicksand-Bold',
+    textAlign: 'center',
+  },
+  modalCloseButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  languageModalList: {
+    flex: 1,
+  },
+  languageModalListContent: {
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+  },
+  languageModalItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    marginBottom: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  languageModalFlag: {
+    fontSize: 24,
+    marginRight: 16,
+  },
+  languageModalText: {
+    flex: 1,
+    fontSize: 16,
+    color: 'white',
+  },
+  checkmarkIcon: {
+    marginLeft: 8,
+    fontWeight: 'bold',
   },
 }); 

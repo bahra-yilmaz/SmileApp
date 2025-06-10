@@ -290,10 +290,36 @@
       "name": "Achievements",
       "description": "Check your brushing achievements"
     },
-    "settings": {
-      "name": "Settings",
-      "description": "App settings and preferences"
+      "settings": {
+    "name": "Settings",
+    "description": "App settings and preferences",
+    "appSettings": {
+      "title": "App Settings"
+    },
+    "resetOnboarding": {
+      "name": "Reset Onboarding",
+      "title": "Reset Onboarding",
+      "message": "Are you sure you want to reset the onboarding flow? You'll be redirected to the welcome screen.",
+      "confirm": "Reset"
+    },
+    "theme": {
+      "name": "App Theme"
+    },
+    "language": {
+      "name": "Language",
+      "selectTitle": "Select Language",
+      "error": {
+        "title": "Language Error",
+        "message": "Failed to change language. Please try again."
+      }
+    },
+    "about": {
+      "title": "About"
+    },
+    "appVersion": {
+      "name": "App Version"
     }
+  }
   },
   "timerOverlay": {
     "start": "Start",
