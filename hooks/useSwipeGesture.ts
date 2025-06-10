@@ -44,6 +44,11 @@ interface UseSwipeGestureConfig {
    * Whether to enable haptic feedback. Default: true
    */
   enableHaptics?: boolean;
+  
+  /**
+   * Whether to play the opening animation when screen appears. Default: true
+   */
+  shouldPlayOpeningAnimation?: boolean;
 }
 
 interface UseSwipeGestureReturn {
@@ -62,6 +67,7 @@ interface UseSwipeGestureReturn {
   
   // State
   isFullyHidden: boolean;
+  isAnimatingIn: boolean;
   
   // Methods
   handleClose: () => void;
@@ -103,6 +109,7 @@ interface UseSwipeGestureReturn {
  *   velocityThreshold: 0.8, // Higher velocity threshold
  *   animationDuration: 300, // Faster animations
  *   enableHaptics: false, // Disable haptics
+ *   shouldPlayOpeningAnimation: true, // FAB-to-screen expand animation
  * });
  * ```
  */
@@ -115,17 +122,19 @@ export const useSwipeGesture = ({
   animationDuration = 400,
   fabButtonSize = 70,
   enableHaptics = true,
+  shouldPlayOpeningAnimation = true,
 }: UseSwipeGestureConfig): UseSwipeGestureReturn => {
   // Animation constants
   const MAX_SCALE_ANIM = Math.max(screenWidth, screenHeight) * 2 / fabButtonSize;
   
-  // Animation values
-  const [screenAppearAnim] = useState(() => new Animated.Value(1));
-  const [contentAppearAnim] = useState(() => new Animated.Value(1));
+  // Animation values - start at 0 if we should play opening animation
+  const [screenAppearAnim] = useState(() => new Animated.Value(shouldPlayOpeningAnimation ? 0 : 1));
+  const [contentAppearAnim] = useState(() => new Animated.Value(shouldPlayOpeningAnimation ? 0 : 1));
   const [gestureAnim] = useState(() => new Animated.Value(0));
   
   // State
   const [isFullyHidden, setIsFullyHidden] = useState(false);
+  const [isAnimatingIn, setIsAnimatingIn] = useState(shouldPlayOpeningAnimation);
   const currentGestureValue = useRef(0);
   
   // Track gesture animation value
@@ -137,6 +146,31 @@ export const useSwipeGesture = ({
       gestureAnim.removeListener(gestureListener);
     };
   }, [gestureAnim]);
+  
+  // Play opening animation on mount if enabled
+  useEffect(() => {
+    if (shouldPlayOpeningAnimation && isAnimatingIn) {
+      if (enableHaptics) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      }
+      
+      Animated.parallel([
+        Animated.timing(screenAppearAnim, {
+          toValue: 1,
+          duration: animationDuration,
+          useNativeDriver: true,
+        }),
+        Animated.timing(contentAppearAnim, {
+          toValue: 1,
+          duration: animationDuration,
+          delay: animationDuration * 0.3, // Content appears after background starts scaling
+          useNativeDriver: true,
+        }),
+      ]).start(() => {
+        setIsAnimatingIn(false);
+      });
+    }
+  }, [shouldPlayOpeningAnimation, isAnimatingIn, screenAppearAnim, contentAppearAnim, animationDuration, enableHaptics]);
   
   // Animation complete handler
   const animateCloseComplete = () => {
@@ -262,8 +296,13 @@ export const useSwipeGesture = ({
   ).current;
   
   // Computed animation styles
+  const baseScale = screenAppearAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, MAX_SCALE_ANIM], // Start from FAB size (1) to full screen
+  });
+  
   const finalTransformScale = Animated.multiply(
-    MAX_SCALE_ANIM,
+    baseScale,
     Animated.subtract(1, gestureAnim.interpolate({
       inputRange: [0, 1],
       outputRange: [0, 0.7],
@@ -318,6 +357,7 @@ export const useSwipeGesture = ({
     
     // State
     isFullyHidden,
+    isAnimatingIn,
     
     // Methods
     handleClose,
