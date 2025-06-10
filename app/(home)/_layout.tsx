@@ -50,6 +50,15 @@ export default function HomeLayout() {
           headerShown: false, // We handle our own header in the settings screen
         }}
       />
+      <Stack.Screen
+        name="timer"
+        options={{
+          title: 'Timer',
+          headerShown: false,
+          presentation: 'transparentModal',
+          animation: 'none',
+        }}
+      />
       <Stack.Screen // Add the screen definition
         name="BrushingResultsScreen"
         options={{

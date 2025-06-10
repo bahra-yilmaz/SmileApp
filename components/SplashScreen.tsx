@@ -8,29 +8,29 @@ interface SplashScreenProps {
 
 export default function SplashScreen({ onFinish, isAppReady }: SplashScreenProps) {
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
-
+  
   useEffect(() => {
     if (isAppReady) {
       // App is ready, start the fade out animation
-      Animated.timing(fadeAnim, {
-        toValue: 0,
+    Animated.timing(fadeAnim, {
+      toValue: 0,
         duration: 400,
         delay: 200, // A small delay to ensure the UI has a moment to settle
-        useNativeDriver: true,
-      }).start(() => {
+      useNativeDriver: true,
+    }).start(() => {
         // Call the onFinish callback when animation completes to unmount the component
-        onFinish();
-      });
-    }
+      onFinish();
+    });
+      }
   }, [isAppReady, onFinish, fadeAnim]);
-
+  
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
       {/* Fallback background color in case image is slow to load */}
       <View style={styles.fallbackBackground} />
-
+      
       {/* Splash screen image - ensure it covers the entire screen */}
-      <Image
+      <Image 
         source={require('../assets/images/splash-screen.png')}
         style={styles.splashImage}
         resizeMode="cover"

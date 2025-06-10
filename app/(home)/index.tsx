@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Dimensions, Text, Platform, TouchableOpacity, Pressable, Animated } from 'react-native';
 import { Image } from 'expo-image';
 import { useTheme } from '../../components/ThemeProvider';
@@ -15,6 +15,7 @@ import { Colors } from '../../constants/Colors';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
 import { AppImages } from '../../utils/loadAssets';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import home components using barrel imports
 import {
@@ -34,6 +35,8 @@ import {
 
 // Get dimensions for background
 const { width, height } = Dimensions.get('window');
+
+const FIRST_TIMER_SHOWN_KEY = 'first_timer_shown';
 
 export default function HomeScreen() {
   const { theme } = useTheme();
@@ -73,6 +76,28 @@ export default function HomeScreen() {
   // State for home screen mascot card expansion
   const [isHomeMascotExpanded, setIsHomeMascotExpanded] = useState(false);
   
+  // Check if this is the first visit after onboarding
+  useEffect(() => {
+    checkFirstVisit();
+  }, []);
+  
+  const checkFirstVisit = async () => {
+    try {
+      const hasShownFirstTimer = await AsyncStorage.getItem(FIRST_TIMER_SHOWN_KEY);
+      if (!hasShownFirstTimer) {
+        // This is the first visit after onboarding, navigate to timer screen
+        setTimeout(() => {
+          router.push('./timer');
+        }, 1000); // Small delay to let the screen settle
+        
+        // Mark that we've shown the first timer
+        await AsyncStorage.setItem(FIRST_TIMER_SHOWN_KEY, 'true');
+      }
+    } catch (error) {
+      console.error('Error checking first visit:', error);
+    }
+  };
+  
   // A single state to track if any overlay is visible
   const isOverlayVisible = isChatVisible || isMenuVisible || isTimerVisible || isToothbrushVisible || isStreakVisible || isBrushingTimeVisible;
 
@@ -98,7 +123,7 @@ export default function HomeScreen() {
   const toggleChat = () => setIsChatVisible(!isChatVisible);
   
   // Handle floating action button press
-  const handleActionButtonPress = () => setIsTimerVisible(true);
+  const handleActionButtonPress = () => router.push('./timer');
   
   // Handle menu button press
   const handleMenuPress = () => setIsMenuVisible(true);
