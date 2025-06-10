@@ -305,6 +305,14 @@
       "theme": {
         "name": "Tema de la app"
       },
+      "mascotTone": {
+        "name": "Tono de la mascota",
+        "selectTitle": "Elige el tono de Nubo",
+        "error": {
+          "title": "Error de tono",
+          "message": "No se pudo cambiar el tono de la mascota. Por favor intenta de nuevo."
+        }
+      },
       "language": {
         "name": "Idioma",
         "selectTitle": "Seleccionar idioma",

@@ -305,6 +305,14 @@
       "theme": {
         "name": "Uygulama Teması"
       },
+      "mascotTone": {
+        "name": "Maskot Tonu",
+        "selectTitle": "Nubo'nun Tonunu Seçin",
+        "error": {
+          "title": "Ton Hatası",
+          "message": "Maskot tonu değiştirilemedi. Lütfen tekrar deneyin."
+        }
+      },
       "language": {
         "name": "Dil",
         "selectTitle": "Dil Seçin",

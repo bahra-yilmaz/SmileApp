@@ -3,6 +3,7 @@ import { View, StyleSheet, ScrollView, Pressable, Alert, Text, Dimensions, Modal
 import { useTheme } from '../../components/ThemeProvider';
 import ThemedText from '../../components/ThemedText';
 import GlassmorphicCard from '../../components/ui/GlassmorphicCard';
+import BottomSheetModal from '../../components/ui/BottomSheetModal';
 import { OnboardingService } from '../../services/OnboardingService';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -21,8 +22,18 @@ import Animated, {
 import { useTranslation } from 'react-i18next';
 import { LANGUAGES, LanguageItem } from '../../services/languageConfig';
 import * as Haptics from 'expo-haptics';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width: screenWidth } = Dimensions.get('window');
+const NUBO_TONE_KEY = 'nubo_tone';
+
+// Mascot tone interface
+interface MascotTone {
+  id: string;
+  label: string;
+  description: string;
+  icon?: string;
+}
 
 export default function SettingsScreen() {
   const { theme } = useTheme();
@@ -39,6 +50,38 @@ export default function SettingsScreen() {
   const [isLanguageModalVisible, setIsLanguageModalVisible] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<string>(i18n.language || 'en');
   
+  // Mascot tone selection state
+  const [isToneModalVisible, setIsToneModalVisible] = useState(false);
+  const [currentTone, setCurrentTone] = useState<MascotTone | null>(null);
+  
+  // Mascot tone options
+  const TONE_OPTIONS: MascotTone[] = [
+    { 
+      id: 'supportive', 
+      label: t('onboarding.nuboToneScreen.options.supportive_label', 'Supportive'), 
+      description: t('onboarding.nuboToneScreen.options.supportive_description', 'Gentle and helpful'),
+      icon: 'heart-outline'
+    },
+    { 
+      id: 'playful', 
+      label: t('onboarding.nuboToneScreen.options.playful_label', 'Playful'), 
+      description: t('onboarding.nuboToneScreen.options.playful_description', 'Fun and encouraging'),
+      icon: 'happy-outline'
+    },
+    { 
+      id: 'cool', 
+      label: t('onboarding.nuboToneScreen.options.cool_label', 'Cool'), 
+      description: t('onboarding.nuboToneScreen.options.cool_description', 'Confident and direct'),
+      icon: 'sunglasses-outline'
+    },
+    { 
+      id: 'wise', 
+      label: t('onboarding.nuboToneScreen.options.wise_label', 'Wise'), 
+      description: t('onboarding.nuboToneScreen.options.wise_description', 'Insightful and calm'),
+      icon: 'library-outline'
+    }
+  ];
+  
   useEffect(() => {
     // Animate in from the right
     translateX.value = withTiming(0, {
@@ -49,12 +92,34 @@ export default function SettingsScreen() {
       duration: 200,
       easing: Easing.out(Easing.quad),
     });
+    
+    // Load current mascot tone
+    loadCurrentTone();
   }, []);
   
   useEffect(() => {
     // Update current language when i18n language changes
     setCurrentLanguage(i18n.language);
   }, [i18n.language]);
+  
+  const loadCurrentTone = async () => {
+    try {
+      const storedTone = await AsyncStorage.getItem(NUBO_TONE_KEY);
+      if (storedTone) {
+        const toneData = JSON.parse(storedTone);
+        const tone = TONE_OPTIONS.find(option => option.id === toneData.id);
+        if (tone) {
+          setCurrentTone(tone);
+        }
+      } else {
+        // Default to supportive if no tone is stored
+        setCurrentTone(TONE_OPTIONS[0]);
+      }
+    } catch (error) {
+      console.error('Error loading mascot tone:', error);
+      setCurrentTone(TONE_OPTIONS[0]); // Default to supportive
+    }
+  };
   
   const handleBackPress = () => {
     // Animate out to the right
@@ -143,6 +208,31 @@ export default function SettingsScreen() {
     }
   };
   
+  const handleTonePress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setIsToneModalVisible(true);
+  };
+  
+  const handleToneSelect = async (tone: MascotTone) => {
+    try {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      const toneData = {
+        id: tone.id,
+        label: tone.label,
+        description: tone.description
+      };
+      await AsyncStorage.setItem(NUBO_TONE_KEY, JSON.stringify(toneData));
+      setCurrentTone(tone);
+      setIsToneModalVisible(false);
+    } catch (error) {
+      console.error('Error changing mascot tone:', error);
+      Alert.alert(
+        t('settings.mascotTone.error.title', 'Tone Error'),
+        t('settings.mascotTone.error.message', 'Failed to change mascot tone. Please try again.')
+      );
+    }
+  };
+  
   const getCurrentLanguageName = () => {
     const language = LANGUAGES.find(lang => lang.code === currentLanguage);
     return language ? t(`languages.${language.code}`, language.name) : t('languages.en', 'English');
@@ -171,6 +261,49 @@ export default function SettingsScreen() {
         {t(`languages.${lang.code}`, lang.name)}
       </ThemedText>
       {currentLanguage === lang.code && (
+        <Ionicons name="checkmark" size={24} color="white" style={styles.checkmarkIcon} />
+      )}
+    </Pressable>
+  );
+  
+  const renderToneItem = ({ item: tone }: { item: MascotTone }) => (
+    <Pressable
+      key={tone.id}
+      onPress={() => handleToneSelect(tone)}
+      style={[
+        styles.toneModalItem,
+        {
+          backgroundColor: currentTone?.id === tone.id 
+            ? 'rgba(0, 100, 255, 0.3)' 
+            : 'rgba(255, 255, 255, 0.1)'
+        }
+      ]}
+    >
+      <Ionicons 
+        name={tone.icon as any} 
+        size={28} 
+        color={currentTone?.id === tone.id ? 'white' : activeColors.tint} 
+        style={styles.toneModalIcon}
+      />
+      <View style={styles.toneModalTextContainer}>
+        <ThemedText style={[
+          styles.toneModalTitle,
+          {
+            color: currentTone?.id === tone.id ? 'white' : activeColors.text
+          }
+        ]}>
+          {tone.label}
+        </ThemedText>
+        <ThemedText style={[
+          styles.toneModalDescription,
+          {
+            color: currentTone?.id === tone.id ? 'rgba(255,255,255,0.8)' : activeColors.textSecondary
+          }
+        ]}>
+          {tone.description}
+        </ThemedText>
+      </View>
+      {currentTone?.id === tone.id && (
         <Ionicons name="checkmark" size={24} color="white" style={styles.checkmarkIcon} />
       )}
     </Pressable>
@@ -234,6 +367,23 @@ export default function SettingsScreen() {
             
             <View style={styles.divider} />
             
+            <Pressable style={styles.settingItem} onPress={handleTonePress}>
+              <View style={styles.settingContent}>
+                <Ionicons name="person-outline" size={24} color={activeColors.tint} />
+                <ThemedText style={styles.settingText}>
+                  {t('settings.mascotTone.name', 'Mascot Tone')}
+                </ThemedText>
+              </View>
+              <View style={styles.languageInfo}>
+                <ThemedText style={styles.currentLanguageText}>
+                  {currentTone?.label || t('onboarding.nuboToneScreen.options.supportive_label', 'Supportive')}
+                </ThemedText>
+                <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+              </View>
+            </Pressable>
+            
+            <View style={styles.divider} />
+            
             <Pressable style={styles.settingItem} onPress={handleLanguagePress}>
               <View style={styles.settingContent}>
                 <Ionicons name="language-outline" size={24} color={activeColors.tint} />
@@ -270,42 +420,24 @@ export default function SettingsScreen() {
         </ScrollView>
         
         {/* Language Selection Modal */}
-        <Modal
+        <BottomSheetModal
           visible={isLanguageModalVisible}
-          animationType="slide"
-          presentationStyle="pageSheet"
-          onRequestClose={() => setIsLanguageModalVisible(false)}
-        >
-          <View style={styles.languageModalContainer}>
-            <Image 
-              source={require('../../assets/images/meshgradient-light-default.png')}
-              style={styles.backgroundImage}
-              contentFit="cover"
-              cachePolicy="disk"
-            />
-            
-            <View style={[styles.languageModalHeader, { paddingTop: insets.top + 5 }]}>
-              <View style={styles.modalCloseButton} />
-              <Text style={styles.languageModalTitle}>
-                {t('settings.language.selectTitle', 'Select Language')}
-              </Text>
-              <Pressable 
-                onPress={() => setIsLanguageModalVisible(false)}
-                style={styles.modalCloseButton}
-              >
-                <Ionicons name="chevron-down" size={28} color="white" />
-              </Pressable>
-            </View>
-            
-            <FlatList
-              data={LANGUAGES}
-              renderItem={renderLanguageItem}
-              keyExtractor={(item) => item.code}
-              style={styles.languageModalList}
-              contentContainerStyle={styles.languageModalListContent}
-            />
-          </View>
-        </Modal>
+          onClose={() => setIsLanguageModalVisible(false)}
+          title={t('settings.language.selectTitle', 'Select Language')}
+          data={LANGUAGES}
+          renderItem={renderLanguageItem}
+          keyExtractor={(item) => item.code}
+        />
+        
+        {/* Mascot Tone Selection Modal */}
+        <BottomSheetModal
+          visible={isToneModalVisible}
+          onClose={() => setIsToneModalVisible(false)}
+          title={t('settings.mascotTone.selectTitle', 'Choose Nubo\'s Tone')}
+          data={TONE_OPTIONS}
+          renderItem={renderToneItem}
+          keyExtractor={(item) => item.id}
+        />
       </Animated.View>
     </PanGestureHandler>
   );
@@ -383,38 +515,7 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: 'rgba(150, 150, 150, 0.2)',
   },
-  // Language Modal Styles
-  languageModalContainer: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
-  languageModalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-    zIndex: 10,
-  },
-  languageModalTitle: {
-    fontSize: 24,
-    color: 'white',
-    fontFamily: 'Quicksand-Bold',
-    textAlign: 'center',
-  },
-  modalCloseButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  languageModalList: {
-    flex: 1,
-  },
-  languageModalListContent: {
-    paddingHorizontal: 20,
-    paddingBottom: 40,
-  },
+  // Modal Item Styles
   languageModalItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -436,5 +537,29 @@ const styles = StyleSheet.create({
   checkmarkIcon: {
     marginLeft: 8,
     fontWeight: 'bold',
+  },
+  // Tone Modal Styles
+  toneModalItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    marginBottom: 12,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  toneModalIcon: {
+    marginRight: 16,
+  },
+  toneModalTextContainer: {
+    flex: 1,
+  },
+  toneModalTitle: {
+    fontSize: 16,
+    fontFamily: 'Quicksand-Bold',
+  },
+  toneModalDescription: {
+    fontSize: 14,
+    opacity: 0.7,
   },
 }); 

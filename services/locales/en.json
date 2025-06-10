@@ -305,6 +305,14 @@
     "theme": {
       "name": "App Theme"
     },
+    "mascotTone": {
+      "name": "Mascot Tone",
+      "selectTitle": "Choose Nubo's Tone",
+      "error": {
+        "title": "Tone Error",
+        "message": "Failed to change mascot tone. Please try again."
+      }
+    },
     "language": {
       "name": "Language",
       "selectTitle": "Select Language",
