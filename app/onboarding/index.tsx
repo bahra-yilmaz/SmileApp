@@ -321,11 +321,11 @@ export default function OnboardingWelcome() {
       styles.container, 
       { opacity: fadeAnim, position: 'absolute', width: '100%', height: '100%' }
     ]}>
-      {/* Backdrop Pressable to collapse mascot card, disabled after C3 is done */}
-      {isMascotCardExpanded && !isCheckpoint3Done && (
+      {/* Backdrop Pressable to handle interaction, disabled after C3 is done */}
+      {!isCheckpoint3Done && (
         <Pressable
-          style={styles.backdropPressable} 
-          onPress={handleCollapseAndUpdate}
+          style={styles.backdropPressable}
+          onPress={isMascotCardExpanded ? handleCollapseAndUpdate : handleExpandAndProgress}
         />
       )}
 

@@ -58,25 +58,8 @@ export default function NuboToneScreen({
   });
   
   // Animation values
-  const fadeAnim = React.useRef(new Animated.Value(0)).current;
-  const slideAnim = React.useRef(new Animated.Value(50)).current;
+  const fadeAnim = React.useRef(new Animated.Value(1)).current;
   
-  useEffect(() => {
-    // Run animations when the component mounts
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 800,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 800,
-        useNativeDriver: true,
-      })
-    ]).start();
-  }, []);
-
   const handleNext = async () => {
     // Save the selected Nubo tone
     try {
@@ -96,7 +79,16 @@ export default function NuboToneScreen({
       await OnboardingService.markOnboardingAsCompleted();
     }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    router.push(nextScreenPath as any);
+
+    // Fade out animation before navigating
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 300, // A bit faster for a snappy feel
+      useNativeDriver: true,
+    }).start(() => {
+      // Replace the screen to prevent users from going back to onboarding
+      router.replace(nextScreenPath as any);
+    });
   };
 
   const handleSelectTone = (toneId: string) => {
@@ -129,7 +121,7 @@ export default function NuboToneScreen({
   ], [t]);
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
       {/* Progress indicators and question text */}
       <View style={[styles.progressContainer, { marginTop: headerHeight + 10 }]}>
         <View style={styles.indicators}>
@@ -232,7 +224,7 @@ export default function NuboToneScreen({
           useDisplayFont={true}
         />
       </View>
-    </View>
+    </Animated.View>
   );
 }
 

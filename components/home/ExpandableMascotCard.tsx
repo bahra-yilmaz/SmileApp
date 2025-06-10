@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, Animated, Pressable, Dimensions, ViewStyle } from 'react-native';
+import { View, StyleSheet, Animated, Pressable, Dimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import GlassmorphicCard from '../ui/GlassmorphicCard';
 import Mascot from '../ui/Mascot';
@@ -26,8 +26,7 @@ interface ExpandableMascotCardProps {
   isExpanded: boolean;
   onPress?: () => void;
   onPressWhenExpanded?: () => void;
-  enablePulse?: boolean;
-  containerStyle?: ViewStyle;
+  enablePulse: boolean;
 }
 
 export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
@@ -36,8 +35,7 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
   isExpanded,
   onPress,
   onPressWhenExpanded,
-  enablePulse = false,
-  containerStyle
+  enablePulse
 }) => {
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
@@ -198,80 +196,95 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
   const expandedMascotOverlayLeft = glassmorphicCardStyle.paddingHorizontal + internalMascotContainerStyle.marginLeft;
 
   return (
-    <Reanimated.View style={[styles.cardContainer, pulseAnimatedStyle, containerStyle]}>
-      <Pressable onPress={isExpanded ? onPressWhenExpanded : onPress}>
-        <GlassmorphicCard
-          width={animatedWidth}
-          borderRadius="none"
-          intensity={70}
-          shadow="lg"
-          containerStyle={{
-            height: circleHeight,
-            width: isExpanded ? animatedWidth : circleHeight,
-            borderRadius: animatedRadius,
-          }}
-          style={glassmorphicCardStyle}
-        >
-          <Animated.View style={internalMascotContainerStyle}>
-            <Animated.View 
-              style={{
-                opacity: notExpandedMascotOpacityAnim, 
-                position: 'absolute',
-                top: 0, left: 0, right: 0, bottom: 0,
-                justifyContent: 'center',
-                alignItems: 'center',
-                transform: [{ translateX: -6 }, { translateY: -1 }],
+    <Reanimated.View style={pulseAnimatedStyle}>
+      <View style={styles.cardContainer}>
+        <View style={{ alignItems: 'center' }}>
+          <Pressable
+            onPress={() => {
+              if (isExpanded && onPressWhenExpanded) {
+                onPressWhenExpanded();
+              } else if (!isExpanded && onPress) {
+                onPress();
+              }
+            }}
+            style={({ pressed }) => ({
+              opacity: (pressed && !isExpanded) ? 0.95 : 1
+            })}
+          >
+            <GlassmorphicCard
+              width={animatedWidth}
+              borderRadius="none"
+              intensity={70}
+              shadow="lg"
+              containerStyle={{
+                height: circleHeight,
+                width: isExpanded ? animatedWidth : circleHeight,
+                borderRadius: animatedRadius,
               }}
+              style={glassmorphicCardStyle}
             >
-              <Mascot variant={config.collapsedVariant} size={nonExpandedMascotSize} />
-            </Animated.View>
-          </Animated.View>
-          
-          {isExpanded && (
-            <View style={styles.expandedContent}>
-              <ThemedText 
-                variant="subtitle" 
+              <Animated.View style={internalMascotContainerStyle}>
+                <Animated.View 
+                  style={{
+                    opacity: notExpandedMascotOpacityAnim, 
+                    position: 'absolute',
+                    top: 0, left: 0, right: 0, bottom: 0,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    transform: [{ translateX: -6 }, { translateY: -1 }],
+                  }}
+                >
+                  <Mascot variant={config.collapsedVariant} size={nonExpandedMascotSize} />
+                </Animated.View>
+              </Animated.View>
+              
+              {isExpanded && (
+                <View style={styles.expandedContent}>
+                  <ThemedText 
+                    variant="subtitle" 
+                    style={{
+                      color: 'white',
+                      marginLeft: 0, 
+                      fontSize: 15,
+                      fontWeight: '500',
+                      fontFamily: 'Quicksand-Bold',
+                      lineHeight: 22,
+                    }}
+                  >
+                    {typedText}
+                  </ThemedText>
+                </View>
+              )}
+            </GlassmorphicCard>
+
+            {isExpanded && (
+              <Animated.View
                 style={{
-                  color: 'white',
-                  marginLeft: 0, 
-                  fontSize: 15,
-                  fontWeight: '500',
-                  fontFamily: 'Quicksand-Bold',
-                  lineHeight: 22,
+                  position: 'absolute',
+                  top: 0,
+                  left: expandedMascotOverlayLeft,
+                  width: mascotSize,
+                  height: circleHeight,
+                  opacity: expandedMascotOpacityAnim,
+                  zIndex: 10,
+                  transform: [{ translateX: -5 }, { translateY: 0 }],
                 }}
               >
-                {typedText}
-              </ThemedText>
-            </View>
-          )}
-        </GlassmorphicCard>
-
-        {isExpanded && (
-          <Animated.View
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: expandedMascotOverlayLeft,
-              width: mascotSize,
-              height: circleHeight,
-              opacity: expandedMascotOpacityAnim,
-              zIndex: 10,
-              transform: [{ translateX: -5 }, { translateY: 0 }],
-            }}
-          >
-            <Animated.View 
-              style={{ 
-                position: 'absolute',
-                top: 0, left: 0, right: 0, bottom: 0,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <Mascot variant={config.expandedVariant} size={expandedStateMascotActualSize}/>
-            </Animated.View>
-          </Animated.View>
-        )}
-      </Pressable>
+                <Animated.View 
+                  style={{ 
+                    position: 'absolute',
+                    top: 0, left: 0, right: 0, bottom: 0,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Mascot variant={config.expandedVariant} size={expandedStateMascotActualSize}/>
+                </Animated.View>
+              </Animated.View>
+            )}
+          </Pressable>
+        </View>
+      </View>
     </Reanimated.View>
   );
 };
