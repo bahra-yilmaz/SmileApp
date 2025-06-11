@@ -6,6 +6,7 @@ import GlassmorphicCard from '../../components/ui/GlassmorphicCard';
 import GlassmorphicHeader from '../../components/ui/GlassmorphicHeader';
 import BottomSheetModal from '../../components/ui/BottomSheetModal';
 import ReminderTimeManager, { ReminderTime } from '../../components/ReminderTimeManager';
+import BrushingTargetSelector, { BrushingTarget } from '../../components/BrushingTargetSelector';
 import { OnboardingService } from '../../services/OnboardingService';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -29,6 +30,7 @@ import { BlurView } from 'expo-blur';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const NUBO_TONE_KEY = 'nubo_tone';
+const BRUSHING_TARGET_KEY = 'brushing_target';
 
 // Mascot tone interface
 interface MascotTone {
@@ -38,6 +40,8 @@ interface MascotTone {
   icon?: string;
   image: any;
 }
+
+
 
 
 
@@ -60,6 +64,10 @@ export default function SettingsScreen() {
   // Mascot tone selection state
   const [isToneModalVisible, setIsToneModalVisible] = useState(false);
   const [currentTone, setCurrentTone] = useState<MascotTone | null>(null);
+  
+  // Brushing target selection state
+  const [isTargetModalVisible, setIsTargetModalVisible] = useState(false);
+  const [currentTarget, setCurrentTarget] = useState<BrushingTarget | null>(null);
   
   // Reminder time selection state
   const [isReminderModalVisible, setIsReminderModalVisible] = useState(false);
@@ -96,6 +104,8 @@ export default function SettingsScreen() {
       image: require('../../assets/mascot/nubo-wise-5.png')
     }
   ];
+
+
   
 
   
@@ -137,6 +147,8 @@ export default function SettingsScreen() {
       setCurrentTone(TONE_OPTIONS[0]); // Default to supportive
     }
   };
+
+
   
 
   
@@ -212,11 +224,21 @@ export default function SettingsScreen() {
     setIsLanguageModalVisible(true);
   };
   
+  // Generic modal close handler - can be used to make all modals auto-close or stay open
+  const MODAL_AUTO_CLOSE = false; // Set to true if you want all modals to auto-close after selection
+  
+  const closeModalIfConfigured = (modalSetter: (visible: boolean) => void) => {
+    if (MODAL_AUTO_CLOSE) {
+      modalSetter(false);
+    }
+  };
+
   const handleLanguageSelect = async (langCode: string) => {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       await i18n.changeLanguage(langCode);
       setCurrentLanguage(langCode);
+      closeModalIfConfigured(setIsLanguageModalVisible);
     } catch (error) {
       console.error('Error changing language:', error);
       Alert.alert(
@@ -241,6 +263,7 @@ export default function SettingsScreen() {
       };
       await AsyncStorage.setItem(NUBO_TONE_KEY, JSON.stringify(toneData));
       setCurrentTone(tone);
+      closeModalIfConfigured(setIsToneModalVisible);
     } catch (error) {
       console.error('Error changing mascot tone:', error);
       Alert.alert(
@@ -248,6 +271,11 @@ export default function SettingsScreen() {
         t('settings.mascotTone.error.message', 'Failed to change mascot tone. Please try again.')
       );
     }
+  };
+
+  const handleTargetPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setIsTargetModalVisible(true);
   };
   
   const handleReminderPress = () => {
@@ -345,6 +373,8 @@ export default function SettingsScreen() {
       </View>
     </Pressable>
   );
+
+
   
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
@@ -472,14 +502,19 @@ export default function SettingsScreen() {
             
             <View style={styles.divider} />
             
-            <Pressable style={styles.settingItem}>
+            <Pressable style={styles.settingItem} onPress={handleTargetPress}>
               <View style={styles.settingContent}>
                 <Ionicons name="stopwatch-outline" size={24} color={activeColors.tint} />
                 <ThemedText style={styles.settingText}>
                   {t('settings.brushingSettings.targetTime', 'Target Brushing Time')}
                 </ThemedText>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+              <View style={styles.languageInfo}>
+                <ThemedText style={styles.currentLanguageText}>
+                  {currentTarget?.label || t('settings.brushingTarget.options.standard_label', '2 minutes')}
+                </ThemedText>
+                <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+              </View>
             </Pressable>
             
             <View style={styles.divider} />
@@ -541,6 +576,14 @@ export default function SettingsScreen() {
           data={TONE_OPTIONS}
           renderItem={renderToneItem}
           keyExtractor={(item) => item.id}
+        />
+
+        {/* Brushing Target Selection Modal */}
+        <BrushingTargetSelector
+          visible={isTargetModalVisible}
+          onClose={() => setIsTargetModalVisible(false)}
+          onUpdate={(target) => setCurrentTarget(target)}
+          autoClose={MODAL_AUTO_CLOSE}
         />
         
         {/* Reminder Times Manager */}
