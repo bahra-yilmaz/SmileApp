@@ -8,6 +8,7 @@ import BottomSheetModal from '../../components/ui/BottomSheetModal';
 import ReminderTimeManager, { ReminderTime } from '../../components/ReminderTimeManager';
 import BrushingTargetSelector, { BrushingTarget } from '../../components/BrushingTargetSelector';
 import DailyBrushingFrequencySelector, { DailyBrushingFrequency } from '../../components/DailyBrushingFrequencySelector';
+import ToothbrushManager, { ToothbrushData } from '../../components/ToothbrushManager';
 import { OnboardingService } from '../../services/OnboardingService';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -73,6 +74,10 @@ export default function SettingsScreen() {
   // Daily frequency selection state
   const [isFrequencyModalVisible, setIsFrequencyModalVisible] = useState(false);
   const [currentFrequency, setCurrentFrequency] = useState<DailyBrushingFrequency | null>(null);
+  
+  // Toothbrush management state
+  const [isToothbrushModalVisible, setIsToothbrushModalVisible] = useState(false);
+  const [toothbrushData, setToothbrushData] = useState<ToothbrushData>({ current: null, history: [] });
   
   // Reminder time selection state
   const [isReminderModalVisible, setIsReminderModalVisible] = useState(false);
@@ -286,6 +291,11 @@ export default function SettingsScreen() {
   const handleFrequencyPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setIsFrequencyModalVisible(true);
+  };
+
+  const handleToothbrushPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setIsToothbrushModalVisible(true);
   };
   
   const handleReminderPress = () => {
@@ -543,6 +553,26 @@ export default function SettingsScreen() {
               </View>
               <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
             </Pressable>
+            
+            <View style={styles.divider} />
+            
+            <Pressable style={styles.settingItem} onPress={handleToothbrushPress}>
+              <View style={styles.settingContent}>
+                <Ionicons name="brush-outline" size={24} color={activeColors.tint} />
+                <ThemedText style={styles.settingText}>
+                  {t('settings.brushingSettings.toothbrush', 'Toothbrush Management')}
+                </ThemedText>
+              </View>
+              <View style={styles.languageInfo}>
+                <ThemedText style={styles.currentLanguageText}>
+                  {toothbrushData.current 
+                    ? `${Math.ceil((new Date().getTime() - new Date(toothbrushData.current.startDate).getTime()) / (1000 * 60 * 60 * 24))}d old`
+                    : t('toothbrush.current.none', 'None')
+                  }
+                </ThemedText>
+                <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+              </View>
+            </Pressable>
           </GlassmorphicCard>
           
           <View style={{ height: spacing.sm }} />
@@ -606,6 +636,14 @@ export default function SettingsScreen() {
           visible={isFrequencyModalVisible}
           onClose={() => setIsFrequencyModalVisible(false)}
           onUpdate={(frequency) => setCurrentFrequency(frequency)}
+          autoClose={MODAL_AUTO_CLOSE}
+        />
+
+        {/* Toothbrush Management Modal */}
+        <ToothbrushManager
+          visible={isToothbrushModalVisible}
+          onClose={() => setIsToothbrushModalVisible(false)}
+          onUpdate={(data) => setToothbrushData(data)}
           autoClose={MODAL_AUTO_CLOSE}
         />
         
