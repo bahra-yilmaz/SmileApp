@@ -60,7 +60,7 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
   
   // Create arrays for time pickers
   const HOURS = Array.from({ length: 24 }, (_, i) => ({ id: i, value: i, label: i.toString().padStart(2, '0') }));
-  const MINUTES = Array.from({ length: 4 }, (_, i) => ({ id: i, value: i * 15, label: (i * 15).toString().padStart(2, '0') }));
+  const MINUTES = Array.from({ length: 12 }, (_, i) => ({ id: i, value: i * 5, label: (i * 5).toString().padStart(2, '0') }));
   
   // Default reminder time options (sorted by time)
   const DEFAULT_REMINDER_TIMES: ReminderTime[] = [
@@ -291,65 +291,70 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
     );
 
     return (
-      <Swipeable 
-        renderRightActions={renderRightActions}
-        friction={2}
-        leftThreshold={30}
-        rightThreshold={40}
-      >
-        <Pressable
-          onPress={() => handleReminderToggle(reminder.id)}
-          style={[
-            styles.reminderItem,
-            {
-              backgroundColor: reminder.enabled 
-                ? 'rgba(0, 100, 255, 0.3)' 
-                : 'rgba(255, 255, 255, 0.1)'
-            }
-          ]}
+      <View>
+        <Swipeable 
+          renderRightActions={renderRightActions}
+          friction={2}
+          leftThreshold={30}
+          rightThreshold={40}
         >
-          <View style={styles.reminderContent}>
-            <View style={styles.reminderTextContainer}>
-              <View style={styles.reminderLabelRow}>
+          <Pressable
+            onPress={() => handleReminderToggle(reminder.id)}
+            style={[
+              styles.reminderItem,
+              {
+                backgroundColor: reminder.enabled 
+                  ? 'rgba(0, 100, 255, 0.3)' 
+                  : 'rgba(255, 255, 255, 0.1)'
+              }
+            ]}
+          >
+            <View style={styles.reminderContent}>
+              <View style={styles.reminderTextContainer}>
+                <View style={styles.reminderLabelRow}>
+                  <ThemedText style={[
+                    styles.reminderLabel,
+                    {
+                      color: reminder.enabled ? 'white' : activeColors.text
+                    }
+                  ]}>
+                    {reminder.label}
+                  </ThemedText>
+                  {reminder.isCustom && (
+                    <View style={styles.customBadge}>
+                      <ThemedText style={styles.customBadgeText}>
+                        {t('settings.reminderTimes.customBadge', 'Custom')}
+                      </ThemedText>
+                    </View>
+                  )}
+                </View>
                 <ThemedText style={[
-                  styles.reminderLabel,
+                  styles.reminderTime,
                   {
-                    color: reminder.enabled ? 'white' : activeColors.text
+                    color: reminder.enabled ? 'white' : activeColors.textSecondary,
+                    opacity: reminder.enabled ? 1 : 0.8
                   }
                 ]}>
-                  {reminder.label}
+                  {reminder.time}
                 </ThemedText>
-                {reminder.isCustom && (
-                  <View style={styles.customBadge}>
-                    <ThemedText style={styles.customBadgeText}>
-                      {t('settings.reminderTimes.customBadge', 'Custom')}
-                    </ThemedText>
-                  </View>
-                )}
               </View>
-              <ThemedText style={[
-                styles.reminderTime,
+              <View style={[
+                styles.reminderToggle,
                 {
-                  color: reminder.enabled ? 'white' : activeColors.textSecondary,
-                  opacity: reminder.enabled ? 1 : 0.8
+                  backgroundColor: reminder.enabled ? activeColors.tint : 'rgba(255, 255, 255, 0.3)'
                 }
               ]}>
-                {reminder.time}
-              </ThemedText>
+                {reminder.enabled && (
+                  <Ionicons name="checkmark" size={16} color="white" style={{ fontWeight: 'bold' }} />
+                )}
+              </View>
             </View>
-            <View style={[
-              styles.reminderToggle,
-              {
-                backgroundColor: reminder.enabled ? activeColors.tint : 'rgba(255, 255, 255, 0.3)'
-              }
-            ]}>
-              {reminder.enabled && (
-                <Ionicons name="checkmark" size={16} color="white" style={{ fontWeight: 'bold' }} />
-              )}
-            </View>
-          </View>
-        </Pressable>
-      </Swipeable>
+          </Pressable>
+        </Swipeable>
+        
+        {/* Inline Time Picker - appears right below this specific reminder when editing */}
+        {showTimePicker && editingReminder?.id === reminder.id && renderTimePickerContent()}
+      </View>
     );
   };
 
@@ -364,8 +369,8 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
         </View>
       </Pressable>
       
-      {/* Inline Time Picker - appears right below the add button */}
-      {showTimePicker && renderTimePickerContent()}
+      {/* Inline Time Picker - appears right below the add button when adding new reminder */}
+      {showTimePicker && !editingReminder && renderTimePickerContent()}
     </View>
   );
 
@@ -504,6 +509,7 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
                     item.value === selectedHour && { 
                       color: theme.activeColors.tint,
                       fontSize: 20,
+                      fontFamily: 'Quicksand-Bold',
                     }
                   ]}>
                     {item.label}
@@ -541,6 +547,7 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
                     item.value === selectedMinute && { 
                       color: theme.activeColors.tint,
                       fontSize: 20,
+                      fontFamily: 'Quicksand-Bold',
                     }
                   ]}>
                     {item.label}
@@ -564,7 +571,7 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
         </Pressable>
         
         <Pressable 
-          style={styles.saveTimeButton}
+          style={[styles.saveTimeButton, { backgroundColor: theme.colors.primary[500] }]}
           onPress={handleTimeSave}
         >
           <ThemedText style={styles.saveTimeButtonText}>
@@ -834,12 +841,11 @@ const styles = StyleSheet.create({
   },
   cancelInlineButtonText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Quicksand-Medium',
     color: 'rgba(255, 255, 255, 0.8)',
   },
   saveTimeButton: {
     flex: 1,
-    backgroundColor: 'rgba(0, 100, 255, 0.8)',
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 12,
@@ -847,7 +853,7 @@ const styles = StyleSheet.create({
   },
   saveTimeButtonText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Quicksand-Medium',
     color: 'white',
   },
 }); 
