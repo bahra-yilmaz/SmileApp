@@ -145,7 +145,10 @@
   "common": {
     "ok": "OK",
     "cancel": "Cancel",
-    "Continue": "Continue"
+    "Continue": "Continue",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save"
   },
   "languages": {
     "en": "English",
@@ -290,51 +293,70 @@
       "name": "Achievements",
       "description": "Check your brushing achievements"
     },
-      "settings": {
-    "name": "Settings",
-    "description": "App settings and preferences",
-    "appSettings": {
-      "title": "App Settings"
-    },
-    "resetOnboarding": {
-      "name": "Reset Onboarding",
-      "title": "Reset Onboarding",
-      "message": "Are you sure you want to reset the onboarding flow? You'll be redirected to the welcome screen.",
-      "confirm": "Reset"
-    },
-    "theme": {
-      "name": "App Theme"
-    },
-    "mascotTone": {
-      "name": "Mascot Tone",
-      "selectTitle": "Choose Nubo's Tone",
-      "error": {
-        "title": "Tone Error",
-        "message": "Failed to change mascot tone. Please try again."
+    "settings": {
+      "name": "Settings",
+      "description": "App settings and preferences",
+      "appSettings": {
+        "title": "App Settings"
+      },
+      "resetOnboarding": {
+        "name": "Reset Onboarding",
+        "title": "Reset Onboarding",
+        "message": "Are you sure you want to reset the onboarding flow? You'll be redirected to the welcome screen.",
+        "confirm": "Reset"
+      },
+      "theme": {
+        "name": "App Theme"
+      },
+      "mascotTone": {
+        "name": "Mascot Tone",
+        "selectTitle": "Choose Nubo's Tone",
+        "error": {
+          "title": "Tone Error",
+          "message": "Failed to change mascot tone. Please try again."
+        }
+      },
+      "language": {
+        "name": "Language",
+        "selectTitle": "Select Language",
+        "error": {
+          "title": "Language Error",
+          "message": "Failed to change language. Please try again."
+        }
+      },
+      "about": {
+        "title": "About"
+      },
+      "appVersion": {
+        "name": "App Version"
+      },
+      "reminderTimes": {
+        "selectTitle": "Set Reminder Times",
+        "none": "None set",
+        "one": "1 reminder",
+        "multiple": "{{count}} reminders",
+        "morning": "Morning",
+        "evening": "Evening",
+        "afternoon": "Afternoon",
+        "night": "Before Bed",
+        "custom": "Custom",
+        "customBadge": "Custom",
+        "editTime": "Edit Time",
+        "addTime": "Add New Time",
+        "addNew": "Add New Reminder",
+        "error": {
+          "title": "Reminder Error",
+          "message": "Failed to update reminder time. Please try again."
+        }
+      },
+      "brushingSettings": {
+        "title": "Brushing Settings",
+        "reminderTime": "Reminder Time",
+        "frequency": "Brushing Frequency",
+        "targetTime": "Target Brushing Time",
+        "notifications": "Brushing Notifications"
       }
-    },
-    "language": {
-      "name": "Language",
-      "selectTitle": "Select Language",
-      "error": {
-        "title": "Language Error",
-        "message": "Failed to change language. Please try again."
-      }
-    },
-    "about": {
-      "title": "About"
-    },
-    "appVersion": {
-      "name": "App Version"
-    },
-    "brushingSettings": {
-      "title": "Brushing Settings",
-      "reminderTime": "Reminder Time",
-      "frequency": "Brushing Frequency",
-      "targetTime": "Target Brushing Time",
-      "notifications": "Brushing Notifications"
     }
-  }
   },
   "timerOverlay": {
     "start": "Start",

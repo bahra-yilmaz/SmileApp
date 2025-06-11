@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, Pressable, Alert, Text, Dimensions, Modal, FlatList, Image } from 'react-native';
+import { View, StyleSheet, ScrollView, Pressable, Alert, Text, Dimensions } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import ThemedText from '../../components/ThemedText';
 import GlassmorphicCard from '../../components/ui/GlassmorphicCard';
 import GlassmorphicHeader from '../../components/ui/GlassmorphicHeader';
 import BottomSheetModal from '../../components/ui/BottomSheetModal';
+import ReminderTimeManager, { ReminderTime } from '../../components/ReminderTimeManager';
 import { OnboardingService } from '../../services/OnboardingService';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,7 +27,7 @@ import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BlurView } from 'expo-blur';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const NUBO_TONE_KEY = 'nubo_tone';
 
 // Mascot tone interface
@@ -37,6 +38,8 @@ interface MascotTone {
   icon?: string;
   image: any;
 }
+
+
 
 export default function SettingsScreen() {
   const { theme } = useTheme();
@@ -57,6 +60,10 @@ export default function SettingsScreen() {
   // Mascot tone selection state
   const [isToneModalVisible, setIsToneModalVisible] = useState(false);
   const [currentTone, setCurrentTone] = useState<MascotTone | null>(null);
+  
+  // Reminder time selection state
+  const [isReminderModalVisible, setIsReminderModalVisible] = useState(false);
+  const [reminderTimes, setReminderTimes] = useState<ReminderTime[]>([]);
   
   // Mascot tone options
   const TONE_OPTIONS: MascotTone[] = [
@@ -89,6 +96,8 @@ export default function SettingsScreen() {
       image: require('../../assets/mascot/nubo-wise-5.png')
     }
   ];
+  
+
   
   useEffect(() => {
     // Animate in from the right
@@ -128,6 +137,8 @@ export default function SettingsScreen() {
       setCurrentTone(TONE_OPTIONS[0]); // Default to supportive
     }
   };
+  
+
   
   const handleBackPress = () => {
     // Animate out to the right
@@ -239,10 +250,28 @@ export default function SettingsScreen() {
     }
   };
   
+  const handleReminderPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setIsReminderModalVisible(true);
+  };
+  
   const getCurrentLanguageName = () => {
     const language = LANGUAGES.find(lang => lang.code === currentLanguage);
     return language ? t(`languages.${language.code}`, language.name) : t('languages.en', 'English');
   };
+  
+  const getEnabledRemindersText = () => {
+    const enabledCount = reminderTimes.filter(time => time.enabled).length;
+    if (enabledCount === 0) {
+      return t('settings.reminderTimes.none', 'None set');
+    } else if (enabledCount === 1) {
+      return t('settings.reminderTimes.one', '1 reminder');
+    } else {
+      return t('settings.reminderTimes.multiple', `${enabledCount} reminders`);
+    }
+  };
+  
+
   
   const renderLanguageItem = ({ item: lang }: { item: LanguageItem }) => (
     <Pressable
@@ -414,14 +443,19 @@ export default function SettingsScreen() {
               {t('settings.brushingSettings.title', 'Brushing Settings')}
             </ThemedText>
             
-            <Pressable style={styles.settingItem}>
+            <Pressable style={styles.settingItem} onPress={handleReminderPress}>
               <View style={styles.settingContent}>
                 <Ionicons name="timer-outline" size={24} color={activeColors.tint} />
                 <ThemedText style={styles.settingText}>
                   {t('settings.brushingSettings.reminderTime', 'Reminder Time')}
                 </ThemedText>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+              <View style={styles.languageInfo}>
+                <ThemedText style={styles.currentLanguageText}>
+                  {getEnabledRemindersText()}
+                </ThemedText>
+                <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+              </View>
             </Pressable>
             
             <View style={styles.divider} />
@@ -507,6 +541,13 @@ export default function SettingsScreen() {
           data={TONE_OPTIONS}
           renderItem={renderToneItem}
           keyExtractor={(item) => item.id}
+        />
+        
+        {/* Reminder Times Manager */}
+        <ReminderTimeManager
+          visible={isReminderModalVisible}
+          onClose={() => setIsReminderModalVisible(false)}
+          onUpdate={(reminders) => setReminderTimes(reminders)}
         />
       </Animated.View>
     </PanGestureHandler>
@@ -627,4 +668,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     alignItems: 'center',
   },
+
+
 }); 
