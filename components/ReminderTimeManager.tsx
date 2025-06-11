@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Pressable, Alert, Text, Modal, Dimensions } from 'react-native';
+import { View, StyleSheet, Pressable, Alert, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Swipeable } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,6 @@ import BottomSheetModal from './ui/BottomSheetModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const REMINDER_TIMES_KEY = 'reminder_times';
 
 // Export the interface
@@ -19,12 +18,6 @@ export interface ReminderTime {
   label: string;
   enabled: boolean;
   isCustom?: boolean;
-}
-
-// Time picker interface
-interface TimePicker {
-  hour: number;
-  minute: number;
 }
 
 interface ReminderTimeManagerProps {
@@ -39,9 +32,6 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
   const { activeColors } = theme;
   
   const [reminderTimes, setReminderTimes] = useState<ReminderTime[]>([]);
-  const [isTimePickerVisible, setIsTimePickerVisible] = useState(false);
-  const [editingReminder, setEditingReminder] = useState<ReminderTime | null>(null);
-  const [selectedTime, setSelectedTime] = useState<TimePicker>({ hour: 8, minute: 0 });
   
   // Default reminder time options (sorted by time)
   const DEFAULT_REMINDER_TIMES: ReminderTime[] = [
@@ -98,6 +88,100 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
     }
   };
 
+  const validateTimeFormat = (timeString: string): boolean => {
+    const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+    return timeRegex.test(timeString);
+  };
+
+  const formatTime = (timeString: string): string => {
+    // Add leading zeros if needed
+    const [hour, minute] = timeString.split(':');
+    return `${hour.padStart(2, '0')}:${minute.padStart(2, '0')}`;
+  };
+
+  const handleTimeSave = async (inputTime: string, isEdit: boolean, existingReminder?: ReminderTime) => {
+    try {
+      const trimmedTime = inputTime.trim();
+      
+      if (!validateTimeFormat(trimmedTime)) {
+        Alert.alert(
+          t('settings.reminderTimes.error.title', 'Invalid Time'),
+          t('settings.reminderTimes.error.invalidFormat', 'Please enter a valid time in HH:MM format (e.g., 14:30)')
+        );
+        return;
+      }
+
+      const formattedTime = formatTime(trimmedTime);
+      let updatedTimes: ReminderTime[];
+      
+      if (isEdit && existingReminder) {
+        // Edit existing reminder
+        updatedTimes = reminderTimes.map(time => 
+          time.id === existingReminder.id 
+            ? { ...time, time: formattedTime }
+            : time
+        );
+      } else {
+        // Add new reminder
+        const newReminder: ReminderTime = {
+          id: `custom_${Date.now()}`,
+          time: formattedTime,
+          label: t('settings.reminderTimes.custom', 'Custom'),
+          enabled: true,
+          isCustom: true
+        };
+        updatedTimes = [...reminderTimes, newReminder];
+      }
+      
+      const sortedTimes = sortRemindersByTime(updatedTimes);
+      setReminderTimes(sortedTimes);
+      await saveReminderTimes(sortedTimes);
+      
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    } catch (error) {
+      Alert.alert(
+        t('settings.reminderTimes.error.title', 'Reminder Error'),
+        t('settings.reminderTimes.error.message', 'Failed to save reminder time. Please try again.')
+      );
+    }
+  };
+
+  const showTimeInputDialog = (isEdit: boolean = false, reminder?: ReminderTime) => {
+    const title = isEdit ? t('settings.reminderTimes.editTime', 'Edit Time') : t('settings.reminderTimes.addTime', 'Add New Time');
+    const currentTime = isEdit && reminder ? reminder.time : '08:00';
+    
+    Alert.prompt(
+      title,
+      t('settings.reminderTimes.enterTime', 'Enter time (HH:MM format, e.g., 14:30)'),
+      [
+        {
+          text: t('common.cancel', 'Cancel'),
+          style: 'cancel',
+        },
+        {
+          text: t('common.save', 'Save'),
+          onPress: (inputText) => {
+            if (inputText) {
+              handleTimeSave(inputText, isEdit, reminder);
+            }
+          },
+        },
+      ],
+      'plain-text',
+      currentTime
+    );
+  };
+
+  const handleAddReminder = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    showTimeInputDialog(false);
+  };
+
+  const handleEditReminder = (reminder: ReminderTime) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    showTimeInputDialog(true, reminder);
+  };
+
   const handleReminderToggle = async (timeId: string) => {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -115,23 +199,8 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
     }
   };
 
-  const handleAddReminder = () => {
-    setEditingReminder(null);
-    setSelectedTime({ hour: 8, minute: 0 });
-    setIsTimePickerVisible(true);
-  };
-
-  const handleEditReminder = (reminder: ReminderTime) => {
-    console.log('Edit pressed for:', reminder.id);
-    const [hour, minute] = reminder.time.split(':').map(Number);
-    setEditingReminder(reminder);
-    setSelectedTime({ hour, minute });
-    setIsTimePickerVisible(true);
-  };
-
   const handleDeleteReminder = async (reminderId: string) => {
     try {
-      console.log('Delete pressed for:', reminderId);
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       const updatedTimes = reminderTimes.filter(time => time.id !== reminderId);
       const sortedTimes = sortRemindersByTime(updatedTimes);
@@ -141,43 +210,6 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
       Alert.alert(
         t('settings.reminderTimes.error.title', 'Reminder Error'),
         t('settings.reminderTimes.error.message', 'Failed to delete reminder time. Please try again.')
-      );
-    }
-  };
-
-  const handleSaveTime = async () => {
-    try {
-      const timeString = `${selectedTime.hour.toString().padStart(2, '0')}:${selectedTime.minute.toString().padStart(2, '0')}`;
-      let updatedTimes: ReminderTime[];
-      
-      if (editingReminder) {
-        // Edit existing reminder
-        updatedTimes = reminderTimes.map(time => 
-          time.id === editingReminder.id 
-            ? { ...time, time: timeString }
-            : time
-        );
-      } else {
-        // Add new reminder
-        const newReminder: ReminderTime = {
-          id: `custom_${Date.now()}`,
-          time: timeString,
-          label: t('settings.reminderTimes.custom', 'Custom'),
-          enabled: true,
-          isCustom: true
-        };
-        updatedTimes = [...reminderTimes, newReminder];
-      }
-      
-      const sortedTimes = sortRemindersByTime(updatedTimes);
-      setReminderTimes(sortedTimes);
-      await saveReminderTimes(sortedTimes);
-      setIsTimePickerVisible(false);
-      setEditingReminder(null);
-    } catch (error) {
-      Alert.alert(
-        t('settings.reminderTimes.error.title', 'Reminder Error'),
-        t('settings.reminderTimes.error.message', 'Failed to save reminder time. Please try again.')
       );
     }
   };
@@ -289,119 +321,14 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
   };
 
   return (
-    <>
-      <BottomSheetModal
-        visible={visible}
-        onClose={onClose}
-        title={t('settings.reminderTimes.selectTitle', 'Set Reminder Times')}
-        data={modalData}
-        renderItem={renderModalItem}
-        keyExtractor={(item) => item.id}
-      />
-      
-      {/* Time Picker Modal */}
-      <Modal
-        visible={isTimePickerVisible}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setIsTimePickerVisible(false)}
-      >
-        <View style={styles.timePickerOverlay}>
-          <View style={styles.timePickerModal}>
-            <ThemedText style={styles.timePickerTitle}>
-              {editingReminder 
-                ? t('settings.reminderTimes.editTime', 'Edit Time')
-                : t('settings.reminderTimes.addTime', 'Add New Time')
-              }
-            </ThemedText>
-            
-            <View style={styles.timePickerContainer}>
-              <View style={styles.timePicker}>
-                <Text style={styles.timePickerText}>
-                  {selectedTime.hour.toString().padStart(2, '0')}:
-                  {selectedTime.minute.toString().padStart(2, '0')}
-                </Text>
-              </View>
-              
-              <View style={styles.timePickerControls}>
-                <View style={styles.timeControlRow}>
-                  <ThemedText style={styles.timeLabel}>Hour</ThemedText>
-                  <View style={styles.timeControl}>
-                    <Pressable 
-                      style={styles.timeButton}
-                      onPress={() => setSelectedTime(prev => ({ 
-                        ...prev, 
-                        hour: prev.hour > 0 ? prev.hour - 1 : 23 
-                      }))}
-                    >
-                      <Ionicons name="remove" size={20} color="#333" />
-                    </Pressable>
-                    <Text style={styles.timeValue}>
-                      {selectedTime.hour.toString().padStart(2, '0')}
-                    </Text>
-                    <Pressable 
-                      style={styles.timeButton}
-                      onPress={() => setSelectedTime(prev => ({ 
-                        ...prev, 
-                        hour: prev.hour < 23 ? prev.hour + 1 : 0 
-                      }))}
-                    >
-                      <Ionicons name="add" size={20} color="#333" />
-                    </Pressable>
-                  </View>
-                </View>
-                
-                <View style={styles.timeControlRow}>
-                  <ThemedText style={styles.timeLabel}>Minute</ThemedText>
-                  <View style={styles.timeControl}>
-                    <Pressable 
-                      style={styles.timeButton}
-                      onPress={() => setSelectedTime(prev => ({ 
-                        ...prev, 
-                        minute: prev.minute > 0 ? prev.minute - 15 : 45 
-                      }))}
-                    >
-                      <Ionicons name="remove" size={20} color="#333" />
-                    </Pressable>
-                    <Text style={styles.timeValue}>
-                      {selectedTime.minute.toString().padStart(2, '0')}
-                    </Text>
-                    <Pressable 
-                      style={styles.timeButton}
-                      onPress={() => setSelectedTime(prev => ({ 
-                        ...prev, 
-                        minute: prev.minute < 45 ? prev.minute + 15 : 0 
-                      }))}
-                    >
-                      <Ionicons name="add" size={20} color="#333" />
-                    </Pressable>
-                  </View>
-                </View>
-              </View>
-            </View>
-            
-            <View style={styles.timePickerActions}>
-              <Pressable 
-                style={[styles.timePickerButton, styles.cancelButton]}
-                onPress={() => setIsTimePickerVisible(false)}
-              >
-                <ThemedText style={styles.timePickerButtonText}>
-                  {t('common.cancel', 'Cancel')}
-                </ThemedText>
-              </Pressable>
-              <Pressable 
-                style={[styles.timePickerButton, styles.saveButton]}
-                onPress={handleSaveTime}
-              >
-                <ThemedText style={styles.timePickerButtonText}>
-                  {t('common.save', 'Save')}
-                </ThemedText>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
-    </>
+    <BottomSheetModal
+      visible={visible}
+      onClose={onClose}
+      title={t('settings.reminderTimes.selectTitle', 'Set Reminder Times')}
+      data={modalData}
+      renderItem={renderModalItem}
+      keyExtractor={(item) => item.id}
+    />
   );
 }
 
@@ -501,98 +428,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 12,
-  },
-  timePickerOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  timePickerModal: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 24,
-    width: screenWidth * 0.85,
-    maxHeight: screenHeight * 0.6,
-  },
-  timePickerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 24,
-    color: '#333',
-  },
-  timePickerContainer: {
-    marginBottom: 24,
-  },
-  timePicker: {
-    alignItems: 'center',
-    marginBottom: 24,
-    padding: 16,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 12,
-  },
-  timePickerText: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#333',
-    fontFamily: 'monospace',
-  },
-  timePickerControls: {
-    gap: 16,
-  },
-  timeControlRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  timeControl: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    borderRadius: 8,
-    padding: 4,
-  },
-  timeButton: {
-    padding: 8,
-    borderRadius: 6,
-    backgroundColor: '#e0e0e0',
-    margin: 2,
-  },
-  timeValue: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginHorizontal: 16,
-    minWidth: 30,
-    textAlign: 'center',
-    color: '#333',
-  },
-  timeLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-  },
-  timePickerActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 16,
-  },
-  timePickerButton: {
-    flex: 1,
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  cancelButton: {
-    backgroundColor: '#e0e0e0',
-  },
-  saveButton: {
-    backgroundColor: '#2196F3',
-  },
-  timePickerButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
   },
 }); 

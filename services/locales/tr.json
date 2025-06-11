@@ -290,8 +290,8 @@
         "name": "Başarılar",
         "description": "Fırçalama başarılarını kontrol et"
       },
-          "settings": {
-      "name": "Ayarlar",
+      "settings": {
+        "name": "Ayarlar",
       "description": "Uygulama ayarları ve tercihler",
       "appSettings": {
         "title": "Uygulama Ayarları"
@@ -334,7 +334,7 @@
         "targetTime": "Hedef Fırçalama Süresi",
         "notifications": "Fırçalama Bildirimleri"
       }
-    }
+      }
     },
     "timerOverlay": {
       "start": "Başla",

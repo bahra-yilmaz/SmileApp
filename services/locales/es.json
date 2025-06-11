@@ -290,8 +290,8 @@
         "name": "Logros",
         "description": "Revisa tus logros de cepillado"
       },
-          "settings": {
-      "name": "Configuración",
+      "settings": {
+        "name": "Configuración",
       "description": "Ajustes y preferencias de la app",
       "appSettings": {
         "title": "Configuración de la app"
@@ -334,7 +334,7 @@
         "targetTime": "Tiempo objetivo de cepillado",
         "notifications": "Notificaciones de cepillado"
       }
-    }
+      }
     },
     "timerOverlay": {
       "start": "Iniciar",
