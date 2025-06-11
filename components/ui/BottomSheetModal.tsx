@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, StyleSheet, Modal, Pressable, Text, FlatList, ListRenderItem } from 'react-native';
+import { View, StyleSheet, Modal, Pressable, Text, FlatList, ListRenderItem, KeyboardAvoidingView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 interface BottomSheetModalProps<T> {
   visible: boolean;
@@ -30,36 +31,49 @@ export default function BottomSheetModal<T>({
       presentationStyle="pageSheet"
       onRequestClose={onClose}
     >
-      <View style={styles.container}>
-        <Image 
-          source={require('../../assets/images/meshgradient-light-default.png')}
-          style={styles.backgroundImage}
-          contentFit="cover"
-          cachePolicy="disk"
-        />
-        
-        <View style={[styles.header, { paddingTop: insets.top + 5 }]}>
-          <View style={styles.closeButton} />
-          <Text style={styles.title}>
-            {title}
-          </Text>
-          <Pressable 
-            onPress={onClose}
-            style={styles.closeButton}
-          >
-            <Ionicons name="chevron-down" size={28} color="white" />
-          </Pressable>
-        </View>
-        
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          style={styles.list}
-          contentContainerStyle={styles.listContent}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <KeyboardAvoidingView 
+          style={styles.container}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+        >
+          <Image 
+            source={require('../../assets/images/meshgradient-light-default.png')}
+            style={styles.backgroundImage}
+            contentFit="cover"
+            cachePolicy="disk"
+          />
+          
+          <View style={[styles.header, { paddingTop: insets.top + 5 }]}>
+            <View style={styles.closeButton} />
+            <Text style={styles.title}>
+              {title}
+            </Text>
+            <Pressable 
+              onPress={onClose}
+              style={styles.closeButton}
+            >
+              <Ionicons name="chevron-down" size={28} color="white" />
+            </Pressable>
+          </View>
+          
+          <FlatList
+            data={data}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            style={styles.list}
+            contentContainerStyle={styles.listContent}
+            showsVerticalScrollIndicator={false}
+            nestedScrollEnabled={true}
+            removeClippedSubviews={false}
+            keyboardShouldPersistTaps="handled"
+            bounces={true}
+            alwaysBounceVertical={false}
+            scrollEnabled={true}
+            scrollEventThrottle={16}
+          />
+        </KeyboardAvoidingView>
+      </GestureHandlerRootView>
     </Modal>
   );
 }
@@ -103,7 +117,8 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingHorizontal: 20,
-    paddingBottom: 40,
+    paddingBottom: 150,
     backgroundColor: 'transparent',
+    flexGrow: 1,
   },
 }); 
