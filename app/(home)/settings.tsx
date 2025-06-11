@@ -7,6 +7,7 @@ import GlassmorphicHeader from '../../components/ui/GlassmorphicHeader';
 import BottomSheetModal from '../../components/ui/BottomSheetModal';
 import ReminderTimeManager, { ReminderTime } from '../../components/ReminderTimeManager';
 import BrushingTargetSelector, { BrushingTarget } from '../../components/BrushingTargetSelector';
+import DailyBrushingFrequencySelector, { DailyBrushingFrequency } from '../../components/DailyBrushingFrequencySelector';
 import { OnboardingService } from '../../services/OnboardingService';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -68,6 +69,10 @@ export default function SettingsScreen() {
   // Brushing target selection state
   const [isTargetModalVisible, setIsTargetModalVisible] = useState(false);
   const [currentTarget, setCurrentTarget] = useState<BrushingTarget | null>(null);
+  
+  // Daily frequency selection state
+  const [isFrequencyModalVisible, setIsFrequencyModalVisible] = useState(false);
+  const [currentFrequency, setCurrentFrequency] = useState<DailyBrushingFrequency | null>(null);
   
   // Reminder time selection state
   const [isReminderModalVisible, setIsReminderModalVisible] = useState(false);
@@ -276,6 +281,11 @@ export default function SettingsScreen() {
   const handleTargetPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setIsTargetModalVisible(true);
+  };
+
+  const handleFrequencyPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setIsFrequencyModalVisible(true);
   };
   
   const handleReminderPress = () => {
@@ -490,14 +500,19 @@ export default function SettingsScreen() {
             
             <View style={styles.divider} />
             
-            <Pressable style={styles.settingItem}>
+            <Pressable style={styles.settingItem} onPress={handleFrequencyPress}>
               <View style={styles.settingContent}>
                 <Ionicons name="calendar-outline" size={24} color={activeColors.tint} />
                 <ThemedText style={styles.settingText}>
                   {t('settings.brushingSettings.frequency', 'Brushing Frequency')}
                 </ThemedText>
               </View>
-              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+              <View style={styles.languageInfo}>
+                <ThemedText style={styles.currentLanguageText}>
+                  {currentFrequency ? `${currentFrequency.count} times` : t('settings.dailyFrequency.options.standard_short', '2 times')}
+                </ThemedText>
+                <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+              </View>
             </Pressable>
             
             <View style={styles.divider} />
@@ -583,6 +598,14 @@ export default function SettingsScreen() {
           visible={isTargetModalVisible}
           onClose={() => setIsTargetModalVisible(false)}
           onUpdate={(target) => setCurrentTarget(target)}
+          autoClose={MODAL_AUTO_CLOSE}
+        />
+
+        {/* Daily Brushing Frequency Selection Modal */}
+        <DailyBrushingFrequencySelector
+          visible={isFrequencyModalVisible}
+          onClose={() => setIsFrequencyModalVisible(false)}
+          onUpdate={(frequency) => setCurrentFrequency(frequency)}
           autoClose={MODAL_AUTO_CLOSE}
         />
         
