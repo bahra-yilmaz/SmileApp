@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import { View, StyleSheet, Modal, Pressable, Text, FlatList, ListRenderItem, KeyboardAvoidingView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -12,6 +12,7 @@ interface BottomSheetModalProps<T> {
   data: T[];
   renderItem: ListRenderItem<T>;
   keyExtractor: (item: T) => string;
+  listRef?: RefObject<FlatList<T>>;
 }
 
 export default function BottomSheetModal<T>({
@@ -21,6 +22,7 @@ export default function BottomSheetModal<T>({
   data,
   renderItem,
   keyExtractor,
+  listRef,
 }: BottomSheetModalProps<T>) {
   const insets = useSafeAreaInsets();
 
@@ -58,6 +60,7 @@ export default function BottomSheetModal<T>({
           </View>
           
           <FlatList
+            ref={listRef}
             data={data}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
@@ -117,7 +120,7 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingHorizontal: 20,
-    paddingBottom: 150,
+    paddingBottom: 60,
     backgroundColor: 'transparent',
     flexGrow: 1,
   },
