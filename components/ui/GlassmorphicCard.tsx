@@ -31,9 +31,9 @@ export interface GlassmorphicCardProps extends ViewProps {
   shadow?: 'none' | 'sm' | 'md' | 'lg';
 
   /**
-   * Card variant - 'default' for regular cards, 'input' for form fields
+   * Card variant - 'default' for regular cards, 'input' for form fields, 'secondary' for button-style cards
    */
-  variant?: 'default' | 'input';
+  variant?: 'default' | 'input' | 'secondary';
   
   /**
    * Optional width override (number for exact width or string for percentages)
@@ -76,10 +76,14 @@ export function GlassmorphicCard({
   // Determine background and border color based on variant
   const backgroundColor = variant === 'input' 
     ? glass.inputBackground 
+    : variant === 'secondary'
+    ? glass.secondaryCardBackground
     : glass.background;
   
   const borderColor = variant === 'input'
     ? glass.inputBorder
+    : variant === 'secondary'
+    ? glass.secondaryCardBorder
     : glass.border;
   
   // Adjust intensity for input variant for better text contrast

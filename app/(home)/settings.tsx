@@ -560,7 +560,7 @@ export default function SettingsScreen() {
               <View style={styles.settingContent}>
                 <Ionicons name="brush-outline" size={24} color={activeColors.tint} />
                 <ThemedText style={styles.settingText}>
-                  {t('settings.brushingSettings.toothbrush', 'Toothbrush Management')}
+                  {t('settings.brushingSettings.toothbrush', 'Toothbrush Menu')}
                 </ThemedText>
               </View>
               <View style={styles.languageInfo}>

@@ -3,7 +3,7 @@ import { View, Alert, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from './ThemeProvider';
 import BottomSheetModal from './ui/BottomSheetModal';
-import ReminderItem, { ReminderTime } from './ReminderItem';
+import ReminderItem, { ReminderTime, ReminderItemRef } from './ReminderItem';
 import AddReminderButton from './AddReminderButton';
 import InlineTimePicker from './InlineTimePicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -38,6 +38,7 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
   const hourPickerRef = useRef<ScrollView>(null);
   const minutePickerRef = useRef<ScrollView>(null);
   const modalListRef = useRef<any>(null);
+  const reminderItemRefs = useRef<{ [key: string]: ReminderItemRef | null }>({});
 
   // Animation values
   const timePickerOpacity = useSharedValue(0);
@@ -214,6 +215,11 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
       runOnJS(setShowTimePicker)(false);
       runOnJS(setEditingReminder)(null);
       runOnJS(setReminderName)('');
+      
+      // Close swipe action if we were editing a reminder
+      if (editingReminder) {
+        reminderItemRefs.current[editingReminder.id]?.closeSwipe();
+      }
     }, 250);
   };
 
@@ -277,6 +283,11 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
         runOnJS(setShowTimePicker)(false);
         runOnJS(setEditingReminder)(null);
         runOnJS(setReminderName)('');
+        
+        // Close swipe action if we were editing a reminder
+        if (editingReminder) {
+          reminderItemRefs.current[editingReminder.id]?.closeSwipe();
+        }
       }, 250);
       
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -324,6 +335,9 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
     return (
       <View>
         <ReminderItem
+          ref={(ref) => {
+            reminderItemRefs.current[reminder.id] = ref;
+          }}
           reminder={reminder}
           onToggle={handleReminderToggle}
           onEdit={handleEditReminder}

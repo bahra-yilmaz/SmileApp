@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useImperativeHandle, forwardRef } from 'react';
 import { View, StyleSheet, Pressable, Animated as RNAnimated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Swipeable } from 'react-native-gesture-handler';
@@ -28,16 +28,28 @@ interface ReminderItemProps {
   onSwipeClose?: () => void;
 }
 
-export default function ReminderItem({ 
+export interface ReminderItemRef {
+  closeSwipe: () => void;
+}
+
+const ReminderItem = forwardRef<ReminderItemRef, ReminderItemProps>(({ 
   reminder, 
   onToggle, 
   onEdit, 
   onDelete, 
   onSwipeClose 
-}: ReminderItemProps) {
+}, ref) => {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const { activeColors } = theme;
+  
+  const swipeableRef = useRef<Swipeable>(null);
+  
+  useImperativeHandle(ref, () => ({
+    closeSwipe: () => {
+      swipeableRef.current?.close();
+    },
+  }));
 
   const renderRightActions = (progressAnimatedValue: RNAnimated.AnimatedInterpolation<number>) => {
     const opacity = progressAnimatedValue.interpolate({
@@ -83,6 +95,7 @@ export default function ReminderItem({
 
   return (
     <Swipeable 
+      ref={swipeableRef}
       renderRightActions={renderRightActions}
       friction={2}
       leftThreshold={30}
@@ -136,7 +149,11 @@ export default function ReminderItem({
       </Pressable>
     </Swipeable>
   );
-}
+});
+
+ReminderItem.displayName = 'ReminderItem';
+
+export default ReminderItem;
 
 const styles = StyleSheet.create({
   reminderItem: {

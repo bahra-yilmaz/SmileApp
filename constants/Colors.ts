@@ -75,6 +75,9 @@ const glass = {
     blur: 10,
     inputBackground: 'rgba(31, 41, 51, 0.25)', // Darker background for input fields
     inputBorder: 'rgba(255, 255, 255, 0.3)',
+    // Secondary card style - matches button styling
+    secondaryCardBackground: 'rgba(255, 255, 255, 0.1)',
+    secondaryCardBorder: 'rgba(255, 255, 255, 0.3)',
   },
   dark: {
     background: 'rgba(31, 41, 51, 0.65)',
@@ -83,6 +86,9 @@ const glass = {
     blur: 10,
     inputBackground: 'rgba(0, 0, 0, 0.35)', // Darker background for input fields
     inputBorder: 'rgba(70, 80, 100, 0.3)',
+    // Secondary card style - matches button styling
+    secondaryCardBackground: 'rgba(255, 255, 255, 0.1)',
+    secondaryCardBorder: 'rgba(255, 255, 255, 0.3)',
   },
 };
 

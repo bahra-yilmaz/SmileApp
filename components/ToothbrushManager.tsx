@@ -8,6 +8,10 @@ import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { Image as ExpoImage } from 'expo-image';
+import { cardStyles, buttonStyles } from '../utils/sharedStyles';
+import InlineToothbrushPicker from './InlineToothbrushPicker';
 
 const { width: screenWidth } = Dimensions.get('window');
 const TOOTHBRUSH_DATA_KEY = 'toothbrush_data';
@@ -45,6 +49,24 @@ export default function ToothbrushManager({
   const { t } = useTranslation();
   const router = useRouter();
   const [toothbrushData, setToothbrushData] = useState<ToothbrushData>({ current: null, history: [] });
+  
+  // Expandable menu state
+  const [showToothbrushPicker, setShowToothbrushPicker] = useState(false);
+  const [toothbrushConfig, setToothbrushConfig] = useState({
+    type: 'manual' as 'manual' | 'electric',
+    category: 'regular' as 'regular' | 'braces' | 'sensitive' | 'whitening',
+    brand: '',
+    model: '',
+  });
+  
+  // Animation values
+  const plusRotation = useSharedValue(0);
+  const pickerOpacity = useSharedValue(0);
+  const pickerScale = useSharedValue(0.95);
+  
+  const plusAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${plusRotation.value}deg` }],
+  }));
 
   useEffect(() => {
     if (visible) {
@@ -122,26 +144,97 @@ export default function ToothbrushManager({
     return { status: 'good', text: t('toothbrush.status.good', 'Good'), color: '#27AE60' };
   };
 
-  const handleNewToothbrush = async () => {
+  const handleAddToothbrushPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    
+    // If picker is already open, close it
+    if (showToothbrushPicker) {
+      handleCancelToothbrushAdd();
+      return;
+    }
+    
+    // Reset config to defaults
+    setToothbrushConfig({
+      type: 'manual',
+      category: 'regular',
+      brand: '',
+      model: '',
+    });
+    
+    setShowToothbrushPicker(true);
+    
+    // Animate picker in
+    pickerOpacity.value = withTiming(1, { duration: 300 });
+    pickerScale.value = withTiming(1, { duration: 300 });
+    
+    // Rotate plus to X
+    plusRotation.value = withTiming(45, { duration: 200 });
+  };
+
+  const handleCancelToothbrushAdd = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    
+    // Animate picker out
+    pickerOpacity.value = withTiming(0, { duration: 200 });
+    pickerScale.value = withTiming(0.95, { duration: 250 });
+    
+    // Rotate X back to plus
+    plusRotation.value = withTiming(0, { duration: 200 });
+    
+    // Reset state after animation
+    setTimeout(() => {
+      setShowToothbrushPicker(false);
+      setToothbrushConfig({
+        type: 'manual',
+        category: 'regular',
+        brand: '',
+        model: '',
+      });
+    }, 250);
+  };
+
+  const handleSaveToothbrush = async () => {
     try {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      
       const now = new Date().toISOString();
       const newData: ToothbrushData = { ...toothbrushData };
       
+      // Move current brush to history if exists
       if (newData.current) {
         newData.current.endDate = now;
         newData.history.unshift(newData.current);
       }
       
+      // Create new toothbrush with config
       newData.current = {
         id: Date.now().toString(),
-        type: 'manual',
-        category: 'regular',
-        startDate: now
+        type: toothbrushConfig.type,
+        category: toothbrushConfig.category,
+        startDate: now,
+        brand: toothbrushConfig.brand || undefined,
+        model: toothbrushConfig.model || undefined,
       };
       
       await saveToothbrushData(newData);
+      
+      // Animate picker out
+      pickerOpacity.value = withTiming(0, { duration: 200 });
+      pickerScale.value = withTiming(0.95, { duration: 250 });
+      
+      // Rotate X back to plus
+      plusRotation.value = withTiming(0, { duration: 200 });
+      
+      // Reset state after animation
+      setTimeout(() => {
+        setShowToothbrushPicker(false);
+        setToothbrushConfig({
+          type: 'manual',
+          category: 'regular',
+          brand: '',
+          model: '',
+        });
+      }, 250);
+      
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       
       if (autoClose) {
         onClose();
@@ -159,37 +252,53 @@ export default function ToothbrushManager({
   const renderCurrentBrush = () => {
     if (!toothbrushData.current) {
       return (
-        <View style={styles.noBrushContainer}>
-          <Ionicons name="help-circle-outline" size={32} color={activeColors.textSecondary} />
-          <ThemedText style={styles.noBrushText}>
-            {t('toothbrush.current.none', 'No toothbrush registered')}
-          </ThemedText>
-          <ThemedText style={styles.noBrushSubtext}>
-            {t('toothbrush.current.addFirst', 'Add your first toothbrush to start tracking')}
-          </ThemedText>
+        <View style={[styles.toothbrushCard, cardStyles.secondaryCard]}>
+          <View style={styles.noBrushContainer}>
+            <ExpoImage 
+              source={require('../assets/images/toothbrush.png')}
+              style={[styles.toothbrushImage, { opacity: 0.4 }]}
+              contentFit="contain"
+            />
+            <View style={styles.noBrushTextContainer}>
+              <ThemedText style={styles.noBrushText}>
+                {t('toothbrush.current.none', 'No toothbrush registered')}
+              </ThemedText>
+              <ThemedText style={styles.noBrushSubtext}>
+                {t('toothbrush.current.addFirst', 'Add your first toothbrush to start tracking')}
+              </ThemedText>
+            </View>
+          </View>
         </View>
       );
     }
 
     const status = getReplacementStatus();
     
-    return (
-      <View style={styles.currentBrushContainer}>
-        <View style={styles.currentBrushHeader}>
-          <View style={styles.currentBrushInfo}>
-            <Ionicons 
-              name={toothbrushData.current.type === 'electric' ? 'flash' : 'brush'} 
-              size={24} 
-              color={activeColors.tint} 
+          return (
+        <View style={[styles.toothbrushCard, cardStyles.secondaryCard]}>
+          <View style={styles.toothbrushCardContent}>
+          <View style={styles.toothbrushIconContainer}>
+            <ExpoImage 
+              source={require('../assets/images/toothbrush.png')}
+              style={styles.toothbrushImage}
+              contentFit="contain"
             />
-            <View style={styles.currentBrushText}>
-              <ThemedText style={styles.currentBrushType}>
-                {t(`toothbrush.type.${toothbrushData.current.type}`, toothbrushData.current.type === 'electric' ? 'Electric' : 'Manual')} Toothbrush
+          </View>
+          <View style={styles.toothbrushTextContainer}>
+            <ThemedText style={styles.toothbrushCardTitle}>
+              {t(`toothbrush.type.${toothbrushData.current.type}`, toothbrushData.current.type === 'electric' ? 'Electric' : 'Manual')} Toothbrush
+            </ThemedText>
+            <ThemedText style={styles.toothbrushCardSubtitle}>
+              {t(`toothbrush.category.${toothbrushData.current.category}`, toothbrushData.current.category)}
+            </ThemedText>
+            <ThemedText style={styles.toothbrushCardAge}>
+              {t('toothbrush.current.age', 'Age')}: {getAgeDisplayText()}
+            </ThemedText>
+            {toothbrushData.history.length > 0 && (
+              <ThemedText style={styles.toothbrushCardHistory}>
+                {toothbrushData.history.length} {toothbrushData.history.length === 1 ? 'brush' : 'brushes'} in history
               </ThemedText>
-              <ThemedText style={styles.currentBrushAge}>
-                {t('toothbrush.current.age', 'Age')}: {getAgeDisplayText()}
-              </ThemedText>
-            </View>
+            )}
           </View>
           <View style={[styles.statusBadge, { backgroundColor: status.color }]}>
             <ThemedText style={styles.statusText}>
@@ -197,12 +306,6 @@ export default function ToothbrushManager({
             </ThemedText>
           </View>
         </View>
-        
-        {toothbrushData.history.length > 0 && (
-          <ThemedText style={styles.historyText}>
-            {toothbrushData.history.length} {toothbrushData.history.length === 1 ? 'brush' : 'brushes'} in history
-          </ThemedText>
-        )}
       </View>
     );
   };
@@ -290,17 +393,20 @@ export default function ToothbrushManager({
         {renderCurrentBrush()}
         
         <View style={styles.actionsContainer}>
-          <Pressable 
-            style={[styles.actionButton, styles.primaryButton]} 
-            onPress={handleNewToothbrush}
-          >
-            <Ionicons name="add-circle" size={20} color="white" />
-            <ThemedText style={styles.primaryButtonText}>
-              {toothbrushData.current 
-                ? t('toothbrush.newBrush.replace', 'Replace Toothbrush')
-                : t('toothbrush.newBrush.add', 'Add Toothbrush')
-              }
-            </ThemedText>
+          {/* Replace Toothbrush Button - AddReminderButton Style */}
+          <Pressable onPress={handleAddToothbrushPress} style={buttonStyles.addReminderItem}>
+            <View style={buttonStyles.addReminderContent}>
+              <View style={buttonStyles.addReminderTextContainer}>
+                <ThemedText style={[buttonStyles.addReminderText, { color: activeColors.text }]}>
+                  {t('toothbrush.newBrush.addNew', 'Add New Toothbrush')}
+                </ThemedText>
+              </View>
+              <View style={buttonStyles.addReminderToggle}>
+                <Animated.View style={plusAnimatedStyle}>
+                  <Ionicons name="add" size={28} color="white" style={{ fontWeight: '900' }} />
+                </Animated.View>
+              </View>
+            </View>
           </Pressable>
           
           <Pressable 
@@ -312,8 +418,19 @@ export default function ToothbrushManager({
               {t('toothbrush.viewDetails', 'View Full Screen')}
             </ThemedText>
           </Pressable>
-        </View>
+                </View>
 
+        {/* Inline Toothbrush Picker - appears below the button when adding */}
+        <InlineToothbrushPicker
+          visible={showToothbrushPicker}
+          config={toothbrushConfig}
+          onConfigChange={setToothbrushConfig}
+          onSave={handleSaveToothbrush}
+          onCancel={handleCancelToothbrushAdd}
+          pickerOpacity={pickerOpacity}
+          pickerScale={pickerScale}
+        />
+        
         {/* History Section */}
         {toothbrushData.history.length > 0 && (
           <View style={styles.section}>
@@ -347,7 +464,7 @@ export default function ToothbrushManager({
     <BottomSheetModal
       visible={visible}
       onClose={onClose}
-      title={t('toothbrush.title', 'Toothbrush Management')}
+      title={t('toothbrush.title', 'Toothbrush Menu')}
       data={modalData}
       renderItem={renderContent}
       keyExtractor={(item) => item.id}
@@ -364,9 +481,63 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingVertical: 10,
   },
+  // Toothbrush Card Styles (like nubo tone cards)
+  toothbrushCard: {
+    width: screenWidth * 0.85,
+    minHeight: 120,
+    borderRadius: 20,
+    borderWidth: 1,
+    padding: 20,
+    marginVertical: 10,
+    justifyContent: 'center',
+    overflow: 'hidden',
+    alignSelf: 'center',
+  },
+
+  toothbrushImage: {
+    width: 48,
+    height: 48,
+  },
+  toothbrushCardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  toothbrushIconContainer: {
+    marginRight: 16,
+  },
+  toothbrushTextContainer: {
+    flex: 1,
+  },
+  toothbrushCardTitle: {
+    fontSize: 18,
+    marginBottom: 4,
+    fontFamily: 'Quicksand-Bold',
+    color: 'white',
+  },
+  toothbrushCardSubtitle: {
+    fontSize: 14,
+    marginBottom: 4,
+    opacity: 0.8,
+    color: 'white',
+  },
+  toothbrushCardAge: {
+    fontSize: 14,
+    marginBottom: 4,
+    color: 'white',
+  },
+  toothbrushCardHistory: {
+    fontSize: 12,
+    opacity: 0.7,
+    color: 'white',
+  },
   noBrushContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 20,
+  },
+  noBrushTextContainer: {
+    marginLeft: 16,
+    flex: 1,
   },
   noBrushText: {
     fontSize: 16,
@@ -425,6 +596,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 8,
   },
+
   actionsContainer: {
     marginTop: 16,
     gap: 12,
