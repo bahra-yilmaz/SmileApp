@@ -604,7 +604,9 @@ export default function ToothbrushManager({
 }
 
 const styles = StyleSheet.create({
-  scrollContainer: {},
+  scrollContainer: {
+    paddingBottom: 40,
+  },
   container: {
     width: screenWidth * 0.85,
     alignSelf: 'center',

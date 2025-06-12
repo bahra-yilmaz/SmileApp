@@ -5,7 +5,8 @@ import ThemedText from '../../components/ThemedText';
 import GlassmorphicCard from '../../components/ui/GlassmorphicCard';
 import GlassmorphicHeader from '../../components/ui/GlassmorphicHeader';
 import BottomSheetModal from '../../components/ui/BottomSheetModal';
-import ReminderTimeManager, { ReminderTime } from '../../components/ReminderTimeManager';
+import ReminderTimeManager from '../../components/ReminderTimeManager';
+import { ReminderTime } from '../../components/ReminderItem';
 import BrushingTargetSelector, { BrushingTarget } from '../../components/BrushingTargetSelector';
 import DailyBrushingFrequencySelector, { DailyBrushingFrequency } from '../../components/DailyBrushingFrequencySelector';
 import ToothbrushManager, { ToothbrushData } from '../../components/ToothbrushManager';
@@ -441,18 +442,6 @@ export default function SettingsScreen() {
             
             <View style={styles.divider} />
             
-            <Pressable style={styles.settingItem}>
-              <View style={styles.settingContent}>
-                <Ionicons name="moon-outline" size={24} color={activeColors.tint} />
-                <ThemedText style={styles.settingText}>
-                  {t('settings.theme.name', 'App Theme')}
-                </ThemedText>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
-            </Pressable>
-            
-            <View style={styles.divider} />
-            
             <Pressable style={styles.settingItem} onPress={handleTonePress}>
               <View style={styles.settingContent}>
                 <Ionicons name="person-outline" size={24} color={activeColors.tint} />
@@ -495,7 +484,7 @@ export default function SettingsScreen() {
             
             <Pressable style={styles.settingItem} onPress={handleReminderPress}>
               <View style={styles.settingContent}>
-                <Ionicons name="timer-outline" size={24} color={activeColors.tint} />
+                <Ionicons name="notifications-outline" size={24} color={activeColors.tint} />
                 <ThemedText style={styles.settingText}>
                   {t('settings.brushingSettings.reminderTime', 'Reminder Time')}
                 </ThemedText>
@@ -540,18 +529,6 @@ export default function SettingsScreen() {
                 </ThemedText>
               <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
               </View>
-            </Pressable>
-            
-            <View style={styles.divider} />
-            
-            <Pressable style={styles.settingItem}>
-              <View style={styles.settingContent}>
-                <Ionicons name="notifications-outline" size={24} color={activeColors.tint} />
-                <ThemedText style={styles.settingText}>
-                  {t('settings.brushingSettings.notifications', 'Brushing Notifications')}
-                </ThemedText>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
             </Pressable>
             
             <View style={styles.divider} />
