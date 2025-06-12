@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Pressable } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { useTheme } from '../ThemeProvider';
@@ -92,75 +92,90 @@ export const SongMenu: React.FC<SongMenuProps> = ({
   };
 
   return (
-    <Animated.View style={[styles.wrapper, opacity ? { opacity } : {}]}>
-      {/* Shadow Wrapper for Collapsed Bar */}
-      <View style={styles.shadowWrapper}>
-        <BlurView tint={theme.colorScheme === 'dark' ? 'dark' : 'light'} intensity={80} style={styles.blurViewStyle}> 
-          <View style={styles.collapsedBarContainer}> 
-            <TouchableOpacity onPress={onPlayPause} style={styles.playPauseButton}>
-              <MaterialCommunityIcons
-                name={isPlaying ? "pause" : "play"}
-                size={40} 
-                color={theme.colorScheme === 'dark' ? theme.colors.primary[200] : theme.colors.primary[800]} // Using primary[800] for light, primary[200] for dark
-              />
-            </TouchableOpacity>
-            <View style={styles.songInfoContainer}>
-              <Text style={styles.songNameText} numberOfLines={1}>{actualCurrentSongName}</Text>
-              {renderVisualizer()}
-            </View>
-            <TouchableOpacity onPress={toggleMenu} style={styles.toggleButton}>
-              <MaterialCommunityIcons
-                name="format-list-bulleted"
-                size={22}
-                color={theme.colors.primary[200]} // Color from TimerCircle's center circle
-              />
-            </TouchableOpacity>
-          </View>
-        </BlurView>
-      </View>
+    <>
+      {/* Full-screen transparent overlay – closes the menu when tapped */}
+      {isMenuOpen && (
+        <Pressable
+          onPress={toggleMenu}
+          style={styles.fullScreenOverlay}
+        />
+      )}
 
-      {/* Shadow Wrapper for Menu Options */}
-      <Animated.View style={[styles.menuOptionsShadowWrapper, { height: menuHeight, opacity: animation }]}>
-        <View style={styles.shadowWrapper}> 
-          <BlurView 
-            tint={theme.colorScheme === 'dark' ? 'dark' : 'light'} 
-            intensity={70} // Intensity as a direct prop
-            style={styles.blurViewOptionsStyle}
-          > 
-            <View style={styles.menuOptionsContainer}>
-              {actualSongs.map((song) => (
-                <TouchableOpacity
-                  key={song.id}
-                  style={styles.menuItem}
-                  onPress={() => {
-                    onSelectSong?.(song);
-                    toggleMenu(); // Close menu on selection
-                  }}
-                >
-                  <MaterialCommunityIcons name="music-note" size={20} color={theme.colorScheme === 'dark' ? theme.colors.primary[200] : theme.colors.primary[800]} />
-                  <Text style={styles.menuItemText}>{song.name}</Text>
-                </TouchableOpacity>
-              ))}
-              <View style={styles.separator} />
-              <TouchableOpacity
-                style={styles.menuItem}
-                onPress={() => {
-                  onSelectNoSound?.();
-                  toggleMenu(); // Close menu on selection
-                }}
-              >
-                <MaterialCommunityIcons name="volume-off" size={20} color={theme.colorScheme === 'dark' ? theme.colors.primary[200] : theme.colors.primary[800]} />
-                <Text style={styles.menuItemText}>{t('timerOverlay.songMenu.noSound')}</Text>
+      <Animated.View style={[styles.wrapper, opacity ? { opacity } : {}]}>
+        {/* Shadow Wrapper for Collapsed Bar */}
+        <View style={styles.shadowWrapper}>
+          <BlurView tint={theme.colorScheme === 'dark' ? 'dark' : 'light'} intensity={80} style={styles.blurViewStyle}> 
+            <View style={styles.collapsedBarContainer}> 
+              <TouchableOpacity onPress={onPlayPause} style={styles.playPauseButton}>
+                <MaterialCommunityIcons
+                  name={isPlaying ? "pause" : "play"}
+                  size={40} 
+                  color={theme.colorScheme === 'dark' ? theme.colors.primary[200] : theme.colors.primary[800]} // Using primary[800] for light, primary[200] for dark
+                />
+              </TouchableOpacity>
+              <Pressable style={styles.songInfoContainer} onPress={toggleMenu}>
+                <Text style={styles.songNameText} numberOfLines={1}>{actualCurrentSongName}</Text>
+                {renderVisualizer()}
+              </Pressable>
+              <TouchableOpacity onPress={toggleMenu} style={styles.toggleButton}>
+                <MaterialCommunityIcons
+                  name="format-list-bulleted"
+                  size={22}
+                  color={theme.colors.primary[200]} // Color from TimerCircle's center circle
+                />
               </TouchableOpacity>
             </View>
           </BlurView>
         </View>
+
+        {/* Shadow Wrapper for Menu Options */}
+        <Animated.View style={[styles.menuOptionsShadowWrapper, { height: menuHeight, opacity: animation }]}>
+          <View style={styles.shadowWrapper}> 
+            <BlurView 
+              tint={theme.colorScheme === 'dark' ? 'dark' : 'light'} 
+              intensity={70} // Intensity as a direct prop
+              style={styles.blurViewOptionsStyle}
+            > 
+              <View style={styles.menuOptionsContainer}>
+                {actualSongs.map((song) => (
+                  <TouchableOpacity
+                    key={song.id}
+                    style={styles.menuItem}
+                    onPress={() => {
+                      onSelectSong?.(song);
+                      toggleMenu(); // Close menu on selection
+                    }}
+                  >
+                    <MaterialCommunityIcons name="music-note" size={20} color={theme.colorScheme === 'dark' ? theme.colors.primary[200] : theme.colors.primary[800]} />
+                    <Text style={styles.menuItemText}>{song.name}</Text>
+                  </TouchableOpacity>
+                ))}
+                <View style={styles.separator} />
+                <TouchableOpacity
+                  style={styles.menuItem}
+                  onPress={() => {
+                    onSelectNoSound?.();
+                    toggleMenu(); // Close menu on selection
+                  }}
+                >
+                  <MaterialCommunityIcons name="volume-off" size={20} color={theme.colorScheme === 'dark' ? theme.colors.primary[200] : theme.colors.primary[800]} />
+                  <Text style={styles.menuItemText}>{t('timerOverlay.songMenu.noSound')}</Text>
+                </TouchableOpacity>
+              </View>
+            </BlurView>
+          </View>
+        </Animated.View>
       </Animated.View>
-    </Animated.View>
+    </>
   );
 };
 
 const createStyles = (theme: any, insets: any) => StyleSheet.create({
+  fullScreenOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'transparent',
+    zIndex: 2000, // Just below the menu wrapper's zIndex
+  },
   wrapper: {
     position: 'absolute',
     top: insets.top + 10,
