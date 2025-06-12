@@ -12,6 +12,10 @@ const { width: screenWidth } = Dimensions.get('window');
 interface ToothbrushConfig {
   type: 'manual' | 'electric';
   category: 'regular' | 'braces' | 'sensitive' | 'whitening';
+  /**
+   * User friendly identifier for this toothbrush (e.g., "My Snow-White Brush").
+   */
+  name: string;
   brand: string;
   model: string;
 }
@@ -61,6 +65,10 @@ export default function InlineToothbrushPicker({
     onConfigChange({ ...config, category });
   };
 
+  const handleNameChange = (text: string) => {
+    onConfigChange({ ...config, name: text });
+  };
+
   const handleBrandChange = (brand: string) => {
     onConfigChange({ ...config, brand });
   };
@@ -93,122 +101,103 @@ export default function InlineToothbrushPicker({
     >
       {/* Separator Line - matching InlineTimePicker */}
       <View style={styles.pickerSeparator} />
-        {/* Type Selection */}
-        <View style={styles.section}>
-          <ThemedText style={[styles.sectionTitle, { color: activeColors.text }]}>
-            {t('toothbrush.picker.type', 'Type')}
-          </ThemedText>
-          <View style={styles.optionsContainer}>
-            {toothbrushTypes.map((type) => (
-                              <Pressable
-                  key={type.id}
-                  style={[
-                    styles.optionButton,
-                    {
-                      backgroundColor: config.type === type.id 
-                        ? activeColors.tint 
-                        : 'rgba(255, 255, 255, 0.15)',
-                    }
-                  ]}
-                  onPress={() => handleTypeSelect(type.id as 'manual' | 'electric')}
-                >
-                  <Ionicons 
-                    name={type.icon as any} 
-                    size={20} 
-                    color={config.type === type.id ? 'white' : activeColors.text} 
-                  />
-                  <ThemedText style={[
-                    styles.optionText,
-                    { color: config.type === type.id ? 'white' : activeColors.text }
-                  ]}>
-                    {type.label}
-                  </ThemedText>
-                </Pressable>
-            ))}
-          </View>
-        </View>
 
-        {/* Category Selection */}
-        <View style={styles.section}>
-          <ThemedText style={[styles.sectionTitle, { color: activeColors.text }]}>
-            {t('toothbrush.picker.category', 'Category')}
-          </ThemedText>
-          <View style={styles.categoryGrid}>
-            {toothbrushCategories.map((category) => (
-                              <Pressable
-                  key={category.id}
-                  style={[
-                    styles.categoryButton,
-                    {
-                      backgroundColor: config.category === category.id 
-                        ? activeColors.tint 
-                        : 'rgba(255, 255, 255, 0.15)',
-                    }
-                  ]}
-                  onPress={() => handleCategorySelect(category.id as any)}
-                >
-                  <Ionicons 
-                    name={category.icon as any} 
-                    size={18} 
-                    color={config.category === category.id ? 'white' : activeColors.text} 
-                  />
-                  <ThemedText style={[
-                    styles.categoryText,
-                    { color: config.category === category.id ? 'white' : activeColors.text }
-                  ]}>
-                    {category.label}
-                  </ThemedText>
-                </Pressable>
-            ))}
-          </View>
-        </View>
+      {/* Name Input */}
+      <View style={styles.section}>
+        <ThemedText style={styles.sectionTitle}>Name</ThemedText>
+        <TextInput
+          style={styles.textInput}
+          value={config.name}
+          onChangeText={handleNameChange}
+          placeholder={t('toothbrush.picker.namePlaceholder', 'e.g., Daily Driver')}
+          placeholderTextColor="rgba(255, 255, 255, 0.5)"
+          maxLength={30}
+        />
+      </View>
 
-        {/* Optional Brand and Model */}
-        <View style={styles.section}>
-          <ThemedText style={[styles.sectionTitle, { color: activeColors.text }]}>
-            {t('toothbrush.picker.details', 'Details (Optional)')}
-          </ThemedText>
-          <View style={styles.inputsContainer}>
-            <View style={styles.inputContainer}>
-              <ThemedText style={[styles.inputLabel, { color: activeColors.text }]}>
-                {t('toothbrush.picker.brand', 'Brand')}
-              </ThemedText>
-              <TextInput
-                style={styles.textInput}
-                value={config.brand}
-                onChangeText={handleBrandChange}
-                placeholder={t('toothbrush.picker.brandPlaceholder', 'e.g., Oral-B')}
-                placeholderTextColor="rgba(255, 255, 255, 0.5)"
+      {/* Type Selection */}
+      <View style={styles.section}>
+        <ThemedText style={styles.sectionTitle}>
+          {t('toothbrush.picker.type', 'Type')}
+        </ThemedText>
+        <View style={styles.optionsContainer}>
+          {toothbrushTypes.map((type) => (
+            <Pressable
+              key={type.id}
+              style={[
+                styles.optionButton,
+                {
+                  backgroundColor: config.type === type.id 
+                    ? activeColors.tint 
+                    : 'rgba(255, 255, 255, 0.15)',
+                }
+              ]}
+              onPress={() => handleTypeSelect(type.id as 'manual' | 'electric')}
+            >
+              <Ionicons 
+                name={type.icon as any} 
+                size={20} 
+                color={config.type === type.id ? 'white' : activeColors.text} 
               />
-            </View>
-            <View style={styles.inputContainer}>
-              <ThemedText style={[styles.inputLabel, { color: activeColors.text }]}>
-                {t('toothbrush.picker.model', 'Model')}
+              <ThemedText style={[
+                styles.optionText,
+                { color: config.type === type.id ? 'white' : activeColors.text }
+              ]}>
+                {type.label}
               </ThemedText>
-              <TextInput
-                style={styles.textInput}
-                value={config.model}
-                onChangeText={handleModelChange}
-                placeholder={t('toothbrush.picker.modelPlaceholder', 'e.g., Pro 1000')}
-                placeholderTextColor="rgba(255, 255, 255, 0.5)"
-              />
-            </View>
-          </View>
+            </Pressable>
+          ))}
         </View>
+      </View>
 
-        {/* Action Buttons */}
-        <View style={styles.inlineActionButtons}>
-          <Pressable style={styles.cancelInlineButton} onPress={handleCancel}>
-            <ThemedText style={styles.cancelInlineButtonText}>
-              {t('common.cancel', 'Cancel')}
-            </ThemedText>
-          </Pressable>
-          <Pressable style={[styles.saveTimeButton, { backgroundColor: theme.colors.primary[500] }]} onPress={handleSave}>
-            <ThemedText style={styles.saveTimeButtonText}>
-              {t('toothbrush.addToothbrush', 'Add Brush')}
-            </ThemedText>
-          </Pressable>
+      {/* Head Selection */}
+      <View style={styles.section}>
+        <ThemedText style={styles.sectionTitle}>
+          {t('toothbrush.picker.head', 'Toothbrush Head')}
+        </ThemedText>
+        <View style={styles.categoryGrid}>
+          {toothbrushCategories.map((category) => (
+            <Pressable
+              key={category.id}
+              style={[
+                styles.categoryButton,
+                {
+                  backgroundColor: config.category === category.id 
+                    ? activeColors.tint 
+                    : 'rgba(255, 255, 255, 0.15)',
+                }
+              ]}
+              onPress={() => handleCategorySelect(category.id as any)}
+            >
+              <Ionicons 
+                name={category.icon as any} 
+                size={18} 
+                color={config.category === category.id ? 'white' : activeColors.text} 
+              />
+              <ThemedText style={[
+                styles.categoryText,
+                { color: config.category === category.id ? 'white' : activeColors.text }
+              ]}>
+                {category.label}
+              </ThemedText>
+            </Pressable>
+          ))}
         </View>
+      </View>
+
+      {/* Action Buttons */}
+      <View style={styles.inlineActionButtons}>
+        <Pressable style={styles.cancelInlineButton} onPress={handleCancel}>
+          <ThemedText style={styles.cancelInlineButtonText}>
+            {t('common.cancel', 'Cancel')}
+          </ThemedText>
+        </Pressable>
+        <Pressable style={[styles.saveTimeButton, { backgroundColor: theme.colors.primary[500] }]} onPress={handleSave}>
+          <ThemedText style={styles.saveTimeButtonText}>
+            {t('toothbrush.addToothbrush', 'Add Brush')}
+          </ThemedText>
+        </Pressable>
+      </View>
     </Animated.View>
   );
 }
@@ -229,8 +218,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    marginBottom: 12,
-    fontFamily: 'Quicksand-Bold',
+    marginBottom: 8,
     color: 'white',
   },
   optionsContainer: {
@@ -275,6 +263,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   inputsContainer: {
+    /* deprecated after user removed details section */
     gap: 12,
   },
   inputContainer: {
@@ -287,14 +276,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   textInput: {
-    borderWidth: 0,
-    borderRadius: 20,
-    padding: 20,
-    fontSize: 16,
     backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    fontWeight: '500',
-    textAlign: 'center',
+    borderRadius: 12,
+    padding: 12,
+    fontSize: 16,
     color: 'white',
+    fontWeight: '500',
   },
   inlineActionButtons: {
     flexDirection: 'row',

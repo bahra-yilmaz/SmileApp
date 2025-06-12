@@ -242,7 +242,7 @@ export default function SettingsScreen() {
       modalSetter(false);
     }
   };
-
+  
   const handleLanguageSelect = async (langCode: string) => {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -521,7 +521,7 @@ export default function SettingsScreen() {
                 <ThemedText style={styles.currentLanguageText}>
                   {currentFrequency ? `${currentFrequency.count} times` : t('settings.dailyFrequency.options.standard_short', '2 times')}
                 </ThemedText>
-                <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
               </View>
             </Pressable>
             
@@ -538,7 +538,7 @@ export default function SettingsScreen() {
                 <ThemedText style={styles.currentLanguageText}>
                   {currentTarget?.label || t('settings.brushingTarget.options.standard_label', '2 minutes')}
                 </ThemedText>
-                <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
+              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
               </View>
             </Pressable>
             

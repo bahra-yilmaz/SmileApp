@@ -18,6 +18,8 @@ const TOOTHBRUSH_DATA_KEY = 'toothbrush_data';
 
 export interface Toothbrush {
   id: string;
+  /** User provided label for quick identification */
+  name?: string;
   type: 'manual' | 'electric';
   category: 'regular' | 'braces' | 'sensitive' | 'whitening';
   startDate: string;
@@ -55,6 +57,7 @@ export default function ToothbrushManager({
   const [toothbrushConfig, setToothbrushConfig] = useState({
     type: 'manual' as 'manual' | 'electric',
     category: 'regular' as 'regular' | 'braces' | 'sensitive' | 'whitening',
+    name: '',
     brand: '',
     model: '',
   });
@@ -157,6 +160,7 @@ export default function ToothbrushManager({
     setToothbrushConfig({
       type: 'manual',
       category: 'regular',
+      name: '',
       brand: '',
       model: '',
     });
@@ -187,6 +191,7 @@ export default function ToothbrushManager({
       setToothbrushConfig({
         type: 'manual',
         category: 'regular',
+        name: '',
         brand: '',
         model: '',
       });
@@ -209,6 +214,7 @@ export default function ToothbrushManager({
         id: Date.now().toString(),
         type: toothbrushConfig.type,
         category: toothbrushConfig.category,
+        name: toothbrushConfig.name || undefined,
         startDate: now,
         brand: toothbrushConfig.brand || undefined,
         model: toothbrushConfig.model || undefined,
@@ -229,6 +235,7 @@ export default function ToothbrushManager({
         setToothbrushConfig({
           type: 'manual',
           category: 'regular',
+          name: '',
           brand: '',
           model: '',
         });
