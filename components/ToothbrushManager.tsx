@@ -7,7 +7,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
-import { useRouter } from 'expo-router';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { Image as ExpoImage } from 'expo-image';
 import { cardStyles, buttonStyles } from '../utils/sharedStyles';
@@ -49,8 +48,6 @@ export default function ToothbrushManager({
   const { theme } = useTheme();
   const { activeColors } = theme;
   const { t } = useTranslation();
-  const router = useRouter();
-  const [toothbrushData, setToothbrushData] = useState<ToothbrushData>({ current: null, history: [] });
   
   // Expandable menu state
   const [showToothbrushPicker, setShowToothbrushPicker] = useState(false);
@@ -72,6 +69,8 @@ export default function ToothbrushManager({
   const plusAnimatedStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${plusRotation.value}deg` }],
   }));
+
+  const [toothbrushData, setToothbrushData] = useState<ToothbrushData>({ current: null, history: [] });
 
   useEffect(() => {
     if (visible) {
@@ -265,11 +264,6 @@ export default function ToothbrushManager({
     }
   };
 
-  const handleViewDetails = () => {
-    onClose();
-    router.push('/(home)/toothbrush');
-  };
-
   const renderCurrentBrush = () => {
     if (!toothbrushData.current) {
       return (
@@ -429,17 +423,7 @@ export default function ToothbrushManager({
               </View>
             </View>
           </Pressable>
-          
-          <Pressable 
-            style={[styles.actionButton, styles.secondaryButton]} 
-            onPress={handleViewDetails}
-          >
-            <Ionicons name="list-outline" size={20} color={activeColors.tint} />
-            <ThemedText style={[styles.secondaryButtonText, { color: activeColors.tint }]}>
-              {t('toothbrush.viewDetails', 'View Full Screen')}
-            </ThemedText>
-          </Pressable>
-                </View>
+        </View>
 
         {/* Inline Toothbrush Picker - appears below the button when adding */}
         <InlineToothbrushPicker
@@ -633,20 +617,7 @@ const styles = StyleSheet.create({
   primaryButton: {
     backgroundColor: 'rgba(0, 100, 255, 0.8)',
   },
-  secondaryButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-  },
-  primaryButtonText: {
-    color: 'white',
-    fontWeight: '600',
-    marginLeft: 8,
-  },
-  secondaryButtonText: {
-    fontWeight: '600',
-    marginLeft: 8,
-  },
+  // secondaryButton styles removed
   // New sections
   section: {
     marginTop: 24,
