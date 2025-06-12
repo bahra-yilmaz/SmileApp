@@ -136,16 +136,36 @@ export default function ToothbrushManager({
     }
   };
 
+  /**
+   * Returns human-friendly status label & color based on toothbrush age.
+   * Dental guidelines suggest replacing every ~90 days.
+   * We therefore expose a few granular buckets so the user gets clearer feedback.
+   */
   const getReplacementStatus = () => {
-    const age = getCurrentAge();
-    if (age.months >= 4) {
-      return { status: 'overdue', text: t('toothbrush.status.overdue', 'Overdue'), color: '#E74C3C' };
-    } else if (age.months >= 3) {
-      return { status: 'due', text: t('toothbrush.status.due', 'Replace Soon'), color: '#F39C12' };
-    } else if (age.months >= 2) {
-      return { status: 'soon', text: t('toothbrush.status.soon', 'Getting Old'), color: '#F39C12' };
+    let totalDays = 0;
+    if (toothbrushData.current) {
+      const startDate = new Date(toothbrushData.current.startDate);
+      const now = new Date();
+      totalDays = Math.ceil(Math.abs(now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
     }
-    return { status: 'good', text: t('toothbrush.status.good', 'Good'), color: '#27AE60' };
+
+    if (totalDays < 7) {
+      return { status: 'brand_new', text: t('toothbrush.status.brandNew', 'Brand New'), color: '#1ABC9C' };
+    }
+
+    if (totalDays < 30) {
+      return { status: 'fresh', text: t('toothbrush.status.fresh', 'Fresh'), color: '#2ECC71' };
+    }
+
+    if (totalDays < 60) {
+      return { status: 'good', text: t('toothbrush.status.good', 'Good'), color: '#27AE60' };
+    }
+
+    if (totalDays < 90) {
+      return { status: 'replace_soon', text: t('toothbrush.status.due', 'Replace Soon'), color: '#F39C12' };
+    }
+
+    return { status: 'overdue', text: t('toothbrush.status.overdue', 'Overdue'), color: '#E74C3C' };
   };
 
   const handleAddToothbrushPress = () => {
@@ -300,25 +320,29 @@ export default function ToothbrushManager({
             />
           </View>
           <View style={styles.toothbrushTextContainer}>
-            <ThemedText style={styles.toothbrushCardTitle}>
-              {t(`toothbrush.type.${toothbrushData.current.type}`, toothbrushData.current.type === 'electric' ? 'Electric' : 'Manual')} Toothbrush
-            </ThemedText>
+            <View style={styles.titleRow}>
+              <ThemedText style={styles.toothbrushCardTitle} numberOfLines={2}>
+                {toothbrushData.current.name 
+                  ? toothbrushData.current.name 
+                  : `${t(`toothbrush.type.${toothbrushData.current.type}`, toothbrushData.current.type === 'electric' ? 'Electric' : 'Manual')} Toothbrush`}
+              </ThemedText>
+              <View style={[styles.statusBadge, { backgroundColor: status.color }]}> 
+                <ThemedText style={styles.statusText}>{status.text}</ThemedText>
+              </View>
+            </View>
             <ThemedText style={styles.toothbrushCardSubtitle}>
               {t(`toothbrush.category.${toothbrushData.current.category}`, toothbrushData.current.category)}
             </ThemedText>
-            <ThemedText style={styles.toothbrushCardAge}>
-              {t('toothbrush.current.age', 'Age')}: {getAgeDisplayText()}
-            </ThemedText>
-            {toothbrushData.history.length > 0 && (
-              <ThemedText style={styles.toothbrushCardHistory}>
-                {toothbrushData.history.length} {toothbrushData.history.length === 1 ? 'brush' : 'brushes'} in history
+            <View style={styles.ageRow}>
+              <ThemedText style={styles.toothbrushCardAge}>
+                {t('toothbrush.current.age', 'Age')}: {getAgeDisplayText()}
               </ThemedText>
-            )}
-          </View>
-          <View style={[styles.statusBadge, { backgroundColor: status.color }]}>
-            <ThemedText style={styles.statusText}>
-              {status.text}
-            </ThemedText>
+              {toothbrushData.history.length > 0 && (
+                <ThemedText style={styles.toothbrushCardHistoryRight}>
+                  {toothbrushData.history.length} {toothbrushData.history.length === 1 ? 'brushing' : 'brushings'}
+                </ThemedText>
+              )}
+            </View>
           </View>
         </View>
       </View>
@@ -489,10 +513,13 @@ const styles = StyleSheet.create({
   // Toothbrush Card Styles (like nubo tone cards)
   toothbrushCard: {
     width: screenWidth * 0.85,
-    minHeight: 120,
+    minHeight: 130,
     borderRadius: 20,
     borderWidth: 1,
-    padding: 20,
+    paddingRight: 10,
+    paddingLeft: 0,
+    paddingTop: 10,
+    paddingBottom: 0,
     marginVertical: 10,
     justifyContent: 'center',
     overflow: 'hidden',
@@ -500,15 +527,18 @@ const styles = StyleSheet.create({
   },
 
   toothbrushImage: {
-    width: 48,
-    height: 48,
+    width: 120,
+    height: 120,
+    alignSelf: 'flex-end',
+    transform: [{ scaleX: -1 }],
   },
   toothbrushCardContent: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   toothbrushIconContainer: {
-    marginRight: 16,
+    marginRight: 0,
+    marginLeft: -12,
   },
   toothbrushTextContainer: {
     flex: 1,
@@ -518,6 +548,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     fontFamily: 'Quicksand-Bold',
     color: 'white',
+    flexShrink: 1,
+    flexGrow: 1,
   },
   toothbrushCardSubtitle: {
     fontSize: 14,
@@ -534,6 +566,17 @@ const styles = StyleSheet.create({
     fontSize: 12,
     opacity: 0.7,
     color: 'white',
+    alignSelf: 'flex-start',
+  },
+  toothbrushCardHistoryRight: {
+    fontSize: 12,
+    opacity: 0.7,
+    color: 'white',
+    marginLeft: 'auto',
+  },
+  ageRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   noBrushContainer: {
     flexDirection: 'row',
@@ -603,7 +646,7 @@ const styles = StyleSheet.create({
   },
 
   actionsContainer: {
-    marginTop: 16,
+    marginTop: -6,
     gap: 12,
   },
   actionButton: {
@@ -673,7 +716,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   infoCardIcon: {
-    marginRight: 12,
+    marginRight: 0,
     marginTop: 2,
   },
   infoCardText: {
@@ -688,5 +731,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     opacity: 0.8,
     lineHeight: 20,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
   },
 }); 
