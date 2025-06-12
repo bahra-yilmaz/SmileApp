@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, StyleSheet, Pressable, Dimensions, Alert, ScrollView } from 'react-native';
 import { useTheme } from './ThemeProvider';
 import ThemedText from './ThemedText';
@@ -11,6 +11,7 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-na
 import { Image as ExpoImage } from 'expo-image';
 import { cardStyles, buttonStyles } from '../utils/sharedStyles';
 import InlineToothbrushPicker from './InlineToothbrushPicker';
+import ReminderItem, { ReminderTime, ReminderItemRef } from './ReminderItem';
 
 const { width: screenWidth } = Dimensions.get('window');
 const TOOTHBRUSH_DATA_KEY = 'toothbrush_data';
@@ -71,6 +72,11 @@ export default function ToothbrushManager({
   }));
 
   const [toothbrushData, setToothbrushData] = useState<ToothbrushData>({ current: null, history: [] });
+  // track expanded info card ids
+  const [expandedInfo, setExpandedInfo] = useState<Set<string>>(new Set());
+
+  // refs to close swipe when editing
+  const historyItemRefs = useRef<{ [key: string]: ReminderItemRef | null }>({});
 
   useEffect(() => {
     if (visible) {
@@ -352,56 +358,99 @@ export default function ToothbrushManager({
   // Info cards about toothbrushes
   const INFO_CARDS = [
     {
-      id: 'electric_vs_manual',
-      title: t('toothbrush.infoCards.electricVsManual.title', 'Electric vs Manual'),
-      description: t('toothbrush.infoCards.electricVsManual.description', 'Electric toothbrushes can remove more plaque and are easier on your gums.'),
+      id: 'plaque_removal',
+      title: t('toothbrush.infoCards.plaqueRemoval.title', 'Plaque Removal 101'),
+      description: t(
+        'toothbrush.infoCards.plaqueRemoval.description',
+        'Clinical trials show electric brushes with oscillating–rotating heads remove up to 21% more plaque after 3 months compared with manual brushes (Cochrane Review 2020).'
+      ),
       icon: 'flash-outline',
-      color: '#4A90E2'
+      color: '#4A90E2',
     },
     {
-      id: 'replacement_time',
-      title: t('toothbrush.infoCards.replacementTime.title', 'When to Replace'),
-      description: t('toothbrush.infoCards.replacementTime.description', 'Replace your toothbrush every 3-4 months or after illness.'),
+      id: 'replace_interval',
+      title: t('toothbrush.infoCards.replaceInterval.title', 'Change Heads Every 90 Days'),
+      description: t(
+        'toothbrush.infoCards.replaceInterval.description',
+        'After ~3 months bristles splay and remove up to 40% less plaque. ADA and FDI therefore recommend replacing the brush (or head) every 90 days or sooner if bristles fray.'
+      ),
       icon: 'time-outline',
-      color: '#F39C12'
+      color: '#F39C12',
     },
     {
-      id: 'braces_care',
-      title: t('toothbrush.infoCards.bracesCare.title', 'Braces Care'),
-      description: t('toothbrush.infoCards.bracesCare.description', 'Use soft bristles and consider interdental brushes for braces.'),
-      icon: 'medical-outline',
-      color: '#E74C3C'
+      id: 'fluoride_timing',
+      title: t('toothbrush.infoCards.fluorideTiming.title', "Don't Rinse Fluoride Away"),
+      description: t(
+        'toothbrush.infoCards.fluorideTiming.description',
+        "Spit—don't rinse—after brushing. Leaving a thin film of 1450 ppm fluoride on enamel can lower caries risk by ~25% (Public Health England guideline 2017)."
+      ),
+      icon: 'water-outline',
+      color: '#00B894',
     },
     {
-      id: 'sensitive_teeth',
-      title: t('toothbrush.infoCards.sensitiveTeeth.title', 'Sensitive Teeth'),
-      description: t('toothbrush.infoCards.sensitiveTeeth.description', 'Extra soft bristles help protect sensitive gums and enamel.'),
-      icon: 'heart-outline',
-      color: '#9B59B6'
-    }
+      id: 'pressure',
+      title: t('toothbrush.infoCards.pressure.title', 'Easy on the Pressure'),
+      description: t(
+        'toothbrush.infoCards.pressure.description',
+        'Pressing harder ≠ cleaner. >150 g of force can cause gum recession; plaque removal plateaus around 100 g. Let the bristles do the work.'
+      ),
+      icon: 'speedometer-outline',
+      color: '#E74C3C',
+    },
+    {
+      id: 'tongue_clean',
+      title: t('toothbrush.infoCards.tongueClean.title', 'Remember Your Tongue'),
+      description: t(
+        'toothbrush.infoCards.tongueClean.description',
+        "60–90 % of bad-breath compounds come from the tongue's dorsum. A quick 10-second tongue sweep can cut volatile sulfur compounds by half."
+      ),
+      icon: 'happy-outline',
+      color: '#9B59B6',
+    },
   ];
 
-  const renderInfoCard = (card: any) => (
-    <View key={card.id} style={[styles.infoCard, { borderLeftColor: card.color }]}>
-      <View style={styles.infoCardContent}>
-        <Ionicons name={card.icon as any} size={24} color={card.color} style={styles.infoCardIcon} />
-        <View style={styles.infoCardText}>
-          <ThemedText style={[styles.infoCardTitle, { color: card.color }]}>
+  const toggleInfoCard = (id: string) => {
+    setExpandedInfo(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) newSet.delete(id); else newSet.add(id);
+      return newSet;
+    });
+  };
+
+  const renderInfoCard = (card: any) => {
+    const isOpen = expandedInfo.has(card.id);
+    return (
+      <Pressable key={card.id} onPress={() => toggleInfoCard(card.id)} style={[styles.infoCard, { borderLeftColor: card.color }]}>
+        <View style={styles.infoCardHeader}>
+          <Ionicons name={card.icon as any} size={20} color={card.color} style={styles.infoCardIcon} />
+          <ThemedText style={[styles.infoCardTitle, { color: card.color, flex:1 }]}>
             {card.title}
           </ThemedText>
+          <Ionicons name={isOpen ? 'chevron-down' : 'chevron-forward'} size={20} color={'white'} />
+        </View>
+        {isOpen && (
           <ThemedText style={styles.infoCardDescription}>
             {card.description}
           </ThemedText>
-        </View>
-      </View>
-    </View>
-  );
+        )}
+      </Pressable>
+    );
+  };
 
   const renderHistoryItem = (brush: Toothbrush, index: number) => {
     const startDate = new Date(brush.startDate);
     const endDate = brush.endDate ? new Date(brush.endDate) : new Date();
     const usageDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
     
+    const fallbackName = `${t(`toothbrush.type.${brush.type}`, brush.type === 'electric' ? 'Electric' : 'Manual')} Toothbrush`;
+    const brushingCount = usageDays * 2; // assuming 2 brushings per day
+    const reminderLike: ReminderTime = {
+      id: brush.id,
+      time: `${usageDays}d`,
+      label: brush.name || fallbackName,
+      enabled: false,
+    };
+
     return (
       <View key={brush.id} style={styles.historyItem}>
         <View style={styles.historyItemHeader}>
@@ -427,7 +476,9 @@ export default function ToothbrushManager({
   const modalData = [{ id: 'content' }];
 
   const renderContent = () => (
-    <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={styles.scrollContainer}
+      showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         {renderCurrentBrush()}
         
@@ -460,7 +511,7 @@ export default function ToothbrushManager({
           pickerScale={pickerScale}
         />
         
-        {/* History Section */}
+        {/* History Section using modular ReminderItem */}
         {toothbrushData.history.length > 0 && (
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
@@ -469,13 +520,45 @@ export default function ToothbrushManager({
               </ThemedText>
             </View>
             <View style={styles.historyContainer}>
-              {toothbrushData.history.map((brush, index) => renderHistoryItem(brush, index))}
+              {toothbrushData.history.map((brush) => {
+                const startDate = new Date(brush.startDate);
+                const endDate = brush.endDate ? new Date(brush.endDate) : new Date();
+                const usageDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+
+                const fallbackName = `${t(`toothbrush.type.${brush.type}`, brush.type === 'electric' ? 'Electric' : 'Manual')} Toothbrush`;
+                const brushingCount = usageDays * 2;
+                const reminderLike: ReminderTime = {
+                  id: brush.id,
+                  time: `${usageDays}d`,
+                  label: brush.name || fallbackName,
+                  enabled: false,
+                };
+
+                return (
+                  <ReminderItem
+                    ref={(ref)=>{historyItemRefs.current[brush.id]=ref;}}
+                    key={brush.id}
+                    reminder={reminderLike}
+                    showToggle={false}
+                    rightTop={t(`toothbrush.category.${brush.category}`, brush.category)}
+                    rightBottom={`${brushingCount} ${brushingCount === 1 ? 'brushing' : 'brushings'}`}
+                    onToggle={() => {}}
+                    // editing disabled
+                    onDelete={async (id) => {
+                      const updatedHist = toothbrushData.history.filter(b => b.id !== id);
+                      const newData = { ...toothbrushData, history: updatedHist };
+                      setToothbrushData(newData);
+                      await saveToothbrushData(newData);
+                    }}
+                  />
+                );
+              })}
             </View>
           </View>
         )}
 
         {/* Info Cards Section */}
-        <View style={styles.section}>
+        <View style={[styles.section, styles.tipsSection]}>
           <View style={styles.sectionHeader}>
             <ThemedText style={styles.sectionTitle}>
               {t('toothbrush.infoCards.title', 'Toothbrush Tips')}
@@ -488,6 +571,25 @@ export default function ToothbrushManager({
       </View>
     </ScrollView>
   );
+
+  const openPickerForBrush = (brush: Toothbrush, usageDays: number) => {
+    // Close swipe row if open
+    historyItemRefs.current[brush.id]?.closeSwipe();
+
+    setToothbrushConfig({
+      type: brush.type,
+      category: brush.category,
+      name: brush.name || '',
+      brand: brush.brand || '',
+      model: brush.model || '',
+      isUsed: true,
+      ageDays: usageDays,
+    });
+
+    // Rotate plus to X and show picker
+    plusRotation.value = withTiming(45, { duration: 200 });
+    setShowToothbrushPicker(true);
+  };
 
   return (
     <BottomSheetModal
@@ -502,9 +604,7 @@ export default function ToothbrushManager({
 }
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    maxHeight: 600, // Limit modal height
-  },
+  scrollContainer: {},
   container: {
     width: screenWidth * 0.85,
     alignSelf: 'center',
@@ -646,7 +746,7 @@ const styles = StyleSheet.create({
   },
 
   actionsContainer: {
-    marginTop: -6,
+    marginTop: -14,
     gap: 12,
   },
   actionButton: {
@@ -663,7 +763,10 @@ const styles = StyleSheet.create({
   // secondaryButton styles removed
   // New sections
   section: {
-    marginTop: 24,
+    marginTop: 4,
+  },
+  tipsSection: {
+    marginTop: 20,
   },
   sectionHeader: {
     marginBottom: 12,
@@ -672,12 +775,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     fontFamily: 'Quicksand-Bold',
+    color: 'white',
   },
-  historyContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 12,
-    padding: 16,
-  },
+  historyContainer: {},
   historyItem: {
     paddingVertical: 12,
     borderBottomWidth: 1,
@@ -711,13 +811,13 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderLeftWidth: 4,
   },
-  infoCardContent: {
+  infoCardHeader: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   infoCardIcon: {
-    marginRight: 0,
-    marginTop: 2,
+    marginRight: 8,
   },
   infoCardText: {
     flex: 1,

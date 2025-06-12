@@ -14,6 +14,7 @@ import Animated, {
   withSpring,
   runOnJS
 } from 'react-native-reanimated';
+import useInlinePickerScroll from '../utils/useInlinePickerScroll';
 
 const REMINDER_TIMES_KEY = 'reminder_times';
 const PICKER_ITEM_HEIGHT = 40;
@@ -52,6 +53,9 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
     { id: 'evening', time: '20:00', label: t('settings.reminderTimes.evening', 'Evening'), enabled: true },
     { id: 'night', time: '22:00', label: t('settings.reminderTimes.night', 'Before Bed'), enabled: false },
   ];
+
+  // Modular auto-scroll helpers
+  const autoScroll = useInlinePickerScroll(modalListRef);
 
   useEffect(() => {
     if (visible) {
@@ -138,14 +142,7 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
     setTimeout(() => {
       hourPickerRef.current?.scrollTo({ y: 8 * PICKER_ITEM_HEIGHT, animated: true });
       minutePickerRef.current?.scrollTo({ y: 0, animated: true });
-      
-      // Auto-scroll to show the expanded menu (scroll to the last item which is add button)
-      const scrollIndex = reminderTimes.length; // Add button is at the end
-      modalListRef.current?.scrollToIndex({ 
-        index: scrollIndex, 
-        animated: true,
-        viewPosition: 1.2 // Scroll further below to give more space
-      });
+      autoScroll.openAdd(reminderTimes.length);
     }, 400);
   };
 
@@ -171,11 +168,7 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
       // Auto-scroll to show the expanded menu for this specific reminder
       const reminderIndex = reminderTimes.findIndex(r => r.id === reminder.id);
       if (reminderIndex !== -1) {
-        modalListRef.current?.scrollToIndex({ 
-          index: reminderIndex, 
-          animated: true,
-          viewPosition: 0.7 // Position reminder lower for better expanded menu visibility
-        });
+        autoScroll.openEdit(reminderIndex);
       }
     }, 400);
   };
@@ -186,21 +179,10 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
     // Smooth scroll back to normal position when closing
     if (editingReminder) {
       const reminderIndex = reminderTimes.findIndex(r => r.id === editingReminder.id);
-      if (reminderIndex !== -1) {
-        modalListRef.current?.scrollToIndex({ 
-          index: reminderIndex, 
-          animated: true,
-          viewPosition: 0.3 // Scroll back to a more centered position
-        });
-      }
+      if (reminderIndex !== -1) autoScroll.closeEdit(reminderIndex);
     } else {
       // If closing add menu, scroll to top of add button
-      const scrollIndex = reminderTimes.length;
-      modalListRef.current?.scrollToIndex({ 
-        index: scrollIndex, 
-        animated: true,
-        viewPosition: 0.5 // Return to normal add button position
-      });
+      autoScroll.closeAdd(reminderTimes.length);
     }
     
     // Animate the time picker out
@@ -255,16 +237,10 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
       // Smooth scroll back when saving
       if (editingReminder) {
         const reminderIndex = reminderTimes.findIndex(r => r.id === editingReminder.id);
-        if (reminderIndex !== -1) {
-          modalListRef.current?.scrollToIndex({ 
-            index: reminderIndex, 
-            animated: true,
-            viewPosition: 0.3 // Scroll back to normal position
-          });
-        }
+        if (reminderIndex !== -1) autoScroll.closeEdit(reminderIndex);
       } else {
         // If saving new reminder, scroll to show the new item
-        const scrollIndex = sortedTimes.length - 1; // New item position
+        const scrollIndex = sortedTimes.length - 1;
         modalListRef.current?.scrollToIndex({ 
           index: scrollIndex, 
           animated: true,

@@ -23,9 +23,13 @@ export interface ReminderTime {
 interface ReminderItemProps {
   reminder: ReminderTime;
   onToggle: (id: string) => void;
-  onEdit: (reminder: ReminderTime) => void;
+  onEdit?: (reminder: ReminderTime) => void;
   onDelete: (id: string) => void;
   onSwipeClose?: () => void;
+  showToggle?: boolean;
+  rightText?: string;
+  rightTop?: string;
+  rightBottom?: string;
 }
 
 export interface ReminderItemRef {
@@ -37,7 +41,11 @@ const ReminderItem = forwardRef<ReminderItemRef, ReminderItemProps>(({
   onToggle, 
   onEdit, 
   onDelete, 
-  onSwipeClose 
+  onSwipeClose,
+  showToggle = true,
+  rightText,
+  rightTop,
+  rightBottom,
 }, ref) => {
   const { t } = useTranslation();
   const { theme } = useTheme();
@@ -72,12 +80,14 @@ const ReminderItem = forwardRef<ReminderItemRef, ReminderItemProps>(({
           transform: [{ scale }],
         }
       ]}>
-        <Pressable 
-          style={[styles.swipeAction, styles.editAction, { backgroundColor: theme.colors.primary[500] }]}
-          onPress={() => onEdit(reminder)}
-        >
-          <Ionicons name="pencil" size={28} color="white" />
-        </Pressable>
+        {onEdit && (
+          <Pressable 
+            style={[styles.swipeAction, styles.editAction, { backgroundColor: theme.colors.primary[500] }]}
+            onPress={() => onEdit(reminder)}
+          >
+            <Ionicons name="pencil" size={28} color="white" />
+          </Pressable>
+        )}
         <Pressable 
           style={[styles.swipeAction, styles.deleteAction]}
           onPress={() => onDelete(reminder.id)}
@@ -135,16 +145,30 @@ const ReminderItem = forwardRef<ReminderItemRef, ReminderItemProps>(({
               {reminder.label}
             </ThemedText>
           </View>
-          <View style={[
-            styles.reminderToggle,
-            {
-              backgroundColor: reminder.enabled ? activeColors.tint : 'rgba(255, 255, 255, 0.3)'
-            }
-          ]}>
-            {reminder.enabled && (
-              <Ionicons name="checkmark" size={16} color="white" style={{ fontWeight: 'bold' }} />
-            )}
-          </View>
+          {rightTop || rightBottom ? (
+            <View style={styles.rightBlock}>
+              {rightTop && (
+                <ThemedText style={styles.rightTopText}>{rightTop}</ThemedText>
+              )}
+              {rightBottom && (
+                <ThemedText style={styles.rightBottomText}>{rightBottom}</ThemedText>
+              )}
+            </View>
+          ) : rightText ? (
+            <ThemedText style={styles.rightText}>{rightText}</ThemedText>
+          ) : (
+            showToggle && (
+              <View style={[styles.reminderToggle,
+                {
+                  backgroundColor: reminder.enabled ? activeColors.tint : 'rgba(255, 255, 255, 0.3)'
+                }
+              ]}>
+                {reminder.enabled && (
+                  <Ionicons name="checkmark" size={16} color="white" style={{ fontWeight: 'bold' }} />
+                )}
+              </View>
+            )
+          )}
         </View>
       </Pressable>
     </Swipeable>
@@ -213,5 +237,25 @@ const styles = StyleSheet.create({
   },
   deleteAction: {
     backgroundColor: COLORS.destructive,
+  },
+  rightText: {
+    fontSize: 12,
+    opacity: 0.7,
+    color: 'white',
+    marginLeft: 8,
+  },
+  rightBlock: {
+    alignItems: 'flex-end',
+    marginLeft: 8,
+  },
+  rightTopText: {
+    fontSize: 12,
+    color: 'white',
+    opacity: 0.8,
+  },
+  rightBottomText: {
+    fontSize: 12,
+    color: 'white',
+    opacity: 0.7,
   },
 }); 
