@@ -60,6 +60,8 @@ export default function ToothbrushManager({
     name: '',
     brand: '',
     model: '',
+    isUsed: false,
+    ageDays: 0,
   });
   
   // Animation values
@@ -163,6 +165,8 @@ export default function ToothbrushManager({
       name: '',
       brand: '',
       model: '',
+      isUsed: false,
+      ageDays: 0,
     });
     
     setShowToothbrushPicker(true);
@@ -194,6 +198,8 @@ export default function ToothbrushManager({
         name: '',
         brand: '',
         model: '',
+        isUsed: false,
+        ageDays: 0,
       });
     }, 250);
   };
@@ -209,13 +215,19 @@ export default function ToothbrushManager({
         newData.history.unshift(newData.current);
       }
       
+      // Compute start date based on age offset
+      const nowMs = Date.now();
+      const startDateIso = new Date(
+        nowMs - (toothbrushConfig.ageDays || 0) * 24 * 60 * 60 * 1000
+      ).toISOString();
+      
       // Create new toothbrush with config
       newData.current = {
         id: Date.now().toString(),
         type: toothbrushConfig.type,
         category: toothbrushConfig.category,
         name: toothbrushConfig.name || undefined,
-        startDate: now,
+        startDate: startDateIso,
         brand: toothbrushConfig.brand || undefined,
         model: toothbrushConfig.model || undefined,
       };
@@ -238,6 +250,8 @@ export default function ToothbrushManager({
           name: '',
           brand: '',
           model: '',
+          isUsed: false,
+          ageDays: 0,
         });
       }, 250);
       

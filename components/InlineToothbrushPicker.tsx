@@ -18,6 +18,10 @@ interface ToothbrushConfig {
   name: string;
   brand: string;
   model: string;
+  /** Whether the user is already using this brush */
+  isUsed: boolean;
+  /** Age offset in days */
+  ageDays: number;
 }
 
 interface InlineToothbrushPickerProps {
@@ -55,6 +59,16 @@ export default function InlineToothbrushPicker({
     { id: 'whitening', label: t('toothbrush.category.whitening', 'Whitening'), icon: 'star' },
   ];
 
+  // Age presets similar to onboarding
+  const AGE_PRESETS = [
+    { id: 'brand_new', label: t('toothbrush.agePreset.brandNew_short', 'New ✨'), days: 0 },
+    { id: 'less_than_1_week', label: t('toothbrush.agePreset.lessThan1Week_short', '<1 week'), days: 3 },
+    { id: '1_2_weeks', label: t('toothbrush.agePreset.oneTwoWeeks_short', '1-2 weeks'), days: 10 },
+    { id: '3_4_weeks', label: t('toothbrush.agePreset.threeFourWeeks_short', '3-4 weeks'), days: 24 },
+    { id: '2_months', label: t('toothbrush.agePreset.twoMonths_short', '2 months'), days: 60 },
+    { id: '3_months', label: t('toothbrush.agePreset.threeMonths_short', '3 months'), days: 90 },
+  ];
+
   const handleTypeSelect = (type: 'manual' | 'electric') => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onConfigChange({ ...config, type });
@@ -75,6 +89,16 @@ export default function InlineToothbrushPicker({
 
   const handleModelChange = (model: string) => {
     onConfigChange({ ...config, model });
+  };
+
+  const handleIsUsedToggle = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onConfigChange({ ...config, isUsed: !config.isUsed });
+  };
+
+  const handleAgeSelect = (days: number) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onConfigChange({ ...config, ageDays: days, isUsed: true });
   };
 
   const handleSave = () => {
@@ -113,6 +137,40 @@ export default function InlineToothbrushPicker({
           placeholderTextColor="rgba(255, 255, 255, 0.5)"
           maxLength={30}
         />
+      </View>
+
+      {/* Age Toggle Section - moved directly below Name */}
+      <View style={styles.section}>
+        <Pressable style={styles.ageHeaderRow} onPress={handleIsUsedToggle}>
+          <ThemedText style={styles.sectionTitle}>{t('toothbrush.picker.age', 'Brush Age')}</ThemedText>
+          <View style={styles.ageIndicatorContainer}>
+            <ThemedText style={styles.ageIndicatorText}>
+              {config.isUsed ? AGE_PRESETS.find(p=>p.days===config.ageDays)?.label || '—' : t('toothbrush.agePreset.brandNew_short', 'New ✨')}
+            </ThemedText>
+            <Ionicons 
+              name={config.isUsed ? 'chevron-down' : 'chevron-forward'} 
+              size={20} 
+              color={theme.colors.primary[500]} 
+            />
+          </View>
+        </Pressable>
+
+        {config.isUsed && (
+          <View style={styles.agePresetGrid}>
+            {AGE_PRESETS.map(preset => (
+              <Pressable
+                key={preset.id}
+                style={[
+                  styles.agePresetButton,
+                  config.ageDays === preset.days && { backgroundColor: activeColors.tint },
+                ]}
+                onPress={() => handleAgeSelect(preset.days)}
+              >
+                <ThemedText style={styles.agePresetText}>{preset.label}</ThemedText>
+              </Pressable>
+            ))}
+          </View>
+        )}
       </View>
 
       {/* Type Selection */}
@@ -313,5 +371,37 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Quicksand-Medium',
     color: 'white',
+  },
+  ageHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+  },
+  ageIndicatorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  ageIndicatorText: {
+    fontSize: 14,
+    opacity: 0.7,
+    marginRight: 4,
+    color: 'white',
+  },
+  agePresetGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  agePresetButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+  },
+  agePresetText: {
+    fontSize: 13,
+    color: 'white',
+    fontWeight: '500',
   },
 }); 
