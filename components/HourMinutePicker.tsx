@@ -101,7 +101,7 @@ export default function HourMinutePicker({
           {t('settings.reminderTimes.hour', 'Hour')}
         </ThemedText>
         <View style={styles.pickerWrapper}>
-          <View style={styles.pickerHighlight} />
+          <View style={styles.pickerHighlight} pointerEvents="none" />
           <ScrollView
             ref={hourPickerRef}
             showsVerticalScrollIndicator={false}
@@ -139,7 +139,7 @@ export default function HourMinutePicker({
           {t('settings.reminderTimes.minute', 'Minute')}
         </ThemedText>
         <View style={styles.pickerWrapper}>
-          <View style={styles.pickerHighlight} />
+          <View style={styles.pickerHighlight} pointerEvents="none" />
           <ScrollView
             ref={minutePickerRef}
             showsVerticalScrollIndicator={false}
