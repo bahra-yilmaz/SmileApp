@@ -26,6 +26,8 @@ export default function BottomSheetModal<T>({
 }: BottomSheetModalProps<T>) {
   const insets = useSafeAreaInsets();
 
+  const headerTopPadding = Math.max(insets.top - 30, 0);
+
   return (
     <Modal
       visible={visible}
@@ -46,7 +48,7 @@ export default function BottomSheetModal<T>({
             cachePolicy="disk"
           />
           
-          <View style={[styles.header, { paddingTop: insets.top + 5 }]}>
+          <View style={[styles.header, { paddingTop: headerTopPadding }] }>
             <View style={styles.closeButton} />
             <Text style={styles.title}>
               {title}
@@ -100,6 +102,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingBottom: 20,
+    marginBottom: 5,
     zIndex: 10,
   },
   title: {
