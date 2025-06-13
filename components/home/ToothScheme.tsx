@@ -46,14 +46,14 @@ export default function ToothScheme({
   const overtimeDisplayMinutes = Math.floor(overtimeCounter / 60);
   const overtimeDisplaySeconds = overtimeCounter % 60;
 
-  // Define tooth sections in brushing order (6 sections total)
+  // Brushing sequence: upper left → upper front → upper right → lower right → lower front → lower left
   const toothSections = [
     'upper-left',
-    'upper-front', 
+    'upper-front',
     'upper-right',
+    'lower-right',
     'lower-front',
     'lower-left',
-    'lower-right'
   ];
 
   // Calculate which sections should be highlighted based on progress
@@ -104,7 +104,7 @@ export default function ToothScheme({
               <G id="lower-left">
                 <Path 
                   d="M42.5 319C51.0604 319 58 312.06 58 303.5C58 297.497 54.5872 292.293 49.5967 289.718C51.1224 287.169 52 284.187 52 281C52 275.098 48.9919 269.9 44.4258 266.852C47.8777 263.257 50 258.377 50 253C50 246.779 47.1592 241.223 42.7051 237.555C45.9917 233.991 48 229.23 48 224C48 212.954 39.0457 204 28 204C16.9543 204 8 212.954 8 224C8 230.221 10.8398 235.778 15.2939 239.446C12.0078 243.01 10 247.77 10 253C10 260.911 14.5932 267.748 21.2578 270.992C19.2096 273.8 18 277.258 18 281C18 288.106 22.3601 294.193 28.5508 296.733C27.5571 298.778 27 301.074 27 303.5C27 312.06 33.9396 319 42.5 319Z" 
-                  fill={getToothSectionColor(4)}
+                  fill={getToothSectionColor(5)}
                 />
               </G>
               
@@ -120,7 +120,7 @@ export default function ToothScheme({
               <G id="lower-right">
                 <Path 
                   d="M206.5 319C197.94 319 191 312.06 191 303.5C191 297.497 194.413 292.293 199.403 289.718C197.878 287.169 197 284.187 197 281C197 275.098 200.008 269.9 204.574 266.852C201.122 263.257 199 258.377 199 253C199 246.779 201.841 241.223 206.295 237.555C203.008 233.991 201 229.23 201 224C201 212.954 209.954 204 221 204C232.046 204 241 212.954 241 224C241 230.221 238.16 235.778 233.706 239.446C236.992 243.10 239 247.77 239 253C239 260.911 234.407 267.748 227.742 270.992C229.79 273.8 231 277.258 231 281C231 288.106 226.64 294.193 220.449 296.733C221.443 298.778 222 301.074 222 303.5C222 312.06 215.06 319 206.5 319Z" 
-                  fill={getToothSectionColor(5)}
+                  fill={getToothSectionColor(3)}
                 />
               </G>
               
@@ -136,7 +136,7 @@ export default function ToothScheme({
               <G id="lower-front">
                 <Path 
                   d="M183 324C191.837 324 199 331.163 199 340C199 348.837 191.837 356 183 356C180.275 356 177.71 355.319 175.464 354.117C173.647 360.958 167.413 366 160 366C156.426 366 153.126 364.828 150.463 362.848C147.897 368.258 142.386 372 136 372C131.221 372 126.932 369.903 124 366.581C121.068 369.903 116.779 372 112 372C105.614 372 100.102 368.258 97.5361 362.848C94.8729 364.828 91.5736 366 88 366C80.5869 366 74.3518 360.959 72.5352 354.117C70.2896 355.318 67.7246 356 65 356C56.1634 356 49 348.837 49 340C49 331.163 56.1634 324 65 324C72.4126 324 78.6468 329.041 80.4639 335.882C82.7095 334.681 85.2753 334 88 334C94.3858 334 99.8966 337.741 102.463 343.151C105.126 341.171 108.426 340 112 340C116.779 340 121.068 342.096 124 345.418C126.932 342.096 131.221 340 136 340C139.573 340 142.873 341.172 145.536 343.151C148.102 337.741 153.614 334 160 334C162.724 334 165.29 334.681 167.535 335.882C169.352 329.041 175.587 324 183 324Z" 
-                  fill={getToothSectionColor(3)}
+                  fill={getToothSectionColor(4)}
                 />
               </G>
 
@@ -206,12 +206,12 @@ const styles = StyleSheet.create({
   centeredTimerContainer: {
     position: 'absolute',
     top: '50%',
-    left: '50%',
-    transform: [{ translateX: -98 }, { translateY: -32.5 }],
+    left: 0,
+    right: 0,
+    transform: [{ translateY: -32.5 }],
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 10,
-    width: 140,
     height: 65,
   },
   centeredTimerText: {
