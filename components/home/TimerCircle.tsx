@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { View, StyleSheet, Text, AppState, Animated } from 'react-native';
 import { useTheme } from '../ThemeProvider';
 import Svg, { Circle } from 'react-native-svg';
 import { useFonts } from 'expo-font';
-import { useTranslation } from 'react-i18next';
 import ThemedText from '../ThemedText';
 import { Colors } from '../../constants/Colors';
 
@@ -15,6 +14,9 @@ interface TimerCircleProps {
   isOvertime: boolean;
   overtimeCounter: number;
   initialTimeInSeconds: number;
+  onStartPress: () => void;
+  onBrushedPress: () => void;
+  onResetPress: () => void;
 }
 
 const TimerCircle: React.FC<TimerCircleProps> = ({
@@ -25,8 +27,10 @@ const TimerCircle: React.FC<TimerCircleProps> = ({
   isOvertime,
   overtimeCounter,
   initialTimeInSeconds,
+  onStartPress,
+  onBrushedPress,
+  onResetPress,
 }) => {
-  const { t } = useTranslation();
   const { theme } = useTheme();
   
   const [animatedProgressValue] = useState(() => new Animated.Value(0));
@@ -54,6 +58,7 @@ const TimerCircle: React.FC<TimerCircleProps> = ({
   });
   
   const fontFamily = fontsLoaded ? 'Merienda-Bold' : 'System';
+  const quicksandBold = fontsLoaded ? 'Quicksand-Bold' : 'System';
   
   // Set up value listener for progress animation
   useEffect(() => {

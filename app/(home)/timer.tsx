@@ -20,7 +20,8 @@ import SongMenu from '../../components/home/SongMenu';
 import * as Haptics from 'expo-haptics';
 import { useAudioPlayer } from 'expo-audio';
 import { useRouter } from 'expo-router';
-import { useEnhancedSwipeGesture } from '../../hooks/useEnhancedSwipeGesture';
+import { useSwipeGesture } from '../../hooks/useSwipeGesture';
+import { useSwipeUpGesture } from '../../hooks/useSwipeUpGesture';
 import { eventBus } from '../../utils/EventBus';
 
 const { height: screenHeight } = Dimensions.get('window');
@@ -56,20 +57,25 @@ export default function TimerScreen() {
   const backgroundColor = theme.colorScheme === 'dark' ? '#1F2933' : '#F3F9FF';
   const successSoundPlayer = useAudioPlayer(require('../../assets/sounds/success.mp3'));
   
-  // Use the enhanced swipe gesture hook
-  const swipeGesture = useEnhancedSwipeGesture({
+  // Swipe-down gesture for closing the screen
+  const swipeDownGesture = useSwipeGesture({
     onClose: () => router.back(),
-    onOpen: () => {
-      // Handle swipe up to toggle timer mode
-      if (!isAnimating.current) {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        toggleTimerMode();
-      }
-    },
     onSwipeStart: () => setIsRunning(false),
     threshold: 0.35,
     velocityThreshold: 0.5,
     animationDuration: 400,
+    enableHaptics: true,
+  });
+
+  // Independent swipe-up gesture for toggling timer mode
+  const swipeUpGesture = useSwipeUpGesture({
+    onSwipeUp: () => {
+      if (!isAnimating.current) {
+        toggleTimerMode();
+      }
+    },
+    distanceThreshold: 60,
+    velocityThreshold: 0.3,
     enableHaptics: true,
   });
 
@@ -94,15 +100,15 @@ export default function TimerScreen() {
   // Listen for the close event from other screens
   useEffect(() => {
     const unsubscribe = eventBus.on('close-timer', () => {
-      if (swipeGesture?.handleClose) {
-        swipeGesture.handleClose();
+      if (swipeDownGesture?.handleClose) {
+        swipeDownGesture.handleClose();
       }
     });
     
     return () => {
       unsubscribe();
     };
-  }, [swipeGesture]);
+  }, [swipeDownGesture]);
 
   // Timer countdown logic
   useEffect(() => {
@@ -197,10 +203,10 @@ export default function TimerScreen() {
 
   const handleClosePress = () => {
     setIsRunning(false);
-    swipeGesture.handleClose();
+    swipeDownGesture.handleClose();
   };
 
-  if (swipeGesture.isFullyHidden) {
+  if (swipeDownGesture.isFullyHidden) {
     return null;
   }
 
@@ -235,15 +241,18 @@ export default function TimerScreen() {
   };
 
   return (
-    <Animated.View 
-      style={swipeGesture.getPanGestureContainerStyle()}
-      {...swipeGesture.panResponder.panHandlers}
+    <Animated.View
+      style={swipeDownGesture.getPanGestureContainerStyle()}
+      {...swipeDownGesture.panResponder.panHandlers}
     >
       {/* Scaling circular background */}
-      <Animated.View style={swipeGesture.getScalerStyle(backgroundColor)} />
+      <Animated.View style={swipeDownGesture.getScalerStyle(backgroundColor)} />
 
       {/* Screen content wrapper */}
-      <Animated.View style={swipeGesture.getContentWrapperStyle()}>
+      <Animated.View
+        style={swipeDownGesture.getContentWrapperStyle()}
+        {...swipeUpGesture.panResponder.panHandlers}
+      >
         {/* Timer Circle Mode */}
         <Animated.View style={[
           styles.contentContainer,

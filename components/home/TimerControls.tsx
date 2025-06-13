@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Pressable } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useTheme } from '../ThemeProvider';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
 import ThemedText from '../ThemedText';
@@ -19,7 +18,6 @@ export default function TimerControls({
   onBrushedPress,
 }: TimerControlsProps) {
   const { t } = useTranslation();
-  const { theme } = useTheme();
 
   return (
     <View style={styles.buttonsContainer}>

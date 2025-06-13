@@ -14,6 +14,7 @@ interface ToothSchemeProps {
   initialTimeInSeconds: number;
   onStartPress: () => void;
   onBrushedPress: () => void;
+  onResetPress: () => void;
 }
 
 export default function ToothScheme({
@@ -26,6 +27,7 @@ export default function ToothScheme({
   initialTimeInSeconds,
   onStartPress,
   onBrushedPress,
+  onResetPress,
 }: ToothSchemeProps) {
   const { theme } = useTheme();
 

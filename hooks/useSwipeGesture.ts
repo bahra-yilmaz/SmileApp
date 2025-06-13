@@ -226,9 +226,14 @@ export const useSwipeGesture = ({
   // Pan responder for swipe gesture
   const panResponder = useRef(
     PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
+      // Engage only after detecting a clear downward swipe movement
+      onStartShouldSetPanResponder: () => false,
       onMoveShouldSetPanResponder: (_, gestureState) => {
-        return Math.abs(gestureState.dy) > 10 && Math.abs(gestureState.dy) > Math.abs(gestureState.dx * 2);
+        // Begin responding only for downward swipes (dy > 0)
+        return (
+          gestureState.dy > 10 && // Sufficient vertical movement
+          gestureState.dy > Math.abs(gestureState.dx * 2) // Dominantly vertical
+        );
       },
       onPanResponderGrant: () => {
         gestureAnim.setValue(0);

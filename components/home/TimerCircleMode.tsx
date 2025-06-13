@@ -13,6 +13,7 @@ interface TimerCircleModeProps {
   initialTimeInSeconds: number;
   onStartPress: () => void;
   onBrushedPress: () => void;
+  onResetPress: () => void;
 }
 
 export default function TimerCircleMode({
@@ -25,6 +26,7 @@ export default function TimerCircleMode({
   initialTimeInSeconds,
   onStartPress,
   onBrushedPress,
+  onResetPress,
 }: TimerCircleModeProps) {
   return (
     <View style={styles.container}>
@@ -36,6 +38,9 @@ export default function TimerCircleMode({
         isOvertime={isOvertime}
         overtimeCounter={overtimeCounter}
         initialTimeInSeconds={initialTimeInSeconds}
+        onStartPress={onStartPress}
+        onBrushedPress={onBrushedPress}
+        onResetPress={onResetPress}
       />
       <TimerControls
         isRunning={isRunning}
