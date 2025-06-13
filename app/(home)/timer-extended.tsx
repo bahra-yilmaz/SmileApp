@@ -1,6 +1,6 @@
 /**
- * Timer Screen - A dedicated screen for the brushing timer experience
- * Supports multiple timer visualization modes
+ * Extended Timer Screen - A dedicated screen for the brushing timer experience
+ * Shown when swiping up from the main timer screen
  */
 
 import React, { useRef, useEffect, useState } from 'react';
@@ -8,14 +8,12 @@ import {
   View, 
   StyleSheet,
   Pressable,
-  Animated,
-  Dimensions
+  Animated
 } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import TimerCircleMode from '../../components/home/TimerCircleMode';
-import ToothScheme from '../../components/home/ToothScheme';
+import TimerCircle from '../../components/home/TimerCircle';
 import SongMenu from '../../components/home/SongMenu';
 import * as Haptics from 'expo-haptics';
 import { useAudioPlayer } from 'expo-audio';
@@ -23,18 +21,10 @@ import { useRouter } from 'expo-router';
 import { useEnhancedSwipeGesture } from '../../hooks/useEnhancedSwipeGesture';
 import { eventBus } from '../../utils/EventBus';
 
-const { height: screenHeight } = Dimensions.get('window');
-
-// Timer mode enum for type safety
-enum TimerMode {
-  CIRCLE = 'circle',
-  TOOTH_SCHEME = 'tooth_scheme'
-}
-
-export default function TimerScreen() {
+export default function ExtendedTimerScreen() {
   // Timer state management
   const [isRunning, setIsRunning] = useState(false);
-  const [minutes, setMinutes] = useState(2);
+  const [minutes, setMinutes] = useState(2); // Standard 2 minutes
   const [seconds, setSeconds] = useState(0);
   const [hasCompleted, setHasCompleted] = useState(false);
   const [isOvertime, setIsOvertime] = useState(false);
@@ -42,16 +32,11 @@ export default function TimerScreen() {
   const timerRef = useRef<NodeJS.Timeout | number | null>(null);
   const initialTimeInSeconds = useRef(2 * 60);
   
-  // Mode state
-  const [currentMode, setCurrentMode] = useState<TimerMode>(TimerMode.CIRCLE);
-  const modeAnim = useRef(new Animated.Value(0)).current;
-  const isAnimating = useRef(false);
-  
   // Get safe area insets and router
   const insets = useSafeAreaInsets();
   const router = useRouter();
   
-  // Get theme color
+  // Get theme color - use the same color as LightContainer
   const { theme } = useTheme();
   const backgroundColor = theme.colorScheme === 'dark' ? '#1F2933' : '#F3F9FF';
   const successSoundPlayer = useAudioPlayer(require('../../assets/sounds/success.mp3'));
@@ -59,37 +44,13 @@ export default function TimerScreen() {
   // Use the enhanced swipe gesture hook
   const swipeGesture = useEnhancedSwipeGesture({
     onClose: () => router.back(),
-    onOpen: () => {
-      // Handle swipe up to toggle timer mode
-      if (!isAnimating.current) {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        toggleTimerMode();
-      }
-    },
-    onSwipeStart: () => setIsRunning(false),
+    onOpen: () => {}, // No-op since we're already in the extended view
+    onSwipeStart: () => setIsRunning(false), // Stop timer when starting to swipe
     threshold: 0.35,
     velocityThreshold: 0.5,
     animationDuration: 400,
     enableHaptics: true,
   });
-
-  // Toggle between timer modes
-  const toggleTimerMode = () => {
-    if (isAnimating.current) return;
-    
-    isAnimating.current = true;
-    const newMode = currentMode === TimerMode.CIRCLE ? TimerMode.TOOTH_SCHEME : TimerMode.CIRCLE;
-    setCurrentMode(newMode);
-    
-    Animated.spring(modeAnim, {
-      toValue: newMode === TimerMode.TOOTH_SCHEME ? 1 : 0,
-      friction: 8,
-      tension: 40,
-      useNativeDriver: true,
-    }).start(() => {
-      isAnimating.current = false;
-    });
-  };
   
   // Listen for the close event from other screens
   useEffect(() => {
@@ -204,36 +165,6 @@ export default function TimerScreen() {
     return null;
   }
 
-  // Calculate the mode transition animations
-  const modeTranslateY = modeAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -screenHeight * 0.2],
-  });
-
-  const circleModeOpacity = modeAnim.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [1, 0.5, 0],
-  });
-
-  const toothSchemeOpacity = modeAnim.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0, 0.5, 1],
-  });
-
-  // Timer state to pass to both modes
-  const timerState = {
-    minutes,
-    seconds,
-    isRunning,
-    hasCompleted,
-    isOvertime,
-    overtimeCounter,
-    initialTimeInSeconds: initialTimeInSeconds.current,
-    onStartPress: handleStartPress,
-    onBrushedPress: handleBrushedPress,
-    onResetPress: () => resetTimer(),
-  };
-
   return (
     <Animated.View 
       style={swipeGesture.getPanGestureContainerStyle()}
@@ -244,37 +175,32 @@ export default function TimerScreen() {
 
       {/* Screen content wrapper */}
       <Animated.View style={swipeGesture.getContentWrapperStyle()}>
-        {/* Timer Circle Mode */}
-        <Animated.View style={[
-          styles.contentContainer,
-          {
-            opacity: circleModeOpacity,
-            transform: [{ translateY: modeTranslateY }]
-          }
-        ]}>
-          <TimerCircleMode {...timerState} />
-        </Animated.View>
-
-        {/* Tooth Scheme Mode */}
-        <Animated.View style={[
-          styles.contentContainer,
-          styles.toothSchemeContainer,
-          {
-            opacity: toothSchemeOpacity,
-            transform: [{ translateY: Animated.add(modeTranslateY, screenHeight * 0.2) }]
-          }
-        ]}>
-          <ToothScheme {...timerState} />
-        </Animated.View>
+        {/* Timer Circle Component */}
+        <View style={styles.contentContainer}>
+          <TimerCircle 
+            minutes={minutes}
+            seconds={seconds}
+            isRunning={isRunning}
+            hasCompleted={hasCompleted}
+            isOvertime={isOvertime}
+            overtimeCounter={overtimeCounter}
+            initialTimeInSeconds={initialTimeInSeconds.current}
+            onStartPress={handleStartPress}
+            onBrushedPress={handleBrushedPress}
+            onResetPress={() => resetTimer()}
+          />
+        </View>
         
         {/* Song Menu */}
         <SongMenu />
         
-        {/* Close Button */}
+        {/* Close Button in top right corner */}
         <View 
           style={[
             styles.closeButtonContainer, 
-            { top: insets.top + 10 }
+            { 
+              top: insets.top + 10 
+            }
           ]}
         >
           <Pressable
@@ -294,22 +220,6 @@ export default function TimerScreen() {
             />
           </Pressable>
         </View>
-
-        {/* Swipe Indicator */}
-        <View style={[styles.swipeIndicator, { bottom: insets.bottom + 20 }]}>
-          <MaterialCommunityIcons 
-            name="chevron-up"
-            size={24} 
-            color={theme.activeColors.text} 
-            style={styles.swipeIcon}
-          />
-          <MaterialCommunityIcons 
-            name="chevron-up"
-            size={24} 
-            color={theme.activeColors.text} 
-            style={[styles.swipeIcon, { opacity: 0.5 }]}
-          />
-        </View>
       </Animated.View>
     </Animated.View>
   );
@@ -321,15 +231,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
-    paddingTop: 60,
+    paddingTop: 60, // Allow space for close button
     paddingBottom: 20,
-  },
-  toothSchemeContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
   },
   closeButtonContainer: {
     position: 'absolute',
@@ -342,15 +245,5 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  swipeIndicator: {
-    position: 'absolute',
-    left: '50%',
-    marginLeft: -12,
-    alignItems: 'center',
-    gap: -8,
-  },
-  swipeIcon: {
-    opacity: 0.8,
   }
 }); 

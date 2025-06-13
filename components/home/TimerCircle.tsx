@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, AppState, Animated, Easing } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, Animated } from 'react-native';
 import { useTheme } from '../ThemeProvider';
 import Svg, { Circle } from 'react-native-svg';
 import { useFonts } from 'expo-font';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import * as Haptics from 'expo-haptics';
 import ThemedText from '../ThemedText';
 import { Colors } from '../../constants/Colors';
 
@@ -17,9 +15,6 @@ interface TimerCircleProps {
   isOvertime: boolean;
   overtimeCounter: number;
   initialTimeInSeconds: number;
-  onStartPress: () => void;
-  onBrushedPress: () => void;
-  onResetPress: () => void;
 }
 
 const TimerCircle: React.FC<TimerCircleProps> = ({
@@ -30,14 +25,9 @@ const TimerCircle: React.FC<TimerCircleProps> = ({
   isOvertime,
   overtimeCounter,
   initialTimeInSeconds,
-  onStartPress,
-  onBrushedPress,
-  onResetPress,
 }) => {
   const { t } = useTranslation();
   const { theme } = useTheme();
-  const [isStartPressed, setIsStartPressed] = useState(false);
-  const [isBrushedPressed, setIsBrushedPressed] = useState(false);
   
   const [animatedProgressValue] = useState(() => new Animated.Value(0));
   const targetProgress = useRef(0);
@@ -64,7 +54,6 @@ const TimerCircle: React.FC<TimerCircleProps> = ({
   });
   
   const fontFamily = fontsLoaded ? 'Merienda-Bold' : 'System';
-  const quicksandBold = fontsLoaded ? 'Quicksand-Bold' : 'System';
   
   // Set up value listener for progress animation
   useEffect(() => {
@@ -139,23 +128,6 @@ const TimerCircle: React.FC<TimerCircleProps> = ({
     outputRange: [circumference, 0],
   });
   
-  // Handle start/pause button press
-  const handleStartPress = () => {
-    onStartPress();
-    if (!isStartPressed) {
-      setIsStartPressed(true);
-    }
-  };
-  
-  // Handle brushed/done button press
-  const handleBrushedPress = () => {
-    onBrushedPress();
-    if (!isBrushedPressed) {
-      setIsBrushedPressed(true);
-    }
-    setTimeout(() => setIsBrushedPressed(false), 150);
-  };
-  
   const overtimeDisplayMinutes = Math.floor(overtimeCounter / 60);
   const overtimeDisplaySeconds = overtimeCounter % 60;
 
@@ -208,51 +180,6 @@ const TimerCircle: React.FC<TimerCircleProps> = ({
           </>
         </View>
       </View>
-      
-      {/* Button container */}
-      <View style={styles.buttonsContainer}>
-        <View style={styles.shadowContainer}>
-          <TouchableOpacity
-            onPress={handleStartPress}
-            style={[styles.primaryButton, isStartPressed && { transform: [{ scale: 0.95 }] }]}
-            activeOpacity={0.9}
-          >
-            <View style={styles.contentContainer}>
-              <View style={styles.buttonIconContainer}>
-                <MaterialCommunityIcons 
-                  name={isRunning ? "refresh" : "play"} 
-                  size={28} 
-                  color={Colors.primary[500]} 
-                />
-              </View>
-              <ThemedText style={[styles.buttonText, { color: Colors.primary[500], fontFamily: quicksandBold }]}>
-                {isRunning ? t('timerOverlay.restart') : t('timerOverlay.start')}
-              </ThemedText>
-            </View>
-          </TouchableOpacity>
-        </View>
-        
-        <View style={[styles.shadowContainer, { marginLeft: BUTTON_SPACING }]}>
-          <TouchableOpacity
-            onPress={handleBrushedPress}
-            style={[styles.primaryColorButton, isBrushedPressed && { transform: [{ scale: 0.95 }] }]}
-            activeOpacity={0.9}
-          >
-            <View style={styles.contentContainer}>
-              <View style={styles.buttonIconContainer}>
-                <MaterialCommunityIcons 
-                  name={isRunning ? "check" : "plus"} 
-                  size={28} 
-                  color="white" 
-                />
-              </View>
-              <ThemedText style={[styles.buttonText, { color: 'white', fontFamily: quicksandBold }]}>
-                {isRunning ? t('timerOverlay.done') : t('timerOverlay.brushed')}
-              </ThemedText>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </View>
     </View>
   );
 };
@@ -262,9 +189,6 @@ const PROGRESS_STROKE_WIDTH = 25;
 const INNER_CIRCLE_SIZE = CIRCLE_SIZE - 24;
 const PROGRESS_CIRCLE_SIZE = INNER_CIRCLE_SIZE + PROGRESS_STROKE_WIDTH;
 const OUTER_GLOW_SIZE = CIRCLE_SIZE + 60;
-const BUTTON_WIDTH = 140;
-const BUTTON_HEIGHT = 52;
-const BUTTON_SPACING = 12;
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -316,57 +240,6 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     lineHeight: 65,
-  },
-  buttonsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 80,
-  },
-  shadowContainer: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
-    borderRadius: 30,
-  },
-  primaryButton: {
-    width: BUTTON_WIDTH,
-    height: BUTTON_HEIGHT,
-    borderRadius: 30,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.9)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-  },
-  primaryColorButton: {
-    width: BUTTON_WIDTH,
-    height: BUTTON_HEIGHT,
-    borderRadius: 30,
-    backgroundColor: Colors.primary[500],
-    borderWidth: 1,
-    borderColor: Colors.primary[500],
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-  },
-  contentContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },  
-  buttonIconContainer: {
-    marginRight: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    fontSize: 18,
-    textAlign: 'center',
-    paddingHorizontal: 2,
   },
 });
 
