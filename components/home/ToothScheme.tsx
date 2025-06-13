@@ -56,6 +56,10 @@ export default function ToothScheme({
     'lower-left',
   ];
 
+  // Rotation: shift starting section based on current day (midnight UTC)
+  const sectionsCount = toothSections.length;
+  const dayOffset = Math.floor(Date.now() / 86400000) % sectionsCount; // 0-5
+
   // Calculate which sections should be highlighted based on progress
   const getToothSectionColor = (sectionIndex: number): string => {
     const sectionProgress = progress * toothSections.length;
@@ -71,11 +75,14 @@ export default function ToothScheme({
       return '#FFFFFF';
     }
     
+    // Apply dayOffset so the starting section rotates daily
+    const logicalIndex = (sectionIndex - dayOffset + sectionsCount) % sectionsCount;
+
     // A section is only completed when we've FULLY moved past it
-    if (sectionIndex < Math.floor(sectionProgress)) {
+    if (logicalIndex < Math.floor(sectionProgress)) {
       // Completed sections - pure white (only when fully completed)
       return '#FFFFFF';
-    } else if (sectionIndex === Math.floor(sectionProgress)) {
+    } else if (logicalIndex === Math.floor(sectionProgress)) {
       // Currently active section - primary 500
       return Colors.primary[500];
     } else {

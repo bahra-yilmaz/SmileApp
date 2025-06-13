@@ -25,6 +25,8 @@ import { useSwipeGesture } from '../../hooks/useSwipeGesture';
 import { useSwipeUpGesture } from '../../hooks/useSwipeUpGesture';
 import { eventBus } from '../../utils/EventBus';
 import { useTranslation } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Countdown from '../../components/home/Countdown';
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -34,6 +36,8 @@ enum TimerMode {
   TOOTH_SCHEME = 'tooth_scheme'
 }
 
+const TIMER_MODE_STORAGE_KEY = '@SmileApp:timerMode';
+
 export default function TimerScreen() {
   // Timer state management
   const [isRunning, setIsRunning] = useState(false);
@@ -41,12 +45,13 @@ export default function TimerScreen() {
   const [seconds, setSeconds] = useState(0);
   const [hasCompleted, setHasCompleted] = useState(false);
   const [isOvertime, setIsOvertime] = useState(false);
+  const [showCountdown, setShowCountdown] = useState(false);
   const [overtimeCounter, setOvertimeCounter] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | number | null>(null);
   const initialTimeInSeconds = useRef(2 * 60);
   
   // Mode state
-  const [currentMode, setCurrentMode] = useState<TimerMode>(TimerMode.CIRCLE);
+  const [currentMode, setCurrentMode] = useState<TimerMode | null>(null);
   const modeAnim = useRef(new Animated.Value(0)).current;
   const isAnimating = useRef(false);
   
@@ -72,28 +77,40 @@ export default function TimerScreen() {
   // Independent swipe-up gesture for toggling timer mode
   const swipeUpGesture = useSwipeUpGesture({
     onSwipeUp: () => {
-      if (!isAnimating.current) {
-        // Use setCurrentMode with a callback to get the latest state
-        setCurrentMode(prevMode => {
-          const newMode = prevMode === TimerMode.CIRCLE ? TimerMode.TOOTH_SCHEME : TimerMode.CIRCLE;
-          
-          isAnimating.current = true;
-          Animated.timing(modeAnim, {
-            toValue: newMode === TimerMode.TOOTH_SCHEME ? 1 : 0,
-            duration: 250,
-            useNativeDriver: true,
-          }).start(() => {
-            isAnimating.current = false;
-          });
-          
-          return newMode;
-        });
-      }
+      toggleTimerMode();
     },
     distanceThreshold: 60,
     velocityThreshold: 0.3,
     enableHaptics: true,
   });
+
+  // Load initial timer mode from storage
+  useEffect(() => {
+    const loadTimerMode = async () => {
+      try {
+        const storedMode = await AsyncStorage.getItem(TIMER_MODE_STORAGE_KEY) as TimerMode | null;
+        const initialMode = storedMode || TimerMode.CIRCLE;
+        setCurrentMode(initialMode);
+
+        // Set initial animation value without animating
+        modeAnim.setValue(initialMode === TimerMode.TOOTH_SCHEME ? 1 : 0);
+      } catch (e) {
+        // Fallback to default if there's an error
+        setCurrentMode(TimerMode.CIRCLE);
+        modeAnim.setValue(0);
+      }
+    };
+
+    loadTimerMode();
+  }, []);
+
+  const saveTimerMode = async (mode: TimerMode) => {
+    try {
+      await AsyncStorage.setItem(TIMER_MODE_STORAGE_KEY, mode);
+    } catch (e) {
+      console.error('Failed to save timer mode to storage', e);
+    }
+  };
 
   // Toggle between timer modes (now only used for programmatic calls)
   const toggleTimerMode = () => {
@@ -102,15 +119,20 @@ export default function TimerScreen() {
     }
     
     isAnimating.current = true;
-    const newMode = currentMode === TimerMode.CIRCLE ? TimerMode.TOOTH_SCHEME : TimerMode.CIRCLE;
-    setCurrentMode(newMode);
-    
-    Animated.timing(modeAnim, {
-      toValue: newMode === TimerMode.TOOTH_SCHEME ? 1 : 0,
-      duration: 250,
-      useNativeDriver: true,
-    }).start(() => {
-      isAnimating.current = false;
+    // Use a callback to ensure we have the latest state
+    setCurrentMode(prevMode => {
+      const newMode = prevMode === TimerMode.CIRCLE ? TimerMode.TOOTH_SCHEME : TimerMode.CIRCLE;
+      
+      saveTimerMode(newMode); // Persist the new mode
+      
+      Animated.timing(modeAnim, {
+        toValue: newMode === TimerMode.TOOTH_SCHEME ? 1 : 0,
+        duration: 250,
+        useNativeDriver: true,
+      }).start(() => {
+        isAnimating.current = false;
+      });
+      return newMode;
     });
   };
   
@@ -200,10 +222,15 @@ export default function TimerScreen() {
       if (hasCompleted) {
         resetTimer(false); 
       }
-      setIsRunning(true);
+      setShowCountdown(true);
     }
   };
   
+  const handleCountdownFinish = () => {
+    setShowCountdown(false);
+    setIsRunning(true);
+  };
+
   const handleBrushedPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     if (isRunning) {
@@ -225,6 +252,11 @@ export default function TimerScreen() {
 
   // Move useTranslation hook before any early returns
   const { t } = useTranslation();
+
+  // Render a loading state or null until the mode is determined
+  if (currentMode === null) {
+    return null; // Or a loading spinner
+  }
 
   if (swipeDownGesture.isFullyHidden) {
     return null;
@@ -266,6 +298,7 @@ export default function TimerScreen() {
       {/* Screen content wrapper */}
       <Animated.View
         style={swipeDownGesture.getContentWrapperStyle()}
+        {...(showCountdown ? {} : swipeUpGesture.panResponder.panHandlers)}
         {...swipeUpGesture.panResponder.panHandlers}
       >
         {/* Timer Circle Mode */}
@@ -330,6 +363,11 @@ export default function TimerScreen() {
           </Text>
         </View>
       </Animated.View>
+
+      {/* Countdown Overlay */}
+      {showCountdown && (
+        <Countdown onCountdownFinish={handleCountdownFinish} />
+      )}
     </Animated.View>
   );
 }
