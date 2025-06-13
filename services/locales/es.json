@@ -251,7 +251,10 @@
       }
     },
     "toothbrush": {
-      "days": "Días en uso: {{count}}"
+      "days": "Días en uso: {{count}}",
+      "current": {
+        "none": "Ninguno"
+      }
     },
     "homeScreen": {
       "streakCard": {
@@ -446,6 +449,62 @@
   "toothScheme": {
     "left": "Izquierda",
     "right": "Derecha"
+  },
+  "settings": {
+    "name": "Ajustes",
+    "appSettings": {
+      "title": "Configuración de la aplicación"
+    },
+    "resetOnboarding": {
+      "name": "Reiniciar presentación",
+      "title": "Reiniciar presentación",
+      "message": "¿Estás seguro de que deseas reiniciar la introducción? Serás redirigido a la pantalla de bienvenida.",
+      "confirm": "Reiniciar"
+    },
+    "mascotTone": {
+      "name": "Tono de la mascota",
+      "selectTitle": "Elige el tono de Nubo",
+      "error": {
+        "title": "Error de tono",
+        "message": "No se pudo cambiar el tono de la mascota. Por favor, inténtalo de nuevo."
+      }
+    },
+    "language": {
+      "name": "Idioma",
+      "selectTitle": "Seleccionar idioma",
+      "error": {
+        "title": "Error de idioma",
+        "message": "No se pudo cambiar el idioma. Por favor, inténtalo de nuevo."
+      }
+    },
+    "brushingSettings": {
+      "title": "Configuración de cepillado",
+      "reminderTime": "Hora de recordatorio",
+      "frequency": "Frecuencia de cepillado",
+      "targetTime": "Tiempo objetivo de cepillado",
+      "toothbrush": "Menú del cepillo"
+    },
+    "reminderTimes": {
+      "none": "Ninguno",
+      "one": "1 recordatorio",
+      "multiple": "{{count}} recordatorios"
+    },
+    "dailyFrequency": {
+      "options": {
+        "standard_short": "2 veces"
+      }
+    },
+    "brushingTarget": {
+      "options": {
+        "standard_label": "2 minutos"
+      }
+    },
+    "about": {
+      "title": "Acerca de"
+    },
+    "appVersion": {
+      "name": "Versión de la app"
+    }
   }
 }
   

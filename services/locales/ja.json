@@ -251,7 +251,10 @@
       }
     },
     "toothbrush": {
-      "days": "使用日数: {{count}}"
+      "days": "使用日数: {{count}}",
+      "current": {
+        "none": "なし"
+      }
     },
     "homeScreen": {
       "streakCard": {
@@ -405,5 +408,61 @@
   "toothScheme": {
     "left": "左",
     "right": "右"
+  },
+  "settings": {
+    "name": "設定",
+    "appSettings": {
+      "title": "アプリ設定"
+    },
+    "resetOnboarding": {
+      "name": "オンボーディングをリセット",
+      "title": "オンボーディングをリセット",
+      "message": "オンボーディングをリセットしますか？ ウェルカム画面に戻ります。",
+      "confirm": "リセット"
+    },
+    "mascotTone": {
+      "name": "マスコットのトーン",
+      "selectTitle": "Nuboのトーンを選択",
+      "error": {
+        "title": "トーンエラー",
+        "message": "マスコットのトーンを変更できませんでした。もう一度お試しください。"
+      }
+    },
+    "language": {
+      "name": "言語",
+      "selectTitle": "言語を選択",
+      "error": {
+        "title": "言語エラー",
+        "message": "言語を変更できませんでした。もう一度お試しください。"
+      }
+    },
+    "brushingSettings": {
+      "title": "ブラッシング設定",
+      "reminderTime": "リマインダー時間",
+      "frequency": "ブラッシング頻度",
+      "targetTime": "目標ブラッシング時間",
+      "toothbrush": "ブラシメニュー"
+    },
+    "reminderTimes": {
+      "none": "なし",
+      "one": "1 件のリマインダー",
+      "multiple": "{{count}} 件のリマインダー"
+    },
+    "dailyFrequency": {
+      "options": {
+        "standard_short": "2 回"
+      }
+    },
+    "brushingTarget": {
+      "options": {
+        "standard_label": "2 分"
+      }
+    },
+    "about": {
+      "title": "情報"
+    },
+    "appVersion": {
+      "name": "アプリバージョン"
+    }
   }
 }  

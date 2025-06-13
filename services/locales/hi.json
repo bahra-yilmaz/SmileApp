@@ -251,7 +251,10 @@
       }
     },
     "toothbrush": {
-      "days": "उपयोग दिन: {{count}}"
+      "days": "उपयोग दिन: {{count}}",
+      "current": {
+        "none": "कोई नहीं"
+      }
     },
     "homeScreen": {
       "streakCard": {
@@ -405,5 +408,61 @@
   "toothScheme": {
     "left": "बाएं",
     "right": "दाएं"
+  },
+  "settings": {
+    "name": "सेटिंग्स",
+    "appSettings": {
+      "title": "ऐप सेटिंग्स"
+    },
+    "resetOnboarding": {
+      "name": "ऑनबोर्डिंग रीसेट करें",
+      "title": "ऑनबोर्डिंग रीसेट करें",
+      "message": "क्या आप वाकई ऑनबोर्डिंग को रीसेट करना चाहते हैं? आपको वेलकम स्क्रीन पर भेजा जाएगा।",
+      "confirm": "रीसेट करें"
+    },
+    "mascotTone": {
+      "name": "मास्कॉट टोन",
+      "selectTitle": "Nubo का टोन चुनें",
+      "error": {
+        "title": "टोन त्रुटि",
+        "message": "मास्कॉट टोन बदलने में विफल। कृपया पुनः प्रयास करें।"
+      }
+    },
+    "language": {
+      "name": "भाषा",
+      "selectTitle": "भाषा चुनें",
+      "error": {
+        "title": "भाषा त्रुटि",
+        "message": "भाषा बदलने में विफल। कृपया पुनः प्रयास करें।"
+      }
+    },
+    "brushingSettings": {
+      "title": "ब्रशिंग सेटिंग्स",
+      "reminderTime": "रिमाइंडर समय",
+      "frequency": "ब्रशिंग आवृत्ति",
+      "targetTime": "लक्ष्य ब्रशिंग समय",
+      "toothbrush": "टूथब्रश मेनू"
+    },
+    "reminderTimes": {
+      "none": "कोई नहीं",
+      "one": "1 रिमाइंडर",
+      "multiple": "{{count}} रिमाइंडर"
+    },
+    "dailyFrequency": {
+      "options": {
+        "standard_short": "2 बार"
+      }
+    },
+    "brushingTarget": {
+      "options": {
+        "standard_label": "2 मिनट"
+      }
+    },
+    "about": {
+      "title": "बारे में"
+    },
+    "appVersion": {
+      "name": "ऐप संस्करण"
+    }
   }
 }

@@ -254,7 +254,71 @@
     }
   },
   "toothbrush": {
-    "days": "Days in use: {{count}}"
+    "title": "Toothbrush Menu",
+    "error": {
+      "title": "Error",
+      "message": "Failed to save toothbrush data. Please try again."
+    },
+    "days": "Days in use: {{count}}",
+    "current": {
+      "none": "No toothbrush registered",
+      "addFirst": "Add your first toothbrush to start tracking",
+      "age": "Age"
+    },
+    "type": {
+      "manual": "Manual",
+      "electric": "Electric"
+    },
+    "category": {
+      "regular": "Regular",
+      "braces": "Braces",
+      "sensitive": "Sensitive",
+      "whitening": "Whitening"
+    },
+    "age": {
+      "oneMonth": "1 month",
+      "months": "{{count}} months",
+      "oneWeek": "1 week",
+      "weeks": "{{count}} weeks",
+      "oneDay": "1 day",
+      "days": "{{count}} days"
+    },
+    "status": {
+      "brandNew": "Brand New",
+      "fresh": "Fresh",
+      "good": "Good",
+      "due": "Replace Soon",
+      "overdue": "Overdue"
+    },
+    "newBrush": {
+      "addNew": "Add New Toothbrush"
+    },
+    "history": {
+      "title": "Toothbrush History"
+    },
+    "infoCards": {
+      "title": "Toothbrush Tips",
+      "plaqueRemoval": {
+        "title": "Plaque Removal 101",
+        "description": "Clinical studies show oscillating–rotating electric brushes remove up to 21% more plaque after 3 months compared with manual brushes."
+      },
+      "replaceInterval": {
+        "title": "Change Heads Every 90 Days",
+        "description": "After about 3 months bristles splay and become less effective. Replace the brush or head every 90 days."
+      },
+      "fluorideTiming": {
+        "title": "Don't Rinse Fluoride Away",
+        "description": "Spit—don't rinse—after brushing so fluoride keeps protecting your enamel."
+      },
+      "pressure": {
+        "title": "Easy on the Pressure",
+        "description": "Brushing harder doesn't clean better; excessive force may harm your gums."
+      },
+      "tongueClean": {
+        "title": "Remember Your Tongue",
+        "description": "A quick tongue sweep reduces bad-breath compounds by up to 50%."
+      }
+    }
   },
   "homeScreen": {
     "streakCard": {
@@ -344,6 +408,10 @@
         "editTime": "Edit Time",
         "addTime": "Add New Time",
         "addNew": "Add New Reminder",
+        "nameLabel": "Reminder Name",
+        "hour": "Hour",
+        "minute": "Minute",
+        "addReminder": "Add Reminder",
         "error": {
           "title": "Reminder Error",
           "message": "Failed to update reminder time. Please try again."
@@ -468,5 +536,104 @@
   "toothScheme": {
     "left": "Left",
     "right": "Right"
+  },
+  "settings": {
+    "name": "Settings",
+    "appSettings": {
+      "title": "App Settings"
+    },
+    "resetOnboarding": {
+      "name": "Reset Onboarding",
+      "title": "Reset Onboarding",
+      "message": "Are you sure you want to reset the onboarding flow? You'll be redirected to the welcome screen.",
+      "confirm": "Reset"
+    },
+    "mascotTone": {
+      "name": "Mascot Tone",
+      "selectTitle": "Choose Nubo's Tone",
+      "error": {
+        "title": "Tone Error",
+        "message": "Failed to change mascot tone. Please try again."
+      }
+    },
+    "language": {
+      "name": "Language",
+      "selectTitle": "Select Language",
+      "error": {
+        "title": "Language Error",
+        "message": "Failed to change language. Please try again."
+      }
+    },
+    "brushingSettings": {
+      "title": "Brushing Settings",
+      "reminderTime": "Reminder Time",
+      "frequency": "Brushing Frequency",
+      "targetTime": "Target Brushing Time",
+      "toothbrush": "Toothbrush Menu"
+    },
+    "reminderTimes": {
+      "none": "None set",
+      "one": "1 reminder",
+      "multiple": "{{count}} reminders",
+      "selectTitle": "Set Reminder Times",
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening",
+      "night": "Before Bed",
+      "custom": "Custom",
+      "customBadge": "Custom",
+      "editTime": "Edit Time",
+      "addTime": "Add New Time",
+      "addNew": "Add New Reminder",
+      "nameLabel": "Reminder Name",
+      "hour": "Hour",
+      "minute": "Minute",
+      "addReminder": "Add Reminder",
+      "error": {
+        "title": "Reminder Error",
+        "message": "Failed to update reminder time. Please try again."
+      }
+    },
+    "dailyFrequency": {
+      "selectTitle": "Choose Daily Frequency",
+      "options": {
+        "minimal_label": "1 time per day",
+        "minimal_description": "Basic maintenance",
+        "standard_label": "2 times per day",
+        "standard_description": "Morning and evening",
+        "standard_short": "2 times",
+        "recommended_label": "3 times per day",
+        "recommended_description": "After each meal",
+        "comprehensive_label": "4+ times per day",
+        "comprehensive_description": "Maximum care"
+      },
+      "error": {
+        "title": "Frequency Error",
+        "message": "Failed to change daily brushing frequency. Please try again."
+      }
+    },
+    "brushingTarget": {
+      "selectTitle": "Choose Your Target",
+      "options": {
+        "quick_label": "1.5 minutes",
+        "quick_description": "Quick but effective",
+        "standard_label": "2 minutes",
+        "standard_description": "Dentist recommended",
+        "thorough_label": "3 minutes",
+        "thorough_description": "Extra thorough cleaning",
+        "comprehensive_label": "4 minutes",
+        "comprehensive_description": "Comprehensive care"
+      },
+      "error": {
+        "title": "Target Error",
+        "message": "Failed to change brushing target. Please try again."
+      }
+    },
+    "about": {
+      "title": "About"
+    },
+    "appVersion": {
+      "name": "App Version"
+    }
   }
 } 

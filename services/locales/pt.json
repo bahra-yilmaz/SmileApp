@@ -252,7 +252,10 @@
       }
     },
     "toothbrush": {
-      "days": "Dias de uso: {{count}}"
+      "days": "Dias de uso: {{count}}",
+      "current": {
+        "none": "Nenhum"
+      }
     },
     "homeScreen": {
       "streakCard": {
@@ -406,6 +409,62 @@
   "toothScheme": {
     "left": "Esquerda",
     "right": "Direita"
+  },
+  "settings": {
+    "name": "Configurações",
+    "appSettings": {
+      "title": "Configurações do aplicativo"
+    },
+    "resetOnboarding": {
+      "name": "Reiniciar onboarding",
+      "title": "Reiniciar onboarding",
+      "message": "Tem certeza de que deseja reiniciar o fluxo de onboarding? Você será redirecionado para a tela inicial.",
+      "confirm": "Reiniciar"
+    },
+    "mascotTone": {
+      "name": "Tom da mascote",
+      "selectTitle": "Escolha o tom do Nubo",
+      "error": {
+        "title": "Erro de tom",
+        "message": "Não foi possível alterar o tom da mascote. Tente novamente."
+      }
+    },
+    "language": {
+      "name": "Idioma",
+      "selectTitle": "Selecionar idioma",
+      "error": {
+        "title": "Erro de idioma",
+        "message": "Não foi possível alterar o idioma. Tente novamente."
+      }
+    },
+    "brushingSettings": {
+      "title": "Configurações de escovação",
+      "reminderTime": "Hora do lembrete",
+      "frequency": "Frequência de escovação",
+      "targetTime": "Tempo alvo de escovação",
+      "toothbrush": "Menu da escova"
+    },
+    "reminderTimes": {
+      "none": "Nenhum",
+      "one": "1 lembrete",
+      "multiple": "{{count}} lembretes"
+    },
+    "dailyFrequency": {
+      "options": {
+        "standard_short": "2 vezes"
+      }
+    },
+    "brushingTarget": {
+      "options": {
+        "standard_label": "2 minutos"
+      }
+    },
+    "about": {
+      "title": "Sobre"
+    },
+    "appVersion": {
+      "name": "Versão do app"
+    }
   }
 }
   

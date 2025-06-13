@@ -40,14 +40,14 @@
         "shadesForShine": "Je mets mes lunettes pour ton éclat.",
         "lessCavitiesMoreConfidence": "Moins de caries. Plus de confiance.",
         "brushGameStrong": "Garde ton niveau de brossage au top.",
-        "dentistJealous": "Faisons jalouser ton dentiste aujourd’hui.",
+        "dentistJealous": "Faisons jalouser ton dentiste aujourd'hui.",
         "dullTeethCouldnBeUs": "Dents ternes ? Pas chez nous.",
         "goodHabitsShinyStats": "Bonnes habitudes = stats brillantes. On upgrade ?",
         "toothbrushReady": "Brosse prête. À toi de jouer.",
         "morningFlex": "Brossage du matin, confiance toute la journée.",
         "noPlaqueZone": "Zone sans plaque ici.",
         "futureSmile": "Brosse aujourd'hui. Brille demain.",
-        "confidenceLoaded": "Confiance chargée. C’est parti.",
+        "confidenceLoaded": "Confiance chargée. C'est parti.",
         "shineProtocol": "Protocole de brillance activé.",
         "nextLevelSmile": "Sourire niveau supérieur débloqué.",
         "tinyMoveBigWin": "Petit geste, grande victoire.",
@@ -61,11 +61,11 @@
         "investInFuture": "Chaque brossage est un investissement pour ton futur.",
         "quietProgress": "Le progrès chuchote avant de briller.",
         "healthIsWealth": "La santé est la vraie richesse.",
-        "showUpDaily": "Présent chaque jour. La routine crée l’excellence.",
+        "showUpDaily": "Présent chaque jour. La routine crée l'excellence.",
         "patternsCreateDestiny": "Tes habitudes créent ton destin.",
         "strongRoots": "Les sourires solides ont des racines solides.",
         "smallActOfMastery": "Chaque brossage est un petit acte de maîtrise.",
-        "disciplineToday": "Discipline aujourd’hui. Liberté demain.",
+        "disciplineToday": "Discipline aujourd'hui. Liberté demain.",
         "lastingResults": "Des gestes constants produisent des résultats durables.",
         "precisionCreatesStrength": "La force réside dans les détails.",
         "habitsShapeYou": "Tes habitudes te forment en silence.",
@@ -73,7 +73,7 @@
         "neverWasteBrush": "Aucun brossage n'est perdu. Tous comptent.",
         "controlWhatYouCan": "Maîtrise ce que tu peux. Laisse la constance guider.",
         "precisionMatters": "La maîtrise vit dans les détails.",
-        "riseEveryDay": "Lève-toi chaque jour. Répète l’effort."
+        "riseEveryDay": "Lève-toi chaque jour. Répète l'effort."
       },
       "playful": {
         "letThePartyBegin": "Brosse prête. Que la fête commence ! 🎉",
@@ -90,18 +90,18 @@
         "brushingRemix": "Lançons le remix du brossage 🎧",
         "smileRecipe": "Recette du sourire : brosse, rince, brille !",
         "sparkleGame": "Ton niveau de brillance est fort 💎",
-        "streakDance": "C’est l’heure de la danse des séries 🕺",
-        "zeroBrushDrama": "Zéro drame de brossage aujourd’hui 😎",
+        "streakDance": "C'est l'heure de la danse des séries 🕺",
+        "zeroBrushDrama": "Zéro drame de brossage aujourd'hui 😎",
         "partyStarter": "Je suis ton DJ du brossage 🎤",
         "shineChampion": "Champion du shine en place 👑",
         "toothbrushHype": "Ta brosse est au taquet 🔥",
         "tinyMovesBigSmile": "Petits gestes, grand sourire 🌟"
       },
       "supportive": {
-        "youShowedUp": "Tu es là. C’est le plus important.",
+        "youShowedUp": "Tu es là. C'est le plus important.",
         "smallWinsBigSmiles": "Petites victoires, grands sourires.",
         "littleByLittle": "Petit à petit — tu y arrives.",
-        "freshStart": "Chaque jour est un nouveau départ. Aujourd’hui aussi.",
+        "freshStart": "Chaque jour est un nouveau départ. Aujourd'hui aussi.",
         "rightHereWithYou": "Je suis là avec toi. Toujours.",
         "progressNotPerfection": "Le progrès avant la perfection.",
         "tinyHabitsMatter": "Les petites habitudes font de grandes routines.",
@@ -113,18 +113,18 @@
         "thisMatters": "Ce moment compte plus que tu ne le penses.",
         "quietProgress": "Le progrès discret est quand même du progrès.",
         "consistentCare": "Le soin régulier crée la confiance.",
-        "keepShowingUp": "Continue de venir. C’est ça qui compte.",
+        "keepShowingUp": "Continue de venir. C'est ça qui compte.",
         "showingUpStrong": "La présence construit la force.",
         "streakOrNoStreak": "Série ou pas — tu es là.",
         "gentleVictory": "Ce moment est une petite victoire.",
-        "todayCounts": "Aujourd’hui compte. Toujours."
+        "todayCounts": "Aujourd'hui compte. Toujours."
       },
       "neutral": {
-  "brushTime": "C’est l’heure du brossage ! 🕰️",
+  "brushTime": "C'est l'heure du brossage ! 🕰️",
   "sparkleLoading": "Chargement du scintillement… ⏳✨",
   "plaqueReminder": "Spoiler : la plaque ne prend jamais de congé.",
   "freshFeeling": "Cette sensation de fraîcheur est unique.",
-  "brushingCrew": "De retour dans l’équipe de brossage ! 🪥",
+  "brushingCrew": "De retour dans l'équipe de brossage ! 🪥",
   "mintyMission": "Mission mentholée activée.",
   "shineReady": "Prêt pour faire briller ton sourire.",
   "dailyBrushThing": "Juste ton brossage quotidien. Rien d'extra.",
@@ -134,7 +134,7 @@
   "routineFeelsGood": "Cette routine fait du bien, non ?",
   "brushingRoutineBack": "La routine de brossage est de retour !",
   "smileMaintenance": "Maintenance du sourire en cours 🛠️",
-  "clearedForShine": "Autorisé pour un maximum d’éclat ✨",
+  "clearedForShine": "Autorisé pour un maximum d'éclat ✨",
   "dailyDefense": "Défense quotidienne activée 🛡️",
   "fresherAlready": "Tu es déjà plus frais.",
   "mintMode": "Mode menthe : ACTIVÉ 🌿",
@@ -247,7 +247,10 @@
       }
     },
     "toothbrush": {
-      "days": "Jours d'utilisation : {{count}}"
+      "days": "Jours d'utilisation : {{count}}",
+      "current": {
+        "none": "Aucun"
+      }
     },
     "homeScreen": {
       "streakCard": {
@@ -401,6 +404,62 @@
     "toothScheme": {
       "left": "Gauche",
       "right": "Droite"
+    },
+    "settings": {
+      "name": "Paramètres",
+      "appSettings": {
+        "title": "Paramètres de l'application"
+      },
+      "resetOnboarding": {
+        "name": "Réinitialiser l'accueil",
+        "title": "Réinitialiser l'accueil",
+        "message": "Êtes-vous sûr de vouloir réinitialiser le parcours d'accueil ? Vous serez redirigé vers l'écran de bienvenue.",
+        "confirm": "Réinitialiser"
+      },
+      "mascotTone": {
+        "name": "Ton de la mascotte",
+        "selectTitle": "Choisissez le ton de Nubo",
+        "error": {
+          "title": "Erreur de ton",
+          "message": "Impossible de changer le ton de la mascotte. Veuillez réessayer."
+        }
+      },
+      "language": {
+        "name": "Langue",
+        "selectTitle": "Choisir la langue",
+        "error": {
+          "title": "Erreur de langue",
+          "message": "Impossible de changer la langue. Veuillez réessayer."
+        }
+      },
+      "brushingSettings": {
+        "title": "Paramètres de brossage",
+        "reminderTime": "Heure de rappel",
+        "frequency": "Fréquence de brossage",
+        "targetTime": "Durée cible de brossage",
+        "toothbrush": "Menu Brosse"
+      },
+      "reminderTimes": {
+        "none": "Aucun",
+        "one": "1 rappel",
+        "multiple": "{{count}} rappels"
+      },
+      "dailyFrequency": {
+        "options": {
+          "standard_short": "2 fois"
+        }
+      },
+      "brushingTarget": {
+        "options": {
+          "standard_label": "2 minutes"
+        }
+      },
+      "about": {
+        "title": "À propos"
+      },
+      "appVersion": {
+        "name": "Version de l'app"
+      }
     }
   }
   

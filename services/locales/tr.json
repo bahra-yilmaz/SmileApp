@@ -251,7 +251,71 @@
       }
     },
     "toothbrush": {
-      "days": "Kullanım gün sayısı: {{count}}"
+      "title": "Diş Fırçası Menüsü",
+      "error": {
+        "title": "Hata",
+        "message": "Diş fırçası verileri kaydedilemedi. Lütfen tekrar deneyin."
+      },
+      "days": "Kullanım günü: {{count}}",
+      "current": {
+        "none": "Kayıtlı fırça yok",
+        "addFirst": "Takip için ilk fırçanı ekle",
+        "age": "Yaş"
+      },
+      "type": {
+        "manual": "Manuel",
+        "electric": "Elektrikli"
+      },
+      "category": {
+        "regular": "Standart",
+        "braces": "Diş Teli",
+        "sensitive": "Hassas",
+        "whitening": "Beyazlatıcı"
+      },
+      "age": {
+        "oneMonth": "1 ay",
+        "months": "{{count}} ay",
+        "oneWeek": "1 hafta",
+        "weeks": "{{count}} hafta",
+        "oneDay": "1 gün",
+        "days": "{{count}} gün"
+      },
+      "status": {
+        "brandNew": "Yepyeni",
+        "fresh": "Taze",
+        "good": "İyi",
+        "due": "Yakında Değiştir",
+        "overdue": "Gecikti"
+      },
+      "newBrush": {
+        "addNew": "Yeni Diş Fırçası Ekle"
+      },
+      "history": {
+        "title": "Fırça Geçmişi"
+      },
+      "infoCards": {
+        "title": "Fırça İpuçları",
+        "plaqueRemoval": {
+          "title": "Plak Temizliği 101",
+          "description": "Dönen–salınımlı elektrikli fırçalar 3 ay sonunda manuel fırçalara göre %21'e kadar daha fazla plak temizler."
+        },
+        "replaceInterval": {
+          "title": "Başlıkları 90 Günde Değiştir",
+          "description": "Yaklaşık 3 ay sonra kıllar dağılır ve etkinlik düşer. Fırçayı veya başlığı 90 günde bir değiştir."
+        },
+        "fluorideTiming": {
+          "title": "Florürü Durulama",
+          "description": "Fırçalama sonrası tükür ama durulama; florür mineyi korumaya devam etsin."
+        },
+        "pressure": {
+          "title": "Baskıyı Azalt",
+          "description": "Daha sert bastırmak daha iyi temizlemez; aşırı güç diş etlerine zarar verebilir."
+        },
+        "tongueClean": {
+          "title": "Dili Unutma",
+          "description": "Kısa bir dil süpürme kötü koku bileşiklerini %50'ye kadar azaltır."
+        }
+      }
     },
     "homeScreen": {
       "streakCard": {
@@ -292,48 +356,106 @@
       },
       "settings": {
         "name": "Ayarlar",
-      "description": "Uygulama ayarları ve tercihler",
-      "appSettings": {
-        "title": "Uygulama Ayarları"
-      },
-      "resetOnboarding": {
-        "name": "Tanıtımı Sıfırla",
-        "title": "Tanıtımı Sıfırla",
-        "message": "Tanıtım akışını sıfırlamak istediğinizden emin misiniz? Karşılama ekranına yönlendirileceksiniz.",
-        "confirm": "Sıfırla"
-      },
-      "theme": {
-        "name": "Uygulama Teması"
-      },
-      "mascotTone": {
-        "name": "Maskot Tonu",
-        "selectTitle": "Nubo'nun Tonunu Seçin",
-        "error": {
-          "title": "Ton Hatası",
-          "message": "Maskot tonu değiştirilemedi. Lütfen tekrar deneyin."
+        "description": "Uygulama ayarları ve tercihler",
+        "appSettings": {
+          "title": "Uygulama Ayarları"
+        },
+        "resetOnboarding": {
+          "name": "Onboardingi Sıfırla",
+          "title": "Onboardingi Sıfırla",
+          "message": "Onboarding akışını sıfırlamak istediğinize emin misiniz? Karşılama ekranına yönlendirileceksiniz.",
+          "confirm": "Sıfırla"
+        },
+        "theme": {
+          "name": "Uygulama Teması"
+        },
+        "mascotTone": {
+          "name": "Maskot Tonu",
+          "selectTitle": "Nubo'nun Tonunu Seç",
+          "error": {
+            "title": "Ton Hatası",
+            "message": "Maskot tonu değiştirilemedi. Lütfen tekrar deneyin."
+          }
+        },
+        "language": {
+          "name": "Dil",
+          "selectTitle": "Dil Seç",
+          "error": {
+            "title": "Dil Hatası",
+            "message": "Dil değiştirilemedi. Lütfen tekrar deneyin."
+          }
+        },
+        "about": {
+          "title": "Hakkında"
+        },
+        "appVersion": {
+          "name": "Uygulama Sürümü"
+        },
+        "brushingSettings": {
+          "title": "Fırçalama Ayarları",
+          "reminderTime": "Hatırlatma Saati",
+          "frequency": "Fırçalama Sıklığı",
+          "targetTime": "Hedef Fırçalama Süresi",
+          "toothbrush": "Diş Fırçası Menüsü"
+        },
+        "reminderTimes": {
+          "none": "Yok",
+          "one": "1 hatırlatma",
+          "multiple": "{{count}} hatırlatma",
+          "selectTitle": "Hatırlatma Saatlerini Ayarla",
+          "morning": "Sabah",
+          "afternoon": "Öğleden Sonra",
+          "evening": "Akşam",
+          "night": "Yatmadan Önce",
+          "custom": "Özel",
+          "customBadge": "Özel",
+          "editTime": "Saati Düzenle",
+          "addTime": "Yeni Saat Ekle",
+          "addNew": "Yeni Hatırlatma Ekle",
+          "nameLabel": "Hatırlatma Adı",
+          "hour": "Saat",
+          "minute": "Dakika",
+          "addReminder": "Hatırlatma Ekle",
+          "error": {
+            "title": "Hatırlatma Hatası",
+            "message": "Hatırlatma zamanı güncellenemedi. Lütfen tekrar deneyin."
+          }
+        },
+        "dailyFrequency": {
+          "selectTitle": "Günlük Sıklığı Seç",
+          "options": {
+            "minimal_label": "Günde 1 kez",
+            "minimal_description": "Temel bakım",
+            "standard_label": "Günde 2 kez",
+            "standard_description": "Sabah ve akşam",
+            "standard_short": "2 kez",
+            "recommended_label": "Günde 3 kez",
+            "recommended_description": "Her öğünden sonra",
+            "comprehensive_label": "Günde 4+ kez",
+            "comprehensive_description": "Maksimum bakım"
+          },
+          "error": {
+            "title": "Sıklık Hatası",
+            "message": "Günlük fırçalama sıklığı değiştirilemedi. Lütfen tekrar deneyin."
+          }
+        },
+        "brushingTarget": {
+          "selectTitle": "Hedef Süreyi Seç",
+          "options": {
+            "quick_label": "1.5 dakika",
+            "quick_description": "Hızlı ama etkili",
+            "standard_label": "2 dakika",
+            "standard_description": "Diş hekimi önerisi",
+            "thorough_label": "3 dakika",
+            "thorough_description": "Ekstra detaylı temizlik",
+            "comprehensive_label": "4 dakika",
+            "comprehensive_description": "Kapsamlı bakım"
+          },
+          "error": {
+            "title": "Hedef Hatası",
+            "message": "Fırçalama hedefi değiştirilemedi. Lütfen tekrar deneyin."
+          }
         }
-      },
-      "language": {
-        "name": "Dil",
-        "selectTitle": "Dil Seçin",
-        "error": {
-          "title": "Dil Hatası",
-          "message": "Dil değiştirilemedi. Lütfen tekrar deneyin."
-        }
-      },
-      "about": {
-        "title": "Hakkında"
-      },
-      "appVersion": {
-        "name": "Uygulama Sürümü"
-      },
-      "brushingSettings": {
-        "title": "Fırçalama Ayarları",
-        "reminderTime": "Hatırlatıcı Saati",
-        "frequency": "Fırçalama Sıklığı",
-        "targetTime": "Hedef Fırçalama Süresi",
-        "notifications": "Fırçalama Bildirimleri"
-      }
       }
     },
     "timerOverlay": {
@@ -446,5 +568,104 @@
   "toothScheme": {
     "left": "Sol",
     "right": "Sağ"
+  },
+  "settings": {
+    "name": "Ayarlar",
+    "appSettings": {
+      "title": "Uygulama Ayarları"
+    },
+    "resetOnboarding": {
+      "name": "Onboardingi Sıfırla",
+      "title": "Onboardingi Sıfırla",
+      "message": "Onboarding akışını sıfırlamak istediğinize emin misiniz? Karşılama ekranına yönlendirileceksiniz.",
+      "confirm": "Sıfırla"
+    },
+    "mascotTone": {
+      "name": "Maskot Tonu",
+      "selectTitle": "Nubo'nun Tonunu Seç",
+      "error": {
+        "title": "Ton Hatası",
+        "message": "Maskot tonu değiştirilemedi. Lütfen tekrar deneyin."
+      }
+    },
+    "language": {
+      "name": "Dil",
+      "selectTitle": "Dil Seç",
+      "error": {
+        "title": "Dil Hatası",
+        "message": "Dil değiştirilemedi. Lütfen tekrar deneyin."
+      }
+    },
+    "brushingSettings": {
+      "title": "Fırçalama Ayarları",
+      "reminderTime": "Hatırlatma Saati",
+      "frequency": "Fırçalama Sıklığı",
+      "targetTime": "Hedef Fırçalama Süresi",
+      "toothbrush": "Diş Fırçası Menüsü"
+    },
+    "reminderTimes": {
+      "none": "Yok",
+      "one": "1 hatırlatma",
+      "multiple": "{{count}} hatırlatma",
+      "selectTitle": "Hatırlatma Saatlerini Ayarla",
+      "morning": "Sabah",
+      "afternoon": "Öğleden Sonra",
+      "evening": "Akşam",
+      "night": "Yatmadan Önce",
+      "custom": "Özel",
+      "customBadge": "Özel",
+      "editTime": "Saati Düzenle",
+      "addTime": "Yeni Saat Ekle",
+      "addNew": "Yeni Hatırlatma Ekle",
+      "nameLabel": "Hatırlatma Adı",
+      "hour": "Saat",
+      "minute": "Dakika",
+      "addReminder": "Hatırlatma Ekle",
+      "error": {
+        "title": "Hatırlatma Hatası",
+        "message": "Hatırlatma zamanı güncellenemedi. Lütfen tekrar deneyin."
+      }
+    },
+    "dailyFrequency": {
+      "selectTitle": "Günlük Sıklığı Seç",
+      "options": {
+        "minimal_label": "Günde 1 kez",
+        "minimal_description": "Temel bakım",
+        "standard_label": "Günde 2 kez",
+        "standard_description": "Sabah ve akşam",
+        "standard_short": "2 kez",
+        "recommended_label": "Günde 3 kez",
+        "recommended_description": "Her öğünden sonra",
+        "comprehensive_label": "Günde 4+ kez",
+        "comprehensive_description": "Maksimum bakım"
+      },
+      "error": {
+        "title": "Sıklık Hatası",
+        "message": "Günlük fırçalama sıklığı değiştirilemedi. Lütfen tekrar deneyin."
+      }
+    },
+    "brushingTarget": {
+      "selectTitle": "Hedef Süreyi Seç",
+      "options": {
+        "quick_label": "1.5 dakika",
+        "quick_description": "Hızlı ama etkili",
+        "standard_label": "2 dakika",
+        "standard_description": "Diş hekimi önerisi",
+        "thorough_label": "3 dakika",
+        "thorough_description": "Ekstra detaylı temizlik",
+        "comprehensive_label": "4 dakika",
+        "comprehensive_description": "Kapsamlı bakım"
+      },
+      "error": {
+        "title": "Hedef Hatası",
+        "message": "Fırçalama hedefi değiştirilemedi. Lütfen tekrar deneyin."
+      }
+    },
+    "about": {
+      "title": "Hakkında"
+    },
+    "appVersion": {
+      "name": "Uygulama Sürümü"
+    }
   }
 }

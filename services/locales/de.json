@@ -34,7 +34,7 @@
         "cool": {
           "routineLocked": "Routine gesperrt. Bleib fokussiert.",
           "sharpenTheSmile": "Schärfe dein Lächeln. Meistere den Tag.",
-          "smileInsurance": "Lächelversicherung aktiviert. Los geht’s mit dem Putzen.",
+          "smileInsurance": "Lächelversicherung aktiviert. Los geht's mit dem Putzen.",
           "mirrorsWaiting": "Der Spiegel wartet auf dein Strahlen. Bereit?",
           "brushingBigFlex": "Zähneputzen: Kleiner Aufwand, großer Style.",
           "shadesForShine": "Für dein Strahlen brauche ich Sonnenbrille.",
@@ -247,7 +247,10 @@
       }
     },
     "toothbrush": {
-      "days": "Tage in Benutzung: {{count}}"
+      "days": "Tage in Benutzung: {{count}}",
+      "current": {
+        "none": "Keine"
+      }
     },
     "homeScreen": {
       "streakCard": {
@@ -404,6 +407,62 @@
     },
     "languageSelectScreen": {
       "title": "Choose Your\nLanguage"
+    },
+    "settings": {
+      "name": "Einstellungen",
+      "appSettings": {
+        "title": "App-Einstellungen"
+      },
+      "resetOnboarding": {
+        "name": "Onboarding zurücksetzen",
+        "title": "Onboarding zurücksetzen",
+        "message": "Möchtest du das Onboarding wirklich zurücksetzen? Du wirst zum Begrüßungsbildschirm weitergeleitet.",
+        "confirm": "Zurücksetzen"
+      },
+      "mascotTone": {
+        "name": "Maskottchen-Ton",
+        "selectTitle": "Wähle Nubos Ton",
+        "error": {
+          "title": "Ton-Fehler",
+          "message": "Der Maskottchen-Ton konnte nicht geändert werden. Bitte versuche es erneut."
+        }
+      },
+      "language": {
+        "name": "Sprache",
+        "selectTitle": "Sprache auswählen",
+        "error": {
+          "title": "Sprachfehler",
+          "message": "Sprache konnte nicht geändert werden. Bitte versuche es erneut."
+        }
+      },
+      "brushingSettings": {
+        "title": "Putz-Einstellungen",
+        "reminderTime": "Erinnerungszeit",
+        "frequency": "Putzfrequenz",
+        "targetTime": "Ziel-Putzzeit",
+        "toothbrush": "Bürstenmenü"
+      },
+      "reminderTimes": {
+        "none": "Keine",
+        "one": "1 Erinnerung",
+        "multiple": "{{count}} Erinnerungen"
+      },
+      "dailyFrequency": {
+        "options": {
+          "standard_short": "2-mal"
+        }
+      },
+      "brushingTarget": {
+        "options": {
+          "standard_label": "2 Minuten"
+        }
+      },
+      "about": {
+        "title": "Über"
+      },
+      "appVersion": {
+        "name": "App-Version"
+      }
     }
   }
   
