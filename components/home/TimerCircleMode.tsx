@@ -30,23 +30,33 @@ export default function TimerCircleMode({
 }: TimerCircleModeProps) {
   return (
     <View style={styles.container}>
-      <TimerCircle 
-        minutes={minutes}
-        seconds={seconds}
-        isRunning={isRunning}
-        hasCompleted={hasCompleted}
-        isOvertime={isOvertime}
-        overtimeCounter={overtimeCounter}
-        initialTimeInSeconds={initialTimeInSeconds}
-        onStartPress={onStartPress}
-        onBrushedPress={onBrushedPress}
-        onResetPress={onResetPress}
-      />
-      <TimerControls
-        isRunning={isRunning}
-        onStartPress={onStartPress}
-        onBrushedPress={onBrushedPress}
-      />
+      {/* Main Content Container - Centers everything relative to screen */}
+      <View style={styles.mainContentContainer}>
+        {/* Timer Circle */}
+        <View style={styles.timerContainer}>
+          <TimerCircle 
+            minutes={minutes}
+            seconds={seconds}
+            isRunning={isRunning}
+            hasCompleted={hasCompleted}
+            isOvertime={isOvertime}
+            overtimeCounter={overtimeCounter}
+            initialTimeInSeconds={initialTimeInSeconds}
+            onStartPress={onStartPress}
+            onBrushedPress={onBrushedPress}
+            onResetPress={onResetPress}
+          />
+        </View>
+
+        {/* Control Buttons - Positioned below the timer circle */}
+        <View style={styles.controlsContainer}>
+          <TimerControls
+            isRunning={isRunning}
+            onStartPress={onStartPress}
+            onBrushedPress={onBrushedPress}
+          />
+        </View>
+      </View>
     </View>
   );
 }
@@ -54,6 +64,19 @@ export default function TimerCircleMode({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mainContentContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  controlsContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 80,
+  },
+  timerContainer: {
     alignItems: 'center',
     justifyContent: 'center',
   },

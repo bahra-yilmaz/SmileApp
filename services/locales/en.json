@@ -464,5 +464,9 @@
     "revertModalMessage": "Do you want to revert this brushing? \nIt'll be like this brushing never happened.",
     "revertModalConfirmButton": "Revert",
     "revertModalCancelButton": "Cancel"
+  },
+  "toothScheme": {
+    "left": "Left",
+    "right": "Right"
   }
 } 

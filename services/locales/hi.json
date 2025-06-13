@@ -401,5 +401,9 @@
     "revertModalMessage": "क्या आप इस ब्रशिंग को वापस लेना चाहते हैं? \nयह कभी हुआ ही नहीं मानेगा।",
     "revertModalConfirmButton": "वापस लें",
     "revertModalCancelButton": "रद्द करें"
+  },
+  "toothScheme": {
+    "left": "बाएं",
+    "right": "दाएं"
   }
 }

@@ -397,6 +397,10 @@
       "revertModalMessage": "Veux-tu annuler ce brossage ? \nCe sera comme s'il n'avait jamais eu lieu.",
       "revertModalConfirmButton": "Annuler",
       "revertModalCancelButton": "Annuler"
+    },
+    "toothScheme": {
+      "left": "Gauche",
+      "right": "Droite"
     }
   }
   

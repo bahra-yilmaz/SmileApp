@@ -223,6 +223,9 @@ export default function TimerScreen() {
     swipeDownGesture.handleClose();
   };
 
+  // Move useTranslation hook before any early returns
+  const { t } = useTranslation();
+
   if (swipeDownGesture.isFullyHidden) {
     return null;
   }
@@ -251,8 +254,6 @@ export default function TimerScreen() {
     onBrushedPress: handleBrushedPress,
     onResetPress: () => resetTimer(),
   };
-
-  const { t } = useTranslation();
 
   return (
     <Animated.View

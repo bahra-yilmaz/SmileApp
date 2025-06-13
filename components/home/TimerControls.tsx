@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 80,
   },
   shadowContainer: {
     shadowColor: '#000',

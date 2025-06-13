@@ -442,6 +442,10 @@
     "revertModalMessage": "¿Quieres revertir este cepillado?\nSerá como si nunca hubiera sucedido.",
     "revertModalConfirmButton": "Revertir",
     "revertModalCancelButton": "Cancelar"
+  },
+  "toothScheme": {
+    "left": "Izquierda",
+    "right": "Derecha"
   }
 }
   

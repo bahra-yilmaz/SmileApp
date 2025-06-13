@@ -442,5 +442,9 @@
     "revertModalMessage": "Bu fırçalamayı geri almak istiyor musun? \nSanki hiç olmamış gibi sayılacak.",
     "revertModalConfirmButton": "Geri Al",
     "revertModalCancelButton": "İptal"
+  },
+  "toothScheme": {
+    "left": "Sol",
+    "right": "Sağ"
   }
 }

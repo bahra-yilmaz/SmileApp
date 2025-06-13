@@ -402,6 +402,10 @@
     "revertModalMessage": "Deseja reverter esta escovação? \nSerá como se nunca tivesse acontecido.",
     "revertModalConfirmButton": "Reverter",
     "revertModalCancelButton": "Cancelar"
+  },
+  "toothScheme": {
+    "left": "Esquerda",
+    "right": "Direita"
   }
 }
   

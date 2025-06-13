@@ -398,6 +398,10 @@
       "revertModalConfirmButton": "Zurücknehmen",
       "revertModalCancelButton": "Abbrechen"
     },
+    "toothScheme": {
+      "left": "Links",
+      "right": "Rechts"
+    },
     "languageSelectScreen": {
       "title": "Choose Your\nLanguage"
     }
