@@ -9,7 +9,8 @@ import {
   StyleSheet,
   Pressable,
   Animated,
-  Dimensions
+  Dimensions,
+  Text
 } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -23,6 +24,7 @@ import { useRouter } from 'expo-router';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
 import { useSwipeUpGesture } from '../../hooks/useSwipeUpGesture';
 import { eventBus } from '../../utils/EventBus';
+import { useTranslation } from 'react-i18next';
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -71,7 +73,21 @@ export default function TimerScreen() {
   const swipeUpGesture = useSwipeUpGesture({
     onSwipeUp: () => {
       if (!isAnimating.current) {
-        toggleTimerMode();
+        // Use setCurrentMode with a callback to get the latest state
+        setCurrentMode(prevMode => {
+          const newMode = prevMode === TimerMode.CIRCLE ? TimerMode.TOOTH_SCHEME : TimerMode.CIRCLE;
+          
+          isAnimating.current = true;
+          Animated.timing(modeAnim, {
+            toValue: newMode === TimerMode.TOOTH_SCHEME ? 1 : 0,
+            duration: 250,
+            useNativeDriver: true,
+          }).start(() => {
+            isAnimating.current = false;
+          });
+          
+          return newMode;
+        });
       }
     },
     distanceThreshold: 60,
@@ -79,18 +95,19 @@ export default function TimerScreen() {
     enableHaptics: true,
   });
 
-  // Toggle between timer modes
+  // Toggle between timer modes (now only used for programmatic calls)
   const toggleTimerMode = () => {
-    if (isAnimating.current) return;
+    if (isAnimating.current) {
+      return;
+    }
     
     isAnimating.current = true;
     const newMode = currentMode === TimerMode.CIRCLE ? TimerMode.TOOTH_SCHEME : TimerMode.CIRCLE;
     setCurrentMode(newMode);
     
-    Animated.spring(modeAnim, {
+    Animated.timing(modeAnim, {
       toValue: newMode === TimerMode.TOOTH_SCHEME ? 1 : 0,
-      friction: 8,
-      tension: 40,
+      duration: 250,
       useNativeDriver: true,
     }).start(() => {
       isAnimating.current = false;
@@ -211,19 +228,14 @@ export default function TimerScreen() {
   }
 
   // Calculate the mode transition animations
-  const modeTranslateY = modeAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -screenHeight * 0.2],
-  });
-
   const circleModeOpacity = modeAnim.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [1, 0.5, 0],
+    inputRange: [0, 1],
+    outputRange: [1, 0],
   });
 
   const toothSchemeOpacity = modeAnim.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [0, 0.5, 1],
+    inputRange: [0, 1],
+    outputRange: [0, 1],
   });
 
   // Timer state to pass to both modes
@@ -239,6 +251,8 @@ export default function TimerScreen() {
     onBrushedPress: handleBrushedPress,
     onResetPress: () => resetTimer(),
   };
+
+  const { t } = useTranslation();
 
   return (
     <Animated.View
@@ -258,7 +272,6 @@ export default function TimerScreen() {
           styles.contentContainer,
           {
             opacity: circleModeOpacity,
-            transform: [{ translateY: modeTranslateY }]
           }
         ]}>
           <TimerCircleMode {...timerState} />
@@ -270,7 +283,6 @@ export default function TimerScreen() {
           styles.toothSchemeContainer,
           {
             opacity: toothSchemeOpacity,
-            transform: [{ translateY: Animated.add(modeTranslateY, screenHeight * 0.2) }]
           }
         ]}>
           <ToothScheme {...timerState} />
@@ -305,19 +317,16 @@ export default function TimerScreen() {
         </View>
 
         {/* Swipe Indicator */}
-        <View style={[styles.swipeIndicator, { bottom: insets.bottom + 20 }]}>
+        <View style={[styles.swipeIndicator, { bottom: insets.bottom + 0 }]}>
           <MaterialCommunityIcons 
             name="chevron-up"
             size={24} 
             color={theme.activeColors.text} 
             style={styles.swipeIcon}
           />
-          <MaterialCommunityIcons 
-            name="chevron-up"
-            size={24} 
-            color={theme.activeColors.text} 
-            style={[styles.swipeIcon, { opacity: 0.5 }]}
-          />
+          <Text style={[styles.swipeText, { color: theme.activeColors.text }]}>
+            {currentMode === TimerMode.CIRCLE ? 'Swipe up for tooth view' : 'Swipe up for timer view'}
+          </Text>
         </View>
       </Animated.View>
     </Animated.View>
@@ -354,12 +363,19 @@ const styles = StyleSheet.create({
   },
   swipeIndicator: {
     position: 'absolute',
-    left: '50%',
-    marginLeft: -12,
+    left: 0,
+    right: 0,
     alignItems: 'center',
-    gap: -8,
+    justifyContent: 'center',
   },
   swipeIcon: {
     opacity: 0.8,
+  },
+  swipeText: {
+    marginTop: 4,
+    fontSize: 12,
+    textAlign: 'center',
+    opacity: 0.7,
+    fontWeight: '500',
   }
 }); 

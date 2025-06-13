@@ -23,17 +23,21 @@ export function useSwipeUpGesture({
   velocityThreshold = 0.3,
   enableHaptics = true,
 }: UseSwipeUpGestureConfig): UseSwipeUpGestureReturn {
-  const hasTriggered = useRef(false);
-
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => false,
       onMoveShouldSetPanResponder: (_, gestureState) => {
         // Engage only if the movement is clearly upward and dominant vertically
-        const isUpward = gestureState.dy < -10 && Math.abs(gestureState.dy) > Math.abs(gestureState.dx * 2);
-        return isUpward;
+        const isUpward = gestureState.dy < -10;
+        const isDominantlyVertical = Math.abs(gestureState.dy) > Math.abs(gestureState.dx * 1.5);
+        return isUpward && isDominantlyVertical;
       },
-      onPanResponderMove: () => {},
+      onPanResponderGrant: () => {
+        // Gesture granted
+      },
+      onPanResponderMove: () => {
+        // Track gesture movement
+      },
       onPanResponderRelease: (_, gestureState) => {
         const distanceTravelled = -gestureState.dy; // Upward distance positive
         const velocity = -gestureState.vy; // Upward velocity positive
@@ -41,17 +45,15 @@ export function useSwipeUpGesture({
         const meetsDistance = distanceTravelled > distanceThreshold;
         const meetsVelocity = velocity > velocityThreshold;
 
-        if ((meetsDistance || meetsVelocity) && !hasTriggered.current) {
-          hasTriggered.current = true;
+        if (meetsDistance || meetsVelocity) {
           if (enableHaptics) {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           }
           onSwipeUp();
-          setTimeout(() => {
-            // Reset after short delay to avoid multiple triggers in same gesture
-            hasTriggered.current = false;
-          }, 300);
         }
+      },
+      onPanResponderTerminate: () => {
+        // Gesture terminated
       },
     })
   ).current;
