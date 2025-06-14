@@ -128,7 +128,7 @@ export default function InlineToothbrushPicker({
 
       {/* Name Input */}
       <View style={styles.section}>
-        <ThemedText style={styles.sectionTitle}>Name</ThemedText>
+        <ThemedText style={styles.sectionTitle}>{t('toothbrush.picker.nameLabel', 'Name')}</ThemedText>
         <TextInput
           style={styles.textInput}
           value={config.name}
@@ -252,7 +252,7 @@ export default function InlineToothbrushPicker({
         </Pressable>
         <Pressable style={[styles.saveTimeButton, { backgroundColor: theme.colors.primary[500] }]} onPress={handleSave}>
           <ThemedText style={styles.saveTimeButtonText}>
-            {t('toothbrush.addToothbrush', 'Add Brush')}
+            {t('common.add', 'Add')}
           </ThemedText>
         </Pressable>
       </View>

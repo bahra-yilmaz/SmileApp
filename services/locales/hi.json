@@ -143,9 +143,13 @@
 }
     },
     "common": {
-      "ok": "ठीक है",
+      "ok": "ठीक",
       "cancel": "रद्द करें",
-      "Continue": "जारी रखें"
+      "Continue": "जारी रखें",
+      "save": "सहेजें",
+      "edit": "संपादित करें",
+      "delete": "हटाएँ",
+      "add": "जोड़ें"
     },
     "languages": {
       "en": "English",
@@ -251,9 +255,71 @@
       }
     },
     "toothbrush": {
+      "title": "टूथब्रश मेनू",
+      "error": {
+        "title": "त्रुटि",
+        "message": "ब्रश सहेजने में विफल। पुनः प्रयास करें।"
+      },
       "days": "उपयोग दिन: {{count}}",
       "current": {
-        "none": "कोई नहीं"
+        "none": "कोई नहीं",
+        "addFirst": "पहला ब्रश जोड़ें",
+        "age": "उम्र",
+        "brushings": "{{count}} ब्रशिंग"
+      },
+      "type": {
+        "manual": "मैनुअल",
+        "electric": "इलेक्ट्रिक"
+      },
+      "category": {
+        "regular": "सामान्य",
+        "braces": "ब्रेसेस",
+        "sensitive": "संवेदनशील",
+        "whitening": "व्हाइटनिंग"
+      },
+      "age": {
+        "oneMonth": "1 माह",
+        "months": "{{count}} माह",
+        "oneWeek": "1 सप्ताह",
+        "weeks": "{{count}} सप्ताह",
+        "oneDay": "1 दिन",
+        "days": "{{count}} दिन"
+      },
+      "status": {
+        "brandNew": "नया",
+        "fresh": "ताज़ा",
+        "good": "अच्छा",
+        "due": "जल्द बदलें",
+        "overdue": "देरी"
+      },
+      "newBrush": {
+        "addNew": "नया ब्रश जोड़ें"
+      },
+      "history": {
+        "title": "ब्रश इतिहास"
+      },
+      "infoCards": {
+        "title": "ब्रशिंग टिप्स",
+        "plaqueRemoval": {
+          "title": "प्लाक हटाना 101",
+          "description": "नैदानिक परीक्षण बताते हैं कि ऑस्सिलेटिंग-रोटेटिंग सिर वाली इलेक्ट्रिक ब्रश तीन महीने के उपयोग के बाद मैनुअल ब्रश की तुलना में प्लाक को 21 % तक अधिक हटाती हैं (कोक्रेन समीक्षा 2020)।"
+        },
+        "replaceInterval": {
+          "title": "हर 90 दिन में हेड बदलें",
+          "description": "लगभग तीन महीने बाद ब्रिसल फैल जाते हैं और प्लाक हटाने की क्षमता 40 % तक घट जाती है। इसलिए ADA और FDI सलाह देती हैं कि ब्रश या उसके हेड को हर 90 दिन, या यदि ब्रिसल जल्दी खराब हों तो उससे पहले बदलें।"
+        },
+        "fluorideTiming": {
+          "title": "फ्लोराइड को न धोएँ",
+          "description": "ब्रश करने के बाद थूकें—पर कुल्ला न करें। एनामेल पर 1 450 ppm फ्लोराइड की पतली परत छोड़ने से कैविटी का जोखिम लगभग 25 % कम हो सकता है (Public Health England 2017)।"
+        },
+        "pressure": {
+          "title": "दबाव हल्का रखें",
+          "description": "ज्यादा दबाव = ज्यादा सफ़ाई नहीं। 150 g से अधिक बल मसूड़े घटा सकता है; प्लाक हटाना लगभग 100 g पर स्थिर हो जाता है। ब्रिसल को अपना काम करने दें।"
+        },
+        "tongueClean": {
+          "title": "जीभ को मत भूलें",
+          "description": "मुँह की दुर्गंध के 60–90 % यौगिक जीभ की सतह से आते हैं। 10 सेकंड की त्वरित सफ़ाई वाष्पशील गंधक यौगिकों को आधा कर सकती है।"
+        }
       }
     },
     "homeScreen": {
@@ -386,7 +452,8 @@
     "cancelButton": "रद्द करें",
     "targetUpdatedAlert": "लक्ष्य समय {{newTarget}} मिनट पर अपडेट किया गया!",
     "invalidInputAlert": "कृपया एक वैध मिनट संख्या दर्ज करें।",
-    "chooseTargetPrompt": "या सामान्य लक्ष्यों में से चुनें:"
+    "chooseTargetPrompt": "या सामान्य लक्ष्यों में से चुनें:",
+    "selectTitle": "रिमाइंडर समय"
   },
   "brushingResultsScreen": {
     "title": "ब्रशिंग पूरी हुई!",
@@ -439,23 +506,61 @@
     "brushingSettings": {
       "title": "ब्रशिंग सेटिंग्स",
       "reminderTime": "रिमाइंडर समय",
-      "frequency": "ब्रशिंग आवृत्ति",
-      "targetTime": "लक्ष्य ब्रशिंग समय",
-      "toothbrush": "टूथब्रश मेनू"
+      "frequency": "आवृत्ति",
+      "targetTime": "लक्ष्य समय",
+      "toothbrush": "ब्रश मेनू"
     },
     "reminderTimes": {
       "none": "कोई नहीं",
       "one": "1 रिमाइंडर",
-      "multiple": "{{count}} रिमाइंडर"
+      "multiple": "{{count}} रिमाइंडर",
+      "nameLabel": "रिमाइंडर नाम",
+      "hour": "घंटा",
+      "minute": "मिनट",
+      "addNew": "नया रिमाइंडर जोड़ें",
+      "morning": "सुबह",
+      "afternoon": "दोपहर",
+      "evening": "शाम",
+      "night": "सोने से पहले",
+      "custom": "कस्टम",
+      "customBadge": "कस्टम",
+      "addReminder": "जोड़ें",
+      "selectTitle": "रिमाइंडर समय"
     },
     "dailyFrequency": {
+      "selectTitle": "दैनिक आवृत्ति",
       "options": {
-        "standard_short": "2 बार"
+        "minimal_label": "1×/दिन",
+        "minimal_description": "बुनियादी रखरखाव",
+        "standard_label": "2×/दिन",
+        "standard_description": "सुबह और रात",
+        "standard_short": "2 बार",
+        "recommended_label": "3×/दिन",
+        "recommended_description": "हर भोजन के बाद",
+        "comprehensive_label": "4+×/दिन",
+        "comprehensive_description": "अधिकतम देखभाल"
+      },
+      "countFormat": "{{count}} बार",
+      "error": {
+        "title": "आवृत्ति त्रुटि",
+        "message": "दैनिक ब्रशिंग आवृत्ति बदलने में विफल। कृपया पुनः प्रयास करें।"
       }
     },
     "brushingTarget": {
+      "selectTitle": "लक्ष्य समय",
       "options": {
-        "standard_label": "2 मिनट"
+        "quick_label": "1.5 मिनट",
+        "quick_description": "तेज़ लेकिन प्रभावी",
+        "standard_label": "2 मिनट",
+        "standard_description": "सिफ़ारिश की गई",
+        "thorough_label": "3 मिनट",
+        "thorough_description": "अधिक गहन",
+        "comprehensive_label": "4 मिनट",
+        "comprehensive_description": "पूर्ण देखभाल"
+      },
+      "error": {
+        "title": "लक्ष्य त्रुटि",
+        "message": "लक्ष्य समय बदलने में विफल। कृपया पुनः प्रयास करें।"
       }
     },
     "about": {
@@ -463,6 +568,23 @@
     },
     "appVersion": {
       "name": "ऐप संस्करण"
+    },
+    "item": "टूथब्रश",
+    "picker": {
+      "nameLabel": "नाम",
+      "namePlaceholder": "उदा. दैनिक ब्रश",
+      "age": "ब्रश आयु",
+      "type": "प्रकार",
+      "head": "ब्रश हेड",
+      "save": "ब्रश जोड़ें"
+    },
+    "agePreset": {
+      "brandNew_short": "नया ✨",
+      "lessThan1Week_short": "<1 सप्ताह",
+      "oneTwoWeeks_short": "1-2 सप्ताह",
+      "threeFourWeeks_short": "3-4 सप्ताह",
+      "twoMonths_short": "2 महीने",
+      "threeMonths_short": "3 महीने"
     }
   }
 }

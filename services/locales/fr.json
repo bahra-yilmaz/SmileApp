@@ -145,7 +145,11 @@
     "common": {
       "ok": "OK",
       "cancel": "Annuler",
-      "Continue": "Continuer"
+      "Continue": "Continuer",
+      "save": "Enregistrer",
+      "edit": "Éditer",
+      "delete": "Supprimer",
+      "add": "Ajouter"
     },
     "languages": {
       "en": "English",
@@ -212,7 +216,7 @@
       },
       "nuboToneScreen": {
         "title": "Le ton de Nubo",
-        "description": "Choisis comment Nubo interagira avec toi",
+        "description": "Comment Nubo interagit avec toi",
         "options": {
           "supportive_label": "Soutenant",
           "supportive_description": "Gentil et utile",
@@ -247,9 +251,90 @@
       }
     },
     "toothbrush": {
+      "title": "Menu Brosse",
+      "error": {
+        "title": "Erreur",
+        "message": "Impossible d'enregistrer la brosse. Réessaie."
+      },
       "days": "Jours d'utilisation : {{count}}",
       "current": {
-        "none": "Aucun"
+        "none": "Aucune",
+        "addFirst": "Ajoute ta première brosse pour commencer",
+        "age": "Âge",
+        "brushings": "{{count}} brossage{{count, plural, one {} other {s}}}"
+      },
+      "type": {
+        "manual": "Manuelle",
+        "electric": "Électrique"
+      },
+      "category": {
+        "regular": "Classique",
+        "braces": "Appareil",
+        "sensitive": "Sensible",
+        "whitening": "Blanchissante"
+      },
+      "age": {
+        "oneMonth": "1 mois",
+        "months": "{{count}} mois",
+        "oneWeek": "1 semaine",
+        "weeks": "{{count}} semaines",
+        "oneDay": "1 jour",
+        "days": "{{count}} jours"
+      },
+      "status": {
+        "brandNew": "Neuve",
+        "fresh": "Fraîche",
+        "good": "Bonne",
+        "due": "À changer bientôt",
+        "overdue": "À changer"
+      },
+      "newBrush": {
+        "addNew": "Ajouter une brosse"
+      },
+      "history": {
+        "title": "Historique des brosses",
+        "ageDays_one": "{{count}} jour",
+        "ageDays_other": "{{count}} jours"
+      },
+      "infoCards": {
+        "title": "Conseils sur les brosses",
+        "plaqueRemoval": {
+          "title": "Élimination de la plaque 101",
+          "description": "Des essais cliniques montrent que les brosses électriques à mouvement oscillant-rotatif éliminent jusqu'à 21 % de plaque en plus après 3 mois par rapport aux brosses manuelles (Revue Cochrane 2020)."
+        },
+        "replaceInterval": {
+          "title": "Change la tête tous les 90 jours",
+          "description": "Au bout d'environ 3 mois les brins s'écartent et retirent jusqu'à 40 % de plaque en moins. L'ADA et la FDI recommandent donc de remplacer la brosse (ou la tête) tous les 90 jours ou plus tôt si les brins s'usent."
+        },
+        "fluorideTiming": {
+          "title": "Ne rince pas le fluor",
+          "description": "Crache—sans rincer—après le brossage. Laisser une fine pellicule de 1 450 ppm de fluor sur l'émail peut réduire le risque de carie d'environ 25 % (guide Public Health England 2017)."
+        },
+        "pressure": {
+          "title": "Doucement sur la pression",
+          "description": "Appuyer plus fort ≠ nettoyer mieux. Une force >150 g peut provoquer une récession gingivale ; l'élimination de la plaque plafonne autour de 100 g. Laisse les brins faire le travail."
+        },
+        "tongueClean": {
+          "title": "Pense à ta langue",
+          "description": "60 à 90 % des composés responsables de la mauvaise haleine proviennent du dos de la langue. Un passage rapide de 10 secondes peut réduire de moitié ces composés volatils soufrés."
+        }
+      },
+      "item": "Brosse à dents",
+      "picker": {
+        "nameLabel": "Nom",
+        "namePlaceholder": "ex. Brosse quotidienne",
+        "age": "Âge de la brosse",
+        "type": "Type",
+        "head": "Tête de brosse",
+        "save": "Ajouter la brosse"
+      },
+      "agePreset": {
+        "brandNew_short": "Neuve ✨",
+        "lessThan1Week_short": "<1 semaine",
+        "oneTwoWeeks_short": "1-2 semaines",
+        "threeFourWeeks_short": "3-4 semaines",
+        "twoMonths_short": "2 mois",
+        "threeMonths_short": "3 mois"
       }
     },
     "homeScreen": {
@@ -382,7 +467,8 @@
       "cancelButton": "Annuler",
       "targetUpdatedAlert": "Objectif mis à jour à {{newTarget}} minutes !",
       "invalidInputAlert": "Merci d'entrer un nombre valide de minutes.",
-      "chooseTargetPrompt": "Ou choisis parmi les objectifs fréquents :"
+      "chooseTargetPrompt": "Ou choisis parmi les objectifs fréquents :",
+      "selectTitle": "Heures rappel"
     },
     "brushingResultsScreen": {
       "title": "Brossage terminé !",
@@ -406,9 +492,9 @@
       "right": "Droite"
     },
     "settings": {
-      "name": "Paramètres",
+      "name": "paramètres",
       "appSettings": {
-        "title": "Paramètres de l'application"
+        "title": "Param. app"
       },
       "resetOnboarding": {
         "name": "Réinitialiser l'accueil",
@@ -418,7 +504,7 @@
       },
       "mascotTone": {
         "name": "Ton de la mascotte",
-        "selectTitle": "Choisissez le ton de Nubo",
+        "selectTitle": "Ton de Nubo",
         "error": {
           "title": "Erreur de ton",
           "message": "Impossible de changer le ton de la mascotte. Veuillez réessayer."
@@ -433,25 +519,63 @@
         }
       },
       "brushingSettings": {
-        "title": "Paramètres de brossage",
-        "reminderTime": "Heure de rappel",
-        "frequency": "Fréquence de brossage",
-        "targetTime": "Durée cible de brossage",
+        "title": "Param. brossage",
+        "reminderTime": "Heure rappel",
+        "frequency": "Fréq. brossage",
+        "targetTime": "Durée cible",
         "toothbrush": "Menu Brosse"
       },
       "reminderTimes": {
         "none": "Aucun",
         "one": "1 rappel",
-        "multiple": "{{count}} rappels"
+        "multiple": "{{count}} rappels",
+        "nameLabel": "Nom du rappel",
+        "hour": "Heure",
+        "minute": "Minute",
+        "addNew": "Ajouter un nouveau rappel",
+        "morning": "Matin",
+        "afternoon": "Après-midi",
+        "evening": "Soir",
+        "night": "Avant le coucher",
+        "custom": "Personnalisé",
+        "customBadge": "Perso",
+        "addReminder": "Ajouter",
+        "selectTitle": "Heures rappel"
       },
       "dailyFrequency": {
+        "selectTitle": "Fréq. jour.",
         "options": {
-          "standard_short": "2 fois"
+          "minimal_label": "1×/jour",
+          "minimal_description": "Entretien basique",
+          "standard_label": "2×/jour",
+          "standard_description": "Matin & soir",
+          "standard_short": "2 fois",
+          "recommended_label": "3×/jour",
+          "recommended_description": "Après chaque repas",
+          "comprehensive_label": "4+×/jour",
+          "comprehensive_description": "Soin maximal"
+        },
+        "countFormat": "{{count}} fois",
+        "error": {
+          "title": "Erreur fréquence",
+          "message": "Impossible de changer la fréquence quotidienne. Veuillez réessayer."
         }
       },
       "brushingTarget": {
+        "selectTitle": "Durée cible",
         "options": {
-          "standard_label": "2 minutes"
+          "quick_label": "1,5 min",
+          "quick_description": "Rapide et efficace",
+          "standard_label": "2 min",
+          "standard_description": "Recommandé",
+          "thorough_label": "3 min",
+          "thorough_description": "Nettoyage extra",
+          "comprehensive_label": "4 min",
+          "comprehensive_description": "Soin complet"
+        },
+        "error": {
+          "title": "Erreur objectif",
+          "message": "Impossible de changer la durée cible. Veuillez réessayer."
         }
       },
       "about": {

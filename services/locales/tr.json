@@ -145,7 +145,11 @@
     "common": {
       "ok": "Tamam",
       "cancel": "İptal",
-      "Continue": "Devam"
+      "Continue": "Devam",
+      "save": "Kaydet",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "add": "Ekle"
     },
     "languages": {
       "en": "English",
@@ -258,16 +262,17 @@
       },
       "days": "Kullanım günü: {{count}}",
       "current": {
-        "none": "Kayıtlı fırça yok",
-        "addFirst": "Takip için ilk fırçanı ekle",
-        "age": "Yaş"
+        "none": "Yok",
+        "addFirst": "İlk fırçanı ekle",
+        "age": "Yaş",
+        "brushings": "{{count}} fırçalama"
       },
       "type": {
         "manual": "Manuel",
         "electric": "Elektrikli"
       },
       "category": {
-        "regular": "Standart",
+        "regular": "Normal",
         "braces": "Diş Teli",
         "sensitive": "Hassas",
         "whitening": "Beyazlatıcı"
@@ -281,14 +286,14 @@
         "days": "{{count}} gün"
       },
       "status": {
-        "brandNew": "Yepyeni",
+        "brandNew": "Yeni",
         "fresh": "Taze",
         "good": "İyi",
-        "due": "Yakında Değiştir",
-        "overdue": "Gecikti"
+        "due": "Yakında değiştir",
+        "overdue": "Gecikmiş"
       },
       "newBrush": {
-        "addNew": "Yeni Diş Fırçası Ekle"
+        "addNew": "Yeni Fırça Ekle"
       },
       "history": {
         "title": "Fırça Geçmişi"
@@ -296,25 +301,42 @@
       "infoCards": {
         "title": "Fırça İpuçları",
         "plaqueRemoval": {
-          "title": "Plak Temizliği 101",
-          "description": "Dönen–salınımlı elektrikli fırçalar 3 ay sonunda manuel fırçalara göre %21'e kadar daha fazla plak temizler."
+          "title": "Plak Giderme 101",
+          "description": "Klinik çalışmalar, salınımlı–dönen başlığa sahip elektrikli fırçaların 3 aylık kullanım sonunda manuel fırçalara göre %21'e kadar daha fazla plak uzaklaştırdığını gösteriyor (Cochrane Derlemesi 2020)."
         },
         "replaceInterval": {
-          "title": "Başlıkları 90 Günde Değiştir",
-          "description": "Yaklaşık 3 ay sonra kıllar dağılır ve etkinlik düşer. Fırçayı veya başlığı 90 günde bir değiştir."
+          "title": "Başlığı 90 günde bir değiştir",
+          "description": "Yaklaşık 3 ay sonra kıllar açılır ve plak giderme %40'a kadar düşer. ADA ve FDI bu nedenle fırçayı (veya başlığı) 90 günde bir ya da kıllar erken yıpranırsa daha önce değiştirmeyi önerir."
         },
         "fluorideTiming": {
-          "title": "Florürü Durulama",
-          "description": "Fırçalama sonrası tükür ama durulama; florür mineyi korumaya devam etsin."
+          "title": "Florürü durulama",
+          "description": "Fırçalama sonrası yalnızca tükür; suyla çalkalama. Mine üzerinde 1 450 ppm florürden ince bir film bırakmak çürük riskini ~%25 azaltabilir (Public Health England 2017)."
         },
         "pressure": {
-          "title": "Baskıyı Azalt",
-          "description": "Daha sert bastırmak daha iyi temizlemez; aşırı güç diş etlerine zarar verebilir."
+          "title": "Baskıyı hafif tut",
+          "description": "Daha sert bastırmak = daha temiz değil. 150 g'den fazla kuvvet diş eti çekilmesine yol açabilir; plak giderme ~100 g civarında plato yapar. İşin çoğunu kıllara bırak."
         },
         "tongueClean": {
-          "title": "Dili Unutma",
-          "description": "Kısa bir dil süpürme kötü koku bileşiklerini %50'ye kadar azaltır."
+          "title": "Dili unutma",
+          "description": "Ağız kokusuna neden olan bileşiklerin %60–90'ı dilin arka yüzeyinden gelir. 10 saniyelik hızlı bir dil temizliği bu uçucu kükürt bileşiklerini yarı yarıya azaltabilir."
         }
+      },
+      "item": "Diş Fırçası",
+      "picker": {
+        "nameLabel": "İsim",
+        "namePlaceholder": "ör. Günlük Fırça",
+        "age": "Fırça yaşı",
+        "type": "Tip",
+        "head": "Fırça başlığı",
+        "save": "Fırça ekle"
+      },
+      "agePreset": {
+        "brandNew_short": "Yeni ✨",
+        "lessThan1Week_short": "<1 hafta",
+        "oneTwoWeeks_short": "1-2 hafta",
+        "threeFourWeeks_short": "3-4 hafta",
+        "twoMonths_short": "2 ay",
+        "threeMonths_short": "3 ay"
       }
     },
     "homeScreen": {
@@ -355,7 +377,7 @@
         "description": "Fırçalama başarılarını kontrol et"
       },
       "settings": {
-        "name": "Ayarlar",
+        "name": "ayarlar",
         "description": "Uygulama ayarları ve tercihler",
         "appSettings": {
           "title": "Uygulama Ayarları"
@@ -395,14 +417,14 @@
           "title": "Fırçalama Ayarları",
           "reminderTime": "Hatırlatma Saati",
           "frequency": "Fırçalama Sıklığı",
-          "targetTime": "Hedef Fırçalama Süresi",
-          "toothbrush": "Diş Fırçası Menüsü"
+          "targetTime": "Hedef Süre",
+          "toothbrush": "Fırça Menüsü"
         },
         "reminderTimes": {
           "none": "Yok",
           "one": "1 hatırlatma",
           "multiple": "{{count}} hatırlatma",
-          "selectTitle": "Hatırlatma Saatlerini Ayarla",
+          "selectTitle": "Hatırlatma Saatleri",
           "morning": "Sabah",
           "afternoon": "Öğleden Sonra",
           "evening": "Akşam",
@@ -415,14 +437,14 @@
           "nameLabel": "Hatırlatma Adı",
           "hour": "Saat",
           "minute": "Dakika",
-          "addReminder": "Hatırlatma Ekle",
+          "addReminder": "Ekle",
           "error": {
             "title": "Hatırlatma Hatası",
             "message": "Hatırlatma zamanı güncellenemedi. Lütfen tekrar deneyin."
           }
         },
         "dailyFrequency": {
-          "selectTitle": "Günlük Sıklığı Seç",
+          "selectTitle": "Günlük Sıklık",
           "options": {
             "minimal_label": "Günde 1 kez",
             "minimal_description": "Temel bakım",
@@ -434,13 +456,14 @@
             "comprehensive_label": "Günde 4+ kez",
             "comprehensive_description": "Maksimum bakım"
           },
+          "countFormat": "{{count}} kez",
           "error": {
             "title": "Sıklık Hatası",
             "message": "Günlük fırçalama sıklığı değiştirilemedi. Lütfen tekrar deneyin."
           }
         },
         "brushingTarget": {
-          "selectTitle": "Hedef Süreyi Seç",
+          "selectTitle": "Hedef Süre",
           "options": {
             "quick_label": "1.5 dakika",
             "quick_description": "Hızlı ama etkili",
@@ -570,7 +593,7 @@
     "right": "Sağ"
   },
   "settings": {
-    "name": "Ayarlar",
+    "name": "ayarlar",
     "appSettings": {
       "title": "Uygulama Ayarları"
     },
@@ -600,14 +623,14 @@
       "title": "Fırçalama Ayarları",
       "reminderTime": "Hatırlatma Saati",
       "frequency": "Fırçalama Sıklığı",
-      "targetTime": "Hedef Fırçalama Süresi",
-      "toothbrush": "Diş Fırçası Menüsü"
+      "targetTime": "Hedef Süre",
+      "toothbrush": "Fırça Menüsü"
     },
     "reminderTimes": {
       "none": "Yok",
       "one": "1 hatırlatma",
       "multiple": "{{count}} hatırlatma",
-      "selectTitle": "Hatırlatma Saatlerini Ayarla",
+      "selectTitle": "Hatırlatma Saatleri",
       "morning": "Sabah",
       "afternoon": "Öğleden Sonra",
       "evening": "Akşam",
@@ -620,14 +643,14 @@
       "nameLabel": "Hatırlatma Adı",
       "hour": "Saat",
       "minute": "Dakika",
-      "addReminder": "Hatırlatma Ekle",
+      "addReminder": "Ekle",
       "error": {
         "title": "Hatırlatma Hatası",
         "message": "Hatırlatma zamanı güncellenemedi. Lütfen tekrar deneyin."
       }
     },
     "dailyFrequency": {
-      "selectTitle": "Günlük Sıklığı Seç",
+      "selectTitle": "Günlük Sıklık",
       "options": {
         "minimal_label": "Günde 1 kez",
         "minimal_description": "Temel bakım",
@@ -639,13 +662,14 @@
         "comprehensive_label": "Günde 4+ kez",
         "comprehensive_description": "Maksimum bakım"
       },
+      "countFormat": "{{count}} kez",
       "error": {
         "title": "Sıklık Hatası",
         "message": "Günlük fırçalama sıklığı değiştirilemedi. Lütfen tekrar deneyin."
       }
     },
     "brushingTarget": {
-      "selectTitle": "Hedef Süreyi Seç",
+      "selectTitle": "Hedef Süre",
       "options": {
         "quick_label": "1.5 dakika",
         "quick_description": "Hızlı ama etkili",

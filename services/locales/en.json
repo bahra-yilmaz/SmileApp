@@ -148,7 +148,8 @@
     "Continue": "Continue",
     "edit": "Edit",
     "delete": "Delete",
-    "save": "Save"
+    "save": "Save",
+    "add": "Add"
   },
   "languages": {
     "en": "English",
@@ -263,7 +264,8 @@
     "current": {
       "none": "No toothbrush registered",
       "addFirst": "Add your first toothbrush to start tracking",
-      "age": "Age"
+      "age": "Age",
+      "brushings": "{{count}} brushing{{count, plural, one {} other {s}}}"
     },
     "type": {
       "manual": "Manual",
@@ -274,6 +276,15 @@
       "braces": "Braces",
       "sensitive": "Sensitive",
       "whitening": "Whitening"
+    },
+    "item": "Toothbrush",
+    "picker": {
+      "nameLabel": "Name",
+      "namePlaceholder": "e.g., Daily Driver",
+      "age": "Brush Age",
+      "type": "Type",
+      "head": "Toothbrush Head",
+      "save": "Add Brush"
     },
     "age": {
       "oneMonth": "1 month",
@@ -294,7 +305,9 @@
       "addNew": "Add New Toothbrush"
     },
     "history": {
-      "title": "Toothbrush History"
+      "title": "Toothbrush History",
+      "ageDays_one": "{{count}} day",
+      "ageDays_other": "{{count}} days"
     },
     "infoCards": {
       "title": "Toothbrush Tips",
@@ -318,6 +331,14 @@
         "title": "Remember Your Tongue",
         "description": "A quick tongue sweep reduces bad-breath compounds by up to 50%."
       }
+    },
+    "agePreset": {
+      "brandNew_short": "New ✨",
+      "lessThan1Week_short": "<1 week",
+      "oneTwoWeeks_short": "1-2 weeks",
+      "threeFourWeeks_short": "3-4 weeks",
+      "twoMonths_short": "2 months",
+      "threeMonths_short": "3 months"
     }
   },
   "homeScreen": {
@@ -411,7 +432,7 @@
         "nameLabel": "Reminder Name",
         "hour": "Hour",
         "minute": "Minute",
-        "addReminder": "Add Reminder",
+        "addReminder": "Add",
         "error": {
           "title": "Reminder Error",
           "message": "Failed to update reminder time. Please try again."
@@ -538,7 +559,7 @@
     "right": "Right"
   },
   "settings": {
-    "name": "Settings",
+    "name": "settings",
     "appSettings": {
       "title": "App Settings"
     },
@@ -588,7 +609,7 @@
       "nameLabel": "Reminder Name",
       "hour": "Hour",
       "minute": "Minute",
-      "addReminder": "Add Reminder",
+      "addReminder": "Add",
       "error": {
         "title": "Reminder Error",
         "message": "Failed to update reminder time. Please try again."
@@ -607,6 +628,7 @@
         "comprehensive_label": "4+ times per day",
         "comprehensive_description": "Maximum care"
       },
+      "countFormat": "{{count}} times",
       "error": {
         "title": "Frequency Error",
         "message": "Failed to change daily brushing frequency. Please try again."
@@ -634,6 +656,7 @@
     },
     "appVersion": {
       "name": "App Version"
-    }
+    },
+    "item": "Toothbrush"
   }
 } 

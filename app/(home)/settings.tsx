@@ -508,7 +508,9 @@ export default function SettingsScreen() {
               </View>
               <View style={styles.languageInfo}>
                 <ThemedText style={styles.currentLanguageText}>
-                  {currentFrequency ? `${currentFrequency.count} times` : t('settings.dailyFrequency.options.standard_short', '2 times')}
+                  {currentFrequency 
+                    ? t('settings.dailyFrequency.countFormat', `${currentFrequency.count} times`, { count: currentFrequency.count })
+                    : t('settings.dailyFrequency.options.standard_short', '2 times')}
                 </ThemedText>
               <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
               </View>

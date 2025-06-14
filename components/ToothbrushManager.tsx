@@ -130,15 +130,15 @@ export default function ToothbrushManager({
     if (age.months >= 1) {
       return age.months === 1 
         ? t('toothbrush.age.oneMonth', '1 month')
-        : t('toothbrush.age.months', `${age.months} months`);
+        : t('toothbrush.age.months', { count: age.months, defaultValue: `${age.months} months` });
     } else if (age.weeks >= 1) {
       return age.weeks === 1 
         ? t('toothbrush.age.oneWeek', '1 week')
-        : t('toothbrush.age.weeks', `${age.weeks} weeks`);
+        : t('toothbrush.age.weeks', { count: age.weeks, defaultValue: `${age.weeks} weeks` });
     } else {
       return age.days === 1 
         ? t('toothbrush.age.oneDay', '1 day')
-        : t('toothbrush.age.days', `${age.days} days`);
+        : t('toothbrush.age.days', { count: age.days, defaultValue: `${age.days} days` });
     }
   };
 
@@ -330,7 +330,7 @@ export default function ToothbrushManager({
               <ThemedText style={styles.toothbrushCardTitle} numberOfLines={2}>
                 {toothbrushData.current.name 
                   ? toothbrushData.current.name 
-                  : `${t(`toothbrush.type.${toothbrushData.current.type}`, toothbrushData.current.type === 'electric' ? 'Electric' : 'Manual')} Toothbrush`}
+                  : `${t(`toothbrush.type.${toothbrushData.current.type}`, toothbrushData.current.type === 'electric' ? 'Electric' : 'Manual')} ${t('toothbrush.item', 'Toothbrush')}`}
               </ThemedText>
               <View style={[styles.statusBadge, { backgroundColor: status.color }]}> 
                 <ThemedText style={styles.statusText}>{status.text}</ThemedText>
@@ -345,7 +345,7 @@ export default function ToothbrushManager({
               </ThemedText>
               {toothbrushData.history.length > 0 && (
                 <ThemedText style={styles.toothbrushCardHistoryRight}>
-                  {toothbrushData.history.length} {toothbrushData.history.length === 1 ? 'brushing' : 'brushings'}
+                  {t('toothbrush.current.brushings', { count: toothbrushData.history.length, defaultValue: `${toothbrushData.history.length} brushings` })}
                 </ThemedText>
               )}
             </View>
@@ -442,11 +442,11 @@ export default function ToothbrushManager({
     const endDate = brush.endDate ? new Date(brush.endDate) : new Date();
     const usageDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
     
-    const fallbackName = `${t(`toothbrush.type.${brush.type}`, brush.type === 'electric' ? 'Electric' : 'Manual')} Toothbrush`;
+    const fallbackName = `${t(`toothbrush.type.${brush.type}`, brush.type === 'electric' ? 'Electric' : 'Manual')} ${t('toothbrush.item', 'Toothbrush')}`;
     const brushingCount = usageDays * 2; // assuming 2 brushings per day
     const reminderLike: ReminderTime = {
       id: brush.id,
-      time: `${usageDays}d`,
+      time: t('toothbrush.history.ageDays', { count: usageDays, defaultValue: `${usageDays} days` }),
       label: brush.name || fallbackName,
       enabled: false,
     };
@@ -525,11 +525,11 @@ export default function ToothbrushManager({
                 const endDate = brush.endDate ? new Date(brush.endDate) : new Date();
                 const usageDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
 
-                const fallbackName = `${t(`toothbrush.type.${brush.type}`, brush.type === 'electric' ? 'Electric' : 'Manual')} Toothbrush`;
+                const fallbackName = `${t(`toothbrush.type.${brush.type}`, brush.type === 'electric' ? 'Electric' : 'Manual')} ${t('toothbrush.item', 'Toothbrush')}`;
                 const brushingCount = usageDays * 2;
                 const reminderLike: ReminderTime = {
                   id: brush.id,
-                  time: `${usageDays}d`,
+                  time: t('toothbrush.history.ageDays', { count: usageDays, defaultValue: `${usageDays} days` }),
                   label: brush.name || fallbackName,
                   enabled: false,
                 };

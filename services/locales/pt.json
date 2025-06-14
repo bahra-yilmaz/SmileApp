@@ -146,7 +146,11 @@
     "common": {
       "ok": "OK",
       "cancel": "Cancelar",
-      "Continue": "Continuar"
+      "Continue": "Continuar",
+      "save": "Salvar",
+      "edit": "Editar",
+      "delete": "Excluir",
+      "add": "Adicionar"
     },
     "languages": {
       "en": "English",
@@ -217,7 +221,7 @@
       },
       "nuboToneScreen": {
         "title": "Tom do Nubo",
-        "description": "Escolha como o Nubo interage com você",
+        "description": "Como o Nubo interage com você",
         "options": {
           "supportive_label": "Apoiador",
           "supportive_description": "Gentil e prestativo",
@@ -252,9 +256,90 @@
       }
     },
     "toothbrush": {
+      "title": "Menu Escova",
+      "error": {
+        "title": "Erro",
+        "message": "Não foi possível salvar a escova. Tente novamente."
+      },
       "days": "Dias de uso: {{count}}",
       "current": {
-        "none": "Nenhum"
+        "none": "Nenhuma",
+        "addFirst": "Adicione sua primeira escova para iniciar",
+        "age": "Idade",
+        "brushings": "{{count}} escovação{{count, plural, one {} other {es}}}"
+      },
+      "type": {
+        "manual": "Manual",
+        "electric": "Elétrica"
+      },
+      "category": {
+        "regular": "Regular",
+        "braces": "Aparelho",
+        "sensitive": "Sensível",
+        "whitening": "Branqueadora",
+        "item": "Escova"
+      },
+      "age": {
+        "oneMonth": "1 mês",
+        "months": "{{count}} meses",
+        "oneWeek": "1 semana",
+        "weeks": "{{count}} semanas",
+        "oneDay": "1 dia",
+        "days": "{{count}} dias"
+      },
+      "status": {
+        "brandNew": "Nova",
+        "fresh": "Fresca",
+        "good": "Boa",
+        "due": "Trocar em breve",
+        "overdue": "Vencida"
+      },
+      "newBrush": {
+        "addNew": "Adicionar escova"
+      },
+      "history": {
+        "title": "Histórico de Escovas",
+        "ageDays_one": "{{count}} dia",
+        "ageDays_other": "{{count}} dias"
+      },
+      "infoCards": {
+        "title": "Dicas de Escova",
+        "plaqueRemoval": {
+          "title": "Remoção de placa 101",
+          "description": "Ensaios clínicos mostram que escovas elétricas com cabeças oscilantes-rotativas removem até 21 % mais placa após 3 meses em comparação com escovas manuais (Revisão Cochrane 2020)."
+        },
+        "replaceInterval": {
+          "title": "Troque o cabeçal a cada 90 dias",
+          "description": "Após cerca de 3 meses as cerdas se abrem e removem até 40 % menos placa. ADA e FDI recomendam substituir a escova (ou o cabeçal) a cada 90 dias ou antes se as cerdas se desgastarem."
+        },
+        "fluorideTiming": {
+          "title": "Não enxágue o flúor",
+          "description": "Cuspir—sem enxaguar—após escovar. Deixar uma película fina de 1 450 ppm de flúor sobre o esmalte pode reduzir o risco de cáries em ~25 % (orientação Public Health England 2017)."
+        },
+        "pressure": {
+          "title": "Leve na pressão",
+          "description": "Pressionar mais forte ≠ limpar melhor. Forças >150 g podem causar recessão gengival; a remoção de placa se estabiliza em torno de 100 g. Deixe as cerdas trabalharem."
+        },
+        "tongueClean": {
+          "title": "Não esqueça a língua",
+          "description": "Entre 60 % e 90 % dos compostos causadores de mau hálito vêm do dorso da língua. Uma rápida raspagem de 10 segundos pode reduzir esses compostos voláteis pela metade."
+        }
+      },
+      "picker": {
+        "nameLabel": "Nome",
+        "namePlaceholder": "ex.: Escova diária",
+        "age": "Idade da escova",
+        "type": "Tipo",
+        "head": "Cabeça da escova",
+        "save": "Adicionar escova"
+      },
+      "agePreset": {
+        "brandNew_short": "Nova ✨",
+        "lessThan1Week_short": "<1 semana",
+        "oneTwoWeeks_short": "1-2 semanas",
+        "threeFourWeeks_short": "3-4 semanas",
+        "twoMonths_short": "2 meses",
+        "threeMonths_short": "3 meses"
       }
     },
     "homeScreen": {
@@ -411,9 +496,9 @@
     "right": "Direita"
   },
   "settings": {
-    "name": "Configurações",
+    "name": "configurações",
     "appSettings": {
-      "title": "Configurações do aplicativo"
+      "title": "Config. do app"
     },
     "resetOnboarding": {
       "name": "Reiniciar onboarding",
@@ -423,7 +508,7 @@
     },
     "mascotTone": {
       "name": "Tom da mascote",
-      "selectTitle": "Escolha o tom do Nubo",
+      "selectTitle": "Tom do Nubo",
       "error": {
         "title": "Erro de tom",
         "message": "Não foi possível alterar o tom da mascote. Tente novamente."
@@ -438,25 +523,63 @@
       }
     },
     "brushingSettings": {
-      "title": "Configurações de escovação",
-      "reminderTime": "Hora do lembrete",
-      "frequency": "Frequência de escovação",
-      "targetTime": "Tempo alvo de escovação",
-      "toothbrush": "Menu da escova"
+      "title": "Config. Escovação",
+      "reminderTime": "Hora Lembrete",
+      "frequency": "Freq. Escovação",
+      "targetTime": "Tempo Alvo",
+      "toothbrush": "Menu Escova"
     },
     "reminderTimes": {
       "none": "Nenhum",
       "one": "1 lembrete",
-      "multiple": "{{count}} lembretes"
+      "multiple": "{{count}} lembretes",
+      "nameLabel": "Nome do lembrete",
+      "hour": "Hora",
+      "minute": "Minuto",
+      "addNew": "Adicionar novo lembrete",
+      "morning": "Manhã",
+      "afternoon": "Tarde",
+      "evening": "Noite",
+      "night": "Antes de dormir",
+      "custom": "Personalizado",
+      "customBadge": "Personalizado",
+      "addReminder": "Adicionar",
+      "selectTitle": "Horas Lembrete"
     },
     "dailyFrequency": {
+      "selectTitle": "Freq. diária",
       "options": {
-        "standard_short": "2 vezes"
+        "minimal_label": "1x/dia",
+        "minimal_description": "Manutenção básica",
+        "standard_label": "2x/dia",
+        "standard_description": "Manhã e noite",
+        "standard_short": "2 vezes",
+        "recommended_label": "3x/dia",
+        "recommended_description": "Após cada refeição",
+        "comprehensive_label": "4+x/dia",
+        "comprehensive_description": "Máximo cuidado"
+      },
+      "countFormat": "{{count}} vezes",
+      "error": {
+        "title": "Erro de frequência",
+        "message": "Não foi possível alterar a frequência diária de escovação. Tente novamente."
       }
     },
     "brushingTarget": {
+      "selectTitle": "Tempo Alvo",
       "options": {
-        "standard_label": "2 minutos"
+        "quick_label": "1,5 min",
+        "quick_description": "Rápido e eficaz",
+        "standard_label": "2 min",
+        "standard_description": "Recomendado",
+        "thorough_label": "3 min",
+        "thorough_description": "Limpeza extra",
+        "comprehensive_label": "4 min",
+        "comprehensive_description": "Cuidado completo"
+      },
+      "error": {
+        "title": "Erro de alvo",
+        "message": "Não foi possível alterar o tempo alvo. Tente novamente."
       }
     },
     "about": {

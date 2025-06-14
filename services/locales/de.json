@@ -145,7 +145,11 @@
     "common": {
       "ok": "OK",
       "cancel": "Abbrechen",
-      "Continue": "Weiter"
+      "Continue": "Weiter",
+      "save": "Speichern",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "add": "Hinzufügen"
     },
     "languages": {
       "en": "English",
@@ -247,9 +251,90 @@
       }
     },
     "toothbrush": {
-      "days": "Tage in Benutzung: {{count}}",
+      "title": "Bürstenmenü",
+      "error": {
+        "title": "Fehler",
+        "message": "Speichern fehlgeschlagen. Bitte erneut."
+      },
+      "days": "Tage in Nutzung: {{count}}",
       "current": {
-        "none": "Keine"
+        "none": "Keine",
+        "addFirst": "Füge deine erste Bürste hinzu",
+        "age": "Alter",
+        "brushings": "{{count}} Bürstung{{count, plural, one {} other {en}}}"
+      },
+      "type": {
+        "manual": "Manuell",
+        "electric": "Elektrisch"
+      },
+      "category": {
+        "regular": "Standard",
+        "braces": "Zahnspange",
+        "sensitive": "Sensitiv",
+        "whitening": "Weißend"
+      },
+      "age": {
+        "oneMonth": "1 Monat",
+        "months": "{{count}} Monate",
+        "oneWeek": "1 Woche",
+        "weeks": "{{count}} Wochen",
+        "oneDay": "1 Tag",
+        "days": "{{count}} Tage"
+      },
+      "status": {
+        "brandNew": "Neu",
+        "fresh": "Frisch",
+        "good": "Gut",
+        "due": "Bald wechseln",
+        "overdue": "Überfällig"
+      },
+      "newBrush": {
+        "addNew": "Neue Bürste"
+      },
+      "history": {
+        "title": "Bürsten-Verlauf",
+        "ageDays_one": "{{count}} Tag",
+        "ageDays_other": "{{count}} Tage"
+      },
+      "infoCards": {
+        "title": "Tipps zur Zahnbürste",
+        "plaqueRemoval": {
+          "title": "Plaqueentfernung 101",
+          "description": "Klinische Studien zeigen, dass elektrische Bürsten mit oszillierend-rotierendem Kopf nach 3 Monaten bis zu 21 % mehr Plaque entfernen als Handzahnbürsten (Cochrane-Review 2020)."
+        },
+        "replaceInterval": {
+          "title": "Wechsle den Bürstenkopf alle 90 Tage",
+          "description": "Nach etwa 3 Monaten spreizen sich die Borsten und entfernen bis zu 40 % weniger Plaque. ADA und FDI empfehlen deshalb, Bürste bzw. Kopf alle 90 Tage oder früher zu ersetzen, wenn die Borsten ausfransen."
+        },
+        "fluorideTiming": {
+          "title": "Fluorid nicht ausspülen",
+          "description": "Spucke nach dem Putzen aus, ohne zu spülen. Ein dünner Film von 1 450 ppm Fluorid auf dem Zahnschmelz kann das Kariesrisiko um ~25 % senken (Richtlinie Public Health England 2017)."
+        },
+        "pressure": {
+          "title": "Sanfter Druck genügt",
+          "description": "Stärkeres Drücken ≠ sauberer. >150 g Kraft können zu Zahnfleischrückgang führen; Plaqueentfernung stagniert bei ca. 100 g. Lass die Borsten arbeiten."
+        },
+        "tongueClean": {
+          "title": "Vergiss die Zunge nicht",
+          "description": "60–90 % der Mundgeruch verursachenden Stoffe stammen vom Zungenrücken. Ein 10-sekündiges Abstreichen kann diese flüchtigen Schwefelverbindungen halbieren."
+        }
+      },
+      "item": "Zahnbürste",
+      "picker": {
+        "nameLabel": "Name",
+        "namePlaceholder": "z.B. Tagesbürste",
+        "age": "Bürstenalter",
+        "type": "Typ",
+        "head": "Bürstenkopf",
+        "save": "Bürste hinzufügen"
+      },
+      "agePreset": {
+        "brandNew_short": "Neu ✨",
+        "lessThan1Week_short": "<1 Woche",
+        "oneTwoWeeks_short": "1-2 Wochen",
+        "threeFourWeeks_short": "3-4 Wochen",
+        "twoMonths_short": "2 Monate",
+        "threeMonths_short": "3 Monate"
       }
     },
     "homeScreen": {
@@ -409,7 +494,7 @@
       "title": "Choose Your\nLanguage"
     },
     "settings": {
-      "name": "Einstellungen",
+      "name": "einstellungen",
       "appSettings": {
         "title": "App-Einstellungen"
       },
@@ -437,24 +522,62 @@
       },
       "brushingSettings": {
         "title": "Putz-Einstellungen",
-        "reminderTime": "Erinnerungszeit",
+        "reminderTime": "Erinn.zeit",
         "frequency": "Putzfrequenz",
-        "targetTime": "Ziel-Putzzeit",
+        "targetTime": "Zielzeit",
         "toothbrush": "Bürstenmenü"
       },
       "reminderTimes": {
         "none": "Keine",
         "one": "1 Erinnerung",
-        "multiple": "{{count}} Erinnerungen"
+        "multiple": "{{count}} Erinnerungen",
+        "nameLabel": "Erinnerungsname",
+        "hour": "Stunde",
+        "minute": "Minute",
+        "addNew": "Neue Erinnerung hinzufügen",
+        "morning": "Morgen",
+        "afternoon": "Nachmittag",
+        "evening": "Abend",
+        "night": "Vor dem Schlafen",
+        "custom": "Benutzerdefiniert",
+        "customBadge": "Benutzerdefiniert",
+        "addReminder": "Hinzufügen",
+        "selectTitle": "Erinnerungszeiten"
       },
       "dailyFrequency": {
+        "selectTitle": "Frequenz/Tag",
         "options": {
-          "standard_short": "2-mal"
+          "minimal_label": "1×/Tag",
+          "minimal_description": "Grundpflege",
+          "standard_label": "2×/Tag",
+          "standard_description": "Morgen & Abend",
+          "standard_short": "2-mal",
+          "recommended_label": "3×/Tag",
+          "recommended_description": "Nach jeder Mahlzeit",
+          "comprehensive_label": "4+×/Tag",
+          "comprehensive_description": "Maximale Pflege"
+        },
+        "countFormat": "{{count}}-mal",
+        "error": {
+          "title": "Frequenzfehler",
+          "message": "Tägliche Putzfrequenz konnte nicht geändert werden. Bitte erneut versuchen."
         }
       },
       "brushingTarget": {
+        "selectTitle": "Zielzeit",
         "options": {
-          "standard_label": "2 Minuten"
+          "quick_label": "1,5 Min",
+          "quick_description": "Schnell & effektiv",
+          "standard_label": "2 Min",
+          "standard_description": "Empfohlen",
+          "thorough_label": "3 Min",
+          "thorough_description": "Extra gründlich",
+          "comprehensive_label": "4 Min",
+          "comprehensive_description": "Umfassende Pflege"
+        },
+        "error": {
+          "title": "Ziel-Fehler",
+          "message": "Zielzeit konnte nicht geändert werden. Bitte erneut versuchen."
         }
       },
       "about": {

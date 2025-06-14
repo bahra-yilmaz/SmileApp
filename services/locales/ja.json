@@ -145,7 +145,11 @@
     "common": {
       "ok": "OK",
       "cancel": "キャンセル",
-      "Continue": "続ける"
+      "Continue": "続行",
+      "save": "保存",
+      "edit": "編集",
+      "delete": "削除",
+      "add": "追加"
     },
     "languages": {
       "en": "English",
@@ -251,9 +255,88 @@
       }
     },
     "toothbrush": {
+      "title": "ブラシメニュー",
+      "error": {
+        "title": "エラー",
+        "message": "保存に失敗しました。再試行してください。"
+      },
       "days": "使用日数: {{count}}",
       "current": {
-        "none": "なし"
+        "none": "なし",
+        "addFirst": "最初のブラシを追加しましょう",
+        "age": "使用期間",
+        "brushings": "{{count}} 回のブラッシング"
+      },
+      "type": {
+        "manual": "手動",
+        "electric": "電動"
+      },
+      "category": {
+        "regular": "通常",
+        "braces": "矯正用",
+        "sensitive": "敏感",
+        "whitening": "ホワイトニング"
+      },
+      "age": {
+        "oneMonth": "1か月",
+        "months": "{{count}}か月",
+        "oneWeek": "1週間",
+        "weeks": "{{count}}週間",
+        "oneDay": "1日",
+        "days": "{{count}}日"
+      },
+      "status": {
+        "brandNew": "新品",
+        "fresh": "新しい",
+        "good": "良好",
+        "due": "交換間近",
+        "overdue": "交換時期"
+      },
+      "newBrush": {
+        "addNew": "新しいブラシを追加"
+      },
+      "history": {
+        "title": "ブラシ履歴"
+      },
+      "infoCards": {
+        "title": "ブラシの豆知識",
+        "plaqueRemoval": {
+          "title": "プラーク除去 101",
+          "description": "臨床試験では、振動回転式ヘッドを備えた電動ブラシは、手動ブラシと比較して 3 か月後に最大 21 % 多くのプラークを除去することが示されています（Cochrane Review 2020）。"
+        },
+        "replaceInterval": {
+          "title": "90 日ごとにブラシ/ヘッド交換",
+          "description": "約 3 か月で毛先が開き、プラーク除去率が最大 40 % 低下します。ADA と FDI は、毛先が開いた場合や 90 日ごとにブラシ（またはヘッド）を交換することを推奨しています。"
+        },
+        "fluorideTiming": {
+          "title": "フッ化物はすすがない",
+          "description": "ブラッシング後はうがいをせず吐き出すだけにします。1,450 ppm のフッ化物膜をエナメル質に残すことで虫歯リスクを約 25 % 低減できます（Public Health England 2017）。"
+        },
+        "pressure": {
+          "title": "力を入れすぎない",
+          "description": "強く押す＝よりクリーンではありません。150 g 以上の力は歯肉退縮を引き起こす可能性があり、プラーク除去は 100 g あたりで頭打ちになります。毛先に任せましょう。"
+        },
+        "tongueClean": {
+          "title": "舌掃除を忘れずに",
+          "description": "口臭の原因物質の 60〜90 % は舌背由来です。10 秒程度の舌掃除で揮発性硫黄化合物を 50 % 以上減少させることができます。"
+        }
+      },
+      "item": "歯ブラシ",
+      "picker": {
+        "nameLabel": "名前",
+        "namePlaceholder": "例: 毎日ブラシ",
+        "age": "ブラシの使用期間",
+        "type": "タイプ",
+        "head": "ブラシヘッド",
+        "save": "ブラシを追加"
+      },
+      "agePreset": {
+        "brandNew_short": "新品 ✨",
+        "lessThan1Week_short": "1週間未満",
+        "oneTwoWeeks_short": "1-2週間",
+        "threeFourWeeks_short": "3-4週間",
+        "twoMonths_short": "2か月",
+        "threeMonths_short": "3か月"
       }
     },
     "homeScreen": {
@@ -386,7 +469,8 @@
     "cancelButton": "キャンセル",
     "targetUpdatedAlert": "目標が{{newTarget}}分に更新されました！",
     "invalidInputAlert": "有効な分数を入力してください。",
-    "chooseTargetPrompt": "よく使う目標から選ぶ："
+    "chooseTargetPrompt": "よく使う目標から選ぶ：",
+    "selectTitle": "リマインダー時間"
   },
   "brushingResultsScreen": {
     "title": "ブラッシング完了！",
@@ -438,24 +522,62 @@
     },
     "brushingSettings": {
       "title": "ブラッシング設定",
-      "reminderTime": "リマインダー時間",
-      "frequency": "ブラッシング頻度",
-      "targetTime": "目標ブラッシング時間",
+      "reminderTime": "通知時間",
+      "frequency": "頻度",
+      "targetTime": "目標時間",
       "toothbrush": "ブラシメニュー"
     },
     "reminderTimes": {
       "none": "なし",
       "one": "1 件のリマインダー",
-      "multiple": "{{count}} 件のリマインダー"
+      "multiple": "{{count}} 件のリマインダー",
+      "nameLabel": "リマインダー名",
+      "hour": "時",
+      "minute": "分",
+      "addNew": "新しいリマインダーを追加",
+      "morning": "朝",
+      "afternoon": "昼",
+      "evening": "夕方",
+      "night": "就寝前",
+      "custom": "カスタム",
+      "customBadge": "カスタム",
+      "addReminder": "追加",
+      "selectTitle": "リマインダー時間"
     },
     "dailyFrequency": {
+      "selectTitle": "回数選択",
       "options": {
-        "standard_short": "2 回"
+        "minimal_label": "1回/日",
+        "minimal_description": "基本ケア",
+        "standard_label": "2回/日",
+        "standard_description": "朝と夜",
+        "standard_short": "2回",
+        "recommended_label": "3回/日",
+        "recommended_description": "毎食後",
+        "comprehensive_label": "4回以上/日",
+        "comprehensive_description": "徹底ケア"
+      },
+      "countFormat": "{{count}}回",
+      "error": {
+        "title": "頻度エラー",
+        "message": "ブラッシング頻度を変更できませんでした。もう一度お試しください。"
       }
     },
     "brushingTarget": {
+      "selectTitle": "目標時間",
       "options": {
-        "standard_label": "2 分"
+        "quick_label": "1.5 分",
+        "quick_description": "短く効果的",
+        "standard_label": "2 分",
+        "standard_description": "推奨",
+        "thorough_label": "3 分",
+        "thorough_description": "より丁寧に",
+        "comprehensive_label": "4 分",
+        "comprehensive_description": "徹底ケア"
+      },
+      "error": {
+        "title": "目標エラー",
+        "message": "目標時間を変更できませんでした。再試行してください。"
       }
     },
     "about": {
