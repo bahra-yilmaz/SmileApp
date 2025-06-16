@@ -263,10 +263,9 @@
       },
       "days": "Dias de uso: {{count}}",
       "current": {
+        "title": "Escova Atual",
         "none": "Nenhuma",
-        "addFirst": "Adicione sua primeira escova para iniciar",
-        "age": "Idade",
-        "brushings": "{{count}} escovação{{count, plural, one {} other {es}}}"
+        "age": "{{days}}d de uso"
       },
       "type": {
         "manual": "Manual",
@@ -276,8 +275,7 @@
         "regular": "Regular",
         "braces": "Aparelho",
         "sensitive": "Sensível",
-        "whitening": "Branqueadora",
-        "item": "Escova"
+        "whitening": "Clareamento"
       },
       "age": {
         "oneMonth": "1 mês",

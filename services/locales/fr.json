@@ -258,10 +258,9 @@
       },
       "days": "Jours d'utilisation : {{count}}",
       "current": {
+        "title": "Brosse Actuelle",
         "none": "Aucune",
-        "addFirst": "Ajoute ta première brosse pour commencer",
-        "age": "Âge",
-        "brushings": "{{count}} brossage{{count, plural, one {} other {s}}}"
+        "age": "{{days}}j d'ancienneté"
       },
       "type": {
         "manual": "Manuelle",
@@ -271,7 +270,7 @@
         "regular": "Classique",
         "braces": "Appareil",
         "sensitive": "Sensible",
-        "whitening": "Blanchissante"
+        "whitening": "Blanchiment"
       },
       "age": {
         "oneMonth": "1 mois",

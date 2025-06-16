@@ -262,10 +262,9 @@
     },
     "days": "Days in use: {{count}}",
     "current": {
-      "none": "No toothbrush registered",
-      "addFirst": "Add your first toothbrush to start tracking",
-      "age": "Age",
-      "brushings": "{{count}} brushing{{count, plural, one {} other {s}}}"
+      "title": "Current Toothbrush",
+      "none": "None",
+      "age": "{{days, number}}d old"
     },
     "type": {
       "manual": "Manual",
@@ -421,7 +420,7 @@
         "selectTitle": "Set Reminder Times",
         "none": "None set",
         "one": "1 reminder",
-        "multiple": "{{count}} reminders",
+        "multiple": "{{count, number}} reminders",
         "morning": "Morning",
         "evening": "Evening",
         "afternoon": "Afternoon",
@@ -597,7 +596,7 @@
     "reminderTimes": {
       "none": "None set",
       "one": "1 reminder",
-      "multiple": "{{count}} reminders",
+      "multiple": "{{count, number}} reminders",
       "selectTitle": "Set Reminder Times",
       "morning": "Morning",
       "afternoon": "Afternoon",

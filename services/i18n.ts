@@ -39,6 +39,28 @@ i18next
     fallbackLng: 'en', // Fallback language if a translation is missing
     interpolation: {
       escapeValue: false, // React already safes from xss
+      format: (value, format, lng, options) => {
+        if (format === 'number') {
+          if (lng === 'hi') {
+            // Use Devanagari digits 🇮🇳
+            return new Intl.NumberFormat('hi', { numberingSystem: 'deva' }).format(value as number);
+          }
+
+          if (lng === 'ja') {
+            // Intl currently does not output Kanji digits for decimal numbers via numberingSystem.
+            // Convert each Latin digit to its Kanji counterpart.
+            const kanjiDigits = ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+            return String(value)
+              .split('')
+              .map((char) => (char >= '0' && char <= '9' ? kanjiDigits[Number(char)] : char))
+              .join('');
+          }
+
+          // Default locale formatting (latn digits)
+          return new Intl.NumberFormat(lng).format(value as number);
+        }
+        return value;
+      },
     },
     react: {
       useSuspense: false, // Set to true if you want to use Suspense for translation loading

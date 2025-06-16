@@ -262,10 +262,9 @@
       },
       "days": "Kullanım günü: {{count}}",
       "current": {
+        "title": "Mevcut Fırça",
         "none": "Yok",
-        "addFirst": "İlk fırçanı ekle",
-        "age": "Yaş",
-        "brushings": "{{count}} fırçalama"
+        "age": "{{days}}g günlük"
       },
       "type": {
         "manual": "Manuel",
@@ -275,7 +274,7 @@
         "regular": "Normal",
         "braces": "Diş Teli",
         "sensitive": "Hassas",
-        "whitening": "Beyazlatıcı"
+        "whitening": "Beyazlatma"
       },
       "age": {
         "oneMonth": "1 ay",

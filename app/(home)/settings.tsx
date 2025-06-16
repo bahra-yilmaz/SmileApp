@@ -316,7 +316,7 @@ export default function SettingsScreen() {
     } else if (enabledCount === 1) {
       return t('settings.reminderTimes.one', '1 reminder');
     } else {
-      return t('settings.reminderTimes.multiple', `${enabledCount} reminders`);
+      return t('settings.reminderTimes.multiple', { count: enabledCount });
     }
   };
   
@@ -509,7 +509,7 @@ export default function SettingsScreen() {
               <View style={styles.languageInfo}>
                 <ThemedText style={styles.currentLanguageText}>
                   {currentFrequency 
-                    ? t('settings.dailyFrequency.countFormat', `${currentFrequency.count} times`, { count: currentFrequency.count })
+                    ? t('settings.dailyFrequency.countFormat', { count: currentFrequency.count })
                     : t('settings.dailyFrequency.options.standard_short', '2 times')}
                 </ThemedText>
               <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
@@ -545,7 +545,7 @@ export default function SettingsScreen() {
               <View style={styles.languageInfo}>
                 <ThemedText style={styles.currentLanguageText}>
                   {toothbrushData.current 
-                    ? `${Math.ceil((new Date().getTime() - new Date(toothbrushData.current.startDate).getTime()) / (1000 * 60 * 60 * 24))}d old`
+                    ? t('toothbrush.current.age', { days: Math.ceil((new Date().getTime() - new Date(toothbrushData.current.startDate).getTime()) / (1000 * 60 * 60 * 24)) })
                     : t('toothbrush.current.none', 'None')
                   }
                 </ThemedText>

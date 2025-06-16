@@ -258,10 +258,9 @@
       },
       "days": "Tage in Nutzung: {{count}}",
       "current": {
+        "title": "Aktuelle Zahnbürste",
         "none": "Keine",
-        "addFirst": "Füge deine erste Bürste hinzu",
-        "age": "Alter",
-        "brushings": "{{count}} Bürstung{{count, plural, one {} other {en}}}"
+        "age": "{{days}}T alt"
       },
       "type": {
         "manual": "Manuell",
@@ -271,7 +270,7 @@
         "regular": "Standard",
         "braces": "Zahnspange",
         "sensitive": "Sensitiv",
-        "whitening": "Weißend"
+        "whitening": "Aufhellung"
       },
       "age": {
         "oneMonth": "1 Monat",

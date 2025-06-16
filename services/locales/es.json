@@ -262,10 +262,9 @@
       },
       "days": "Días de uso: {{count}}",
       "current": {
+        "title": "Cepillo Actual",
         "none": "Ninguno",
-        "addFirst": "Agrega tu primer cepillo para empezar",
-        "age": "Edad",
-        "brushings": "{{count}} cepillado{{count, plural, one {} other {s}}}"
+        "age": "{{days}}d de antigüedad"
       },
       "type": {
         "manual": "Manual",

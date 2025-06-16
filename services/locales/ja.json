@@ -199,8 +199,8 @@
       "brushingGoalScreen": {
         "title": "ブラッシング目標を設定",
         "description": "1日に何回磨きますか？歯科医は少なくとも1日2回を推奨しています。",
-        "optionsLabel_one": "{{count}} 回/日",
-        "optionsLabel_other": "{{count}} 回/日",
+        "optionsLabel_one": "{{count, number}} 回/日",
+        "optionsLabel_other": "{{count, number}} 回/日",
         "question": "1日のブラッシング目標：",
         "startButton": "今すぐ開始"
       },
@@ -260,12 +260,11 @@
         "title": "エラー",
         "message": "保存に失敗しました。再試行してください。"
       },
-      "days": "使用日数: {{count}}",
+      "days": "使用日数: {{count, number}}",
       "current": {
+        "title": "現在の歯ブラシ",
         "none": "なし",
-        "addFirst": "最初のブラシを追加しましょう",
-        "age": "使用期間",
-        "brushings": "{{count}} 回のブラッシング"
+        "age": "使用{{days, number}}日"
       },
       "type": {
         "manual": "手動",
@@ -279,11 +278,11 @@
       },
       "age": {
         "oneMonth": "1か月",
-        "months": "{{count}}か月",
+        "months": "{{count, number}}か月",
         "oneWeek": "1週間",
-        "weeks": "{{count}}週間",
+        "weeks": "{{count, number}}週間",
         "oneDay": "1日",
-        "days": "{{count}}日"
+        "days": "{{count, number}}日"
       },
       "status": {
         "brandNew": "新品",
@@ -297,9 +296,9 @@
       },
       "history": {
         "title": "歯ブラシ履歴",
-        "ageDays": "{{count}}日",
-        "brushings_one": "{{count}}回のブラッシング",
-        "brushings_other": "{{count}}回のブラッシング"
+        "ageDays": "{{count, number}}日",
+        "brushings_one": "{{count, number}}回のブラッシング",
+        "brushings_other": "{{count, number}}回のブラッシング"
       },
       "infoCards": {
         "title": "歯ブラシのヒント",
@@ -340,7 +339,8 @@
         "threeFourWeeks_short": "3-4週間",
         "twoMonths_short": "2か月",
         "threeMonths_short": "3か月"
-      }
+      },
+      "selectTitle": "リマインダー時間"
     },
     "homeScreen": {
       "streakCard": {
@@ -412,7 +412,7 @@
     "healthStatusReplaceSoon": "交換が必要",
     "healthStatusFair": "普通",
     "brushingTrackerTitle": "ブラッシング履歴",
-    "brushesOnThisToothbrushText": "このブラシで {{count}} 回磨きました",
+    "brushesOnThisToothbrushText": "このブラシで {{count, number}} 回磨きました",
     "replaceHistoryTitle": "交換履歴",
     "replaceHistorySubtitle": "歯ブラシ交換の履歴を確認",
     "replacedOnDate": "交換日: {{date}}",
@@ -428,7 +428,7 @@
     "hideHistory": "履歴を非表示"
   },
   "streakOverlay": {
-    "title": "{{count}}日連続達成",
+    "title": "{{count, number}}日連続達成",
     "subtitle": "素晴らしい！",
     "achievementsTitle": "実績",
     "achievementsDescription": "獲得したバッジとマイルストーンを見る",
@@ -437,33 +437,33 @@
     "streakGoalsTitle": "連続目標",
     "streakGoalsDescription": "個人の目標を設定",
     "continuousBrushingsTitle": "続けていこう！",
-    "continuousBrushingsText": "{{count}}回連続成功",
+    "continuousBrushingsText": "{{count, number}}回連続成功",
     "streakHistoryTitle": "最高記録",
     "streakHistorySubtitle": "過去最高の連続記録",
-    "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}}日)",
+    "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration, number}}日)",
     "setReminderTitle": "リマインダーを設定",
     "setReminderSubtitle": "Nuboに通知させよう",
     "nuboMotivationTitle": "Nuboの登山！",
     "nuboMotivationText": "毎日続けるたびにNuboは山を登ります！",
     "nextSummitTitle": "次の山頂",
-    "daysToGoText": "あと{{count}}日！",
+    "daysToGoText": "あと{{count, number}}日！",
     "showHistory": "履歴を表示",
     "hideHistory": "履歴を非表示",
     "noHistory": "まだ記録がありません。続けましょう！"
   },
   "brushingTimeOverlay": {
     "title": "ブラッシング時間",
-    "timeProgressFormat": "{{currentTime}} / {{targetTime}}分",
+    "timeProgressFormat": "{{currentTime, number}} / {{targetTime, number}}分",
     "averageTimeImproving": "平均時間が向上中 🌟",
     "averageTimeDeclining": "もっと長く磨こう 💪",
     "brushingTrendTitle": "ブラッシングの傾向",
     "targetTitle": "目標時間を設定",
-    "targetDescriptionFormat": "現在の目標: {{targetMinutes}}分",
-    "targetOptionFormat": "{{option}}分",
+    "targetDescriptionFormat": "現在の目標: {{targetMinutes, number}}分",
+    "targetOptionFormat": "{{option, number}}分",
     "whyTimeMattersTitle": "なぜ時間が大切？",
     "whyTimeMattersText": "2分未満では歯垢が残ります。2〜3分を目指しましょう。",
     "targetProgressTitle": "目標の進捗",
-    "timeToGoFormat": "残り{{time}}！",
+    "timeToGoFormat": "残り{{time, number}}！",
     "shareStatsButton": "統計を共有",
     "setTargetButton": "新しい目標を設定",
     "editTargetButton": "目標を編集",
@@ -533,7 +533,7 @@
     "reminderTimes": {
       "none": "なし",
       "one": "1 件のリマインダー",
-      "multiple": "{{count}} 件のリマインダー",
+      "multiple": "{{count, number}} 件のリマインダー",
       "nameLabel": "リマインダー名",
       "hour": "時",
       "minute": "分",
@@ -560,7 +560,7 @@
         "comprehensive_label": "4回以上/日",
         "comprehensive_description": "徹底ケア"
       },
-      "countFormat": "{{count}}回",
+      "countFormat": "{{count, number}}回",
       "error": {
         "title": "頻度エラー",
         "message": "ブラッシング頻度を変更できませんでした。もう一度お試しください。"
