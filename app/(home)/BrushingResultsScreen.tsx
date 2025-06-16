@@ -9,11 +9,13 @@ import PrimaryButton from '../../components/ui/PrimaryButton';
 import LightContainer from '../../components/ui/LightContainer';
 import GlassmorphicCard from '../../components/ui/GlassmorphicCard';
 import DonutChart from '../../components/ui/DonutChart';
+import CountUpText from '../../components/ui/CountUpText';
 import { Colors } from '../../constants/Colors';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import ConfirmModal from '../../components/modals/ConfirmModal';
 import { useTranslation } from 'react-i18next';
 import { eventBus } from '../../utils/EventBus';
+import AnimatedProgressBar from '../../components/ui/AnimatedProgressBar';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -110,8 +112,10 @@ const BrushingResultsScreen = () => {
   
   const cardWidth = screenWidth * 0.4;
   const cardHeight = 110;
-  const card1Data = { progress: 75, value: "+90", label: "Points" };
-  const card2Data = { progress: 100, value: "+200", label: "Bonus" };
+  const card1Data = { progress: 75, value: 90, label: "Points" };
+  const card2Data = { progress: 100, value: 200, label: "Bonus" };
+
+  const motivationalProgress = 75; // percent
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
@@ -165,7 +169,7 @@ const BrushingResultsScreen = () => {
                       />
                     </View>
                     <View style={styles.metricTextContainer}>
-                      <ThemedText style={styles.metricValue}>{card1Data.value}</ThemedText>
+                      <CountUpText style={styles.metricValue} value={card1Data.value} prefix="+" />
                       <ThemedText style={styles.metricLabel}>{t('brushingResultsScreen.pointsCardLabel')}</ThemedText>
                     </View>
                   </>
@@ -211,7 +215,7 @@ const BrushingResultsScreen = () => {
                       />
                     </View>
                     <View style={styles.metricTextContainer}>
-                      <ThemedText style={styles.metricValue}>{card2Data.value}</ThemedText>
+                      <CountUpText style={styles.metricValue} value={card2Data.value} prefix="+" />
                       <ThemedText style={styles.metricLabel}>{t('brushingResultsScreen.bonusCardLabel')}</ThemedText>
                     </View>
                   </>
@@ -242,9 +246,7 @@ const BrushingResultsScreen = () => {
             </ThemedText>
             <View style={styles.progressCard}>
               <View style={styles.cardBlur}>
-                <View style={styles.progressBar}>
-                  <View style={[styles.progressFill, { width: '75%' }]} />
-                </View>
+                <AnimatedProgressBar progress={motivationalProgress} duration={800} />
               </View>
             </View>
           </View>
@@ -501,17 +503,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.2)',
     overflow: 'hidden',
-  },
-  progressBar: {
-    height: 8,
-    width: '100%',
-    backgroundColor: 'rgba(200, 200, 220, 0.3)',
-    borderRadius: 4,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: Colors.primary[500],
   },
   buttonRowContainer: {
     width: '100%',
