@@ -23,6 +23,7 @@ import ThemedText from '../ThemedText';
 import DonutChart from '../ui/DonutChart';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
+import { shareContent } from '../../utils/share';
 
 interface BrushingTimeOverlayProps {
   isVisible: boolean;
@@ -406,9 +407,15 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
                       : Colors.primary[600],
                 }
               ]}
-              onPress={() => {
-                console.log('Share stats button pressed');
+              onPress={async () => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                const durationString = `${minutes.toString().padStart(2, '0')}:${seconds
+                  .toString()
+                  .padStart(2, '0')}`;
+                await shareContent({
+                  title: t('brushingTimeOverlay.shareStatsButton'),
+                  message: `${t('brushingTimeOverlay.title')}: ${durationString} min — tracked via SmileApp 🦷✨`,
+                });
               }}
             >
               <MaterialCommunityIcons

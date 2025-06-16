@@ -9,7 +9,9 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  Image
+  Image,
+  Share,
+  InteractionManager,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useTheme } from '../ThemeProvider';
@@ -19,6 +21,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ThemedText from '../ThemedText';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
+import * as Sharing from 'expo-sharing';
+import ViewShot from 'react-native-view-shot';
+import ShareCard from '../ui/ShareCard';
 
 interface StreakOverlayProps {
   isVisible: boolean;
@@ -133,6 +138,10 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
     console.log(`Pressed: ${item.name}`);
     // Optionally close overlay or navigate
   };
+  
+  // Add ref and state for ShareCard
+  const viewShotRef = useRef<ViewShot>(null);
+  const [showShareCard, setShowShareCard] = useState(false);
   
   // If not visible and animation is complete, don't render anything
   if (!isVisible && !animationComplete) return null;
@@ -416,10 +425,47 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                       : Colors.primary[600],
                 }
               ]}
-              onPress={() => {
-                console.log('Share streak button pressed');
+              onPress={async () => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                // Add actual share logic here
+                // Show the hidden card for capture
+                setShowShareCard(true);
+                // Wait until ViewShot is mounted
+                await new Promise<void>((resolve) => {
+                  const check = () => {
+                    if (viewShotRef.current) {
+                      resolve();
+                    } else {
+                      setTimeout(check, 20);
+                    }
+                  };
+                  check();
+                });
+
+                // Extra small delay for fonts / images
+                await new Promise(r => setTimeout(r, 150));
+                try {
+                  const uri = await viewShotRef.current?.capture?.();
+                  if (!uri) throw new Error('Capture failed');
+                  if (await Sharing.isAvailableAsync()) {
+                    await Sharing.shareAsync(uri, {
+                      mimeType: 'image/png',
+                      dialogTitle: t('streakOverlay.shareStreakTitle'),
+                    });
+                  } else {
+                    // Built-in fallback
+                    await Share.share({
+                      url: uri,
+                      message: `${t('streakOverlay.title', { count: streakDays })}`,
+                    });
+                  }
+                } catch (err) {
+                  console.warn('Sharing failed, falling back to text', err);
+                  await Share.share({
+                    message: `${t('streakOverlay.title', { count: streakDays })} – I just hit a ${streakDays}-day brushing streak with #SmileApp 🦷✨`,
+                  });
+                } finally {
+                  setShowShareCard(false);
+                }
               }}
             >
               <MaterialCommunityIcons
@@ -435,6 +481,16 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
           </View>
         </Animated.View>
       </KeyboardAvoidingView>
+      {/* Hidden ShareCard for view-shot */}
+      {showShareCard && (
+        <ViewShot
+          ref={viewShotRef}
+          options={{ format: 'png', quality: 0.9, result: 'tmpfile' }}
+          style={{ position: 'absolute', top: -10000, left: 0 }}
+        >
+          <ShareCard type="streak" streakDays={streakDays} />
+        </ViewShot>
+      )}
     </View>
   );
 };

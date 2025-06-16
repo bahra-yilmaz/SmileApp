@@ -16,6 +16,8 @@ import ConfirmModal from '../../components/modals/ConfirmModal';
 import { useTranslation } from 'react-i18next';
 import { eventBus } from '../../utils/EventBus';
 import AnimatedProgressBar from '../../components/ui/AnimatedProgressBar';
+import * as Haptics from 'expo-haptics';
+import { shareContent } from '../../utils/share';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -72,7 +74,16 @@ const BrushingResultsScreen = () => {
   
   const handleOpenConfirmModal = () => setIsConfirmModalVisible(true);
   const handleCancelRevert = () => setIsConfirmModalVisible(false);
-  const handleShare = () => console.log('Share button pressed');
+  const handleShare = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    const timeString = `${brushingMinutes.toString().padStart(2, '0')}:${brushingSeconds
+      .toString()
+      .padStart(2, '0')}`;
+    await shareContent({
+      title: t('brushingResultsScreen.title'),
+      message: `${t('brushingResultsScreen.message')} – ${timeString} min brushed via SmileApp 🦷✨`,
+    });
+  };
 
   // Card content switching handlers
   const handlePointsCardPress = () => {
