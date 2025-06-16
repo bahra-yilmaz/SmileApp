@@ -330,6 +330,7 @@ const BrushingResultsScreen = () => {
 
       <ConfirmModal
         visible={isConfirmModalVisible}
+        icon={<MaterialCommunityIcons name="history" size={36} color={Colors.primary[600]} />}
         title={t('brushingResultsScreen.revertModalTitle')}
         message={t('brushingResultsScreen.revertModalMessage')}
         confirmText={t('brushingResultsScreen.revertModalConfirmButton')}
