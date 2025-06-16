@@ -296,10 +296,13 @@
         "addNew": "新しいブラシを追加"
       },
       "history": {
-        "title": "ブラシ履歴"
+        "title": "歯ブラシ履歴",
+        "ageDays": "{{count}}日",
+        "brushings_one": "{{count}}回のブラッシング",
+        "brushings_other": "{{count}}回のブラッシング"
       },
       "infoCards": {
-        "title": "ブラシの豆知識",
+        "title": "歯ブラシのヒント",
         "plaqueRemoval": {
           "title": "プラーク除去 101",
           "description": "臨床試験では、振動回転式ヘッドを備えた電動ブラシは、手動ブラシと比較して 3 か月後に最大 21 % 多くのプラークを除去することが示されています（Cochrane Review 2020）。"

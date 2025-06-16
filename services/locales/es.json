@@ -307,11 +307,13 @@
       "history": {
         "title": "Historial de Cepillos",
         "ageDays_one": "{{count}} día",
-        "ageDays_other": "{{count}} días"
+        "ageDays_other": "{{count}} días",
+        "brushings_one": "{{count}} cepillado",
+        "brushings_other": "{{count}} cepillados"
       },
       "infoCards": {
         "title": "Consejos sobre Cepillos",
-        "card1": {
+        "plaqueRemoval": {
           "title": "Eliminación de placa 101",
           "description": "Los ensayos clínicos muestran que los cepillos eléctricos con cabezales oscilantes-rotatorios eliminan hasta un 21 % más de placa tras 3 meses en comparación con los cepillos manuales (Revisión Cochrane 2020)."
         },

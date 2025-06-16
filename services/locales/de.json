@@ -294,7 +294,9 @@
       "history": {
         "title": "Bürsten-Verlauf",
         "ageDays_one": "{{count}} Tag",
-        "ageDays_other": "{{count}} Tage"
+        "ageDays_other": "{{count}} Tage",
+        "brushings_one": "{{count}} Bürstung",
+        "brushings_other": "{{count}} Bürstungen"
       },
       "infoCards": {
         "title": "Tipps zur Zahnbürste",

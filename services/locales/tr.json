@@ -296,7 +296,10 @@
         "addNew": "Yeni Fırça Ekle"
       },
       "history": {
-        "title": "Fırça Geçmişi"
+        "title": "Fırça Geçmişi",
+        "ageDays": "{{count}} gün",
+        "brushings_one": "{{count}} fırçalama",
+        "brushings_other": "{{count}} fırçalama"
       },
       "infoCards": {
         "title": "Fırça İpuçları",

@@ -296,10 +296,14 @@
         "addNew": "नया ब्रश जोड़ें"
       },
       "history": {
-        "title": "ब्रश इतिहास"
+        "title": "टूथब्रश इतिहास",
+        "ageDays_one": "{{count}} दिन",
+        "ageDays_other": "{{count}} दिन",
+        "brushings_one": "{{count}} ब्रशिंग",
+        "brushings_other": "{{count}} ब्रशिंग"
       },
       "infoCards": {
-        "title": "ब्रशिंग टिप्स",
+        "title": "टूथब्रश टिप्स",
         "plaqueRemoval": {
           "title": "प्लाक हटाना 101",
           "description": "नैदानिक परीक्षण बताते हैं कि ऑस्सिलेटिंग-रोटेटिंग सिर वाली इलेक्ट्रिक ब्रश तीन महीने के उपयोग के बाद मैनुअल ब्रश की तुलना में प्लाक को 21 % तक अधिक हटाती हैं (कोक्रेन समीक्षा 2020)।"
@@ -320,6 +324,23 @@
           "title": "जीभ को मत भूलें",
           "description": "मुँह की दुर्गंध के 60–90 % यौगिक जीभ की सतह से आते हैं। 10 सेकंड की त्वरित सफ़ाई वाष्पशील गंधक यौगिकों को आधा कर सकती है।"
         }
+      },
+      "item": "टूथब्रश",
+      "picker": {
+        "nameLabel": "नाम",
+        "namePlaceholder": "उदा. दैनिक ब्रश",
+        "age": "ब्रश आयु",
+        "type": "प्रकार",
+        "head": "ब्रश हेड",
+        "save": "ब्रश जोड़ें"
+      },
+      "agePreset": {
+        "brandNew_short": "नया ✨",
+        "lessThan1Week_short": "<1 सप्ताह",
+        "oneTwoWeeks_short": "1-2 सप्ताह",
+        "threeFourWeeks_short": "3-4 सप्ताह",
+        "twoMonths_short": "2 महीने",
+        "threeMonths_short": "3 महीने"
       }
     },
     "homeScreen": {

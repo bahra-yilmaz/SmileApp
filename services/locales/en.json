@@ -283,7 +283,7 @@
       "namePlaceholder": "e.g., Daily Driver",
       "age": "Brush Age",
       "type": "Type",
-      "head": "Toothbrush Head",
+      "head": "Brush Head",
       "save": "Add Brush"
     },
     "age": {
@@ -307,7 +307,9 @@
     "history": {
       "title": "Toothbrush History",
       "ageDays_one": "{{count}} day",
-      "ageDays_other": "{{count}} days"
+      "ageDays_other": "{{count}} days",
+      "brushings_one": "{{count}} brushing",
+      "brushings_other": "{{count}} brushings"
     },
     "infoCards": {
       "title": "Toothbrush Tips",
@@ -328,8 +330,8 @@
         "description": "Brushing harder doesn't clean better; excessive force may harm your gums."
       },
       "tongueClean": {
-        "title": "Remember Your Tongue",
-        "description": "A quick tongue sweep reduces bad-breath compounds by up to 50%."
+        "title": "Don't Forget the Tongue",
+        "description": "60–90% of bad breath compounds originate from the tongue's surface. A quick 10-second scrape can reduce volatile sulfur compounds by half."
       }
     },
     "agePreset": {
@@ -343,7 +345,7 @@
   },
   "homeScreen": {
     "streakCard": {
-      "daysStreak": "days streak"
+      "daysStreak": "Days Streak"
     },
     "brushingTimeCard": {
       "minutes": "minutes"

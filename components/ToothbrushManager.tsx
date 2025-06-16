@@ -541,7 +541,7 @@ export default function ToothbrushManager({
                     reminder={reminderLike}
                     showToggle={false}
                     rightTop={t(`toothbrush.category.${brush.category}`, brush.category)}
-                    rightBottom={`${brushingCount} ${brushingCount === 1 ? 'brushing' : 'brushings'}`}
+                    rightBottom={t('toothbrush.history.brushings', { count: brushingCount })}
                     onToggle={() => {}}
                     // editing disabled
                     onDelete={async (id) => {

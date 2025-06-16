@@ -294,7 +294,9 @@
       "history": {
         "title": "Historique des brosses",
         "ageDays_one": "{{count}} jour",
-        "ageDays_other": "{{count}} jours"
+        "ageDays_other": "{{count}} jours",
+        "brushings_one": "{{count}} brossage",
+        "brushings_other": "{{count}} brossages"
       },
       "infoCards": {
         "title": "Conseils sur les brosses",

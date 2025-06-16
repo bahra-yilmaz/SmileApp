@@ -300,7 +300,9 @@
       "history": {
         "title": "Histórico de Escovas",
         "ageDays_one": "{{count}} dia",
-        "ageDays_other": "{{count}} dias"
+        "ageDays_other": "{{count}} dias",
+        "brushings_one": "{{count}} escovação",
+        "brushings_other": "{{count}} escovações"
       },
       "infoCards": {
         "title": "Dicas de Escova",
