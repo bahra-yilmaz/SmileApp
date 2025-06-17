@@ -28,6 +28,9 @@ interface ConfirmModalProps {
 
   /** Called when user cancels / closes */
   onCancel: () => void;
+
+  /** Whether to show the cancel button. Defaults to true. */
+  showCancel?: boolean;
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -39,6 +42,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   cancelText = "Cancel",
   onConfirm,
   onCancel,
+  showCancel = true,
 }) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -87,7 +91,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 
           {/* Action buttons */}
           <View style={styles.buttonContainer}>
-            <ModalButton label={cancelText} variant="secondary" onPress={onCancel} />
+            {showCancel && <ModalButton label={cancelText} variant="secondary" onPress={onCancel} />}
             <ModalButton label={confirmText} variant="primary" onPress={onConfirm} />
           </View>
         </View>

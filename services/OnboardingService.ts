@@ -1,4 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import supabase from './supabaseClient';
+import dayjs from 'dayjs';
 
 const ONBOARDING_COMPLETED_KEY = 'onboarding_completed';
 
@@ -37,4 +39,46 @@ export class OnboardingService {
       console.error('Error resetting onboarding status:', error);
     }
   }
+}
+
+interface OnboardingPayload {
+  age_group?: number;
+  brushing_target?: number;
+  toothbrush_start_date?: string | null;
+  mascot_tone?: string;
+}
+
+/**
+ * Updates the user's record in the 'users' table with their onboarding data.
+ * @param userId The ID of the user to update.
+ * @param data The onboarding data to save.
+ */
+export async function updateUserOnboarding(userId: string, data: OnboardingPayload): Promise<void> {
+  if (!userId) {
+    throw new Error('User ID is required to update onboarding data.');
+  }
+
+  const payload = {
+    ...data,
+    // Format date for Supabase if it exists, otherwise keep it as is (e.g., null)
+    toothbrush_start_date: data.toothbrush_start_date
+      ? dayjs(data.toothbrush_start_date).format('YYYY-MM-DD')
+      : data.toothbrush_start_date,
+  };
+
+
+  // We use .update() to modify the existing user row and .eq() to specify which user.
+  const { error } = await supabase
+    .from('users')
+    .update(payload)
+    .eq('id', userId);
+
+  // If Supabase returns an error, we throw it to be caught by our UI.
+  if (error) {
+    console.error('Supabase onboarding update error:', error);
+    throw new Error(error.message || 'Failed to save onboarding data.');
+  }
+
+  // If there's no error, the operation was successful.
+  return;
 } 

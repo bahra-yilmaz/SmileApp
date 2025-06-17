@@ -3,17 +3,12 @@ import { View, StyleSheet, Animated, Pressable, FlatList, Dimensions, Platform }
 import { useRouter } from 'expo-router';
 import { useTheme } from '../ThemeProvider';
 import ThemedText from '../ThemedText';
-import { OnboardingService } from '../../services/OnboardingService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import PrimaryButton from '../ui/PrimaryButton';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
-
-const BRUSHING_GOAL_KEY = 'brushing_goal';
-
-// Brushing frequency options will be defined inside the component using t() and useMemo
+import { useOnboarding } from '../../context/OnboardingContext';
 
 interface BrushingGoalScreenProps {
   title: string;
@@ -24,13 +19,11 @@ interface BrushingGoalScreenProps {
   isLastScreen?: boolean;
 }
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const ITEM_HEIGHT = 60;
 const VISIBLE_ITEMS = 5;
 
 export default function BrushingGoalScreen({
-  title,
-  description,
   nextScreenPath,
   index,
   totalScreens,
@@ -39,32 +32,29 @@ export default function BrushingGoalScreen({
   const { theme } = useTheme();
   const router = useRouter();
   const { t } = useTranslation();
-  const [selectedGoal, setSelectedGoal] = useState<number>(2); // Default to 2 times per day
+  const { updateOnboardingData, onboardingData } = useOnboarding();
+  const [selectedGoal, setSelectedGoal] = useState<number>(onboardingData.brushing_target ?? 2);
   const flatListRef = useRef<FlatList>(null);
   const lastHapticIndex = useRef<number | null>(null);
   const insets = useSafeAreaInsets();
   
-  // Define BRUSHING_OPTIONS inside the component using useMemo
   const BRUSHING_OPTIONS = useMemo(() => [
-    { value: 1, label: t('onboarding.brushingGoalScreen.optionsLabel', { count: 1 }) },
-    { value: 2, label: t('onboarding.brushingGoalScreen.optionsLabel', { count: 2 }) },
-    { value: 3, label: t('onboarding.brushingGoalScreen.optionsLabel', { count: 3 }) },
-    { value: 4, label: t('onboarding.brushingGoalScreen.optionsLabel', { count: 4 }) },
-    { value: 5, label: t('onboarding.brushingGoalScreen.optionsLabel', { count: 5 }) }
+    { value: 1, label: t('onboarding.brushingGoalScreen.optionsLabel_one', { count: 1 }) },
+    { value: 2, label: t('onboarding.brushingGoalScreen.optionsLabel_other', { count: 2 }) },
+    { value: 3, label: t('onboarding.brushingGoalScreen.optionsLabel_other', { count: 3 }) },
+    { value: 4, label: t('onboarding.brushingGoalScreen.optionsLabel_other', { count: 4 }) },
+    { value: 5, label: t('onboarding.brushingGoalScreen.optionsLabel_other', { count: 5 }) }
   ], [t]);
   
-  // Load fonts
   const [fontsLoaded] = useFonts({
     'Quicksand-Bold': require('../../assets/fonts/Quicksand-Bold.ttf'),
     'Merienda-Medium': require('../../assets/fonts/Merienda-Medium.ttf'),
   });
   
-  // Animation values
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const slideAnim = React.useRef(new Animated.Value(50)).current;
   
   useEffect(() => {
-    // Run animations when the component mounts
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -78,9 +68,8 @@ export default function BrushingGoalScreen({
       })
     ]).start();
 
-    // Scroll to the default selected goal (2 times per day)
     setTimeout(() => {
-      const indexToScrollTo = BRUSHING_OPTIONS.findIndex(option => option.value === 2);
+      const indexToScrollTo = BRUSHING_OPTIONS.findIndex(option => option.value === selectedGoal);
       if (indexToScrollTo !== -1 && flatListRef.current) {
         flatListRef.current.scrollToOffset({
           offset: indexToScrollTo * ITEM_HEIGHT,
@@ -89,26 +78,11 @@ export default function BrushingGoalScreen({
       }
     }, 500);
   }, []);
-  
-  const handleSkip = () => {
-    // Mark onboarding as completed and navigate to main app
-    OnboardingService.markOnboardingAsCompleted().then(() => {
-      router.push(nextScreenPath as any);
-    });
-  };
 
-  const handleNext = async () => {
-    // Save the brushing goal
-    try {
-      await AsyncStorage.setItem(BRUSHING_GOAL_KEY, selectedGoal.toString());
-    } catch (error) {
-      console.error('Error saving brushing goal:', error);
-    }
-
-    if (isLastScreen) {
-      // If this is the last screen, mark onboarding as completed
-      await OnboardingService.markOnboardingAsCompleted();
-    }
+  const handleNext = () => {
+    updateOnboardingData({ brushing_target: selectedGoal });
+    
+    // The final save logic will be on the last screen, not here.
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     router.push(nextScreenPath as any);
   };
@@ -179,12 +153,10 @@ export default function BrushingGoalScreen({
     }
   };
 
-  // Calculate header height to position progress indicators below it
-  const headerHeight = insets.top + (Platform.OS === 'ios' ? 10 : 15) + 16 + 32; // SafeArea + additionalPadding + paddingVertical + fontSize
+  const headerHeight = insets.top + (Platform.OS === 'ios' ? 10 : 15) + 16 + 32;
 
   return (
     <View style={styles.container}>
-      {/* Progress indicators - positioned below header */}
       <View style={[styles.progressContainer, { top: headerHeight + 10 }]}>
         <View style={styles.indicators}>
           {Array(totalScreens).fill(0).map((_, i) => (
@@ -204,7 +176,6 @@ export default function BrushingGoalScreen({
           ))}
         </View>
         
-        {/* Question text */}
         <View style={styles.questionContainer}>
           <ThemedText style={[
             styles.questionText,
@@ -215,9 +186,7 @@ export default function BrushingGoalScreen({
         </View>
       </View>
       
-      {/* Brushing Goal Selection Wheel - positioned in center */}
       <View style={styles.goalPickerContainer}>
-        {/* Highlight for the selected item */}
         <View style={[
           styles.selectedHighlight, 
           { 
@@ -245,7 +214,6 @@ export default function BrushingGoalScreen({
         />
       </View>
       
-      {/* Action buttons - positioned at bottom */}
       <View style={styles.buttonsContainer}>
         <PrimaryButton 
           label={isLastScreen ? t('onboarding.brushingGoalScreen.startButton') : t('common.Continue')}
@@ -288,8 +256,8 @@ const styles = StyleSheet.create({
     left: '50%',
     height: ITEM_HEIGHT * VISIBLE_ITEMS,
     width: '80%',
-    marginLeft: -width * 0.4, // Half of container width
-    marginTop: -(ITEM_HEIGHT * VISIBLE_ITEMS) / 2, // Half of container height
+    marginLeft: -width * 0.4,
+    marginTop: -(ITEM_HEIGHT * VISIBLE_ITEMS) / 2,
     alignItems: 'center',
     justifyContent: 'center',
   },

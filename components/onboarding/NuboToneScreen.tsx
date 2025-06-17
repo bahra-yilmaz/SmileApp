@@ -3,21 +3,17 @@ import { View, StyleSheet, Animated, Pressable, Dimensions, Platform, ScrollView
 import { useRouter } from 'expo-router';
 import { useTheme } from '../ThemeProvider';
 import ThemedText from '../ThemedText';
-import { OnboardingService } from '../../services/OnboardingService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import PrimaryButton from '../ui/PrimaryButton';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
-
-const NUBO_TONE_KEY = 'nubo_tone';
-
-// Nubo tone options will be defined inside the component using t() and useMemo
+import { useOnboarding } from '../../context/OnboardingContext';
+import { useAuth } from '../../context/AuthContext';
+import { OnboardingService, updateUserOnboarding } from '../../services/OnboardingService';
+import ConfirmModal from '../modals/ConfirmModal';
 
 interface NuboToneScreenProps {
-  title: string;
-  description: string;
   nextScreenPath: string;
   index: number;
   totalScreens: number;
@@ -25,93 +21,27 @@ interface NuboToneScreenProps {
 }
 
 const { width } = Dimensions.get('window');
-const CARD_WIDTH = width * 0.8;
-const CARD_HEIGHT = 120;
-const CARD_MARGIN = 10;
 
 export default function NuboToneScreen({
-  title,
-  description,
   nextScreenPath,
   index,
   totalScreens,
   isLastScreen = false,
 }: NuboToneScreenProps) {
-  const { theme } = useTheme();
+  const { theme, colorScheme } = useTheme();
   const router = useRouter();
   const { t } = useTranslation();
-  const [selectedTone, setSelectedTone] = useState<string>('supportive'); // Default to supportive
+  const { user } = useAuth();
+  const { onboardingData, updateOnboardingData } = useOnboarding();
+  
+  const [selectedTone, setSelectedTone] = useState<string>(onboardingData.mascot_tone || 'supportive');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
+
   const insets = useSafeAreaInsets();
   
-  const scaleAnims = useRef<{ [key: string]: Animated.Value }>({
-    supportive: new Animated.Value(1.25),
-    playful: new Animated.Value(1),
-    cool: new Animated.Value(1),
-    wise: new Animated.Value(1),
-  }).current;
-
-  // Load fonts
-  const [fontsLoaded] = useFonts({
-    'Quicksand-Bold': require('../../assets/fonts/Quicksand-Bold.ttf'),
-    'Quicksand-Medium': require('../../assets/fonts/Quicksand-Medium.ttf'),
-    'Merienda-Medium': require('../../assets/fonts/Merienda-Medium.ttf'),
-  });
-  
-  // Animation values
-  const fadeAnim = React.useRef(new Animated.Value(1)).current;
-  
-  const handleNext = async () => {
-    // Save the selected Nubo tone
-    try {
-      const selectedOption = TONE_OPTIONS.find(option => option.id === selectedTone);
-      const toneData = {
-        id: selectedTone,
-        label: selectedOption?.label || '',
-        description: selectedOption?.description || ''
-      };
-      await AsyncStorage.setItem(NUBO_TONE_KEY, JSON.stringify(toneData));
-    } catch (error) {
-      console.error('Error saving Nubo tone:', error);
-    }
-
-    if (isLastScreen) {
-      // If this is the last screen, mark onboarding as completed
-      await OnboardingService.markOnboardingAsCompleted();
-    }
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-
-    // Fade out animation before navigating
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 300, // A bit faster for a snappy feel
-      useNativeDriver: true,
-    }).start(() => {
-      // Replace the screen to prevent users from going back to onboarding
-      router.replace(nextScreenPath as any);
-    });
-  };
-
-  const handleSelectTone = (toneId: string) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    if (selectedTone && selectedTone !== toneId) {
-      Animated.timing(scaleAnims[selectedTone], {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true,
-      }).start();
-    }
-
-    Animated.timing(scaleAnims[toneId], {
-      toValue: 1.25,
-      duration: 200,
-      useNativeDriver: true,
-    }).start();
-
-    setSelectedTone(toneId);
-  };
-
-  // Calculate header height to position progress indicators below it
-  const headerHeight = insets.top + (Platform.OS === 'ios' ? 10 : 15) + 16 + 32; // SafeArea + additionalPadding + paddingVertical + fontSize
+  const scaleAnims = useRef<{ [key: string]: Animated.Value }>({}).current;
 
   const TONE_OPTIONS = useMemo(() => [
     { id: 'supportive', label: t('onboarding.nuboToneScreen.options.supportive_label'), description: t('onboarding.nuboToneScreen.options.supportive_description'), image: require('../../assets/mascot/nubo-supportive-1.png') },
@@ -120,111 +50,209 @@ export default function NuboToneScreen({
     { id: 'wise', label: t('onboarding.nuboToneScreen.options.wise_label'), description: t('onboarding.nuboToneScreen.options.wise_description'), image: require('../../assets/mascot/nubo-wise-5.png') }
   ], [t]);
 
+  // Initialize scale animations for each tone option
+  TONE_OPTIONS.forEach(option => {
+    if (!scaleAnims[option.id]) {
+      scaleAnims[option.id] = new Animated.Value(option.id === selectedTone ? 1.25 : 1);
+    }
+  });
+
+  const [fontsLoaded] = useFonts({
+    'Quicksand-Bold': require('../../assets/fonts/Quicksand-Bold.ttf'),
+    'Quicksand-Medium': require('../../assets/fonts/Quicksand-Medium.ttf'),
+    'Merienda-Medium': require('../../assets/fonts/Merienda-Medium.ttf'),
+  });
+  
+  const fadeAnim = React.useRef(new Animated.Value(1)).current;
+  
+  const handleNext = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    setError(null);
+
+    if (!user) {
+      setError("No user session found. Please sign in again.");
+      setIsErrorModalVisible(true);
+      setIsLoading(false);
+      return;
+    }
+    
+    // Update context one last time
+    updateOnboardingData({ mascot_tone: selectedTone });
+
+    // Combine context data with the final selection
+    const finalOnboardingData = {
+      ...onboardingData,
+      mascot_tone: selectedTone,
+    };
+
+    try {
+      await updateUserOnboarding(user.id, finalOnboardingData);
+      
+      // Mark onboarding as completed in local storage
+      await OnboardingService.markOnboardingAsCompleted();
+      
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => {
+        router.replace('/(home)');
+      });
+    } catch (err: any) {
+      setError(err.message || "An unexpected error occurred.");
+      setIsErrorModalVisible(true);
+      setIsLoading(false);
+    }
+  };
+
+  const handleSelectTone = (toneId: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    
+    // Animate the previously selected card back to normal size
+    if (selectedTone && selectedTone !== toneId && scaleAnims[selectedTone]) {
+      Animated.timing(scaleAnims[selectedTone], {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    }
+    
+    // Animate the newly selected card to a larger size
+    if (scaleAnims[toneId]) {
+      Animated.timing(scaleAnims[toneId], {
+        toValue: 1.25,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    }
+    
+    setSelectedTone(toneId);
+  };
+
+  const headerHeight = insets.top + (Platform.OS === 'ios' ? 10 : 15) + 16 + 32;
+
+  if (!fontsLoaded) {
+    return null; // Or a loading spinner
+  }
+
   return (
-    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-      {/* Progress indicators and question text */}
-      <View style={[styles.progressContainer, { marginTop: headerHeight + 10 }]}>
-        <View style={styles.indicators}>
-          {Array(totalScreens).fill(0).map((_, i) => (
-            <View 
-              key={i}
-              style={[
-                styles.indicator,
-                { 
-                  backgroundColor: i === index 
-                    ? theme.colors.primary[600] 
-                    : 'white',
-                  width: i === index ? 24 : 8,
-                  opacity: i === index ? 1 : 0.7
-                }
-              ]}
-            />
-          ))}
+    <>
+      <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+        <View style={[styles.progressContainer, { marginTop: headerHeight + 10 }]}>
+          <View style={styles.indicators}>
+            {Array(totalScreens).fill(0).map((_, i) => (
+              <View 
+                key={i}
+                style={[
+                  styles.indicator,
+                  { 
+                    backgroundColor: i === index 
+                      ? theme.colors.primary[600] 
+                      : 'white',
+                    width: i === index ? 24 : 8,
+                    opacity: i === index ? 1 : 0.7
+                  }
+                ]}
+              />
+            ))}
+          </View>
+          
+          <View style={styles.questionContainer}>
+            <ThemedText style={[
+              styles.questionText,
+              { fontFamily: 'Quicksand-Bold' }
+            ]}>
+              {t('onboarding.nuboToneScreen.question')}
+            </ThemedText>
+          </View>
         </View>
         
-        {/* Question text */}
-        <View style={styles.questionContainer}>
-          <ThemedText style={[
-            styles.questionText,
-            { fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined }
-          ]}>
-            {t('onboarding.nuboToneScreen.question')}
-          </ThemedText>
-        </View>
-      </View>
-      
-      {/* Tone selection cards */}
-      <ScrollView 
-        style={styles.cardsContainer}
-        contentContainerStyle={styles.cardsContentContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        {TONE_OPTIONS.map((option) => (
-          <Pressable
-            key={option.id}
-            style={[
-              styles.card,
-              { 
-                borderColor: option.id === selectedTone 
-                  ? theme.colors.primary[500] 
-                  : 'rgba(255, 255, 255, 0.3)',
-                backgroundColor: option.id === selectedTone 
-                  ? 'rgba(255, 255, 255, 0.1)' 
-                  : 'rgba(255, 255, 255, 0.05)'
-              }
-            ]}
-            onPress={() => handleSelectTone(option.id)}
-          >
-            <View style={styles.cardContent}>
-              <View style={styles.textContainer}>
-                <ThemedText style={[
-                  styles.cardTitle,
-                  { 
-                    fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined,
-                    color: option.id === selectedTone 
-                      ? theme.colors.primary[500] 
-                      : 'white'
-                  }
-                ]}>
-                  {option.label}
-                </ThemedText>
-                <ThemedText style={[
-                  styles.cardDescription,
-                  { 
-                    fontFamily: fontsLoaded ? 'Quicksand-Medium' : undefined,
-                    opacity: option.id === selectedTone ? 1 : 0.9,
-                    color: option.id === selectedTone 
-                      ? theme.colors.primary[500] 
-                      : 'white'
-                  }
-                ]}>
-                  {option.description}
-                </ThemedText>
+        <ScrollView 
+          style={styles.cardsContainer}
+          contentContainerStyle={styles.cardsContentContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          {TONE_OPTIONS.map((option) => (
+            <Pressable
+              key={option.id}
+              style={[
+                styles.card,
+                { 
+                  borderColor: option.id === selectedTone 
+                    ? theme.colors.primary[500] 
+                    : 'rgba(255, 255, 255, 0.3)',
+                  backgroundColor: option.id === selectedTone 
+                    ? 'rgba(255, 255, 255, 0.1)' 
+                    : 'rgba(255, 255, 255, 0.05)'
+                }
+              ]}
+              onPress={() => handleSelectTone(option.id)}
+            >
+              <View style={styles.cardContent}>
+                <View style={styles.textContainer}>
+                  <ThemedText style={[
+                    styles.cardTitle,
+                    { 
+                      fontFamily: 'Quicksand-Bold',
+                      color: option.id === selectedTone 
+                        ? theme.colors.primary[500] 
+                        : 'white'
+                    }
+                  ]}>
+                    {option.label}
+                  </ThemedText>
+                  <ThemedText style={[
+                    styles.cardDescription,
+                    { 
+                      fontFamily: 'Quicksand-Medium',
+                      opacity: option.id === selectedTone ? 1 : 0.9,
+                      color: option.id === selectedTone 
+                        ? theme.colors.primary[500] 
+                        : 'white'
+                    }
+                  ]}>
+                    {option.description}
+                  </ThemedText>
+                </View>
+                {option.image && scaleAnims[option.id] && (
+                  <Animated.Image
+                    source={option.image}
+                    style={[
+                      styles.cardImage,
+                      { transform: [{ scale: scaleAnims[option.id] }] },
+                    ]}
+                  />
+                )}
               </View>
-              {option.image && (
-                <Animated.Image
-                  source={option.image}
-                  style={[
-                    styles.cardImage,
-                    { transform: [{ scale: scaleAnims[option.id] }] },
-                  ]}
-                />
-              )}
-            </View>
-          </Pressable>
-        ))}
-      </ScrollView>
-      
-      {/* Action buttons - positioned at bottom */}
-      <View style={styles.buttonsContainer}>
-        <PrimaryButton 
-          label={isLastScreen ? t('onboarding.nuboToneScreen.startButton') : t('common.Continue')}
-          onPress={handleNext}
-          width={width * 0.85}
-          useDisplayFont={true}
-        />
-      </View>
-    </Animated.View>
+            </Pressable>
+          ))}
+        </ScrollView>
+        
+        <View style={styles.buttonsContainer}>
+          <PrimaryButton 
+            label={isLastScreen ? t('onboarding.nuboToneScreen.startButton') : t('common.Continue')}
+            onPress={handleNext}
+            width={width * 0.85}
+            useDisplayFont={true}
+            isLoading={isLoading}
+          />
+        </View>
+      </Animated.View>
+
+      <ConfirmModal
+        visible={isErrorModalVisible}
+        title="Onboarding Error"
+        message={error || ''}
+        confirmText="OK"
+        onConfirm={() => setIsErrorModalVisible(false)}
+        showCancel={false}
+        iconName="alert-circle-outline"
+        iconColor={theme.colors.feedback.error[colorScheme]}
+      />
+    </>
   );
 }
 
@@ -268,12 +296,12 @@ const styles = StyleSheet.create({
     paddingBottom: 120, // To make space for the button
   },
   card: {
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
+    width: width * 0.8,
+    height: 120,
     borderRadius: 20,
     borderWidth: 1,
     padding: 20,
-    marginVertical: CARD_MARGIN,
+    marginVertical: 10,
     justifyContent: 'center',
     overflow: 'hidden',
   },

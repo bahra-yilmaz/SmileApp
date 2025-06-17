@@ -3,32 +3,26 @@ import { View, StyleSheet, Animated, Pressable, FlatList, Dimensions, Platform }
 import { useRouter } from 'expo-router';
 import { useTheme } from '../ThemeProvider';
 import ThemedText from '../ThemedText';
-import { OnboardingService } from '../../services/OnboardingService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import PrimaryButton from '../ui/PrimaryButton';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
-
-const TOOTHBRUSH_DURATION_KEY = 'toothbrush_duration';
+import { useOnboarding } from '../../context/OnboardingContext';
+import dayjs from 'dayjs';
 
 interface ToothbrushDurationScreenProps {
-  title: string;
-  description: string;
   nextScreenPath: string;
   index: number;
   totalScreens: number;
   isLastScreen?: boolean;
 }
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const ITEM_HEIGHT = 60;
 const VISIBLE_ITEMS = 5;
 
 export default function ToothbrushDurationScreen({
-  title,
-  description,
   nextScreenPath,
   index,
   totalScreens,
@@ -37,18 +31,18 @@ export default function ToothbrushDurationScreen({
   const { theme } = useTheme();
   const router = useRouter();
   const { t } = useTranslation();
-  const [selectedDuration, setSelectedDuration] = useState<number>(2); // Default to 3-4 weeks
+  const { updateOnboardingData, onboardingData } = useOnboarding();
+  // Default to option 2 ('3-4 weeks'), which is a common toothbrush replacement time
+  const [selectedDuration, setSelectedDuration] = useState<number>(2);
   const flatListRef = useRef<FlatList>(null);
   const lastHapticIndex = useRef<number | null>(null);
   const insets = useSafeAreaInsets();
   
-  // Load fonts
   const [fontsLoaded] = useFonts({
     'Quicksand-Bold': require('../../assets/fonts/Quicksand-Bold.ttf'),
     'Merienda-Medium': require('../../assets/fonts/Merienda-Medium.ttf'),
   });
   
-  // Animation values
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const slideAnim = React.useRef(new Animated.Value(50)).current;
   
@@ -62,7 +56,6 @@ export default function ToothbrushDurationScreen({
   ], [t]);
   
   useEffect(() => {
-    // Run animations when the component mounts
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -78,6 +71,7 @@ export default function ToothbrushDurationScreen({
 
     // Scroll to the default selected duration
     setTimeout(() => {
+      // Find index of default selection and scroll to it
       const indexToScrollTo = DURATION_OPTIONS.findIndex(option => option.value === selectedDuration);
       if (indexToScrollTo !== -1 && flatListRef.current) {
         flatListRef.current.scrollToOffset({
@@ -88,22 +82,35 @@ export default function ToothbrushDurationScreen({
     }, 500);
   }, []);
 
-  const handleNext = async () => {
-    // Save the toothbrush duration
-    try {
-      const durationData = {
-        value: selectedDuration,
-        label: DURATION_OPTIONS.find(d => d.value === selectedDuration)?.label || ''
-      };
-      await AsyncStorage.setItem(TOOTHBRUSH_DURATION_KEY, JSON.stringify(durationData));
-    } catch (error) {
-      console.error('Error saving toothbrush duration:', error);
+  const handleNext = () => {
+    let startDate: string | null = null;
+    const now = dayjs();
+
+    switch (selectedDuration) {
+      case 0: // Less than 1 week
+        startDate = now.subtract(3, 'day').toISOString();
+        break;
+      case 1: // 1-2 weeks ago
+        startDate = now.subtract(10, 'day').toISOString();
+        break;
+      case 2: // 3-4 weeks ago
+        startDate = now.subtract(3, 'week').toISOString();
+        break;
+      case 3: // About 2 months ago
+        startDate = now.subtract(2, 'month').toISOString();
+        break;
+      case 4: // About 3 months ago
+        startDate = now.subtract(3, 'month').toISOString();
+        break;
+      case 5: // I don't remember
+        startDate = null;
+        break;
+      default:
+        startDate = null;
     }
 
-    if (isLastScreen) {
-      // If this is the last screen, mark onboarding as completed
-      await OnboardingService.markOnboardingAsCompleted();
-    }
+    updateOnboardingData({ toothbrush_start_date: startDate });
+    
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     router.push(nextScreenPath as any);
   };
@@ -174,12 +181,10 @@ export default function ToothbrushDurationScreen({
     }
   };
 
-  // Calculate header height to position progress indicators below it
-  const headerHeight = insets.top + (Platform.OS === 'ios' ? 10 : 15) + 16 + 32; // SafeArea + additionalPadding + paddingVertical + fontSize
+  const headerHeight = insets.top + (Platform.OS === 'ios' ? 10 : 15) + 16 + 32;
 
   return (
     <View style={styles.container}>
-      {/* Progress indicators - positioned below header */}
       <View style={[styles.progressContainer, { top: headerHeight + 10 }]}>
         <View style={styles.indicators}>
           {Array(totalScreens).fill(0).map((_, i) => (
@@ -199,7 +204,6 @@ export default function ToothbrushDurationScreen({
           ))}
         </View>
         
-        {/* Question text */}
         <View style={styles.questionContainer}>
           <ThemedText style={[
             styles.questionText,
@@ -210,9 +214,7 @@ export default function ToothbrushDurationScreen({
         </View>
       </View>
       
-      {/* Duration Selection Wheel - positioned in center */}
       <View style={styles.durationPickerContainer}>
-        {/* Highlight for the selected item */}
         <View style={[
           styles.selectedHighlight, 
           { 
@@ -240,7 +242,6 @@ export default function ToothbrushDurationScreen({
         />
       </View>
       
-      {/* Action buttons - positioned at bottom */}
       <View style={styles.buttonsContainer}>
         <PrimaryButton 
           label={isLastScreen ? t('onboarding.toothbrushDurationScreen.startButton') : t('common.Continue')}
@@ -277,24 +278,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginHorizontal: 4,
   },
-  questionContainer: {
-    marginTop: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  questionText: {
-    color: 'white',
-    fontSize: 24,
-    textAlign: 'center',
-  },
   durationPickerContainer: {
     position: 'absolute',
     top: '50%',
     left: '50%',
     height: ITEM_HEIGHT * VISIBLE_ITEMS,
     width: '80%',
-    marginLeft: -width * 0.4, // Half of container width
-    marginTop: -(ITEM_HEIGHT * VISIBLE_ITEMS) / 2, // Half of container height
+    marginLeft: -width * 0.4,
+    marginTop: -(ITEM_HEIGHT * VISIBLE_ITEMS) / 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -323,6 +314,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'rgba(255, 255, 255, 0.6)',
     fontWeight: '700',
+    textAlign: 'center'
   },
   buttonsContainer: {
     position: 'absolute',
@@ -331,5 +323,35 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     paddingHorizontal: 20,
+  },
+  skipButton: {
+    padding: 12,
+  },
+  skipText: {
+    opacity: 0.7,
+    color: 'white',
+  },
+  nextButton: {
+    backgroundColor: '#0095E6',
+    paddingHorizontal: 36,
+    paddingVertical: 14,
+    borderRadius: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nextText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  questionContainer: {
+    marginTop: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  questionText: {
+    color: 'white',
+    fontSize: 24,
+    textAlign: 'center',
   },
 }); 
