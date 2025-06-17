@@ -50,4 +50,40 @@ export async function signUpWithEmail(rawEmail: string, password: string): Promi
   }
 
   return userId;
+}
+
+/**
+ * Signs a user in with email & password.
+ *
+ * On success returns the user id string.
+ */
+export async function signInWithEmail(rawEmail: string, password: string): Promise<string> {
+  if (!rawEmail || !password) {
+    throw new Error('Email and password are required.');
+  }
+
+  const email = rawEmail.trim().toLowerCase();
+
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error || !data?.user) {
+      if (error?.code === 'invalid_credentials') {
+        throw new Error('Incorrect email or password.');
+      }
+      throw error ?? new Error('Unable to sign in. Please try again later.');
+    }
+
+    return data.user.id;
+  } catch (err: any) {
+    // Network / unexpected errors bubble up here
+    if (err?.message === 'Failed to fetch') {
+      throw new Error('Network error. Please check your connection and try again.');
+    }
+
+    throw err;
+  }
 } 
