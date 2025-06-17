@@ -1,19 +1,22 @@
 import React from 'react';
 import { Stack } from 'expo-router';
-import { useTheme } from '../../components/ThemeProvider';
 import { Platform, View, StyleSheet } from 'react-native';
 import HeaderLogo from '../../components/ui/HeaderLogo';
+import { usePathname } from 'expo-router';
 
 export default function OnboardingLayout() {
-  const { theme } = useTheme();
+  const pathname = usePathname();
+  const showBackButton = !!(pathname && (pathname.endsWith('/signin') || pathname.endsWith('/signup')));
   
   return (
     <View style={styles.container}>
       {/* Fixed HeaderLogo that stays visible during transitions */}
-      <HeaderLogo additionalTopPadding={Platform.OS === 'ios' ? 10 : 15} />
+      <HeaderLogo 
+        additionalTopPadding={Platform.OS === 'ios' ? 10 : 15} 
+        showBackButton={showBackButton}
+      />
       
       <Stack
-        id="onboarding"
         screenOptions={{
           headerShown: false,
           animation: 'none',

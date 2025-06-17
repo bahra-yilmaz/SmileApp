@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, Animated, Keyboard, TouchableWithoutFeedback, Easing } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, Animated, Keyboard, TouchableWithoutFeedback, Easing, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import PrimaryButton from '../../components/ui/PrimaryButton';
@@ -10,6 +10,9 @@ import { useFonts } from 'expo-font';
 import { SvgXml } from 'react-native-svg';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
+import ConfirmModal from '../../components/modals/ConfirmModal';
+import { signUpWithEmail } from '../../services/auth';
+import { Ionicons } from '@expo/vector-icons';
 
 const googleIcon = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M19.6 10.2273C19.6 9.51818 19.5364 8.83636 19.4182 8.18182H10V12.05H15.3818C15.15 13.3 14.4455 14.3591 13.3864 15.0682V17.5773H16.6182C18.5091 15.8364 19.6 13.2727 19.6 10.2273Z" fill="#4285F4"/>
@@ -27,6 +30,10 @@ export default function SignupScreen() {
   const [isInputFocused, setIsInputFocused] = useState(false);
   const contentTranslateY = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
   
   // Check font loading status
   const [fontsLoaded] = useFonts({
@@ -35,14 +42,33 @@ export default function SignupScreen() {
     'Quicksand-Medium': require('../../assets/fonts/Quicksand-Medium.ttf'),
   });
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (!email.trim()) {
+      setErrorMessage(t('onboarding.signupScreen.invalidEmail', { defaultValue: 'Please enter a valid email address.' }));
+      setShowErrorModal(true);
+      return;
+    }
+
+    if (password.length < 6) {
+      setErrorMessage(t('onboarding.signupScreen.invalidPassword', { defaultValue: 'Password must be at least 6 characters.' }));
+      setShowErrorModal(true);
+      return;
+    }
+
     setIsSubmitting(true);
-    // Simulate network request
-    setTimeout(() => {
-      setIsSubmitting(false);
+
+    try {
+      await signUpWithEmail(email.trim(), password);
+      // On success, navigate forward
       router.push('/onboarding');
-    }, 500);
+    } catch (err: any) {
+      const message = err?.message || 'Sign up failed. Please try again.';
+      setErrorMessage(message);
+      setShowErrorModal(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   const handleContinue = () => {
@@ -157,18 +183,25 @@ export default function SignupScreen() {
             </Text>
           </View>
           
+          {/* Email Field */}
           <InputField 
-            placeholder={t('onboarding.signupScreen.usernamePlaceholder')}
+            placeholder={t('onboarding.signupScreen.emailPlaceholder')} 
+            keyboardType="email-address"
             autoCapitalize="none"
+            value={email}
+            onChangeText={setEmail}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
             width={width * 0.75}
           />
           
+          {/* Password Field */}
           <InputField 
-            placeholder={t('onboarding.signupScreen.emailPlaceholder')} 
-            keyboardType="email-address"
+            placeholder={t('onboarding.signupScreen.passwordPlaceholder')} 
+            secureTextEntry
             autoCapitalize="none"
+            value={password}
+            onChangeText={setPassword}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
             width={width * 0.75}
@@ -189,7 +222,7 @@ export default function SignupScreen() {
           
           <View style={styles.dividerContainer}>
             <View style={styles.divider} />
-            <Text style={[styles.dividerText, { fontFamily: fontFamilyText }]}>{t('onboarding.signinScreen.orDivider')}</Text>
+            <Text style={[styles.dividerText, { fontFamily: fontFamilyText }]}>{t('onboarding.signupScreen.orDivider')}</Text>
             <View style={styles.divider} />
           </View>
           
@@ -201,6 +234,18 @@ export default function SignupScreen() {
             width={width * 0.75}
           />
         </Animated.View>
+        
+        {/* Error Modal */}
+        <ConfirmModal
+          visible={showErrorModal}
+          icon={<Ionicons name="alert-circle-outline" size={48} color={Colors.primary[600]} />}
+          title={t('common.errorTitle', { defaultValue: 'Error' })}
+          message={errorMessage}
+          confirmText="OK"
+          cancelText="Close"
+          onConfirm={() => setShowErrorModal(false)}
+          onCancel={() => setShowErrorModal(false)}
+        />
         
         <View style={[styles.signInContainer, { marginBottom: insets.bottom + 20 }]}>
           <Text style={[styles.signInText, { fontFamily: fontFamilyText }]}>

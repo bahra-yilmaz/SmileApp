@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, Image, Animated } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface SplashScreenProps {
   onFinish: () => void;
@@ -8,6 +9,7 @@ interface SplashScreenProps {
 
 export default function SplashScreen({ onFinish, isAppReady }: SplashScreenProps) {
   const fadeAnim = React.useRef(new Animated.Value(1)).current;
+  const insets = useSafeAreaInsets();
   
   useEffect(() => {
     if (isAppReady) {
@@ -25,7 +27,14 @@ export default function SplashScreen({ onFinish, isAppReady }: SplashScreenProps
   }, [isAppReady, onFinish, fadeAnim]);
   
   return (
-    <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+    <Animated.View style={[
+      styles.container,
+      { 
+        opacity: fadeAnim,
+        // Extend to cover safe area gaps if any
+        bottom: -insets.bottom,
+      }
+    ]}>
       {/* Fallback background color in case image is slow to load */}
       <View style={styles.fallbackBackground} />
       
@@ -49,7 +58,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   splashImage: {
-    width: '100%',
-    height: '100%',
+    ...StyleSheet.absoluteFillObject,
+    width: undefined,
+    height: undefined,
   },
 }); 

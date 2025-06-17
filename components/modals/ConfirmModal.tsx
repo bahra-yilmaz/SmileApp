@@ -124,7 +124,7 @@ const createStyles = (theme: any) => StyleSheet.create({ // Use 'any' for theme 
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: 'rgba(0,0,0,0.05)',
+    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
   },
