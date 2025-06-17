@@ -30,6 +30,7 @@ import { LANGUAGES, LanguageItem } from '../../services/languageConfig';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BlurView } from 'expo-blur';
+import supabase from '../../services/supabaseClient';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const NUBO_TONE_KEY = 'nubo_tone';
@@ -84,6 +85,9 @@ export default function SettingsScreen() {
   const [isReminderModalVisible, setIsReminderModalVisible] = useState(false);
   const [reminderTimes, setReminderTimes] = useState<ReminderTime[]>([]);
   
+  // Account state
+  const [user, setUser] = useState<any | null>(null);
+  
   // Mascot tone options
   const TONE_OPTIONS: MascotTone[] = [
     { 
@@ -116,10 +120,9 @@ export default function SettingsScreen() {
     }
   ];
 
+  // After other account-related hooks
+  const [isAccountExpanded, setIsAccountExpanded] = useState(false);
 
-  
-
-  
   useEffect(() => {
     // Animate in from the right
     translateX.value = withTiming(0, {
@@ -140,6 +143,20 @@ export default function SettingsScreen() {
     setCurrentLanguage(i18n.language);
   }, [i18n.language]);
   
+  useEffect(() => {
+    // Fetch current auth user (if any)
+    (async () => {
+      try {
+        const { data } = await supabase.auth.getUser();
+        if (data?.user) {
+          setUser(data.user);
+        }
+      } catch (err) {
+        console.warn('Unable to fetch user', err);
+      }
+    })();
+  }, []);
+  
   const loadCurrentTone = async () => {
     try {
       const storedTone = await AsyncStorage.getItem(NUBO_TONE_KEY);
@@ -159,10 +176,6 @@ export default function SettingsScreen() {
     }
   };
 
-
-  
-
-  
   const handleBackPress = () => {
     // Animate out to the right
     translateX.value = withTiming(screenWidth, {
@@ -320,7 +333,46 @@ export default function SettingsScreen() {
     }
   };
   
+  const handleAccountPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // If user is signed in, open a future account screen, otherwise redirect to sign-in
+    if (user) {
+      // Placeholder: navigate to future account details screen
+      Alert.alert(t('settings.account.comingSoon', 'Account screen coming soon!'));
+    } else {
+      router.push('/onboarding/signin');
+    }
+  };
+  
+  const accountName = user?.user_metadata?.full_name || user?.email || t('settings.account.guest', 'Guest User');
+  const accountEmail = user?.email || t('settings.account.signInPrompt', 'Tap to sign in');
+  
+  const handleAccountChevronPress = (e: any) => {
+    e.stopPropagation();
+    setIsAccountExpanded((prev) => !prev);
+  };
 
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      setUser(null);
+      setIsAccountExpanded(false);
+      Alert.alert(t('settings.account.signedOut', 'Signed out successfully'));
+    } catch (error) {
+      Alert.alert(t('settings.account.error', 'Unable to sign out'));
+    }
+  };
+  
+  const handleSignInPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    router.push('/onboarding/signin');
+    setIsAccountExpanded(false);
+  };
+
+  const handleGetPremiumPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Alert.alert(t('settings.account.premiumSoon', 'Premium Smile coming soon!'));
+  };
   
   const renderLanguageItem = ({ item: lang }: { item: LanguageItem }) => (
     <Pressable
@@ -422,6 +474,50 @@ export default function SettingsScreen() {
           }}
           scrollEventThrottle={16}
         >
+          <GlassmorphicCard style={styles.accountCard} width={screenWidth * 0.9}>
+            <View>
+              <Pressable style={styles.accountItem} onPress={handleAccountPress}>
+                <Ionicons name="person-circle-outline" size={48} color={activeColors.tint} />
+                <View style={styles.accountInfo}>
+                  <ThemedText style={styles.accountName}>{accountName}</ThemedText>
+                  {!user && (
+                    <ThemedText style={styles.accountEmail}>{accountEmail}</ThemedText>
+                  )}
+                </View>
+                <Pressable onPress={(e) => handleAccountChevronPress(e)} hitSlop={10}>
+                  <Ionicons 
+                    name={isAccountExpanded ? "chevron-down" : "chevron-forward"}
+                    size={24} 
+                    color={activeColors.textSecondary} 
+                  />
+                </Pressable>
+              </Pressable>
+              {isAccountExpanded && (
+                <View style={styles.accountExpandedContent}>
+                  {user ? (
+                    <Pressable style={styles.expandedItem} onPress={handleSignOut}>
+                      <Ionicons name="log-out-outline" size={22} color={activeColors.tint} />
+                      <ThemedText style={styles.settingText}>{t('settings.account.signOut', 'Sign Out')}</ThemedText>
+                    </Pressable>
+                  ) : (
+                    <>
+                      <Pressable style={styles.expandedItem} onPress={handleSignInPress}>
+                        <Ionicons name="log-in-outline" size={22} color={activeColors.tint} />
+                        <ThemedText style={styles.settingText}>{t('settings.account.signIn', 'Sign in for personalized experience')}</ThemedText>
+                      </Pressable>
+                      <View style={styles.divider} />
+                      <Pressable style={styles.expandedItem} onPress={handleGetPremiumPress}>
+                        <Ionicons name="star-outline" size={22} color={activeColors.tint} />
+                        <ThemedText style={styles.settingText}>{t('settings.account.getPremium', 'Get Premium Smile')}</ThemedText>
+                      </Pressable>
+                    </>
+                  )}
+                </View>
+              )}
+            </View>
+          </GlassmorphicCard>
+          <View style={{ height: spacing.sm }} />
+          
           <GlassmorphicCard style={styles.settingsCard} width={screenWidth * 0.9}>
             <ThemedText variant="subtitle" style={styles.sectionTitle}>
               {t('settings.appSettings.title', 'App Settings')}
@@ -752,5 +848,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  accountCard: {
+    padding: 20,
+    marginBottom: 16,
+  },
+  accountItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  accountInfo: {
+    marginLeft: 16,
+    flex: 1,
+  },
+  accountName: {
+    fontSize: 18,
+    fontFamily: 'Quicksand-Bold',
+  },
+  accountEmail: {
+    fontSize: 14,
+    opacity: 0.7,
+  },
+  accountExpandedContent: {
+    marginTop: 12,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(150,150,150,0.2)',
+  },
+  expandedItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
 
 }); 
