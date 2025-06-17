@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 import { Platform, View, StyleSheet } from 'react-native';
 import HeaderLogo from '../../components/ui/HeaderLogo';
 import { usePathname } from 'expo-router';
+import { OnboardingProvider } from '../../context/OnboardingContext'; // 1. Import OnboardingProvider
 
 export default function OnboardingLayout() {
   const pathname = usePathname();
@@ -15,7 +16,8 @@ export default function OnboardingLayout() {
         additionalTopPadding={Platform.OS === 'ios' ? 10 : 15} 
         showBackButton={showBackButton}
       />
-      
+        {/* 2. Wrap the Stack with OnboardingProvider */}
+      <OnboardingProvider>
       <Stack
         screenOptions={{
           headerShown: false,
@@ -25,6 +27,7 @@ export default function OnboardingLayout() {
           gestureEnabled: false,
         }}
       >
+        {/* 3. Add the screens */}
         <Stack.Screen
           name="language-select"
           options={{
@@ -74,6 +77,7 @@ export default function OnboardingLayout() {
           }}
         />
       </Stack>
+      </OnboardingProvider>
     </View>
   );
 }
