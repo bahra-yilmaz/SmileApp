@@ -59,23 +59,20 @@ export async function updateUserOnboarding(userId: string, data: OnboardingPaylo
   }
 
   const payload = {
-    ...data,
-    // Format date for Supabase if it exists, otherwise keep it as is (e.g., null)
-    toothbrush_start_date: data.toothbrush_start_date
+    p_user_id: userId,
+    p_age_group: data.age_group,
+    p_brushing_target: data.brushing_target,
+    p_toothbrush_start_date: data.toothbrush_start_date
       ? dayjs(data.toothbrush_start_date).format('YYYY-MM-DD')
-      : data.toothbrush_start_date,
+      : null,
+    p_mascot_tone: data.mascot_tone,
   };
 
-
-  // We use .update() to modify the existing user row and .eq() to specify which user.
-  const { error } = await supabase
-    .from('users')
-    .update(payload)
-    .eq('id', userId);
+  const { error } = await supabase.rpc('update_user_onboarding_details', payload);
 
   // If Supabase returns an error, we throw it to be caught by our UI.
   if (error) {
-    console.error('Supabase onboarding update error:', error);
+    console.error('Supabase onboarding update error (RPC):', error);
     throw new Error(error.message || 'Failed to save onboarding data.');
   }
 

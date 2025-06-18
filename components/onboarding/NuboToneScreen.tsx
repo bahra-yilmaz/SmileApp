@@ -86,6 +86,8 @@ export default function NuboToneScreen({
       mascot_tone: selectedTone,
     };
 
+    console.log('Final Onboarding Data Payload:', JSON.stringify(finalOnboardingData, null, 2));
+
     try {
       await updateUserOnboarding(user.id, finalOnboardingData);
       
@@ -248,9 +250,10 @@ export default function NuboToneScreen({
         message={error || ''}
         confirmText="OK"
         onConfirm={() => setIsErrorModalVisible(false)}
+        onCancel={() => setIsErrorModalVisible(false)}
         showCancel={false}
         iconName="alert-circle-outline"
-        iconColor={theme.colors.feedback.error[colorScheme]}
+        iconColor={theme.colors.feedback.error[colorScheme || 'light']}
       />
     </>
   );

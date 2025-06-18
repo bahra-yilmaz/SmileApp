@@ -11,6 +11,12 @@ interface ConfirmModalProps {
   /** Icon element to render in the top-left corner of the card (optional) */
   icon?: React.ReactNode;
 
+  /** Name of the Ionicons icon to display */
+  iconName?: keyof typeof Ionicons.glyphMap;
+  
+  /** Color of the icon */
+  iconColor?: string;
+
   /** Short header text shown below the icon */
   title?: string;
 
@@ -36,6 +42,8 @@ interface ConfirmModalProps {
 const ConfirmModal: React.FC<ConfirmModalProps> = ({
   visible,
   icon,
+  iconName,
+  iconColor,
   title,
   message,
   confirmText = "Confirm",
@@ -79,7 +87,12 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           </Pressable>
 
           {/* Icon */}
-          {icon ? <View style={styles.iconWrapper}>{icon}</View> : null}
+          {iconName && (
+            <View style={styles.iconWrapper}>
+              <Ionicons name={iconName} size={32} color={iconColor || theme.activeColors.text} />
+            </View>
+          )}
+          {icon && !iconName ? <View style={styles.iconWrapper}>{icon}</View> : null}
 
           {/* Header */}
           {title ? <Text style={styles.modalTitle}>{title}</Text> : null}
