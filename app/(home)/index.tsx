@@ -18,6 +18,7 @@ import { AppImages } from '../../utils/loadAssets';
 import ConfirmModal from '../../components/modals/ConfirmModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Easing } from 'react-native';
+import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 
 // Import home components using barrel imports
 import {
@@ -123,11 +124,15 @@ export default function HomeScreen() {
   const toggleChat = () => setIsChatVisible(!isChatVisible);
   
   // FAB breathing animation
-  const fabAnim = React.useRef(new Animated.Value(0)).current; // 0..1
+  const fabAnim = React.useRef(new Animated.Value(0)).current; // 0..1 for breathing
+  const pressAnim = React.useRef(new Animated.Value(1)).current; // For press effect
   const fabLoopRef = React.useRef<Animated.CompositeAnimation | null>(null);
 
   const fabAnimatedStyle = {
-    transform: [{ scale: fabAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 1.12] }) }],
+    transform: [
+      { scale: fabAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 1.12] }) },
+      { scale: pressAnim }
+    ],
     shadowOpacity: fabAnim.interpolate({ inputRange: [0, 1], outputRange: [0.35, 0.8] }),
     shadowRadius: fabAnim.interpolate({ inputRange: [0, 1], outputRange: [10, 16] }),
     shadowColor: showFirstTimerPrompt ? 'white' : '#000',
@@ -153,8 +158,19 @@ export default function HomeScreen() {
     };
   }, [showFirstTimerPrompt, fabAnim]);
 
-  // Handle floating action button press
-  const handleActionButtonPress = () => router.push('./timer');
+  // A new function to handle the FAB animation and navigation
+  const triggerFabAndNavigate = () => {
+    // Animate the FAB press
+    Animated.sequence([
+      Animated.timing(pressAnim, { toValue: 0.9, duration: 150, useNativeDriver: false }),
+      Animated.timing(pressAnim, { toValue: 1, duration: 200, useNativeDriver: false })
+    ]).start();
+
+    // Navigate after the animation is done
+    setTimeout(() => {
+      router.push('./timer');
+    }, 400);
+  };
   
   // Handle menu button press
   const handleMenuPress = () => router.push('/(home)/settings');
@@ -234,11 +250,11 @@ export default function HomeScreen() {
         </View>
       </View>
       <Animated.View style={[styles.floatingActionButton, fabAnimatedStyle]} >
-        <TouchableOpacity style={styles.fabInner} onPress={handleActionButtonPress} activeOpacity={0.8}>
+        <Pressable style={styles.fabInner} onPress={() => triggerFabAndNavigate()}>
           <LinearGradient colors={[theme.colors.primary[500], theme.colors.primary[600]]} style={styles.gradientButton}>
             <MaterialCommunityIcons name="tooth" size={36} color="white" />
           </LinearGradient>
-        </TouchableOpacity>
+        </Pressable>
       </Animated.View>
       <View style={[styles.bottomLeftMascot, { bottom: mountainHeight * 0.25 }]}>
         <View style={styles.mascotCard}>
@@ -267,8 +283,8 @@ export default function HomeScreen() {
 
   return (
     <Animated.View 
-      style={[styles.container, { opacity: introOpacity }]} 
-      onStartShouldSetResponder={() => true}
+      style={[styles.container, { opacity: introOpacity }]}
+      onStartShouldSetResponderCapture={() => awaitingFirstTap}
       onResponderRelease={handleFirstTap}
     >
       <Animated.View 
@@ -302,7 +318,10 @@ export default function HomeScreen() {
         cancelText={t('common.later', 'Later')}
         dimAmount={0.4}
         floatingElement={(
-          <Animated.View style={[styles.fabCopy, { transform: [{ scale: fabAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 1.12] }) }] }]} pointerEvents="none">
+          <Animated.View style={[styles.fabCopy, { transform: [
+            { scale: fabAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 1.12] }) },
+            { scale: pressAnim }
+          ] }]} pointerEvents="none">
             <LinearGradient colors={[theme.colors.primary[500], theme.colors.primary[600]]} style={styles.gradientButton}>
               <MaterialCommunityIcons name="tooth" size={36} color="white" />
             </LinearGradient>
@@ -310,7 +329,7 @@ export default function HomeScreen() {
         )}
         onConfirm={() => {
           setShowFirstTimerPrompt(false);
-          router.push('./timer');
+          triggerFabAndNavigate();
         }}
         onCancel={() => {
           setShowFirstTimerPrompt(false);

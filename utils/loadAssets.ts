@@ -107,4 +107,19 @@ export async function loadAssets() {
   // });
 
   await Promise.all([imageAssets]);
+}
+
+// Preloads and decodes the most critical images for the home screen to prevent pop-in.
+export async function preloadHomeScreenAssets() {
+  const assetsToLoad = [
+    AppImages.homescreenBackground,
+    AppImages.mountain1,
+  ];
+
+  try {
+    const urisToPrefetch = assetsToLoad.map(asset => Asset.fromModule(asset).uri);
+    await Promise.all(urisToPrefetch.map(uri => Image.prefetch(uri)));
+  } catch (e) {
+    console.warn("Error preloading home screen assets", e);
+  }
 } 

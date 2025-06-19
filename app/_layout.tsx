@@ -10,7 +10,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import i18nInstance from '../services/i18n';
 import { I18nextProvider } from 'react-i18next';
 import { enableFreeze } from 'react-native-screens';
-import { loadAssets } from '../utils/loadAssets';
+import { loadAssets, preloadHomeScreenAssets } from '../utils/loadAssets';
 import { AuthProvider } from '../context/AuthContext'; // 1. Import AuthProvider
 
 // Get dimensions for background
@@ -46,7 +46,11 @@ export default function RootLayout() {
   useEffect(() => {
     async function prepareApp() {
       try {
-        await loadAssets();
+        // In parallel, load general assets and decode critical home screen images.
+        await Promise.all([
+          loadAssets(),
+          preloadHomeScreenAssets()
+        ]);
       } catch (e) {
         console.warn(e);
       } finally {

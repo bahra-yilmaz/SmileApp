@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Dimensions, Text, FlatList, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Dimensions, Text, FlatList } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { Theme } from '../../constants/Theme';
@@ -11,9 +11,6 @@ import PrimaryButton from '../../components/ui/PrimaryButton';
 import * as Haptics from 'expo-haptics';
 import { OnboardingService } from '../../services/OnboardingService';
 import { useAuth } from '../../context/AuthContext';
-import { Asset } from 'expo-asset';
-import { AppImages } from '../../utils/loadAssets';
-import { Image } from 'expo-image';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - (Theme.spacing.lg * 2) - Theme.spacing.md) / 2;
@@ -51,14 +48,8 @@ export default function LanguageSelectScreen() {
         await OnboardingService.setUserLanguage(user.id, selectedLanguage);
       }
 
-      // Explicitly prefetch and decode the images required by the Home screen.
-      const urisToPrefetch = [
-        Asset.fromModule(AppImages.homescreenBackground).uri,
-        Asset.fromModule(AppImages.mountain1).uri,
-      ];
-      await Promise.all(urisToPrefetch.map(uri => Image.prefetch(uri)));
-
-      // Add a short, deliberate delay to make the transition feel smoother.
+      // The preloading logic is now handled globally in _layout.tsx.
+      // We can add a small artificial delay if the transition feels too fast.
       await new Promise(r => setTimeout(r, 400));
 
       // Navigate to the Home screen

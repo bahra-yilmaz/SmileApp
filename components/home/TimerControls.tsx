@@ -24,8 +24,13 @@ export default function TimerControls({
       <View style={styles.shadowContainer}>
         <Pressable
           onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            onStartPress();
+            if (isRunning) {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              onStartPress();
+            } else {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              onBrushedPress();
+            }
           }}
           style={({ pressed }) => [
             styles.primaryButton,
@@ -35,13 +40,13 @@ export default function TimerControls({
           <View style={styles.contentContainer}>
             <View style={styles.buttonIconContainer}>
               <MaterialCommunityIcons 
-                name={isRunning ? "refresh" : "play"} 
+                name={isRunning ? "refresh" : "plus"} 
                 size={28} 
                 color={Colors.primary[500]} 
               />
             </View>
             <ThemedText style={[styles.buttonText, { color: Colors.primary[500] }]}>
-              {isRunning ? t('timerOverlay.restart') : t('timerOverlay.start')}
+              {isRunning ? t('timerOverlay.restart') : t('timerOverlay.brushed')}
             </ThemedText>
           </View>
         </Pressable>
@@ -50,8 +55,13 @@ export default function TimerControls({
       <View style={[styles.shadowContainer, { marginLeft: BUTTON_SPACING }]}>
         <Pressable
           onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-            onBrushedPress();
+            if (isRunning) {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              onBrushedPress();
+            } else {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              onStartPress();
+            }
           }}
           style={({ pressed }) => [
             styles.primaryColorButton,
@@ -61,13 +71,13 @@ export default function TimerControls({
           <View style={styles.contentContainer}>
             <View style={styles.buttonIconContainer}>
               <MaterialCommunityIcons 
-                name={isRunning ? "check" : "plus"} 
+                name={isRunning ? "check" : "play"} 
                 size={28} 
                 color="white" 
               />
             </View>
             <ThemedText style={[styles.buttonText, { color: 'white' }]}>
-              {isRunning ? t('timerOverlay.done') : t('timerOverlay.brushed')}
+              {isRunning ? t('timerOverlay.done') : t('timerOverlay.start')}
             </ThemedText>
           </View>
         </Pressable>
