@@ -75,13 +75,15 @@ export default function HomeScreen() {
   // ---------------------------------------------------------------------------
   const [showFirstTimerPrompt, setShowFirstTimerPrompt] = useState(false);
 
-  // Run only once when component mounts
+  // Determine if we should show modal on first interaction
+  const [awaitingFirstTap, setAwaitingFirstTap] = useState(false);
+
   useEffect(() => {
     (async () => {
       try {
         const hasShown = await AsyncStorage.getItem(FIRST_TIMER_SHOWN_KEY);
         if (!hasShown) {
-          setTimeout(() => setShowFirstTimerPrompt(true), 1200); // 1.2s delay
+          setAwaitingFirstTap(true);
         }
       } catch (err) {
         console.warn('Error checking first visit flag', err);
@@ -89,19 +91,11 @@ export default function HomeScreen() {
     })();
   }, []);
 
-  const handleFirstTimerConfirm = async () => {
-    try {
-      await AsyncStorage.setItem(FIRST_TIMER_SHOWN_KEY, 'true');
-    } catch {}
-    setShowFirstTimerPrompt(false);
-    router.push('./timer');
-  };
-
-  const handleFirstTimerLater = async () => {
-    try {
-      await AsyncStorage.setItem(FIRST_TIMER_SHOWN_KEY, 'true');
-    } catch {}
-    setShowFirstTimerPrompt(false);
+  const handleFirstTap = () => {
+    if (awaitingFirstTap) {
+      setShowFirstTimerPrompt(true);
+      setAwaitingFirstTap(false);
+    }
   };
 
   // A single state to track if any overlay is visible
@@ -129,18 +123,35 @@ export default function HomeScreen() {
   const toggleChat = () => setIsChatVisible(!isChatVisible);
   
   // FAB breathing animation
-  const fabScale = React.useRef(new Animated.Value(1)).current;
+  const fabAnim = React.useRef(new Animated.Value(0)).current; // 0..1
+  const fabLoopRef = React.useRef<Animated.CompositeAnimation | null>(null);
+
+  const fabAnimatedStyle = {
+    transform: [{ scale: fabAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 1.12] }) }],
+    shadowOpacity: fabAnim.interpolate({ inputRange: [0, 1], outputRange: [0.35, 0.8] }),
+    shadowRadius: fabAnim.interpolate({ inputRange: [0, 1], outputRange: [10, 16] }),
+    shadowColor: showFirstTimerPrompt ? 'white' : '#000',
+  } as any;
 
   useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(fabScale, { toValue: 1.12, duration: 800, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
-        Animated.timing(fabScale, { toValue: 1, duration: 800, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
-      ])
-    );
-    loop.start();
-    return () => loop.stop();
-  }, [fabScale]);
+    if (showFirstTimerPrompt) {
+      // Start breathing animation
+      fabLoopRef.current = Animated.loop(
+        Animated.sequence([
+          Animated.timing(fabAnim, { toValue: 1, duration: 800, easing: Easing.inOut(Easing.ease), useNativeDriver: false }),
+          Animated.timing(fabAnim, { toValue: 0, duration: 800, easing: Easing.inOut(Easing.ease), useNativeDriver: false }),
+        ])
+      );
+      fabLoopRef.current.start();
+    } else {
+      if (fabLoopRef.current) fabLoopRef.current.stop();
+      fabAnim.setValue(0);
+    }
+
+    return () => {
+      if (fabLoopRef.current) fabLoopRef.current.stop();
+    };
+  }, [showFirstTimerPrompt, fabAnim]);
 
   // Handle floating action button press
   const handleActionButtonPress = () => router.push('./timer');
@@ -222,7 +233,7 @@ export default function HomeScreen() {
           </LightContainer>
         </View>
       </View>
-      <Animated.View style={[styles.floatingActionButton, { transform: [{ scale: fabScale }] }] }>
+      <Animated.View style={[styles.floatingActionButton, fabAnimatedStyle]} >
         <TouchableOpacity style={styles.fabInner} onPress={handleActionButtonPress} activeOpacity={0.8}>
           <LinearGradient colors={[theme.colors.primary[500], theme.colors.primary[600]]} style={styles.gradientButton}>
             <MaterialCommunityIcons name="tooth" size={36} color="white" />
@@ -255,7 +266,11 @@ export default function HomeScreen() {
   );
 
   return (
-    <Animated.View style={[styles.container, { opacity: introOpacity }] }>
+    <Animated.View 
+      style={[styles.container, { opacity: introOpacity }]} 
+      onStartShouldSetResponder={() => true}
+      onResponderRelease={handleFirstTap}
+    >
       <Animated.View 
         style={[
           styles.container,
@@ -287,14 +302,19 @@ export default function HomeScreen() {
         cancelText={t('common.later', 'Later')}
         dimAmount={0.4}
         floatingElement={(
-          <Animated.View style={[styles.fabCopy, { transform: [{ scale: fabScale }] }]} pointerEvents="none">
+          <Animated.View style={[styles.fabCopy, { transform: [{ scale: fabAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 1.12] }) }] }]} pointerEvents="none">
             <LinearGradient colors={[theme.colors.primary[500], theme.colors.primary[600]]} style={styles.gradientButton}>
               <MaterialCommunityIcons name="tooth" size={36} color="white" />
             </LinearGradient>
           </Animated.View>
         )}
-        onConfirm={handleFirstTimerConfirm}
-        onCancel={handleFirstTimerLater}
+        onConfirm={() => {
+          setShowFirstTimerPrompt(false);
+          router.push('./timer');
+        }}
+        onCancel={() => {
+          setShowFirstTimerPrompt(false);
+        }}
       />
     </Animated.View>
   );
@@ -423,8 +443,8 @@ const styles = StyleSheet.create({
     zIndex: 1000,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
     elevation: 8,
   },
   fabInner: {
