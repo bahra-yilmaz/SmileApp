@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Dimensions, Animated, Text, FlatList } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Dimensions, Text, FlatList, ActivityIndicator } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { Theme } from '../../constants/Theme';
@@ -11,9 +11,9 @@ import PrimaryButton from '../../components/ui/PrimaryButton';
 import * as Haptics from 'expo-haptics';
 import { OnboardingService } from '../../services/OnboardingService';
 import { useAuth } from '../../context/AuthContext';
-import SplashScreen from '../../components/SplashScreen';
 import { Asset } from 'expo-asset';
 import { AppImages } from '../../utils/loadAssets';
+import { Image } from 'expo-image';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - (Theme.spacing.lg * 2) - Theme.spacing.md) / 2;
@@ -21,11 +21,9 @@ const ITEM_WIDTH = (width - (Theme.spacing.lg * 2) - Theme.spacing.md) / 2;
 export default function LanguageSelectScreen() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
-  const fadeAnim = useRef(new Animated.Value(0)).current;
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
   const { user } = useAuth();
-  const [showSplash, setShowSplash] = useState(false);
-  const [assetsReady, setAssetsReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -42,45 +40,36 @@ export default function LanguageSelectScreen() {
   }, [i18n]);
 
   const handleContinue = useCallback(async () => {
-    // Fade out this screen
+    if (isLoading) return;
+
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start(async () => {
-      try {
-        if (user?.id && selectedLanguage) {
-          await OnboardingService.setUserLanguage(user.id, selectedLanguage);
-        }
-      } catch (error) {
-        console.error('Failed to set user language:', error);
+    setIsLoading(true);
+
+    try {
+      // Save user language preference
+      if (user?.id && selectedLanguage) {
+        await OnboardingService.setUserLanguage(user.id, selectedLanguage);
       }
 
-      // Show interim splash while preloading home images
-      setShowSplash(true);
-      try {
-        await Asset.loadAsync([
-          AppImages.homescreenBackground,
-          AppImages.mountain1,
-        ]);
-      } catch (err) {
-        console.warn('Preloading home images failed', err);
-      } finally {
-        // Small delay so user perceives the overlay
-        await new Promise(r => setTimeout(r, 600));
-        setAssetsReady(true);
-      }
-    });
-  }, [router, fadeAnim, user, selectedLanguage]);
+      // Explicitly prefetch and decode the images required by the Home screen.
+      const urisToPrefetch = [
+        Asset.fromModule(AppImages.homescreenBackground).uri,
+        Asset.fromModule(AppImages.mountain1).uri,
+      ];
+      await Promise.all(urisToPrefetch.map(uri => Image.prefetch(uri)));
 
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
-  }, []);
+      // Add a short, deliberate delay to make the transition feel smoother.
+      await new Promise(r => setTimeout(r, 400));
+
+      // Navigate to the Home screen
+      router.replace('/(home)');
+
+    } catch (err) {
+      console.error('Failed during language selection continuation:', err);
+      // In case of an error, allow the user to try again.
+      setIsLoading(false);
+    }
+  }, [user, selectedLanguage, isLoading]);
 
   // If fonts aren't loaded yet, we'll still render but with system fonts as fallback
   const fontFamilyTitle = fontsLoaded ? 'Quicksand-Bold' : 'System';
@@ -116,10 +105,7 @@ export default function LanguageSelectScreen() {
   );
 
   return (
-    <Animated.View style={[
-      styles.container, 
-      { opacity: fadeAnim, position: 'absolute', width: '100%', height: '100%' }
-    ]}>
+    <View style={styles.container}>
       <View style={styles.contentContainer}>
         <View style={styles.titleContainer}>
           <ThemedText style={[styles.title, { fontFamily: fontFamilyTitle }]}>
@@ -142,24 +128,14 @@ export default function LanguageSelectScreen() {
           <PrimaryButton
             label={t('common.Continue')}
             onPress={handleContinue}
-            disabled={!selectedLanguage}
+            disabled={!selectedLanguage || isLoading}
+            isLoading={isLoading}
             width={width * 0.85}
             useDisplayFont={true}
           />
         </View>
       </View>
-      {showSplash && (
-        <SplashScreen 
-          isAppReady={assetsReady} 
-          showHeader
-          overlay
-          onFinish={() => {
-            setShowSplash(false);
-            router.replace('/(home)');
-          }} 
-        />
-      )}
-    </Animated.View>
+    </View>
   );
 }
 

@@ -20,7 +20,6 @@ export default function SplashScreen({ onFinish, isAppReady, showHeader = false,
     Animated.timing(fadeAnim, {
       toValue: 0,
         duration: 400,
-        delay: 200, // A small delay to ensure the UI has a moment to settle
       useNativeDriver: true,
     }).start(() => {
         // Call the onFinish callback when animation completes to unmount the component
