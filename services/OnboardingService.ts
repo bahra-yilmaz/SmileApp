@@ -1,42 +1,85 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import supabase from './supabaseClient';
 import dayjs from 'dayjs';
 
-const ONBOARDING_COMPLETED_KEY = 'onboarding_completed';
-
 export class OnboardingService {
   /**
-   * Marks onboarding as completed
+   * Determines if the onboarding (language selection) has been completed by
+   * checking whether the `language` column in the current user row is set.
    */
-  static async markOnboardingAsCompleted(): Promise<void> {
-    try {
-      await AsyncStorage.setItem(ONBOARDING_COMPLETED_KEY, 'true');
-    } catch (error) {
-      console.error('Error saving onboarding status:', error);
-    }
-  }
+  static async hasCompletedOnboarding(userId: string | undefined | null): Promise<boolean> {
+    if (!userId) return false;
 
-  /**
-   * Checks if onboarding has been completed
-   */
-  static async hasCompletedOnboarding(): Promise<boolean> {
     try {
-      const value = await AsyncStorage.getItem(ONBOARDING_COMPLETED_KEY);
-      return value === 'true';
+      const { data, error } = await supabase
+        .from('users')
+        .select('language')
+        .eq('id', userId)
+        .single();
+
+      if (error) {
+        console.error('Supabase error fetching user language:', error);
+        return false;
+      }
+
+      return !!data?.language;
     } catch (error) {
-      console.error('Error getting onboarding status:', error);
+      console.error('Failed to check onboarding completion:', error);
       return false;
     }
   }
 
   /**
-   * Resets onboarding status (for testing)
+   * Persists the selected language on the backend.
    */
-  static async resetOnboardingStatus(): Promise<void> {
+  static async setUserLanguage(userId: string, languageCode: string): Promise<void> {
+    if (!userId) throw new Error('Missing user ID for setUserLanguage');
+
     try {
-      await AsyncStorage.removeItem(ONBOARDING_COMPLETED_KEY);
+      const { error } = await supabase
+        .from('users')
+        .update({ language: languageCode })
+        .eq('id', userId);
+
+      if (error) {
+        throw error;
+      }
     } catch (error) {
-      console.error('Error resetting onboarding status:', error);
+      console.error('Failed to update user language:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Dev helper – clears the language so onboarding shows again.
+   */
+  static async resetOnboardingStatus(userId: string): Promise<void> {
+    if (!userId) throw new Error('Missing user ID for reset');
+
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({ language: null })
+        .eq('id', userId);
+
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      console.error('Failed to reset onboarding status:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * @deprecated Existing onboarding screens call this. It now just ensures the
+   *              language column is set so the app won\'t show onboarding again.
+   */
+  static async markOnboardingAsCompleted(userId?: string, languageCode?: string): Promise<void> {
+    if (!userId) return;
+
+    // If a language code is provided, set it. Otherwise leave as-is.
+    if (languageCode) {
+      await OnboardingService.setUserLanguage(userId, languageCode);
     }
   }
 }

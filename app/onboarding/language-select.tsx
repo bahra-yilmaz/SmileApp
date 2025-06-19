@@ -9,6 +9,8 @@ import { useFonts } from 'expo-font';
 import { GlassmorphicCard } from '../../components/ui/GlassmorphicCard';
 import PrimaryButton from '../../components/ui/PrimaryButton';
 import * as Haptics from 'expo-haptics';
+import { OnboardingService } from '../../services/OnboardingService';
+import { useAuth } from '../../context/AuthContext';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - (Theme.spacing.lg * 2) - Theme.spacing.md) / 2;
@@ -18,6 +20,7 @@ export default function LanguageSelectScreen() {
   const router = useRouter();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
+  const { user } = useAuth();
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -33,18 +36,26 @@ export default function LanguageSelectScreen() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   }, [i18n]);
 
-  const handleContinue = useCallback(() => {
+  const handleContinue = useCallback(async () => {
     // Fade out this screen
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 200,
       useNativeDriver: true,
-    }).start(() => {
-      // Then navigate when animation completes
-      router.replace('/onboarding/signup');
+    }).start(async () => {
+      try {
+        if (user?.id && selectedLanguage) {
+          await OnboardingService.setUserLanguage(user.id, selectedLanguage);
+        }
+      } catch (error) {
+        console.error('Failed to set user language:', error);
+      }
+
+      // Navigate straight to the Home stack
+      router.replace('/(home)');
     });
-  }, [router, fadeAnim]);
+  }, [router, fadeAnim, user, selectedLanguage]);
 
   useEffect(() => {
     Animated.timing(fadeAnim, {

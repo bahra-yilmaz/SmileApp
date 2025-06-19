@@ -31,6 +31,7 @@ import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BlurView } from 'expo-blur';
 import supabase from '../../services/supabaseClient';
+import { useAuth } from '../../context/AuthContext';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const NUBO_TONE_KEY = 'nubo_tone';
@@ -122,6 +123,8 @@ export default function SettingsScreen() {
 
   // After other account-related hooks
   const [isAccountExpanded, setIsAccountExpanded] = useState(false);
+
+  const { user: authUser } = useAuth();
 
   useEffect(() => {
     // Animate in from the right
@@ -234,7 +237,9 @@ export default function SettingsScreen() {
         {
           text: t('settings.resetOnboarding.confirm', 'Reset'),
           onPress: async () => {
-            await OnboardingService.resetOnboardingStatus();
+            if (authUser?.id) {
+              await OnboardingService.resetOnboardingStatus(authUser.id);
+            }
             router.replace('/');
           },
           style: "destructive"
