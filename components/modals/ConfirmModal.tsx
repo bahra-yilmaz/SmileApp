@@ -1,5 +1,5 @@
-import React from 'react';
-import { Modal, View, Text, StyleSheet, Pressable } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Modal, View, Text, StyleSheet, Pressable, Animated } from 'react-native';
 import { useTheme } from '../ThemeProvider'; // Assuming ThemeProvider is in components
 import { Colors } from '../../constants/Colors'; // Import Colors
 import { Ionicons } from '@expo/vector-icons';
@@ -37,6 +37,9 @@ interface ConfirmModalProps {
 
   /** Whether to show the cancel button. Defaults to true. */
   showCancel?: boolean;
+
+  /** Background dim amount (0-1). Set 0 for no backdrop. Default 0.6 */
+  dimAmount?: number;
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -51,9 +54,24 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onConfirm,
   onCancel,
   showCancel = true,
+  dimAmount = 0.6,
 }) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+  // Fade-in animation
+  const opacityAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (visible) {
+      opacityAnim.setValue(0);
+      Animated.timing(opacityAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [visible, opacityAnim]);
 
   // Local inline button component that scales with flexbox
   const ModalButton = ({ label, variant, onPress }: { label: string; variant: 'primary' | 'secondary'; onPress: () => void }) => {
@@ -79,8 +97,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       visible={visible}
       onRequestClose={onCancel}
     >
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
+      <View style={[styles.centeredView, { backgroundColor: dimAmount > 0 ? `rgba(0,0,0,${dimAmount})` : 'transparent' }] }>
+        <Animated.View style={[styles.modalView, { opacity: opacityAnim }] }>
           {/* Close   */}
           <Pressable onPress={onCancel} style={styles.closeButton} hitSlop={8}>
             <Ionicons name="close" size={20} color={theme.activeColors.text} />
@@ -107,7 +125,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             {showCancel && <ModalButton label={cancelText} variant="secondary" onPress={onCancel} />}
             <ModalButton label={confirmText} variant="primary" onPress={onConfirm} />
           </View>
-        </View>
+        </Animated.View>
       </View>
     </Modal>
   );

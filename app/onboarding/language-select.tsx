@@ -11,6 +11,7 @@ import PrimaryButton from '../../components/ui/PrimaryButton';
 import * as Haptics from 'expo-haptics';
 import { OnboardingService } from '../../services/OnboardingService';
 import { useAuth } from '../../context/AuthContext';
+import SplashScreen from '../../components/SplashScreen';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - (Theme.spacing.lg * 2) - Theme.spacing.md) / 2;
@@ -21,6 +22,7 @@ export default function LanguageSelectScreen() {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
   const { user } = useAuth();
+  const [showSplash, setShowSplash] = useState(false);
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -52,8 +54,11 @@ export default function LanguageSelectScreen() {
         console.error('Failed to set user language:', error);
       }
 
-      // Navigate straight to the Home stack
-      router.replace('/(home)');
+      // Show interim splash for 1s then navigate
+      setShowSplash(true);
+      setTimeout(() => {
+        router.replace('/(home)');
+      }, 1000);
     });
   }, [router, fadeAnim, user, selectedLanguage]);
 
@@ -131,6 +136,9 @@ export default function LanguageSelectScreen() {
           />
         </View>
       </View>
+      {showSplash && (
+        <SplashScreen isAppReady={true} onFinish={() => setShowSplash(false)} />
+      )}
     </Animated.View>
   );
 }

@@ -10,7 +10,7 @@ export default function RootScreen() {
   
   useEffect(() => {
     if (!isLoading) {
-      checkOnboardingStatus();
+    checkOnboardingStatus();
     }
   }, [isLoading, user]);
   

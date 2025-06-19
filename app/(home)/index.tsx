@@ -15,6 +15,7 @@ import { Colors } from '../../constants/Colors';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
 import { AppImages } from '../../utils/loadAssets';
+import ConfirmModal from '../../components/modals/ConfirmModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Import home components using barrel imports
@@ -68,28 +69,40 @@ export default function HomeScreen() {
   // State for home screen mascot card expansion
   const [isHomeMascotExpanded, setIsHomeMascotExpanded] = useState(false);
   
-  // Check if this is the first visit after onboarding
+  // ---------------------------------------------------------------------------
+  // First-visit prompt & FAB highlight
+  // ---------------------------------------------------------------------------
+  const [showFirstTimerPrompt, setShowFirstTimerPrompt] = useState(false);
+
+  // Run only once when component mounts
   useEffect(() => {
-    checkFirstVisit();
-  }, []);
-  
-  const checkFirstVisit = async () => {
-    try {
-      const hasShownFirstTimer = await AsyncStorage.getItem(FIRST_TIMER_SHOWN_KEY);
-      if (!hasShownFirstTimer) {
-        // This is the first visit after onboarding, navigate to timer screen
-        setTimeout(() => {
-          router.push('./timer');
-        }, 1000); // Small delay to let the screen settle
-        
-        // Mark that we've shown the first timer
-        await AsyncStorage.setItem(FIRST_TIMER_SHOWN_KEY, 'true');
+    (async () => {
+      try {
+        const hasShown = await AsyncStorage.getItem(FIRST_TIMER_SHOWN_KEY);
+        if (!hasShown) {
+          setTimeout(() => setShowFirstTimerPrompt(true), 1200); // 1.2s delay
+        }
+      } catch (err) {
+        console.warn('Error checking first visit flag', err);
       }
-    } catch (error) {
-      console.error('Error checking first visit:', error);
-    }
+    })();
+  }, []);
+
+  const handleFirstTimerConfirm = async () => {
+    try {
+      await AsyncStorage.setItem(FIRST_TIMER_SHOWN_KEY, 'true');
+    } catch {}
+    setShowFirstTimerPrompt(false);
+    router.push('./timer');
   };
-  
+
+  const handleFirstTimerLater = async () => {
+    try {
+      await AsyncStorage.setItem(FIRST_TIMER_SHOWN_KEY, 'true');
+    } catch {}
+    setShowFirstTimerPrompt(false);
+  };
+
   // A single state to track if any overlay is visible
   const isOverlayVisible = isChatVisible || isToothbrushVisible || isStreakVisible || isBrushingTimeVisible;
 
@@ -238,6 +251,17 @@ export default function HomeScreen() {
           <BrushingTimeOverlay isVisible={isBrushingTimeVisible} onClose={() => setIsBrushingTimeVisible(false)} minutes={2} seconds={30} />
         </>
       )}
+      <ConfirmModal
+        visible={showFirstTimerPrompt}
+        iconName="time"
+        title={t('home.firstBrush.title', 'Ready for your first brush?')}
+        message={t('home.firstBrush.body', 'Tap the tooth button below whenever you want to start a 2-minute brushing session. Would you like to start one now?')}
+        confirmText={t('home.firstBrush.start', 'Start now')}
+        cancelText={t('common.later', 'Later')}
+        dimAmount={0}
+        onConfirm={handleFirstTimerConfirm}
+        onCancel={handleFirstTimerLater}
+      />
     </View>
   );
 }
@@ -356,8 +380,7 @@ const styles = StyleSheet.create({
   floatingActionButton: {
     position: 'absolute',
     bottom: 45,
-    left: '50%',
-    marginLeft: -35,
+    left: width / 2 - 35,
     width: 70,
     height: 70,
     borderRadius: 35,
