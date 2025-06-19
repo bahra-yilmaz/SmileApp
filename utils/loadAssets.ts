@@ -5,8 +5,8 @@ import * as Font from 'expo-font';
 // Object containing all images for easy access
 export const AppImages = {
   // backgrounds
-  homescreenBackground: require('../assets/images/homescreen-background.png'),
-  mountain1: require('../assets/images/mountain-1.png'),
+  homescreenBackground: require('../assets/images/homescreen-background.webp'),
+  mountain1: require('../assets/images/mountain-1.webp'),
   mountainFaded: require('../assets/images/mountain-faded.png'),
   logo: require('../assets/images/logo.png'),
   meshgradientLightDefault: require('../assets/images/meshgradient-light-default.png'),

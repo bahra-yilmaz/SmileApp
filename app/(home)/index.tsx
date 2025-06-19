@@ -154,6 +154,12 @@ export default function HomeScreen() {
     setIsHomeMascotExpanded(!isHomeMascotExpanded);
   };
   
+  const introOpacity = React.useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(introOpacity, { toValue: 1, duration: 600, easing: Easing.inOut(Easing.ease), useNativeDriver: true }).start();
+  }, []);
+
   const screenContent = (
     <>
       <Image 
@@ -161,6 +167,7 @@ export default function HomeScreen() {
         style={styles.homeBackgroundImage}
         contentFit="cover"
         cachePolicy="disk"
+        transition={600}
       />
       <View style={styles.mainContainer}>
         <SafeAreaView style={styles.headerContainer}>
@@ -242,12 +249,13 @@ export default function HomeScreen() {
         style={[styles.mountainImage, { bottom: -insets.bottom - 10 }]} 
         contentFit="contain" 
         cachePolicy="disk" 
+        transition={600}
       />
     </>
   );
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { opacity: introOpacity }] }>
       <Animated.View 
         style={[
           styles.container,
@@ -288,7 +296,7 @@ export default function HomeScreen() {
         onConfirm={handleFirstTimerConfirm}
         onCancel={handleFirstTimerLater}
       />
-    </View>
+    </Animated.View>
   );
 }
 

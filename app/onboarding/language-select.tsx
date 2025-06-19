@@ -12,6 +12,8 @@ import * as Haptics from 'expo-haptics';
 import { OnboardingService } from '../../services/OnboardingService';
 import { useAuth } from '../../context/AuthContext';
 import SplashScreen from '../../components/SplashScreen';
+import { Asset } from 'expo-asset';
+import { AppImages } from '../../utils/loadAssets';
 
 const { width } = Dimensions.get('window');
 const ITEM_WIDTH = (width - (Theme.spacing.lg * 2) - Theme.spacing.md) / 2;
@@ -23,6 +25,7 @@ export default function LanguageSelectScreen() {
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
   const { user } = useAuth();
   const [showSplash, setShowSplash] = useState(false);
+  const [assetsReady, setAssetsReady] = useState(false);
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -54,11 +57,20 @@ export default function LanguageSelectScreen() {
         console.error('Failed to set user language:', error);
       }
 
-      // Show interim splash for 1s then navigate
+      // Show interim splash while preloading home images
       setShowSplash(true);
-      setTimeout(() => {
-        router.replace('/(home)');
-      }, 1000);
+      try {
+        await Asset.loadAsync([
+          AppImages.homescreenBackground,
+          AppImages.mountain1,
+        ]);
+      } catch (err) {
+        console.warn('Preloading home images failed', err);
+      } finally {
+        // Small delay so user perceives the overlay
+        await new Promise(r => setTimeout(r, 600));
+        setAssetsReady(true);
+      }
     });
   }, [router, fadeAnim, user, selectedLanguage]);
 
@@ -137,7 +149,15 @@ export default function LanguageSelectScreen() {
         </View>
       </View>
       {showSplash && (
-        <SplashScreen isAppReady={true} onFinish={() => setShowSplash(false)} />
+        <SplashScreen 
+          isAppReady={assetsReady} 
+          showHeader
+          overlay
+          onFinish={() => {
+            setShowSplash(false);
+            router.replace('/(home)');
+          }} 
+        />
       )}
     </Animated.View>
   );
