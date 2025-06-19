@@ -17,6 +17,7 @@ import * as Haptics from 'expo-haptics';
 import { AppImages } from '../../utils/loadAssets';
 import ConfirmModal from '../../components/modals/ConfirmModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Easing } from 'react-native';
 
 // Import home components using barrel imports
 import {
@@ -127,6 +128,20 @@ export default function HomeScreen() {
   // Toggle chat overlay visibility
   const toggleChat = () => setIsChatVisible(!isChatVisible);
   
+  // FAB breathing animation
+  const fabScale = React.useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(fabScale, { toValue: 1.12, duration: 800, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+        Animated.timing(fabScale, { toValue: 1, duration: 800, easing: Easing.inOut(Easing.ease), useNativeDriver: true }),
+      ])
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [fabScale]);
+
   // Handle floating action button press
   const handleActionButtonPress = () => router.push('./timer');
   
@@ -200,11 +215,13 @@ export default function HomeScreen() {
           </LightContainer>
         </View>
       </View>
-      <TouchableOpacity style={styles.floatingActionButton} onPress={handleActionButtonPress} activeOpacity={0.8}>
-        <LinearGradient colors={[theme.colors.primary[500], theme.colors.primary[600]]} style={styles.gradientButton}>
-          <MaterialCommunityIcons name="tooth" size={36} color="white" />
-        </LinearGradient>
-      </TouchableOpacity>
+      <Animated.View style={[styles.floatingActionButton, { transform: [{ scale: fabScale }] }] }>
+        <TouchableOpacity style={styles.fabInner} onPress={handleActionButtonPress} activeOpacity={0.8}>
+          <LinearGradient colors={[theme.colors.primary[500], theme.colors.primary[600]]} style={styles.gradientButton}>
+            <MaterialCommunityIcons name="tooth" size={36} color="white" />
+          </LinearGradient>
+        </TouchableOpacity>
+      </Animated.View>
       <View style={[styles.bottomLeftMascot, { bottom: mountainHeight * 0.25 }]}>
         <View style={styles.mascotCard}>
           <BlurView intensity={70} tint="light" style={styles.cardBlur}>
@@ -253,12 +270,21 @@ export default function HomeScreen() {
       )}
       <ConfirmModal
         visible={showFirstTimerPrompt}
-        iconName="time"
+        icon={
+          <MaterialCommunityIcons name="toothbrush" size={32} color={theme.colors.primary[500]} />
+        }
         title={t('home.firstBrush.title', 'Ready for your first brush?')}
-        message={t('home.firstBrush.body', 'Tap the tooth button below whenever you want to start a 2-minute brushing session. Would you like to start one now?')}
+        message={undefined}
         confirmText={t('home.firstBrush.start', 'Start now')}
         cancelText={t('common.later', 'Later')}
-        dimAmount={0}
+        dimAmount={0.4}
+        floatingElement={(
+          <Animated.View style={[styles.fabCopy, { transform: [{ scale: fabScale }] }]} pointerEvents="none">
+            <LinearGradient colors={[theme.colors.primary[500], theme.colors.primary[600]]} style={styles.gradientButton}>
+              <MaterialCommunityIcons name="tooth" size={36} color="white" />
+            </LinearGradient>
+          </Animated.View>
+        )}
         onConfirm={handleFirstTimerConfirm}
         onCancel={handleFirstTimerLater}
       />
@@ -393,9 +419,25 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 8,
   },
+  fabInner: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 35,
+    overflow: 'hidden',
+  },
   gradientButton: {
     width: '100%',
     height: '100%',
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fabCopy: {
+    position: 'absolute',
+    bottom: 45,
+    left: width / 2 - 35,
+    width: 70,
+    height: 70,
     borderRadius: 35,
     justifyContent: 'center',
     alignItems: 'center',

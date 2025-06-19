@@ -40,6 +40,9 @@ interface ConfirmModalProps {
 
   /** Background dim amount (0-1). Set 0 for no backdrop. Default 0.6 */
   dimAmount?: number;
+
+  /** Optional floating element (renders inside modal above backdrop) */
+  floatingElement?: React.ReactNode;
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -55,6 +58,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onCancel,
   showCancel = true,
   dimAmount = 0.6,
+  floatingElement,
 }) => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -75,15 +79,14 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 
   // Local inline button component that scales with flexbox
   const ModalButton = ({ label, variant, onPress }: { label: string; variant: 'primary' | 'secondary'; onPress: () => void }) => {
-    // Right-side button ("primary") should have an off-white background & red text
     const isPrimary = variant === 'primary';
-    const backgroundColor = isPrimary ? Colors.neutral[100] : Colors.primary[600];
-    const textColor = isPrimary ? '#D32F2F' /* destructive red from ReminderItem */ : Colors.neutral[50];
-
+    const backgroundColor = isPrimary ? Colors.primary[500] : 'transparent';
+    const textColor = isPrimary ? Colors.neutral[50] : Colors.primary[500];
+    const borderStyle = isPrimary ? {} : { borderWidth: 2, borderColor: Colors.primary[200] };
     return (
       <Pressable
         onPress={onPress}
-        style={[styles.modalButton, { backgroundColor }]}
+        style={[styles.modalButton, { backgroundColor, ...borderStyle }]}
       >
         <Text style={[styles.modalButtonText, { color: textColor }]}>{label}</Text>
       </Pressable>
@@ -98,6 +101,12 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       onRequestClose={onCancel}
     >
       <View style={[styles.centeredView, { backgroundColor: dimAmount > 0 ? `rgba(0,0,0,${dimAmount})` : 'transparent' }] }>
+        {/* Floating element like FAB copy */}
+        {floatingElement && (
+          <View style={StyleSheet.absoluteFill} pointerEvents="none">
+            {floatingElement}
+          </View>
+        )}
         <Animated.View style={[styles.modalView, { opacity: opacityAnim }] }>
           {/* Close   */}
           <Pressable onPress={onCancel} style={styles.closeButton} hitSlop={8}>
