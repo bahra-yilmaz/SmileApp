@@ -24,30 +24,28 @@ import DonutChart from '../ui/DonutChart';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
 import { shareContent } from '../../utils/share';
+import { useBrushingGoal } from '../../context/BrushingGoalContext';
 
 interface BrushingTimeOverlayProps {
   isVisible: boolean;
   onClose: () => void;
   minutes: number;
   seconds: number;
-  targetMinutes?: number;
-  onTargetTimeUpdate?: (newTarget: number) => void;
 }
 
-// Define common target time options
-const TARGET_TIME_OPTIONS = [2, 3, 4];
+// Define common target time options (in minutes)
+const TARGET_TIME_OPTIONS = [1.5, 2, 3, 4];
 
 export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({ 
   isVisible, 
   onClose, 
   minutes, 
-  seconds, 
-  targetMinutes = 3,
-  onTargetTimeUpdate,
+  seconds,
 }) => {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const { activeColors } = theme;
+  const { brushingGoalMinutes, setBrushingGoalMinutes } = useBrushingGoal();
   
   // Animation values for container
   const [fadeAnim] = useState(() => new Animated.Value(0));
@@ -74,7 +72,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   const overlayHeight = screenHeight * 0.7;
   
   // Calculate progress as a percentage
-  const progress = ((minutes + seconds / 60) / targetMinutes) * 100;
+  const progress = ((minutes + seconds / 60) / brushingGoalMinutes) * 100;
   
   // Handle animations when visibility changes
   useEffect(() => {
@@ -122,14 +120,14 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   };
   
   // Handler for selecting a predefined target time
-  const handleSelectTargetTime = (newTarget: number) => {
-    if (onTargetTimeUpdate) {
-      onTargetTimeUpdate(newTarget);
-    } else {
-      console.warn("BrushingTimeOverlay: onTargetTimeUpdate prop not provided. Target time not saved.");
+  const handleSelectTargetTime = async (newTarget: number) => {
+    try {
+      await setBrushingGoalMinutes(newTarget);
+      setIsTargetOptionsVisible(false); // Collapse options after selection
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    } catch (error) {
+      console.error('Error setting brushing goal:', error);
     }
-    setIsTargetOptionsVisible(false); // Collapse options after selection
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   };
   
   // If not visible and animation is complete, don't render anything
@@ -141,7 +139,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   
   // Calculate remaining time
   const totalSecondsBrushed = minutes * 60 + seconds;
-  const targetTotalSeconds = targetMinutes * 60;
+  const targetTotalSeconds = brushingGoalMinutes * 60;
   const remainingSeconds = Math.max(0, targetTotalSeconds - totalSecondsBrushed);
   const remainingMinutes = Math.floor(remainingSeconds / 60);
   const remainingSecondsPart = remainingSeconds % 60;
@@ -247,7 +245,10 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
                   {t('brushingTimeOverlay.title')}
                 </ThemedText>
                 <ThemedText style={styles.timeText}>
-                  {t('brushingTimeOverlay.timeProgressFormat', { currentTime: `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`, targetTime: `${targetMinutes}:00` })}
+                  {t('brushingTimeOverlay.timeProgressFormat', { 
+                    currentTime: `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`, 
+                    targetTime: brushingGoalMinutes === 1.5 ? '1:30' : `${brushingGoalMinutes}:00` 
+                  })}
                 </ThemedText>
               </View>
             </View>
@@ -294,12 +295,14 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
                   {t('brushingTimeOverlay.targetTitle')}
                 </ThemedText>
                 <ThemedText style={styles.usageText}>
-                  {t('brushingTimeOverlay.targetDescriptionFormat', { targetMinutes })}
+                  {t('brushingTimeOverlay.targetDescriptionFormat', { 
+                    targetMinutes: brushingGoalMinutes === 1.5 ? '1:30' : `${brushingGoalMinutes}` 
+                  })}
                 </ThemedText>
               </View>
               {/* Removed chevron icon as row itself is not interactive */}
               <MaterialCommunityIcons
-                name={isTargetOptionsVisible ? "chevron-up" : "chevron-down"} // Toggle icon
+                name={isTargetOptionsVisible ? "chevron-down" : "chevron-right"} // Toggle icon
                 size={24}
                 color={activeColors.textSecondary}
                 style={{ marginLeft: 8 }} 
@@ -310,7 +313,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
             {isTargetOptionsVisible && (
               <View style={styles.targetOptionsContainer}>
                 {TARGET_TIME_OPTIONS.map((option) => {
-                  const isSelected = option === targetMinutes;
+                  const isSelected = option === brushingGoalMinutes;
                   return (
                     <Pressable
                       key={option}
@@ -329,7 +332,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
                           isSelected && { color: '#FFFFFF' } // White text when selected
                         ]}
                       >
-                        {t('brushingTimeOverlay.targetOptionFormat', { option })}
+                        {option === 1.5 ? '1:30' : `${option}:00`}
                       </ThemedText>
                     </Pressable>
                   );
@@ -581,19 +584,21 @@ const styles = StyleSheet.create({
   },
   targetOptionsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around', // Distribute buttons evenly
-    marginHorizontal: 16,
+    justifyContent: 'space-between', // Distribute buttons evenly
+    paddingHorizontal: 16, // Full width container
     marginTop: 4,
     marginBottom: 16,
+    gap: 8, // Add small gap between buttons
   },
   targetOptionButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    flex: 1, // Make buttons equal width
+    paddingVertical: 12,
+    paddingHorizontal: 8,
     borderRadius: 20,
     borderWidth: 1,
     borderColor: Colors.primary[500], // Use primary color for border
-    minWidth: 80, // Ensure decent button size
     alignItems: 'center',
+    justifyContent: 'center',
   },
   targetOptionText: {
     fontSize: 14,

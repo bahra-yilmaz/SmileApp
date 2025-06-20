@@ -27,6 +27,7 @@ import { eventBus } from '../../utils/EventBus';
 import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Countdown from '../../components/home/Countdown';
+import { useBrushingGoal } from '../../context/BrushingGoalContext';
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -39,16 +40,19 @@ enum TimerMode {
 const TIMER_MODE_STORAGE_KEY = '@SmileApp:timerMode';
 
 export default function TimerScreen() {
+  // Get global brushing goal
+  const { brushingGoalMinutes } = useBrushingGoal();
+  
   // Timer state management
   const [isRunning, setIsRunning] = useState(false);
-  const [minutes, setMinutes] = useState(2);
-  const [seconds, setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(Math.floor(brushingGoalMinutes));
+  const [seconds, setSeconds] = useState(Math.round((brushingGoalMinutes % 1) * 60));
   const [hasCompleted, setHasCompleted] = useState(false);
   const [isOvertime, setIsOvertime] = useState(false);
   const [showCountdown, setShowCountdown] = useState(false);
   const [overtimeCounter, setOvertimeCounter] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | number | null>(null);
-  const initialTimeInSeconds = useRef(2 * 60);
+  const initialTimeInSeconds = useRef(brushingGoalMinutes * 60);
   
   // Mode state
   const [currentMode, setCurrentMode] = useState<TimerMode | null>(null);
@@ -83,6 +87,16 @@ export default function TimerScreen() {
     velocityThreshold: 0.3,
     enableHaptics: true,
   });
+
+  // Update initial time when brushing goal changes
+  useEffect(() => {
+    initialTimeInSeconds.current = brushingGoalMinutes * 60;
+    // Reset timer to new goal if not currently running
+    if (!isRunning && !hasCompleted) {
+      setMinutes(Math.floor(brushingGoalMinutes));
+      setSeconds(Math.round((brushingGoalMinutes % 1) * 60));
+    }
+  }, [brushingGoalMinutes, isRunning, hasCompleted]);
 
   // Load initial timer mode from storage
   useEffect(() => {
@@ -206,8 +220,8 @@ export default function TimerScreen() {
     }
     if (timerRef.current) clearInterval(timerRef.current);
     setIsRunning(false);
-    setMinutes(2);
-    setSeconds(0);
+    setMinutes(Math.floor(brushingGoalMinutes));
+    setSeconds(Math.round((brushingGoalMinutes % 1) * 60));
     setHasCompleted(false);
     setIsOvertime(false);
     setOvertimeCounter(0);
@@ -242,7 +256,20 @@ export default function TimerScreen() {
   };
 
   const handleNavigateToResults = () => {
-    router.push('./BrushingResultsScreen');
+    // Calculate actual brushed time in seconds
+    const totalElapsedSeconds = initialTimeInSeconds.current - (minutes * 60 + seconds);
+    const actualMinutes = Math.floor(totalElapsedSeconds / 60);
+    const actualSeconds = totalElapsedSeconds % 60;
+    
+    // Navigate with actual time data
+    router.push({
+      pathname: './BrushingResultsScreen',
+      params: {
+        actualMinutes: actualMinutes.toString(),
+        actualSeconds: actualSeconds.toString(),
+        actualTimeInSec: totalElapsedSeconds.toString(),
+      },
+    });
   };
 
   const handleClosePress = () => {

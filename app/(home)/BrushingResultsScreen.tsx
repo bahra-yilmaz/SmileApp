@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions, Pressable, Animated } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import ThemedText from '../../components/ThemedText';
@@ -18,6 +18,9 @@ import { eventBus } from '../../utils/EventBus';
 import AnimatedProgressBar from '../../components/ui/AnimatedProgressBar';
 import * as Haptics from 'expo-haptics';
 import { shareContent } from '../../utils/share';
+import { insertBrushingLog, InsertBrushingLogResult } from '../../services/BrushingLogsService';
+import { useBrushingGoal } from '../../context/BrushingGoalContext';
+import { useAuth } from '../../context/AuthContext';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -26,10 +29,23 @@ const BrushingResultsScreen = () => {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { t } = useTranslation();
+  const params = useLocalSearchParams();
+  const { brushingGoalMinutes } = useBrushingGoal();
+  const { user } = useAuth();
+  
+  // Parse actual time from navigation params, fallback to 0 if not provided
+  const actualMinutes = parseInt(params.actualMinutes as string) || 0;
+  const actualSeconds = parseInt(params.actualSeconds as string) || 0;
+  const actualTimeInSec = parseInt(params.actualTimeInSec as string) || 0;
   
   // State for animations and modal visibility. Start fadeAnim at 0 (invisible).
   const [fadeAnim] = useState(() => new Animated.Value(0));
   const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false);
+  
+  // State for brushing log data
+  const [brushingLogData, setBrushingLogData] = useState<InsertBrushingLogResult | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [logError, setLogError] = useState<string | null>(null);
 
   // Add a useEffect to run the fade-in animation on mount
   useEffect(() => {
@@ -39,6 +55,38 @@ const BrushingResultsScreen = () => {
       useNativeDriver: true,
     }).start();
   }, []); // Empty dependency array ensures this runs only once on mount
+
+  // Save brushing log when component mounts
+  useEffect(() => {
+    const saveBrushingLog = async () => {
+      if (!user?.id || actualTimeInSec <= 0) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const targetTimeInSec = Math.round(brushingGoalMinutes * 60);
+        const result = await insertBrushingLog({
+          userId: user.id,
+          actualTimeInSec,
+          targetTimeInSec,
+          aimedSessionsPerDay: 2, // Default to 2 sessions per day
+        });
+        
+        setBrushingLogData(result);
+        
+        // Emit event to refresh dashboard data
+        eventBus.emit('brushing-completed');
+      } catch (error) {
+        console.error('Failed to save brushing log:', error);
+        setLogError(error instanceof Error ? error.message : 'Failed to save brushing log');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    saveBrushingLog();
+  }, [user?.id, actualTimeInSec, brushingGoalMinutes]);
 
   // --- NAVIGATION HANDLERS ---
   const handleNavigateHome = () => {
@@ -76,7 +124,7 @@ const BrushingResultsScreen = () => {
   const handleCancelRevert = () => setIsConfirmModalVisible(false);
   const handleShare = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    const timeString = `${brushingMinutes.toString().padStart(2, '0')}:${brushingSeconds
+    const timeString = `${actualMinutes.toString().padStart(2, '0')}:${actualSeconds
       .toString()
       .padStart(2, '0')}`;
     await shareContent({
@@ -114,19 +162,67 @@ const BrushingResultsScreen = () => {
     });
   };
 
-  const brushingMinutes = 2;
-  const brushingSeconds = 30;
+
 
   if (!fontsLoaded) {
     return null;
   }
+
+  // Show loading state while saving brushing log
+  if (isLoading) {
+    return (
+      <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+        <Image
+          source={require('../../assets/images/meshgradient-light-default.png')}
+          style={styles.backgroundImage}
+        />
+        <View style={[styles.centerContainer, { paddingTop: insets.top + 40 }]}>
+          <ThemedText style={styles.loadingText}>{t('brushingResultsScreen.saving', 'Saving your brushing session...')}</ThemedText>
+        </View>
+      </Animated.View>
+    );
+  }
+
+  // Show error state if saving failed
+  if (logError) {
+    return (
+      <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
+        <Image
+          source={require('../../assets/images/meshgradient-light-default.png')}
+          style={styles.backgroundImage}
+        />
+        <View style={[styles.centerContainer, { paddingTop: insets.top + 40 }]}>
+          <ThemedText style={styles.errorText}>{t('brushingResultsScreen.saveError', 'Failed to save brushing session')}</ThemedText>
+          <PrimaryButton
+            label={t('common.continue', 'Continue')}
+            onPress={handleNavigateHome}
+            width={screenWidth * 0.6}
+            style={styles.errorButton}
+          />
+        </View>
+      </Animated.View>
+    );
+  }
   
   const cardWidth = screenWidth * 0.4;
   const cardHeight = 110;
-  const card1Data = { progress: 75, value: 90, label: "Points" };
-  const card2Data = { progress: 100, value: 200, label: "Bonus" };
+  
+  // Calculate progress based on target
+  const targetTimeInSec = Math.round(brushingGoalMinutes * 60);
+  const progress = Math.min(100, Math.round((actualTimeInSec / targetTimeInSec) * 100));
+  
+  const card1Data = { 
+    progress, 
+    value: brushingLogData?.basePoints || 0, 
+    label: "Points" 
+  };
+  const card2Data = { 
+    progress: (brushingLogData?.bonusPoints ?? 0) > 0 ? 100 : 0, 
+    value: brushingLogData?.bonusPoints ?? 0, 
+    label: "Bonus" 
+  };
 
-  const motivationalProgress = 75; // percent
+  const motivationalProgress = progress; // Use actual progress percentage
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
@@ -139,7 +235,7 @@ const BrushingResultsScreen = () => {
 
         <View style={styles.timeCardContainer}>
           <ThemedText style={[styles.cardText, { fontFamily: 'Merienda-Bold' }]}>
-            {String(brushingMinutes).padStart(2, '0')}:{String(brushingSeconds).padStart(2, '0')}
+            {String(actualMinutes).padStart(2, '0')}:{String(actualSeconds).padStart(2, '0')}
           </ThemedText>
           <ThemedText style={styles.cardTitle}>{t('brushingResultsScreen.timeSpentCardTitle')}</ThemedText>
         </View>
@@ -598,6 +694,28 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     color: Colors.primary[800],
     textAlign: 'center',
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  loadingText: {
+    fontSize: 18,
+    fontFamily: 'Quicksand-Medium',
+    color: Colors.neutral[800],
+    textAlign: 'center',
+  },
+  errorText: {
+    fontSize: 16,
+    fontFamily: 'Quicksand-Medium',
+    color: Colors.feedback.error.light,
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  errorButton: {
+    marginTop: 10,
   },
 });
 

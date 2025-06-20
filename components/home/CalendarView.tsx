@@ -5,6 +5,7 @@ import { format, startOfWeek, addDays, isSameDay, subWeeks, parse } from 'date-f
 import { enUS, es, de, fr, tr, pt, ja, hi } from 'date-fns/locale'; // Import locales
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import { BlurView } from 'expo-blur';
+import { useCalendarData } from '../../hooks/useCalendarData';
 
 // Import the track color from DonutChart
 const TRACK_COLOR = 'rgba(200, 200, 220, 0.3)';
@@ -14,24 +15,7 @@ interface CalendarViewProps {
   onDateChange?: (date: Date) => void; // Made optional since we're disabling selection
 }
 
-// Mock brushing data for demonstration
-// In a real app, this would come from your data store or API
-const mockBrushingData = {
-  // Format: { 'YYYY-MM-DD': number_of_times_brushed }
-  [format(new Date(), 'yyyy-MM-dd')]: 2, // Today - brushed twice
-  [format(addDays(new Date(), -1), 'yyyy-MM-dd')]: 1, // Yesterday - brushed once
-  [format(addDays(new Date(), -2), 'yyyy-MM-dd')]: 2, // Day before - brushed twice
-  [format(addDays(new Date(), -3), 'yyyy-MM-dd')]: 0, // Missed brushing
-  [format(addDays(new Date(), -4), 'yyyy-MM-dd')]: 1, // Brushed once
-  // Add more historical data for demonstration
-  [format(addDays(new Date(), -7), 'yyyy-MM-dd')]: 2,
-  [format(addDays(new Date(), -8), 'yyyy-MM-dd')]: 1,
-  [format(addDays(new Date(), -9), 'yyyy-MM-dd')]: 0,
-  [format(addDays(new Date(), -10), 'yyyy-MM-dd')]: 2,
-  [format(addDays(new Date(), -11), 'yyyy-MM-dd')]: 1,
-  [format(addDays(new Date(), -14), 'yyyy-MM-dd')]: 2,
-  [format(addDays(new Date(), -15), 'yyyy-MM-dd')]: 0,
-};
+
 
 // Stable week type with ID to prevent rendering issues
 interface WeekData {
@@ -47,6 +31,9 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   const { theme } = useTheme();
   const { width: screenWidth } = Dimensions.get('window');
   const flatListRef = useRef<FlatList>(null);
+  
+  // Fetch real brushing data
+  const { brushingData, isLoading: isDataLoading } = useCalendarData();
   
   // State to track visible weeks and if we're ready to display
   const [weeks, setWeeks] = useState<WeekData[]>([]);
@@ -132,7 +119,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   // Render activity dots based on number of times brushed
   const renderActivityDots = (date: Date) => {
     const dateKey = format(date, 'yyyy-MM-dd', { locale: currentLocale });
-    const brushCount = mockBrushingData[dateKey] || 0;
+    const brushCount = brushingData[dateKey] || 0;
     
     // Maximum 2 dots (for morning and evening brushing)
     const maxDots = 2;

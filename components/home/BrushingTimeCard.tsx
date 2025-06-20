@@ -5,11 +5,11 @@ import ThemedText from '../ThemedText';
 import DonutChart from '../ui/DonutChart';
 import { Colors } from '../../constants/Colors';
 import { useTranslation } from 'react-i18next';
+import { useBrushingGoal } from '../../context/BrushingGoalContext';
 
 interface BrushingTimeCardProps {
   minutes: number;
   seconds: number;
-  targetMinutes?: number;
   fontFamily?: string;
   onPress?: () => void;
 }
@@ -17,13 +17,14 @@ interface BrushingTimeCardProps {
 const BrushingTimeCard: React.FC<BrushingTimeCardProps> = ({
   minutes,
   seconds,
-  targetMinutes = 3,
   fontFamily,
   onPress,
 }) => {
   const { t } = useTranslation();
-  // Calculate progress as a percentage
-  const progress = ((minutes + seconds / 60) / targetMinutes) * 100;
+  const { brushingGoalMinutes } = useBrushingGoal();
+  
+  // Calculate progress as a percentage using global goal
+  const progress = ((minutes + seconds / 60) / brushingGoalMinutes) * 100;
   
   return (
     <Pressable 

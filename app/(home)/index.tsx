@@ -19,6 +19,8 @@ import ConfirmModal from '../../components/modals/ConfirmModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Easing } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+import { useDashboardData } from '../../hooks/useDashboardData';
+import { eventBus } from '../../utils/EventBus';
 
 // Import home components using barrel imports
 import {
@@ -44,6 +46,9 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { t } = useTranslation();
+  
+  // Fetch dashboard data from backend
+  const { data: dashboardData, isLoading: isDashboardLoading, error: dashboardError, refetch } = useDashboardData();
   
   // Get screen dimensions
   const { height: screenHeight } = Dimensions.get('window');
@@ -180,6 +185,17 @@ export default function HomeScreen() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setIsHomeMascotExpanded(!isHomeMascotExpanded);
   };
+
+  // Refresh dashboard data when returning from timer or other screens
+  useEffect(() => {
+    const unsubscribe = eventBus.on('brushing-completed', () => {
+      refetch();
+    });
+
+    return () => {
+      eventBus.off('brushing-completed', unsubscribe);
+    };
+  }, [refetch]);
   
   const introOpacity = React.useRef(new Animated.Value(0)).current;
 
@@ -241,9 +257,22 @@ export default function HomeScreen() {
               zIndex: 25,
             }}
           >
-            <StreakCard streakDays={7} fontFamily={fontFamily} onPress={() => setIsStreakVisible(true)} />
-            <BrushingTimeCard minutes={2} seconds={30} fontFamily={fontFamily} onPress={() => setIsBrushingTimeVisible(true)} />
-            <ToothbrushCard daysInUse={45} fontFamily={fontFamily} onPress={() => setIsToothbrushVisible(true)} />
+            <StreakCard 
+              streakDays={dashboardData?.streakDays ?? 0} 
+              fontFamily={fontFamily} 
+              onPress={() => setIsStreakVisible(true)} 
+            />
+            <BrushingTimeCard 
+              minutes={dashboardData?.lastBrushingTime?.minutes ?? 0} 
+              seconds={dashboardData?.lastBrushingTime?.seconds ?? 0} 
+              fontFamily={fontFamily} 
+              onPress={() => setIsBrushingTimeVisible(true)} 
+            />
+            <ToothbrushCard 
+              daysInUse={dashboardData?.toothbrushDaysInUse ?? 0} 
+              fontFamily={fontFamily} 
+              onPress={() => setIsToothbrushVisible(true)} 
+            />
             <View style={styles.spacer} />
             <CalendarView selectedDate={selectedDate} onDateChange={setSelectedDate} />
           </LightContainer>
@@ -295,16 +324,29 @@ export default function HomeScreen() {
           }
         ]}
         pointerEvents={isOverlayVisible ? 'none' : 'auto'}
-      >
-        {screenContent}
-      </Animated.View>
+              >
+          {screenContent}
+        </Animated.View>
       
       {isOverlayVisible && (
         <>
           <ChatOverlay isVisible={isChatVisible} onClose={() => setIsChatVisible(false)} />
-          <ToothbrushOverlay isVisible={isToothbrushVisible} onClose={() => setIsToothbrushVisible(false)} daysInUse={45} />
-          <StreakOverlay isVisible={isStreakVisible} onClose={() => setIsStreakVisible(false)} streakDays={7} />
-          <BrushingTimeOverlay isVisible={isBrushingTimeVisible} onClose={() => setIsBrushingTimeVisible(false)} minutes={2} seconds={30} />
+          <ToothbrushOverlay 
+            isVisible={isToothbrushVisible} 
+            onClose={() => setIsToothbrushVisible(false)} 
+            daysInUse={dashboardData?.toothbrushDaysInUse ?? 0} 
+          />
+          <StreakOverlay 
+            isVisible={isStreakVisible} 
+            onClose={() => setIsStreakVisible(false)} 
+            streakDays={dashboardData?.streakDays ?? 0} 
+          />
+          <BrushingTimeOverlay 
+            isVisible={isBrushingTimeVisible} 
+            onClose={() => setIsBrushingTimeVisible(false)} 
+            minutes={dashboardData?.lastBrushingTime?.minutes ?? 0} 
+            seconds={dashboardData?.lastBrushingTime?.seconds ?? 0} 
+          />
         </>
       )}
       <ConfirmModal
@@ -489,4 +531,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
 });

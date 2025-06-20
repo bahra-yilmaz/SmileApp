@@ -12,6 +12,7 @@ import { I18nextProvider } from 'react-i18next';
 import { enableFreeze } from 'react-native-screens';
 import { loadAssets, preloadHomeScreenAssets } from '../utils/loadAssets';
 import { AuthProvider } from '../context/AuthContext'; // 1. Import AuthProvider
+import { BrushingGoalProvider } from '../context/BrushingGoalContext';
 
 // Get dimensions for background
 const { width, height } = Dimensions.get('window');
@@ -83,20 +84,22 @@ export default function RootLayout() {
       
        {/* 2. Wrap everything with AuthProvider */}
        <AuthProvider>
-        <I18nextProvider i18n={i18nInstance}>
-          <ThemeProvider defaultColorScheme="light" defaultThemeVariation="default">
-            <StatusBar style="auto" />
-            <Slot />
-            
-            {/* Show custom splash screen until fonts are loaded, then trigger fade out */}
-            {showSplash && (
-              <SplashScreen
-                isAppReady={appReady}
-                onFinish={() => setShowSplash(false)}
-              />
-            )}
-          </ThemeProvider>
-        </I18nextProvider>
+        <BrushingGoalProvider>
+          <I18nextProvider i18n={i18nInstance}>
+            <ThemeProvider defaultColorScheme="light" defaultThemeVariation="default">
+              <StatusBar style="auto" />
+              <Slot />
+              
+              {/* Show custom splash screen until fonts are loaded, then trigger fade out */}
+              {showSplash && (
+                <SplashScreen
+                  isAppReady={appReady}
+                  onFinish={() => setShowSplash(false)}
+                />
+              )}
+            </ThemeProvider>
+          </I18nextProvider>
+        </BrushingGoalProvider>
       </AuthProvider>
     </GestureHandlerRootView>
   );
