@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, useContext, ReactNode } from
 import { Session, User } from '@supabase/supabase-js';
 import supabase from '../services/supabaseClient';
 import { GuestUserService } from '../services/GuestUserService';
+import { LanguageService } from '../services/LanguageService';
 
 // Define the shape of the context's value
 interface AuthContextType {
@@ -45,14 +46,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setUser(session?.user ?? null);
         if (isLoading) setIsLoading(false); // Stop loading once we have a definite state
         
-        // Clear guest data when user signs in
+        // Handle user sign in
         if (event === 'SIGNED_IN' && session?.user && !previousUser) {
-          console.log('🔄 User signed in, clearing guest data cache...');
+          console.log('🔄 User signed in, loading preferences...');
           try {
+            // Clear guest data
             await GuestUserService.clearGuestData();
             console.log('✅ Guest data cache cleared for authenticated user');
+            
+            // Load user's language preference
+            await LanguageService.loadAndApplyUserLanguage(session.user.id);
+            console.log('✅ User language preference loaded');
           } catch (error) {
-            console.error('❌ Error clearing guest data:', error);
+            console.error('❌ Error loading user preferences:', error);
+          }
+        }
+
+        // Handle user sign out
+        if (event === 'SIGNED_OUT') {
+          console.log('🔄 User signed out, loading default language...');
+          try {
+            // Load default language (device or fallback)
+            await LanguageService.loadAndApplyUserLanguage();
+            console.log('✅ Default language loaded');
+          } catch (error) {
+            console.error('❌ Error loading default language:', error);
           }
         }
       }

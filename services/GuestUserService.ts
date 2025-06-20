@@ -52,7 +52,6 @@ export class GuestUserService {
     
     // If creation is already in progress, wait for it
     if (creationPromise) {
-      console.log('👻 Waiting for guest user creation in progress...');
       return await creationPromise;
     }
     

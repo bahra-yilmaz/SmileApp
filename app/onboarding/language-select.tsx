@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Dimensions, Text, FlatList } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Dimensions, Text, FlatList, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'expo-router';
 import { Theme } from '../../constants/Theme';
@@ -9,6 +9,7 @@ import { useFonts } from 'expo-font';
 import { GlassmorphicCard } from '../../components/ui/GlassmorphicCard';
 import PrimaryButton from '../../components/ui/PrimaryButton';
 import * as Haptics from 'expo-haptics';
+import { LanguageService } from '../../services/LanguageService';
 import { OnboardingService } from '../../services/OnboardingService';
 import { useAuth } from '../../context/AuthContext';
 
@@ -21,6 +22,7 @@ export default function LanguageSelectScreen() {
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -28,28 +30,58 @@ export default function LanguageSelectScreen() {
     'Quicksand-Medium': require('../../assets/fonts/Quicksand-Medium.ttf'),
   });
 
+  // Initialize with current language
+  useEffect(() => {
+    const initializeLanguage = async () => {
+      try {
+        const currentLanguage = LanguageService.getCurrentLanguage();
+        setSelectedLanguage(currentLanguage);
+      } catch (error) {
+        console.error('Failed to initialize language:', error);
+        // Fall back to English
+        setSelectedLanguage('en');
+      } finally {
+        setIsInitializing(false);
+      }
+    };
+
+    initializeLanguage();
+  }, []);
+
   const handleLanguageSelect = useCallback(async (langCode: string) => {
-    // Change the language
-    await i18n.changeLanguage(langCode);
-    // Update selected language
-    setSelectedLanguage(langCode);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  }, [i18n]);
+    try {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      
+      // Change the language using our service
+      await LanguageService.changeLanguage(langCode, user?.id);
+      
+      // Update selected language
+      setSelectedLanguage(langCode);
+    } catch (error) {
+      console.error('Failed to select language:', error);
+      Alert.alert(
+        t('common.error'),
+        t('onboarding.languageSelectScreen.changeLanguageError') || 'Failed to change language. Please try again.'
+      );
+    }
+  }, [user?.id, t]);
 
   const handleContinue = useCallback(async () => {
-    if (isLoading) return;
+    if (isLoading || !selectedLanguage) return;
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setIsLoading(true);
 
     try {
-      // Save user language preference
+      // Save user language preference using our new service
       if (user?.id && selectedLanguage) {
-        await OnboardingService.setUserLanguage(user.id, selectedLanguage);
+        await LanguageService.setUserLanguage(user.id, selectedLanguage);
+        
+        // Mark onboarding as completed
+        await OnboardingService.markOnboardingAsCompleted(user.id, selectedLanguage);
       }
 
-      // The preloading logic is now handled globally in _layout.tsx.
-      // We can add a small artificial delay if the transition feels too fast.
+      // Small delay for smooth transition
       await new Promise(r => setTimeout(r, 400));
 
       // Navigate to the Home screen
@@ -57,10 +89,21 @@ export default function LanguageSelectScreen() {
 
     } catch (err) {
       console.error('Failed during language selection continuation:', err);
-      // In case of an error, allow the user to try again.
+      
+      Alert.alert(
+        t('common.error'),
+        t('onboarding.languageSelectScreen.saveError') || 'Failed to save language preference. Please try again.',
+        [
+          {
+            text: t('common.tryAgain') || 'Try Again',
+            onPress: () => setIsLoading(false)
+          }
+        ]
+      );
+      
       setIsLoading(false);
     }
-  }, [user, selectedLanguage, isLoading]);
+  }, [user, selectedLanguage, isLoading, router, t]);
 
   // If fonts aren't loaded yet, we'll still render but with system fonts as fallback
   const fontFamilyTitle = fontsLoaded ? 'Quicksand-Bold' : 'System';
@@ -94,6 +137,21 @@ export default function LanguageSelectScreen() {
       </GlassmorphicCard>
     </TouchableOpacity>
   );
+
+  // Show loading while initializing
+  if (isInitializing) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.contentContainer}>
+          <View style={styles.titleContainer}>
+            <ThemedText style={[styles.title, { fontFamily: fontFamilyTitle }]}>
+              {t('common.loading') || 'Loading...'}
+            </ThemedText>
+          </View>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>

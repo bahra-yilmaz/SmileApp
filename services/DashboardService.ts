@@ -20,6 +20,18 @@ export interface DashboardStats {
   };
 }
 
+/**
+ * Determines which service to use based on the user ID.
+ * Returns GuestUserService for guests, or a Supabase query builder for authenticated users.
+ */
+function getServiceForUser(userId: string) {
+  if (userId === 'guest') {
+    console.log('👻 Using GuestUserService for data fetching.');
+    return { service: GuestUserService, isGuest: true };
+  }
+  return { service: supabase, isGuest: false };
+}
+
 const TOOTHBRUSH_DATA_KEY = 'toothbrush_data';
 
 /**
@@ -28,12 +40,13 @@ const TOOTHBRUSH_DATA_KEY = 'toothbrush_data';
 export async function getDashboardStats(userId: string, brushingGoalMinutes: number = 2): Promise<DashboardStats> {
   console.log('📊 Getting dashboard stats for userId:', userId, 'fallback goal:', brushingGoalMinutes);
   
-  // Handle guest users with the GuestUserService
+  // Handle guest users separately
   if (userId === 'guest') {
-    console.log('👻 Guest user detected, using GuestUserService...');
+    console.log('👻 Using GuestUserService for dashboard stats.');
     return await GuestUserService.getGuestDashboardStats(brushingGoalMinutes);
   }
   
+  // Authenticated user logic
   try {
     // First, fetch the user's target time from the users table
     const { data: userData, error: userError } = await supabase
@@ -249,11 +262,13 @@ async function getToothbrushDaysInUse(): Promise<number> {
 export async function getCalendarBrushingData(userId: string): Promise<Record<string, number>> {
   // Handle guest users with the GuestUserService
   if (userId === 'guest') {
-    console.log('👻 Guest user detected for calendar, using GuestUserService...');
+    console.log('👻 Using GuestUserService for calendar data.');
     return await GuestUserService.getGuestCalendarData();
   }
-  
+
+  // Authenticated user logic
   try {
+    const today = new Date();
     // Fetch brushing logs for the past 30 days
     const thirtyDaysAgo = subDays(new Date(), 30);
     const { data: brushingLogs, error } = await supabase
@@ -297,17 +312,18 @@ export async function getStreakData(userId: string, brushingGoalMinutes: number 
 }> {
   // Handle guest users with the GuestUserService
   if (userId === 'guest') {
-    console.log('👻 Guest user detected for streak, using GuestUserService...');
-    const guestStats = await GuestUserService.getGuestDashboardStats(brushingGoalMinutes);
+    console.log('👻 Using GuestUserService for streak data.');
+    const stats = await GuestUserService.getGuestDashboardStats(brushingGoalMinutes);
     return {
-      currentStreak: guestStats.streakDays,
-      longestStreak: Math.max(guestStats.streakDays, 3), // Mock longest streak for guests
-      streakHistory: [], // Empty history for guests
+      currentStreak: stats.streakDays,
+      longestStreak: 0, // Guest mode doesn't track longest streak yet
+      streakHistory: [], // Guest mode doesn't track history
     };
   }
-  
+
+  // Authenticated user logic
   try {
-    // Fetch user's target from users table to get accurate stats
+    // Fetch the user's specific brushing goal first
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select('target_time_in_sec')

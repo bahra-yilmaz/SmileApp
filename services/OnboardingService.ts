@@ -1,5 +1,8 @@
 import supabase from './supabaseClient';
 import dayjs from 'dayjs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const LANGUAGE_STORAGE_KEY = 'user_language_preference';
 
 export class OnboardingService {
   /**
@@ -7,25 +10,111 @@ export class OnboardingService {
    * checking whether the `language` column in the current user row is set.
    */
   static async hasCompletedOnboarding(userId: string | undefined | null): Promise<boolean> {
-    if (!userId) return false;
+    console.log('🔍 OnboardingService: hasCompletedOnboarding called with userId:', userId);
+    
+    if (!userId) {
+      console.log('🔍 OnboardingService: No userId provided, returning false');
+      return false;
+    }
 
     try {
-      const { data, error } = await supabase
+      console.log('🔍 OnboardingService: Querying database for user language...');
+      
+      // Create a timeout promise that rejects after 5 seconds
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Database query timeout')), 5000);
+      });
+      
+      // Race the query against the timeout
+      const queryPromise = supabase
         .from('users')
         .select('language')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
+      
+      const { data, error } = await Promise.race([queryPromise, timeoutPromise]);
+
+      console.log('🔍 OnboardingService: Database query result:', { data, error });
 
       if (error) {
-        console.error('Supabase error fetching user language:', error);
+        console.error('❌ Supabase error fetching user language:', error);
+        // If it's an RLS error, assume onboarding is not completed
+        if (error.code === '42501' || error.message?.includes('permission') || error.message?.includes('policy')) {
+          console.warn('⚠️ RLS permission issue detected - assuming onboarding not completed');
+          return false;
+        }
         return false;
       }
 
-      return !!data?.language;
+      const isCompleted = !!data?.language;
+      console.log('🔍 OnboardingService: Onboarding completed:', isCompleted, 'Language:', data?.language);
+      return isCompleted;
     } catch (error) {
-      console.error('Failed to check onboarding completion:', error);
+      console.error('❌ Failed to check onboarding completion:', error);
+      
+      // If timeout or RLS issue, check local storage as fallback
+      if (error instanceof Error && error.message.includes('timeout')) {
+        console.warn('⚠️ Database timeout - checking local storage as fallback');
+        return await this.checkLocalLanguagePreference();
+      }
+      
       return false;
     }
+  }
+
+  /**
+   * Checks if user has a language preference in local storage
+   */
+  private static async checkLocalLanguagePreference(): Promise<boolean> {
+    try {
+      const localLanguage = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
+      
+      // If we have a language preference stored locally, consider onboarding complete
+      const hasLanguagePreference = !!localLanguage;
+      console.log('🔍 Local language preference exists:', hasLanguagePreference);
+      
+      return hasLanguagePreference;
+    } catch (error) {
+      console.error('❌ Failed to check local language preference:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Enhanced onboarding completion check that considers both database and local storage
+   */
+  static async hasCompletedOnboardingEnhanced(userId: string | undefined | null): Promise<boolean> {
+    console.log('🔍 OnboardingService: Enhanced onboarding check for userId:', userId);
+
+    // For authenticated users, try database first, then local storage
+    if (userId) {
+      try {
+        // Try database first with timeout
+        const timeoutPromise = new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error('Database query timeout')), 3000);
+        });
+        
+        const queryPromise = supabase
+          .from('users')
+          .select('language')
+          .eq('id', userId)
+          .maybeSingle();
+        
+        const { data, error } = await Promise.race([queryPromise, timeoutPromise]);
+
+        if (!error && data?.language) {
+          console.log('✅ Database language found:', data.language);
+          return true;
+        }
+
+        console.log('⚠️ No database language, checking local storage...');
+      } catch (dbError) {
+        console.warn('⚠️ Database check failed, trying local storage:', dbError);
+      }
+    }
+
+    // Check local storage for language preference (works for both guests and authenticated users)
+    return await this.checkLocalLanguagePreference();
   }
 
   /**

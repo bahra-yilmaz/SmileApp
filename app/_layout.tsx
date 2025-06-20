@@ -14,6 +14,7 @@ import { loadAssets, preloadHomeScreenAssets } from '../utils/loadAssets';
 import { AuthProvider } from '../context/AuthContext'; // 1. Import AuthProvider
 import { BrushingGoalProvider } from '../context/BrushingGoalContext';
 import { useBrushingGoalSync } from '../hooks/useBrushingGoalSync';
+import { LanguageService } from '../services/LanguageService';
 
 // Get dimensions for background
 const { width, height } = Dimensions.get('window');
@@ -54,7 +55,7 @@ export default function RootLayout() {
   useEffect(() => {
     async function prepareApp() {
       try {
-        // In parallel, load general assets and decode critical home screen images.
+        // In parallel, load general assets and decode critical home screen images
         await Promise.all([
           loadAssets(),
           preloadHomeScreenAssets()
@@ -72,14 +73,14 @@ export default function RootLayout() {
   const appReady = !!((fontsLoaded || error) && assetsLoaded);
 
   // Handle when assets loaded and splash can be hidden
-  useEffect(() => {
-    if (appReady) {
-      // Fonts are loaded, hide the native splash screen
-      hideAsync().catch(() => {
-        /* ignore error */
-      });
-    }
-  }, [appReady]);
+  // useEffect(() => {
+  //   if (appReady) {
+  //     // Fonts are loaded, hide the native splash screen
+  //     hideAsync().catch(() => {
+  //       /* ignore error */
+  //     });
+  //   }
+  // }, [appReady]);
 
   return (
     <GestureHandlerRootView style={styles.container}>

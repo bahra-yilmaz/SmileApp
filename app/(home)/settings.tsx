@@ -32,6 +32,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BlurView } from 'expo-blur';
 import supabase from '../../services/supabaseClient';
 import { useAuth } from '../../context/AuthContext';
+import { LanguageService } from '../../services/LanguageService';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const NUBO_TONE_KEY = 'nubo_tone';
@@ -265,8 +266,8 @@ export default function SettingsScreen() {
   const handleLanguageSelect = async (langCode: string) => {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      await i18n.changeLanguage(langCode);
-      setCurrentLanguage(langCode);
+      // Use the centralized language service to handle changing and persisting the language
+      await LanguageService.changeLanguage(langCode, authUser?.id);
       closeModalIfConfigured(setIsLanguageModalVisible);
     } catch (error) {
       console.error('Error changing language:', error);

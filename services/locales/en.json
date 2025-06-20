@@ -150,7 +150,9 @@
     "delete": "Delete",
     "save": "Save",
     "add": "Add",
-    "error": "Error"
+    "error": "Error",
+    "loading": "Loading...",
+    "tryAgain": "Try Again"
   },
   "languages": {
     "en": "English",
@@ -181,7 +183,9 @@
       "letsGoButton": "Lets Go"
     },
     "languageSelectScreen": {
-      "title": "Choose Your\nLanguage"
+      "title": "Choose Your\nLanguage",
+      "changeLanguageError": "Failed to change language. Please try again.",
+      "saveError": "Failed to save language preference. Please try again."
     },
     "ageSelectionScreen": {
       "title": "What is your age?",

@@ -18,6 +18,8 @@ import { AppImages } from '../../utils/loadAssets';
 import ConfirmModal from '../../components/modals/ConfirmModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Easing } from 'react-native';
+import { useAuth } from '../../context/AuthContext';
+import { OnboardingService } from '../../services/OnboardingService';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { useDashboardData } from '../../hooks/useDashboardData';
 import { eventBus } from '../../utils/EventBus';
@@ -46,6 +48,7 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { t } = useTranslation();
+  const { user } = useAuth();
   
   // Fetch dashboard data from backend
   const { data: dashboardData, isLoading: isDashboardLoading, error: dashboardError, refetch } = useDashboardData();
@@ -90,12 +93,13 @@ export default function HomeScreen() {
         const hasShown = await AsyncStorage.getItem(FIRST_TIMER_SHOWN_KEY);
         if (!hasShown) {
           setAwaitingFirstTap(true);
+          console.log('🎯 First visit to home screen. The "first brush" modal will show on tap.');
         }
       } catch (err) {
         console.warn('Error checking first visit flag', err);
       }
     })();
-  }, []);
+  }, []); // Run only once
 
   const handleFirstTap = () => {
     if (awaitingFirstTap) {
@@ -103,7 +107,7 @@ export default function HomeScreen() {
       setAwaitingFirstTap(false);
     }
   };
-
+  
   // A single state to track if any overlay is visible
   const isOverlayVisible = isChatVisible || isToothbrushVisible || isStreakVisible || isBrushingTimeVisible;
 
@@ -212,143 +216,182 @@ export default function HomeScreen() {
         cachePolicy="disk"
         transition={600}
       />
-      <View style={styles.mainContainer}>
-        <SafeAreaView style={styles.headerContainer}>
-          <ChatButton hasUnreadMessages={hasUnreadMessages} onPress={toggleChat} />
-          <HeaderLogo />
-          <Pressable
-            onPress={handleMenuPress}
-            style={({ pressed }) => [
-              styles.menuButton,
-              {
-                top: insets.top + 13,
-                transform: [{ scale: pressed ? 0.95 : 1 }]
-              }
-            ]}
+      <Pressable style={{ flex: 1 }} >
+        <View style={styles.mainContainer}>
+          <SafeAreaView style={styles.headerContainer}>
+            <ChatButton hasUnreadMessages={hasUnreadMessages} onPress={toggleChat} />
+            <HeaderLogo />
+            <Pressable
+              onPress={handleMenuPress}
+              style={({ pressed }) => [
+                styles.menuButton,
+                {
+                  top: insets.top + 13,
+                  transform: [{ scale: pressed ? 0.95 : 1 }]
+                }
+              ]}
+            >
+              <View style={styles.menuIconContainer}>
+                <MaterialCommunityIcons name="menu" size={32} color="white" />
+              </View>
+            </Pressable>
+          </SafeAreaView>
+          <View style={styles.mascotContainer}>
+            <ExpandableMascotCard 
+              config={selectedMascotConfig}
+              greetingText={greeting}
+              isExpanded={isHomeMascotExpanded}
+              onPress={toggleHomeMascotExpansion}
+              onPressWhenExpanded={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                setSelectedMascotConfig(getRandomMascotConfig());
+                setIsHomeMascotExpanded(false);
+              }}
+              enablePulse={!isHomeMascotExpanded}
+            />
+          </View>
+          <View style={styles.contentWrapper}>
+            <LightContainer 
+              style={{
+                width: '100%',
+                height: containerHeight,
+                paddingHorizontal: 20,
+                paddingTop: 24,
+                paddingBottom: insets.bottom > 0 ? insets.bottom : 24,
+                flex: 0,
+                zIndex: 25,
+              }}
+            >
+              <StreakCard 
+                streakDays={dashboardData?.streakDays ?? 0} 
+                fontFamily={fontFamily} 
+                onPress={() => setIsStreakVisible(true)} 
+              />
+              <BrushingTimeCard 
+                minutes={dashboardData?.averageLast10Brushings?.minutes ?? 0} 
+                seconds={dashboardData?.averageLast10Brushings?.seconds ?? 0} 
+                fontFamily={fontFamily} 
+                onPress={() => setIsBrushingTimeVisible(true)} 
+              />
+              <ToothbrushCard 
+                daysInUse={dashboardData?.toothbrushDaysInUse ?? 0} 
+                fontFamily={fontFamily} 
+                onPress={() => setIsToothbrushVisible(true)} 
+              />
+              <View style={styles.spacer} />
+              <CalendarView 
+                selectedDate={selectedDate} 
+                onDateChange={setSelectedDate}
+              />
+            </LightContainer>
+          </View>
+        </View>
+        <Animated.View style={[styles.fabContainer, { bottom: insets.bottom + 10 }, fabAnimatedStyle]}>
+          <TouchableOpacity
+            onPress={triggerFabAndNavigate}
+            style={styles.fabButton}
+            activeOpacity={0.8}
           >
-            <View style={styles.menuIconContainer}>
-              <MaterialCommunityIcons name="menu" size={32} color="white" />
-            </View>
-          </Pressable>
-        </SafeAreaView>
-        <View style={styles.mascotContainer}>
-          <ExpandableMascotCard 
-            config={selectedMascotConfig}
-            greetingText={greeting}
-            isExpanded={isHomeMascotExpanded}
-            onPress={toggleHomeMascotExpansion}
-            onPressWhenExpanded={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              setSelectedMascotConfig(getRandomMascotConfig());
-              setIsHomeMascotExpanded(false);
-            }}
-            enablePulse={!isHomeMascotExpanded}
+            <LinearGradient
+              colors={[theme.colors.primary[500], theme.colors.primary[600]]}
+              style={styles.fabGradient}
+            >
+              <MaterialCommunityIcons name="tooth" size={36} color="white" />
+            </LinearGradient>
+          </TouchableOpacity>
+        </Animated.View>
+        <View style={[styles.bottomLeftMascot, { bottom: mountainHeight * 0.25 }]}>
+          <View style={styles.mascotCard}>
+            <BlurView intensity={70} tint="light" style={styles.cardBlur}>
+              <View style={styles.progressBar}>
+                <View style={[styles.progressFill, { width: '70%' }]} />
+              </View>
+            </BlurView>
+          </View>
+          <Image 
+            source={AppImages['nubo-bag-1']} 
+            style={styles.mascotImage} 
+            contentFit="contain" 
+            cachePolicy="disk" 
           />
         </View>
-        <View style={styles.contentWrapper}>
-          <LightContainer 
-            style={{
-              width: '100%',
-              height: containerHeight,
-              paddingHorizontal: 20,
-              paddingTop: 24,
-              paddingBottom: insets.bottom > 0 ? insets.bottom : 24,
-              flex: 0,
-              zIndex: 25,
-            }}
-          >
-            <StreakCard 
-              streakDays={dashboardData?.streakDays ?? 0} 
-              fontFamily={fontFamily} 
-              onPress={() => setIsStreakVisible(true)} 
-            />
-            <BrushingTimeCard 
-              minutes={dashboardData?.averageLast10Brushings?.minutes ?? 0} 
-              seconds={dashboardData?.averageLast10Brushings?.seconds ?? 0} 
-              fontFamily={fontFamily} 
-              onPress={() => setIsBrushingTimeVisible(true)} 
-            />
-            <ToothbrushCard 
-              daysInUse={dashboardData?.toothbrushDaysInUse ?? 0} 
-              fontFamily={fontFamily} 
-              onPress={() => setIsToothbrushVisible(true)} 
-            />
-            <View style={styles.spacer} />
-            <CalendarView selectedDate={selectedDate} onDateChange={setSelectedDate} />
-          </LightContainer>
-        </View>
-      </View>
-      <Animated.View style={[styles.floatingActionButton, fabAnimatedStyle]} >
-        <Pressable style={styles.fabInner} onPress={() => triggerFabAndNavigate()}>
-          <LinearGradient colors={[theme.colors.primary[500], theme.colors.primary[600]]} style={styles.gradientButton}>
-            <MaterialCommunityIcons name="tooth" size={36} color="white" />
-          </LinearGradient>
-        </Pressable>
-      </Animated.View>
-      <View style={[styles.bottomLeftMascot, { bottom: mountainHeight * 0.25 }]}>
-        <View style={styles.mascotCard}>
-          <BlurView intensity={70} tint="light" style={styles.cardBlur}>
-            <View style={styles.progressBar}>
-              <View style={[styles.progressFill, { width: '70%' }]} />
-            </View>
-          </BlurView>
-        </View>
         <Image 
-          source={AppImages['nubo-bag-1']} 
-          style={styles.mascotImage} 
+          source={AppImages.mountain1} 
+          style={[styles.mountainImage, { bottom: -insets.bottom - 10 }]} 
           contentFit="contain" 
           cachePolicy="disk" 
+          transition={600}
         />
-      </View>
-      <Image 
-        source={AppImages.mountain1} 
-        style={[styles.mountainImage, { bottom: -insets.bottom - 10 }]} 
-        contentFit="contain" 
-        cachePolicy="disk" 
-        transition={600}
-      />
+        <ChatOverlay isVisible={isChatVisible} onClose={toggleChat} />
+        <ToothbrushOverlay 
+          isVisible={isToothbrushVisible} 
+          onClose={() => setIsToothbrushVisible(false)} 
+          daysInUse={dashboardData?.toothbrushDaysInUse ?? 0}
+        />
+        <StreakOverlay 
+          isVisible={isStreakVisible} 
+          onClose={() => setIsStreakVisible(false)}
+          streakDays={dashboardData?.streakDays ?? 0}
+        />
+        <BrushingTimeOverlay 
+          isVisible={isBrushingTimeVisible}
+          onClose={() => setIsBrushingTimeVisible(false)}
+          minutes={dashboardData?.averageLast10Brushings?.minutes ?? 0}
+          seconds={dashboardData?.averageLast10Brushings?.seconds ?? 0}
+        />
+      </Pressable>
     </>
   );
 
   return (
-    <Animated.View 
+    <Animated.View
       style={[styles.container, { opacity: introOpacity }]}
       onStartShouldSetResponderCapture={() => awaitingFirstTap}
       onResponderRelease={handleFirstTap}
     >
-      <Animated.View 
-        style={[
-          styles.container,
-          {
-            opacity: isOverlayVisible ? 0.6 : 1,
-          }
-        ]}
+      <View
+        style={[styles.container, { opacity: isOverlayVisible ? 0.6 : 1 }]}
         pointerEvents={isOverlayVisible ? 'none' : 'auto'}
-              >
-          {screenContent}
+      >
+        {screenContent}
+        
+        {/* FAB to start brushing */}
+        <Animated.View style={[styles.fabContainer, { bottom: insets.bottom + 10 }, fabAnimatedStyle]}>
+          <TouchableOpacity
+            onPress={triggerFabAndNavigate}
+            style={styles.fabButton}
+            activeOpacity={0.8}
+          >
+            <LinearGradient
+              colors={[theme.colors.primary[500], theme.colors.primary[600]]}
+              style={styles.fabGradient}
+            >
+              <MaterialCommunityIcons name="tooth" size={36} color="white" />
+            </LinearGradient>
+          </TouchableOpacity>
         </Animated.View>
+      </View>
       
-      {isOverlayVisible && (
-        <>
-          <ChatOverlay isVisible={isChatVisible} onClose={() => setIsChatVisible(false)} />
-          <ToothbrushOverlay 
-            isVisible={isToothbrushVisible} 
-            onClose={() => setIsToothbrushVisible(false)} 
-            daysInUse={dashboardData?.toothbrushDaysInUse ?? 0} 
-          />
-          <StreakOverlay 
-            isVisible={isStreakVisible} 
-            onClose={() => setIsStreakVisible(false)} 
-            streakDays={dashboardData?.streakDays ?? 0} 
-          />
-          <BrushingTimeOverlay 
-            isVisible={isBrushingTimeVisible} 
-            onClose={() => setIsBrushingTimeVisible(false)} 
-            minutes={dashboardData?.averageLast10Brushings?.minutes ?? 0} 
-            seconds={dashboardData?.averageLast10Brushings?.seconds ?? 0} 
-          />
-        </>
-      )}
+      {/* Overlays */}
+      <ChatOverlay isVisible={isChatVisible} onClose={toggleChat} />
+      <ToothbrushOverlay 
+        isVisible={isToothbrushVisible} 
+        onClose={() => setIsToothbrushVisible(false)} 
+        daysInUse={dashboardData?.toothbrushDaysInUse ?? 0} 
+      />
+      <StreakOverlay 
+        isVisible={isStreakVisible} 
+        onClose={() => setIsStreakVisible(false)} 
+        streakDays={dashboardData?.streakDays ?? 0} 
+      />
+      <BrushingTimeOverlay 
+        isVisible={isBrushingTimeVisible} 
+        onClose={() => setIsBrushingTimeVisible(false)} 
+        minutes={dashboardData?.averageLast10Brushings?.minutes ?? 0} 
+        seconds={dashboardData?.averageLast10Brushings?.seconds ?? 0} 
+      />
+
+      {/* First-time User Modal */}
       <ConfirmModal
         visible={showFirstTimerPrompt}
         icon={
@@ -369,12 +412,22 @@ export default function HomeScreen() {
             </LinearGradient>
           </Animated.View>
         )}
-        onConfirm={() => {
+        onConfirm={async () => {
           setShowFirstTimerPrompt(false);
+          try {
+            await AsyncStorage.setItem(FIRST_TIMER_SHOWN_KEY, 'true');
+          } catch (err) {
+            console.warn('Error saving first timer flag', err);
+          }
           triggerFabAndNavigate();
         }}
-        onCancel={() => {
+        onCancel={async () => {
           setShowFirstTimerPrompt(false);
+          try {
+            await AsyncStorage.setItem(FIRST_TIMER_SHOWN_KEY, 'true');
+          } catch (err) {
+            console.warn('Error saving first timer flag', err);
+          }
         }}
       />
     </Animated.View>
@@ -492,9 +545,8 @@ const styles = StyleSheet.create({
     height: height * 0.4,
     zIndex: 20,
   },
-  floatingActionButton: {
+  fabContainer: {
     position: 'absolute',
-    bottom: 45,
     left: width / 2 - 35,
     width: 70,
     height: 70,
@@ -508,13 +560,13 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 8,
   },
-  fabInner: {
+  fabButton: {
     width: '100%',
     height: '100%',
     borderRadius: 35,
     overflow: 'hidden',
   },
-  gradientButton: {
+  fabGradient: {
     width: '100%',
     height: '100%',
     borderRadius: 35,
@@ -531,5 +583,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
+  gradientButton: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 35,
+  },
 });

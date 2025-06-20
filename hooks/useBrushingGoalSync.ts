@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useBrushingGoal } from '../context/BrushingGoalContext';
 
@@ -15,5 +15,5 @@ export const useBrushingGoalSync = () => {
       console.log('🔄 Syncing brushing goal for user:', user.id);
       syncBrushingGoalFromDatabase(user.id);
     }
-  }, [user?.id, syncBrushingGoalFromDatabase]);
+  }, [user?.id]); // Remove syncBrushingGoalFromDatabase from dependencies to prevent infinite loop
 }; 

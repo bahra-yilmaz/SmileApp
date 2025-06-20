@@ -149,7 +149,10 @@
       "save": "Guardar",
       "edit": "Editar",
       "delete": "Eliminar",
-      "add": "Agregar"
+      "add": "Agregar",
+      "error": "Error",
+      "loading": "Cargando...",
+      "tryAgain": "Intentar de nuevo"
     },
     "languages": {
       "en": "English",
@@ -180,7 +183,9 @@
         "letsGoButton": "Vamos"
       },
       "languageSelectScreen": {
-        "title": "Elige tu\nidioma"
+        "title": "Elige tu\nidioma",
+        "changeLanguageError": "Error al cambiar el idioma. Por favor, inténtalo de nuevo.",
+        "saveError": "Error al guardar la preferencia de idioma. Por favor, inténtalo de nuevo."
       },
       "ageSelectionScreen": {
         "title": "¿Cuál es tu edad?",
