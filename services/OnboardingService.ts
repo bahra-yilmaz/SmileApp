@@ -101,24 +101,29 @@ export async function updateUserOnboarding(userId: string, data: OnboardingPaylo
     throw new Error('User ID is required to update onboarding data.');
   }
 
-  const payload = {
-    p_user_id: userId,
-    p_age_group: data.age_group,
-    p_brushing_target: data.brushing_target,
-    p_toothbrush_start_date: data.toothbrush_start_date
+  // Prepare update payload with proper date formatting
+  const updatePayload = {
+    age_group: data.age_group,
+    brushing_target: data.brushing_target,
+    toothbrush_start_date: data.toothbrush_start_date
       ? dayjs(data.toothbrush_start_date).format('YYYY-MM-DD')
       : null,
-    p_mascot_tone: data.mascot_tone,
+    mascot_tone: data.mascot_tone,
   };
 
-  const { error } = await supabase.rpc('update_user_onboarding_details', payload);
+  console.log('🔄 Updating user onboarding data:', { userId, updatePayload });
 
-  // If Supabase returns an error, we throw it to be caught by our UI.
+  // Use direct update instead of RPC to ensure it works
+  const { error } = await supabase
+    .from('users')
+    .update(updatePayload)
+    .eq('id', userId);
+
   if (error) {
-    console.error('Supabase onboarding update error (RPC):', error);
+    console.error('❌ Supabase onboarding update error:', error);
     throw new Error(error.message || 'Failed to save onboarding data.');
   }
 
-  // If there's no error, the operation was successful.
+  console.log('✅ Onboarding data updated successfully');
   return;
 } 

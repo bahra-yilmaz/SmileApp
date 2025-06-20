@@ -67,24 +67,10 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
         console.log('✅ Set and using default target: 120 seconds');
       }
     } else {
-      console.log('⚠️ No user data found, creating user record with default target...');
-      
-      // User doesn't exist at all, create the record
-      const { error: insertError } = await supabase
-        .from('users')
-        .insert({
-          id: userId,
-          target_time_in_sec: 120 // 2 minutes default
-        });
-
-      console.log('🔄 Insert result:', { insertError });
-
-      if (!insertError) {
-        userTargetSeconds = 120;
-        console.log('✅ Created user record and using default target: 120 seconds');
-      } else {
-        console.log('⚠️ Failed to create user, using fallback:', userTargetSeconds, 'seconds');
-      }
+      // User doesn't exist - this shouldn't happen for authenticated users
+      // For authenticated users, the user record should exist from signup/onboarding
+      console.warn('⚠️ Authenticated user not found in database. Using fallback target time.');
+      userTargetSeconds = brushingGoalMinutes * 60; // Use the provided goal as fallback
     }
     
     // Fetch brushing logs for the past 30 days to calculate stats

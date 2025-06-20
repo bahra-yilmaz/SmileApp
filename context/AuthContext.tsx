@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import supabase from '../services/supabaseClient';
+import { GuestUserService } from '../services/GuestUserService';
 
 // Define the shape of the context's value
 interface AuthContextType {
@@ -38,10 +39,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     // Listen for auth state changes
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      async (event, session) => {
+        const previousUser = user;
         setSession(session);
         setUser(session?.user ?? null);
         if (isLoading) setIsLoading(false); // Stop loading once we have a definite state
+        
+        // Clear guest data when user signs in
+        if (event === 'SIGNED_IN' && session?.user && !previousUser) {
+          console.log('🔄 User signed in, clearing guest data cache...');
+          try {
+            await GuestUserService.clearGuestData();
+            console.log('✅ Guest data cache cleared for authenticated user');
+          } catch (error) {
+            console.error('❌ Error clearing guest data:', error);
+          }
+        }
       }
     );
 
