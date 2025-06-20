@@ -43,6 +43,13 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
       .maybeSingle();
 
     console.log('🎯 User target query result:', { userData, userError });
+    console.log('🔍 Detailed user query debug:', {
+      queryUserId: userId,
+      userIdType: typeof userId,
+      userIdLength: userId?.length,
+      hasUserData: !!userData,
+      userDataKeys: userData ? Object.keys(userData) : 'no data'
+    });
 
     let userTargetSeconds = brushingGoalMinutes * 60; // Default fallback
 

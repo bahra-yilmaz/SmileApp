@@ -94,6 +94,9 @@ export default function NuboToneScreen({
       // Mark onboarding as completed in local storage
       await OnboardingService.markOnboardingAsCompleted();
       
+      // Small delay to ensure database commit is complete before navigation
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
       Animated.timing(fadeAnim, {

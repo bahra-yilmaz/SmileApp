@@ -114,7 +114,7 @@ export async function updateUserOnboarding(userId: string, data: OnboardingPaylo
   console.log('🔄 Updating user onboarding data:', { userId, updatePayload });
 
   // Use direct update instead of RPC to ensure it works
-  const { error } = await supabase
+  const { error, count } = await supabase
     .from('users')
     .update(updatePayload)
     .eq('id', userId);
@@ -124,6 +124,20 @@ export async function updateUserOnboarding(userId: string, data: OnboardingPaylo
     throw new Error(error.message || 'Failed to save onboarding data.');
   }
 
-  console.log('✅ Onboarding data updated successfully');
+  console.log('✅ Onboarding data updated successfully. Rows affected:', count);
+
+  // Verify the update worked by fetching the record
+  const { data: verifyData, error: verifyError } = await supabase
+    .from('users')
+    .select('age_group, brushing_target, toothbrush_start_date, mascot_tone, target_time_in_sec')
+    .eq('id', userId)
+    .single();
+
+  if (verifyError) {
+    console.error('❌ Error verifying onboarding update:', verifyError);
+  } else {
+    console.log('🔍 Verification - User record after update:', verifyData);
+  }
+
   return;
 } 
