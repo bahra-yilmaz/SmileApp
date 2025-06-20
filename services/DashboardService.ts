@@ -1,6 +1,7 @@
 import { supabase } from './supabaseClient';
 import { subDays, startOfDay, format } from 'date-fns';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GuestUserService } from './GuestUserService';
 
 export interface DashboardStats {
   streakDays: number;
@@ -13,6 +14,10 @@ export interface DashboardStats {
     minutes: number;
     seconds: number;
   };
+  averageLast10Brushings: {
+    minutes: number;
+    seconds: number;
+  };
 }
 
 const TOOTHBRUSH_DATA_KEY = 'toothbrush_data';
@@ -21,12 +26,72 @@ const TOOTHBRUSH_DATA_KEY = 'toothbrush_data';
  * Fetches all dashboard statistics for the home screen cards
  */
 export async function getDashboardStats(userId: string, brushingGoalMinutes: number = 2): Promise<DashboardStats> {
+  console.log('📊 Getting dashboard stats for userId:', userId, 'fallback goal:', brushingGoalMinutes);
+  
+  // Handle guest users with the GuestUserService
+  if (userId === 'guest') {
+    console.log('👻 Guest user detected, using GuestUserService...');
+    return await GuestUserService.getGuestDashboardStats(brushingGoalMinutes);
+  }
+  
   try {
+    // First, fetch the user's target time from the users table
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('target_time_in_sec')
+      .eq('id', userId)
+      .maybeSingle();
+
+    console.log('🎯 User target query result:', { userData, userError });
+
+    let userTargetSeconds = brushingGoalMinutes * 60; // Default fallback
+
+    if (userError) {
+      console.error('❌ Error fetching user data:', userError);
+    } else if (userData?.target_time_in_sec) {
+      userTargetSeconds = userData.target_time_in_sec;
+      console.log('✅ Using user target:', userTargetSeconds, 'seconds');
+    } else if (userData) {
+      // User exists but target_time_in_sec is null, update it to default
+      console.log('🔄 User exists but target_time_in_sec is null, updating to default...');
+      
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ target_time_in_sec: 120 })
+        .eq('id', userId);
+
+      console.log('🔄 Update result:', { updateError });
+
+      if (!updateError) {
+        userTargetSeconds = 120;
+        console.log('✅ Set and using default target: 120 seconds');
+      }
+    } else {
+      console.log('⚠️ No user data found, creating user record with default target...');
+      
+      // User doesn't exist at all, create the record
+      const { error: insertError } = await supabase
+        .from('users')
+        .insert({
+          id: userId,
+          target_time_in_sec: 120 // 2 minutes default
+        });
+
+      console.log('🔄 Insert result:', { insertError });
+
+      if (!insertError) {
+        userTargetSeconds = 120;
+        console.log('✅ Created user record and using default target: 120 seconds');
+      } else {
+        console.log('⚠️ Failed to create user, using fallback:', userTargetSeconds, 'seconds');
+      }
+    }
+    
     // Fetch brushing logs for the past 30 days to calculate stats
     const thirtyDaysAgo = subDays(new Date(), 30);
     const { data: brushingLogs, error } = await supabase
       .from('brushing_logs')
-      .select('duration_seconds, target_time_in_sec, date, created_at')
+      .select('"duration-seconds", date, created_at')
       .eq('user_id', userId)
       .gte('created_at', thirtyDaysAgo.toISOString())
       .order('created_at', { ascending: false });
@@ -38,14 +103,17 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
 
     const logs = brushingLogs || [];
 
-    // Calculate streak days
-    const streakDays = calculateStreakDays(logs, brushingGoalMinutes);
+    // Calculate streak days using the user's actual target
+    const streakDays = calculateStreakDays(logs, userTargetSeconds);
 
     // Get last brushing time
     const lastBrushingTime = getLastBrushingTime(logs);
 
     // Calculate average brushing time
     const averageBrushingTime = calculateAverageBrushingTime(logs);
+
+    // Calculate average of last 10 brushings
+    const averageLast10Brushings = calculateAverageLast10Brushings(logs);
 
     // Get toothbrush days in use
     const toothbrushDaysInUse = await getToothbrushDaysInUse();
@@ -55,6 +123,7 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
       lastBrushingTime,
       toothbrushDaysInUse,
       averageBrushingTime,
+      averageLast10Brushings,
     };
   } catch (error) {
     console.error('Error fetching dashboard stats:', error);
@@ -64,6 +133,7 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
       lastBrushingTime: { minutes: 0, seconds: 0 },
       toothbrushDaysInUse: 0,
       averageBrushingTime: { minutes: 0, seconds: 0 },
+      averageLast10Brushings: { minutes: 0, seconds: 0 },
     };
   }
 }
@@ -71,7 +141,7 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
 /**
  * Calculate consecutive days of successful brushing
  */
-function calculateStreakDays(logs: any[], brushingGoalMinutes: number): number {
+function calculateStreakDays(logs: any[], userTargetSeconds: number): number {
   if (!logs.length) return 0;
 
   // Group logs by date
@@ -96,8 +166,7 @@ function calculateStreakDays(logs: any[], brushingGoalMinutes: number): number {
     
     // Consider a day successful if user brushed at least once and met target
     const hasSuccessfulBrushing = dayLogs.some(log => {
-      const target = log.target_time_in_sec || (brushingGoalMinutes * 60); // Use global goal
-      return log.duration_seconds >= target;
+      return log['duration-seconds'] >= userTargetSeconds;
     });
 
     if (hasSuccessfulBrushing) {
@@ -118,7 +187,7 @@ function getLastBrushingTime(logs: any[]): { minutes: number; seconds: number } 
   if (!logs.length) return { minutes: 0, seconds: 0 };
 
   const lastLog = logs[0]; // Logs are ordered by created_at desc
-  const durationInSeconds = lastLog.duration_seconds || 0;
+  const durationInSeconds = lastLog['duration-seconds'] || 0;
   
   const minutes = Math.floor(durationInSeconds / 60);
   const seconds = durationInSeconds % 60;
@@ -132,8 +201,25 @@ function getLastBrushingTime(logs: any[]): { minutes: number; seconds: number } 
 function calculateAverageBrushingTime(logs: any[]): { minutes: number; seconds: number } {
   if (!logs.length) return { minutes: 0, seconds: 0 };
 
-  const totalSeconds = logs.reduce((sum, log) => sum + (log.duration_seconds || 0), 0);
+  const totalSeconds = logs.reduce((sum, log) => sum + (log['duration-seconds'] || 0), 0);
   const averageSeconds = Math.round(totalSeconds / logs.length);
+  
+  const minutes = Math.floor(averageSeconds / 60);
+  const seconds = averageSeconds % 60;
+  
+  return { minutes, seconds };
+}
+
+/**
+ * Calculate average brushing time from the last 10 sessions
+ */
+function calculateAverageLast10Brushings(logs: any[]): { minutes: number; seconds: number } {
+  if (!logs.length) return { minutes: 0, seconds: 0 };
+
+      // Take only the last 10 sessions (logs are already ordered by created_at desc)
+    const last10 = logs.slice(0, 10);
+    const totalSeconds = last10.reduce((sum, log) => sum + (log['duration-seconds'] || 0), 0);
+  const averageSeconds = Math.round(totalSeconds / last10.length);
   
   const minutes = Math.floor(averageSeconds / 60);
   const seconds = averageSeconds % 60;
@@ -168,6 +254,12 @@ async function getToothbrushDaysInUse(): Promise<number> {
  * Get calendar brushing data for the calendar view
  */
 export async function getCalendarBrushingData(userId: string): Promise<Record<string, number>> {
+  // Handle guest users with the GuestUserService
+  if (userId === 'guest') {
+    console.log('👻 Guest user detected for calendar, using GuestUserService...');
+    return await GuestUserService.getGuestCalendarData();
+  }
+  
   try {
     // Fetch brushing logs for the past 30 days
     const thirtyDaysAgo = subDays(new Date(), 30);
@@ -210,10 +302,48 @@ export async function getStreakData(userId: string, brushingGoalMinutes: number 
   longestStreak: number;
   streakHistory: Array<{ startDate: string; endDate: string; duration: number }>;
 }> {
+  // Handle guest users with the GuestUserService
+  if (userId === 'guest') {
+    console.log('👻 Guest user detected for streak, using GuestUserService...');
+    const guestStats = await GuestUserService.getGuestDashboardStats(brushingGoalMinutes);
+    return {
+      currentStreak: guestStats.streakDays,
+      longestStreak: Math.max(guestStats.streakDays, 3), // Mock longest streak for guests
+      streakHistory: [], // Empty history for guests
+    };
+  }
+  
   try {
+    // Fetch user's target from users table to get accurate stats
+    const { data: userData, error: userError } = await supabase
+      .from('users')
+      .select('target_time_in_sec')
+      .eq('id', userId)
+      .maybeSingle();
+
+    let userTargetMinutes = brushingGoalMinutes;
+
+    if (userError) {
+      console.error('Error fetching user target time in streak data:', userError);
+    } else if (userData?.target_time_in_sec) {
+      userTargetMinutes = userData.target_time_in_sec / 60;
+    } else if (userData) {
+      // User exists but target_time_in_sec is null, update it to default
+      console.log('User exists but target_time_in_sec is null, updating to default...');
+      
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ target_time_in_sec: 120 })
+        .eq('id', userId);
+
+      if (!updateError) {
+        userTargetMinutes = 2; // 2 minutes
+      }
+    }
+    
     // For now, return the current streak and mock data for history
     // In a real implementation, you'd want to store streak history in the database
-    const stats = await getDashboardStats(userId, brushingGoalMinutes);
+    const stats = await getDashboardStats(userId, userTargetMinutes);
     
     return {
       currentStreak: stats.streakDays,
@@ -231,5 +361,25 @@ export async function getStreakData(userId: string, brushingGoalMinutes: number 
       longestStreak: 0,
       streakHistory: [],
     };
+  }
+}
+
+/**
+ * Update user's target brushing time in the users table
+ */
+export async function updateUserBrushingGoal(userId: string, targetTimeInSec: number): Promise<void> {
+  try {
+    const { error } = await supabase
+      .from('users')
+      .update({ target_time_in_sec: targetTimeInSec })
+      .eq('id', userId);
+
+    if (error) {
+      console.error('Error updating user brushing goal:', error);
+      throw error;
+    }
+  } catch (error) {
+    console.error('Error updating user brushing goal:', error);
+    throw error;
   }
 } 

@@ -263,8 +263,8 @@ export default function HomeScreen() {
               onPress={() => setIsStreakVisible(true)} 
             />
             <BrushingTimeCard 
-              minutes={dashboardData?.lastBrushingTime?.minutes ?? 0} 
-              seconds={dashboardData?.lastBrushingTime?.seconds ?? 0} 
+              minutes={dashboardData?.averageLast10Brushings?.minutes ?? 0} 
+              seconds={dashboardData?.averageLast10Brushings?.seconds ?? 0} 
               fontFamily={fontFamily} 
               onPress={() => setIsBrushingTimeVisible(true)} 
             />
@@ -344,8 +344,8 @@ export default function HomeScreen() {
           <BrushingTimeOverlay 
             isVisible={isBrushingTimeVisible} 
             onClose={() => setIsBrushingTimeVisible(false)} 
-            minutes={dashboardData?.lastBrushingTime?.minutes ?? 0} 
-            seconds={dashboardData?.lastBrushingTime?.seconds ?? 0} 
+            minutes={dashboardData?.averageLast10Brushings?.minutes ?? 0} 
+            seconds={dashboardData?.averageLast10Brushings?.seconds ?? 0} 
           />
         </>
       )}

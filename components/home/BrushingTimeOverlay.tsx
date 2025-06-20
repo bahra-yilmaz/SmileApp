@@ -25,12 +25,14 @@ import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
 import { shareContent } from '../../utils/share';
 import { useBrushingGoal } from '../../context/BrushingGoalContext';
+import { updateUserBrushingGoal } from '../../services/DashboardService';
+import { useAuth } from '../../context/AuthContext';
 
 interface BrushingTimeOverlayProps {
   isVisible: boolean;
   onClose: () => void;
-  minutes: number;
-  seconds: number;
+  minutes: number; // Average of last 10 brushings
+  seconds: number; // Average of last 10 brushings
 }
 
 // Define common target time options (in minutes)
@@ -46,6 +48,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   const { theme } = useTheme();
   const { activeColors } = theme;
   const { brushingGoalMinutes, setBrushingGoalMinutes } = useBrushingGoal();
+  const { user } = useAuth();
   
   // Animation values for container
   const [fadeAnim] = useState(() => new Animated.Value(0));
@@ -122,18 +125,31 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   // Handler for selecting a predefined target time
   const handleSelectTargetTime = async (newTarget: number) => {
     try {
+      // Update local context first
       await setBrushingGoalMinutes(newTarget);
+      
+      // If user is authenticated, also update their target in the database
+      if (user?.id) {
+        const targetTimeInSec = Math.round(newTarget * 60);
+        await updateUserBrushingGoal(user.id, targetTimeInSec);
+      }
+      
       setIsTargetOptionsVisible(false); // Collapse options after selection
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     } catch (error) {
       console.error('Error setting brushing goal:', error);
+      Alert.alert(
+        t('common.error', 'Error'),
+        t('brushingTimeOverlay.updateGoalError', 'Failed to update brushing goal. Please try again.'),
+        [{ text: t('common.ok', 'OK') }]
+      );
     }
   };
   
   // If not visible and animation is complete, don't render anything
   if (!isVisible && !animationComplete) return null;
   
-  // Placeholder for trend data - replace with actual logic
+  // Display trend for average of last 10 brushings
   const trendIcon = 'trending-up'; // or 'trending-down' or 'trending-neutral'
   const trendText = t('brushingTimeOverlay.averageTimeImproving');
   

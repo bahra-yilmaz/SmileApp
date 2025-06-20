@@ -149,7 +149,8 @@
     "edit": "Edit",
     "delete": "Delete",
     "save": "Save",
-    "add": "Add"
+    "add": "Add",
+    "error": "Error"
   },
   "languages": {
     "en": "English",
@@ -540,7 +541,8 @@
     "cancelButton": "Cancel",
     "targetUpdatedAlert": "Target time updated to {{newTarget}} minutes!",
     "invalidInputAlert": "Please enter a valid number for minutes.",
-    "chooseTargetPrompt": "Or choose from common targets:"
+    "chooseTargetPrompt": "Or choose from common targets:",
+    "updateGoalError": "Failed to update brushing goal. Please try again."
   },
   "brushingResultsScreen": {
     "title": "Brushing Complete!",

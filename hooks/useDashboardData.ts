@@ -18,16 +18,21 @@ export function useDashboardData(): UseDashboardDataReturn {
   const { brushingGoalMinutes } = useBrushingGoal();
 
   const fetchData = useCallback(async () => {
-    if (!user?.id) {
-      setIsLoading(false);
-      return;
-    }
-
+    console.log('📈 FETCHING DASHBOARD DATA:', { 
+      userId: user?.id || 'guest', 
+      brushingGoalMinutes 
+    });
     try {
       setIsLoading(true);
       setError(null);
-      const stats = await getDashboardStats(user.id, brushingGoalMinutes);
+      
+      // Use getDashboardStats for both authenticated and guest users
+      const userId = user?.id || 'guest';
+      const stats = await getDashboardStats(userId, brushingGoalMinutes);
+      console.log('📊 Dashboard stats result:', stats);
+      
       setData(stats);
+      console.log('✅ Dashboard data set successfully');
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch dashboard data');

@@ -13,6 +13,7 @@ import { enableFreeze } from 'react-native-screens';
 import { loadAssets, preloadHomeScreenAssets } from '../utils/loadAssets';
 import { AuthProvider } from '../context/AuthContext'; // 1. Import AuthProvider
 import { BrushingGoalProvider } from '../context/BrushingGoalContext';
+import { useBrushingGoalSync } from '../hooks/useBrushingGoalSync';
 
 // Get dimensions for background
 const { width, height } = Dimensions.get('window');
@@ -24,6 +25,12 @@ preventAutoHideAsync().catch(() => {
 
 // Enable react-freeze for automatic screen state management
 enableFreeze(true);
+
+// Component that uses the sync hook - must be inside AuthProvider and BrushingGoalProvider
+function AppWithSync() {
+  useBrushingGoalSync(); // Sync brushing goal when user logs in
+  return <Slot />;
+}
 
 export default function RootLayout() {
   // State to track if splash screen should be shown
@@ -88,7 +95,7 @@ export default function RootLayout() {
           <I18nextProvider i18n={i18nInstance}>
             <ThemeProvider defaultColorScheme="light" defaultThemeVariation="default">
               <StatusBar style="auto" />
-              <Slot />
+              <AppWithSync />
               
               {/* Show custom splash screen until fonts are loaded, then trigger fade out */}
               {showSplash && (

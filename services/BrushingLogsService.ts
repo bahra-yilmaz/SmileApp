@@ -19,19 +19,65 @@ export interface InsertBrushingLogResult extends EarnedPointsResult {
 export async function insertBrushingLog(params: {
   userId: string;
   actualTimeInSec: number;
-  targetTimeInSec: number;
+  targetTimeInSec?: number; // Make optional since we'll fetch from users table
   aimedSessionsPerDay: number;
 }): Promise<InsertBrushingLogResult> {
-  const { userId, actualTimeInSec, targetTimeInSec, aimedSessionsPerDay } = params;
+  const { userId, actualTimeInSec, aimedSessionsPerDay } = params;
 
   // -------------------------------------------------------------------------
-  // 1) Fetch recent sessions (last 10 days, newest first)
+  // 1) Fetch user's target time from users table
+  // -------------------------------------------------------------------------
+  const { data: userData, error: userError } = await supabase
+    .from('users')
+    .select('target_time_in_sec')
+    .eq('id', userId)
+    .maybeSingle();
+
+  let targetTimeInSec = params.targetTimeInSec || 120; // Default 2 minutes
+
+  if (userError) {
+    console.error('Error fetching user target time:', userError);
+  } else if (userData?.target_time_in_sec) {
+    targetTimeInSec = userData.target_time_in_sec;
+  } else if (userData) {
+    // User exists but target_time_in_sec is null, update it to default
+    console.log('User exists but target_time_in_sec is null, updating to default...');
+    
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({ target_time_in_sec: 120 })
+      .eq('id', userId);
+
+    if (!updateError) {
+      targetTimeInSec = 120;
+    }
+  } else {
+    console.log('⚠️ No user data found in brushing logs, creating user record...');
+    
+    // User doesn't exist at all, create the record
+    const { error: insertError } = await supabase
+      .from('users')
+      .insert({
+        id: userId,
+        target_time_in_sec: 120 // 2 minutes default
+      });
+
+    console.log('🔄 Insert result in brushing logs:', { insertError });
+
+    if (!insertError) {
+      targetTimeInSec = 120;
+      console.log('✅ Created user record in brushing logs with default target: 120 seconds');
+    }
+  }
+
+  // -------------------------------------------------------------------------
+  // 2) Fetch recent sessions (last 10 days, newest first)
   // -------------------------------------------------------------------------
   const tenDaysAgoISO = subDays(new Date(), 10).toISOString();
 
   const { data: recent, error: fetchError } = await supabase
     .from('brushing_logs')
-    .select('duration_seconds, target_time_in_sec, date, created_at')
+    .select('"duration-seconds", date, created_at')
     .eq('user_id', userId)
     .gte('created_at', tenDaysAgoISO)
     .order('created_at', { ascending: false });
@@ -41,13 +87,13 @@ export async function insertBrushingLog(params: {
   }
 
   const recentSessions: BrushingSession[] = (recent ?? []).map((row: any) => ({
-    actualTimeInSec: row.duration_seconds,
-    targetTimeInSec: row.target_time_in_sec ?? undefined,
+    actualTimeInSec: row['duration-seconds'],
+    targetTimeInSec: targetTimeInSec, // Use the current session's target
     date: row.date ?? row.created_at?.slice(0, 10),
   }));
 
   // -------------------------------------------------------------------------
-  // 2) Calculate earned points for the current session using the helper
+  // 3) Calculate earned points for the current session using the helper
   // -------------------------------------------------------------------------
   const points = calculateEarnedPoints(
     targetTimeInSec,
@@ -57,7 +103,7 @@ export async function insertBrushingLog(params: {
   );
 
   // -------------------------------------------------------------------------
-  // 3) Insert the new brushing log
+  // 4) Insert the new brushing log
   // -------------------------------------------------------------------------
   const todayDateStr = new Date().toISOString().slice(0, 10);
 
@@ -65,8 +111,7 @@ export async function insertBrushingLog(params: {
     .from('brushing_logs')
     .insert({
       user_id: userId,
-      duration_seconds: actualTimeInSec,
-      target_time_in_sec: targetTimeInSec,
+      'duration-seconds': actualTimeInSec,
       date: todayDateStr,
       earned_points: points.total,
     })

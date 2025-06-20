@@ -6,6 +6,7 @@ import { enUS, es, de, fr, tr, pt, ja, hi } from 'date-fns/locale'; // Import lo
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 import { BlurView } from 'expo-blur';
 import { useCalendarData } from '../../hooks/useCalendarData';
+import { eventBus } from '../../utils/EventBus';
 
 // Import the track color from DonutChart
 const TRACK_COLOR = 'rgba(200, 200, 220, 0.3)';
@@ -33,7 +34,7 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   const flatListRef = useRef<FlatList>(null);
   
   // Fetch real brushing data
-  const { brushingData, isLoading: isDataLoading } = useCalendarData();
+  const { brushingData, isLoading: isDataLoading, refetch: refetchCalendarData } = useCalendarData();
   
   // State to track visible weeks and if we're ready to display
   const [weeks, setWeeks] = useState<WeekData[]>([]);
@@ -115,6 +116,17 @@ const CalendarView: React.FC<CalendarViewProps> = ({
     
     return () => clearTimeout(safetyTimer);
   }, []);
+
+  // Listen for brushing completion to refresh calendar data
+  useEffect(() => {
+    const unsubscribe = eventBus.on('brushing-completed', () => {
+      refetchCalendarData();
+    });
+
+    return () => {
+      eventBus.off('brushing-completed', unsubscribe);
+    };
+  }, [refetchCalendarData]);
   
   // Render activity dots based on number of times brushed
   const renderActivityDots = (date: Date) => {

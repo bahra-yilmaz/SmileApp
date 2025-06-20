@@ -28,6 +28,10 @@ import { useTranslation } from 'react-i18next';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Countdown from '../../components/home/Countdown';
 import { useBrushingGoal } from '../../context/BrushingGoalContext';
+import { useDashboardData } from '../../hooks/useDashboardData';
+import { insertBrushingLog, InsertBrushingLogResult } from '../../services/BrushingLogsService';
+import { GuestUserService } from '../../services/GuestUserService';
+import { useAuth } from '../../context/AuthContext';
 
 const { height: screenHeight } = Dimensions.get('window');
 
@@ -42,6 +46,12 @@ const TIMER_MODE_STORAGE_KEY = '@SmileApp:timerMode';
 export default function TimerScreen() {
   // Get global brushing goal
   const { brushingGoalMinutes } = useBrushingGoal();
+  
+  // Get dashboard data for average brushing time
+  const { data: dashboardData } = useDashboardData();
+  
+  // Get user for saving brushing logs
+  const { user } = useAuth();
   
   // Timer state management
   const [isRunning, setIsRunning] = useState(false);
@@ -70,8 +80,11 @@ export default function TimerScreen() {
   
   // Swipe-down gesture for closing the screen
   const swipeDownGesture = useSwipeGesture({
-    onClose: () => router.back(),
-    onSwipeStart: () => setIsRunning(false),
+    onClose: () => {
+      // Reset timer when screen actually closes
+      resetTimer(false);
+      router.back();
+    },
     threshold: 0.35,
     velocityThreshold: 0.5,
     animationDuration: 400,
@@ -103,15 +116,15 @@ export default function TimerScreen() {
     const loadTimerMode = async () => {
       try {
         const storedMode = await AsyncStorage.getItem(TIMER_MODE_STORAGE_KEY) as TimerMode | null;
-        const initialMode = storedMode || TimerMode.CIRCLE;
+        const initialMode = storedMode || TimerMode.TOOTH_SCHEME;
         setCurrentMode(initialMode);
 
         // Set initial animation value without animating
         modeAnim.setValue(initialMode === TimerMode.TOOTH_SCHEME ? 1 : 0);
       } catch (e) {
         // Fallback to default if there's an error
-        setCurrentMode(TimerMode.CIRCLE);
-        modeAnim.setValue(0);
+        setCurrentMode(TimerMode.TOOTH_SCHEME);
+        modeAnim.setValue(1);
       }
     };
 
@@ -153,6 +166,7 @@ export default function TimerScreen() {
   // Listen for the close event from other screens
   useEffect(() => {
     const unsubscribe = eventBus.on('close-timer', () => {
+      // Timer reset is now handled in swipeDownGesture.onClose
       if (swipeDownGesture?.handleClose) {
         swipeDownGesture.handleClose();
       }
@@ -247,29 +261,119 @@ export default function TimerScreen() {
 
   const handleBrushedPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    if (isRunning) {
-      resetTimer(false);
-      handleNavigateToResults();
-    } else {
-      handleNavigateToResults();
-    }
+    // Don't reset timer before navigation to avoid visual flash
+    // Timer will be reset when user returns to timer screen
+    handleNavigateToResults();
   };
 
   const handleNavigateToResults = () => {
-    // Calculate actual brushed time in seconds
-    const totalElapsedSeconds = initialTimeInSeconds.current - (minutes * 60 + seconds);
-    const actualMinutes = Math.floor(totalElapsedSeconds / 60);
-    const actualSeconds = totalElapsedSeconds % 60;
+    // Calculate actual brushed time based on timer state
+    let actualMinutes, actualSeconds, actualTimeInSec;
     
-    // Navigate with actual time data
+    if (hasCompleted) {
+      // If timer completed, they brushed for the full target time
+      actualMinutes = Math.floor(brushingGoalMinutes);
+      actualSeconds = Math.round((brushingGoalMinutes % 1) * 60);
+      actualTimeInSec = Math.round(brushingGoalMinutes * 60);
+    } else if (isOvertime) {
+      // If in overtime, they brushed target time + overtime seconds
+      const targetTimeInSec = Math.round(brushingGoalMinutes * 60);
+      actualTimeInSec = targetTimeInSec + overtimeCounter;
+      actualMinutes = Math.floor(actualTimeInSec / 60);
+      actualSeconds = actualTimeInSec % 60;
+    } else if (isRunning) {
+      // If currently running, calculate time elapsed
+      const targetTimeInSec = Math.round(brushingGoalMinutes * 60);
+      const currentTimeInSec = minutes * 60 + seconds;
+      actualTimeInSec = targetTimeInSec - currentTimeInSec;
+      actualMinutes = Math.floor(actualTimeInSec / 60);
+      actualSeconds = actualTimeInSec % 60;
+    } else {
+      // If they haven't started, use average time as fallback
+      const avgMinutes = dashboardData?.averageLast10Brushings?.minutes ?? Math.floor(brushingGoalMinutes);
+      const avgSeconds = dashboardData?.averageLast10Brushings?.seconds ?? Math.round((brushingGoalMinutes % 1) * 60);
+      actualMinutes = avgMinutes;
+      actualSeconds = avgSeconds;
+      actualTimeInSec = avgMinutes * 60 + avgSeconds;
+    }
+    
+    console.log('🦷 TIMER NAVIGATION:', {
+      hasCompleted,
+      isOvertime,
+      isRunning,
+      overtimeCounter,
+      currentTimerMinutes: minutes,
+      currentTimerSeconds: seconds,
+      actualMinutes,
+      actualSeconds,
+      actualTimeInSec
+    });
+    
+    // Navigate immediately to results screen for instant transition
     router.push({
       pathname: './BrushingResultsScreen',
       params: {
         actualMinutes: actualMinutes.toString(),
         actualSeconds: actualSeconds.toString(),
-        actualTimeInSec: totalElapsedSeconds.toString(),
+        actualTimeInSec: actualTimeInSec.toString(),
+        // Flag to indicate data will be saved in background
+        saveInBackground: 'true',
       },
     });
+    
+    // Save brushing log in background after navigation
+    const saveBrushingLogInBackground = async () => {
+      if (actualTimeInSec <= 0) {
+        console.log('⚠️ actualTimeInSec is 0 or negative, skipping save');
+        return;
+      }
+
+      try {
+        console.log('🦷 SAVING BRUSHING LOG IN BACKGROUND:', {
+          actualTimeInSec,
+          actualMinutes,
+          actualSeconds,
+          brushingGoalMinutes,
+          userId: user?.id || 'guest'
+        });
+
+        const targetTimeInSec = Math.round(brushingGoalMinutes * 60);
+        let result: InsertBrushingLogResult;
+
+        if (user?.id) {
+          console.log('👤 Authenticated user, saving to backend...');
+          // Authenticated user - save to backend
+          result = await insertBrushingLog({
+            userId: user.id,
+            actualTimeInSec,
+            aimedSessionsPerDay: 2, // Default to 2 sessions per day
+          });
+          console.log('✅ Backend save result:', result);
+        } else {
+          console.log('👻 Guest user, saving to local storage...');
+          // Guest user - save to local storage
+          result = await GuestUserService.insertGuestBrushingLog({
+            actualTimeInSec,
+            targetTimeInSec,
+            aimedSessionsPerDay: 2,
+          });
+          console.log('✅ Guest save result:', result);
+        }
+        
+        // Emit event with saved data for results screen to pick up
+        eventBus.emit('brushing-data-saved', result);
+        
+        // Emit event to refresh dashboard data
+        eventBus.emit('brushing-completed');
+      } catch (error) {
+        console.error('Failed to save brushing log in background:', error);
+        // Emit error event for results screen to handle
+        eventBus.emit('brushing-save-error', error instanceof Error ? error.message : 'Failed to save brushing log');
+      }
+    };
+
+    // Start background save process
+    saveBrushingLogInBackground();
   };
 
   const handleClosePress = () => {

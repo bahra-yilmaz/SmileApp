@@ -26,6 +26,8 @@ export interface EarnedPointsResult {
   basePoints: number;
   bonusPoints: number;
   total: number;
+  timeStreak: number; // Consecutive sessions that hit target time
+  dailyStreak: number; // Consecutive days that hit aimed sessions per day
 }
 
 export function calculateEarnedPoints(
@@ -97,5 +99,7 @@ export function calculateEarnedPoints(
     basePoints,
     bonusPoints,
     total: basePoints + bonusPoints,
+    timeStreak,
+    dailyStreak,
   };
 } 

@@ -16,15 +16,14 @@ export function useCalendarData(): UseCalendarDataReturn {
   const { user } = useAuth();
 
   const fetchData = useCallback(async () => {
-    if (!user?.id) {
-      setIsLoading(false);
-      return;
-    }
-
     try {
       setIsLoading(true);
       setError(null);
-      const data = await getCalendarBrushingData(user.id);
+      
+      // Use getCalendarBrushingData for both authenticated and guest users
+      const userId = user?.id || 'guest';
+      const data = await getCalendarBrushingData(userId);
+      
       setBrushingData(data);
     } catch (err) {
       console.error('Error fetching calendar data:', err);

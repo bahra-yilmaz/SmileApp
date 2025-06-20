@@ -19,6 +19,7 @@ import AnimatedProgressBar from '../../components/ui/AnimatedProgressBar';
 import * as Haptics from 'expo-haptics';
 import { shareContent } from '../../utils/share';
 import { insertBrushingLog, InsertBrushingLogResult } from '../../services/BrushingLogsService';
+import { GuestUserService } from '../../services/GuestUserService';
 import { useBrushingGoal } from '../../context/BrushingGoalContext';
 import { useAuth } from '../../context/AuthContext';
 
@@ -38,14 +39,36 @@ const BrushingResultsScreen = () => {
   const actualSeconds = parseInt(params.actualSeconds as string) || 0;
   const actualTimeInSec = parseInt(params.actualTimeInSec as string) || 0;
   
+  // Check if data will be saved in background
+  const saveInBackground = params.saveInBackground === 'true';
+  const skipSave = params.skipSave === 'true';
+  const saveError = params.saveError as string;
+  const preSavedData = params.savedLogId ? {
+    id: params.savedLogId as string,
+    basePoints: parseInt(params.basePoints as string) || 0,
+    bonusPoints: parseInt(params.bonusPoints as string) || 0,
+    total: parseInt(params.totalPoints as string) || 0,
+    timeStreak: parseInt(params.timeStreak as string) || 0,
+    dailyStreak: parseInt(params.dailyStreak as string) || 0,
+  } : null;
+  
   // State for animations and modal visibility. Start fadeAnim at 0 (invisible).
   const [fadeAnim] = useState(() => new Animated.Value(0));
   const [isConfirmModalVisible, setIsConfirmModalVisible] = useState(false);
   
   // State for brushing log data
-  const [brushingLogData, setBrushingLogData] = useState<InsertBrushingLogResult | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [logError, setLogError] = useState<string | null>(null);
+  const [brushingLogData, setBrushingLogData] = useState<InsertBrushingLogResult | null>(
+    preSavedData || (saveInBackground ? {
+      id: 'loading',
+      basePoints: 0,
+      bonusPoints: 0,
+      total: 0,
+      timeStreak: 0,
+      dailyStreak: 0,
+    } : null)
+  );
+  const [isLoading, setIsLoading] = useState(saveInBackground && !preSavedData && !skipSave && !saveError);
+  const [logError, setLogError] = useState<string | null>(saveError || null);
 
   // Add a useEffect to run the fade-in animation on mount
   useEffect(() => {
@@ -54,24 +77,83 @@ const BrushingResultsScreen = () => {
       duration: 300, // A nice, smooth fade-in
       useNativeDriver: true,
     }).start();
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []);
 
-  // Save brushing log when component mounts
+  // Listen for background save events
   useEffect(() => {
+    if (!saveInBackground) return;
+
+    const handleSaveSuccess = (result: InsertBrushingLogResult) => {
+      console.log('📊 Background save completed, updating results screen:', result);
+      setBrushingLogData(result);
+      setIsLoading(false);
+    };
+
+    const handleSaveError = (errorMessage: string) => {
+      console.error('❌ Background save failed:', errorMessage);
+      setLogError(errorMessage);
+      setIsLoading(false);
+    };
+
+    const unsubscribeSuccess = eventBus.on('brushing-data-saved', handleSaveSuccess);
+    const unsubscribeError = eventBus.on('brushing-save-error', handleSaveError);
+
+    return () => {
+      eventBus.off('brushing-data-saved', unsubscribeSuccess);
+      eventBus.off('brushing-save-error', unsubscribeError);
+    };
+  }, [saveInBackground]);
+
+  // Save brushing log when component mounts (fallback for old navigation method)
+  useEffect(() => {
+    // Skip saving if data was already saved, will be saved in background, or if we should skip save
+    if (preSavedData || saveInBackground || skipSave || saveError) {
+      console.log('🔄 Skipping save in results screen - data handled elsewhere');
+      if (!saveInBackground) {
+        setIsLoading(false);
+      }
+      return;
+    }
+
     const saveBrushingLog = async () => {
-      if (!user?.id || actualTimeInSec <= 0) {
+      console.log('🦷 SAVING BRUSHING LOG IN RESULTS SCREEN:', {
+        actualTimeInSec,
+        actualMinutes,
+        actualSeconds,
+        brushingGoalMinutes,
+        userId: user?.id || 'guest'
+      });
+
+      if (actualTimeInSec <= 0) {
+        console.log('⚠️ actualTimeInSec is 0 or negative, skipping save');
         setIsLoading(false);
         return;
       }
 
       try {
         const targetTimeInSec = Math.round(brushingGoalMinutes * 60);
-        const result = await insertBrushingLog({
-          userId: user.id,
-          actualTimeInSec,
-          targetTimeInSec,
-          aimedSessionsPerDay: 2, // Default to 2 sessions per day
-        });
+        console.log('🎯 Target time calculated:', targetTimeInSec, 'seconds');
+        let result: InsertBrushingLogResult;
+
+        if (user?.id) {
+          console.log('👤 Authenticated user, saving to backend...');
+          // Authenticated user - save to backend (target time fetched from users table)
+          result = await insertBrushingLog({
+            userId: user.id,
+            actualTimeInSec,
+            aimedSessionsPerDay: 2, // Default to 2 sessions per day
+          });
+          console.log('✅ Backend save result:', result);
+        } else {
+          console.log('👻 Guest user, saving to local storage...');
+          // Guest user - save to local storage
+          result = await GuestUserService.insertGuestBrushingLog({
+            actualTimeInSec,
+            targetTimeInSec,
+            aimedSessionsPerDay: 2,
+          });
+          console.log('✅ Guest save result:', result);
+        }
         
         setBrushingLogData(result);
         
@@ -86,7 +168,7 @@ const BrushingResultsScreen = () => {
     };
 
     saveBrushingLog();
-  }, [user?.id, actualTimeInSec, brushingGoalMinutes]);
+  }, [user?.id, actualTimeInSec, brushingGoalMinutes, preSavedData, saveInBackground, skipSave, saveError]);
 
   // --- NAVIGATION HANDLERS ---
   const handleNavigateHome = () => {
@@ -162,25 +244,8 @@ const BrushingResultsScreen = () => {
     });
   };
 
-
-
   if (!fontsLoaded) {
     return null;
-  }
-
-  // Show loading state while saving brushing log
-  if (isLoading) {
-    return (
-      <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-        <Image
-          source={require('../../assets/images/meshgradient-light-default.png')}
-          style={styles.backgroundImage}
-        />
-        <View style={[styles.centerContainer, { paddingTop: insets.top + 40 }]}>
-          <ThemedText style={styles.loadingText}>{t('brushingResultsScreen.saving', 'Saving your brushing session...')}</ThemedText>
-        </View>
-      </Animated.View>
-    );
   }
 
   // Show error state if saving failed
@@ -211,18 +276,19 @@ const BrushingResultsScreen = () => {
   const targetTimeInSec = Math.round(brushingGoalMinutes * 60);
   const progress = Math.min(100, Math.round((actualTimeInSec / targetTimeInSec) * 100));
   
+  // Show placeholder/loading values that will animate to real values
   const card1Data = { 
     progress, 
-    value: brushingLogData?.basePoints || 0, 
+    value: brushingLogData?.basePoints || (isLoading ? 0 : 0), 
     label: "Points" 
   };
   const card2Data = { 
     progress: (brushingLogData?.bonusPoints ?? 0) > 0 ? 100 : 0, 
-    value: brushingLogData?.bonusPoints ?? 0, 
+    value: brushingLogData?.bonusPoints ?? (isLoading ? 0 : 0), 
     label: "Bonus" 
   };
 
-  const motivationalProgress = progress; // Use actual progress percentage
+  const motivationalProgress = progress;
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
@@ -284,7 +350,7 @@ const BrushingResultsScreen = () => {
                   <View style={styles.flippedCardLayout}>
                     <View style={styles.flippedCardTop}>
                       <View style={[styles.metricDonutContainer, styles.flippedNumberContainer]}>
-                        <ThemedText style={styles.flippedCardNumber}>0</ThemedText>
+                        <ThemedText style={styles.flippedCardNumber}>{brushingLogData?.timeStreak ?? 0}</ThemedText>
                       </View>
                       <View style={styles.metricTextContainer}>
                         <ThemedText style={styles.flippedCardValue}>{t('brushingResultsScreen.pointsCardDetailsValue')}</ThemedText>
@@ -330,7 +396,7 @@ const BrushingResultsScreen = () => {
                   <View style={styles.flippedCardLayout}>
                     <View style={styles.flippedCardTop}>
                       <View style={[styles.metricDonutContainer, styles.flippedNumberContainer]}>
-                        <ThemedText style={styles.flippedCardNumber}>5</ThemedText>
+                        <ThemedText style={styles.flippedCardNumber}>{brushingLogData?.dailyStreak ?? 0}</ThemedText>
                       </View>
                       <View style={styles.metricTextContainer}>
                         <ThemedText style={styles.flippedCardValue}>{t('brushingResultsScreen.bonusCardDetailsValue')}</ThemedText>
