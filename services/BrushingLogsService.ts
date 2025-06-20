@@ -52,22 +52,10 @@ export async function insertBrushingLog(params: {
       targetTimeInSec = 120;
     }
   } else {
-    console.log('⚠️ No user data found in brushing logs, creating user record...');
-    
-    // User doesn't exist at all, create the record
-    const { error: insertError } = await supabase
-      .from('users')
-      .insert({
-        id: userId,
-        target_time_in_sec: 120 // 2 minutes default
-      });
-
-    console.log('🔄 Insert result in brushing logs:', { insertError });
-
-    if (!insertError) {
-      targetTimeInSec = 120;
-      console.log('✅ Created user record in brushing logs with default target: 120 seconds');
-    }
+    // User doesn't exist - this shouldn't happen for authenticated users
+    // For authenticated users, the user record should exist from signup/onboarding
+    console.warn('⚠️ Authenticated user not found in database. Using default target time.');
+    targetTimeInSec = 120;
   }
 
   // -------------------------------------------------------------------------
