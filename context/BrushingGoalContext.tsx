@@ -102,28 +102,11 @@ export const BrushingGoalProvider: React.FC<BrushingGoalProviderProps> = ({ chil
           console.log('💾 Updated local state and storage with default');
         }
       } else {
-        console.log('⚠️ No user data found - userData is null, creating user record...');
-        
-        // User doesn't exist at all, create the record
-        const { error: insertError } = await supabase
-          .from('users')
-          .insert({
-            id: userId,
-            target_time_in_sec: 120 // 2 minutes default
-          });
-
-        console.log('🔄 Insert result:', { insertError });
-
-        if (!insertError) {
-          const goalInMinutes = 120 / 60; // 2 minutes
-          console.log('✅ Created user record with default target: 120 sec = 2 min');
-          setBrushingGoalState(goalInMinutes);
-          await AsyncStorage.setItem(BRUSHING_GOAL_KEY, goalInMinutes.toString());
-          console.log('💾 Updated local state and storage with new record');
-        }
+        // User doesn't exist - this shouldn't happen for authenticated users
+        // For authenticated users, the user record should exist from signup/onboarding
+        console.warn('⚠️ Authenticated user not found in database. Using current local value.');
+        // Keep the current local value, don't try to create a duplicate record
       }
-      // If userData is null, user doesn't exist, but this shouldn't happen
-      // since Supabase creates user records automatically
     } catch (error) {
       console.error('💥 Error syncing brushing goal from database:', error);
     }

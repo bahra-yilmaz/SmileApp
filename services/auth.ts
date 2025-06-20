@@ -35,20 +35,32 @@ export async function signUpWithEmail(rawEmail: string, password: string): Promi
 
   const userId = signUpData.user.id;
 
+  console.log('✅ Auth user created successfully. User ID:', userId);
+
   // ---------------------------------------------------------------------------
   // 2) Create corresponding row inside the public `users` table
   // ---------------------------------------------------------------------------
-  const { error: insertError } = await supabase.from('users').insert({
-    id: userId,
-    is_guest: false,
-    created_at: new Date().toISOString(),
-  });
+  console.log('🔄 Creating user record in users table via RPC...');
+  
+  const { data: rpcResult, error: rpcError } = await supabase
+    .rpc('create_user_record', {
+      user_id: userId,
+      is_guest_user: false
+    });
 
-  if (insertError) {
-    // Optionally, you might want to delete the auth user here to keep auth & db in sync
-    throw insertError;
+  console.log('🔄 User record RPC result:', { rpcResult, rpcError });
+
+  if (rpcError) {
+    console.error('❌ Failed to create user record via RPC:', rpcError);
+    throw rpcError;
   }
 
+  if (!rpcResult?.success) {
+    console.error('❌ RPC returned failure:', rpcResult);
+    throw new Error(rpcResult?.error || 'Failed to create user record');
+  }
+
+  console.log('✅ User record created successfully via RPC');
   return userId;
 }
 
