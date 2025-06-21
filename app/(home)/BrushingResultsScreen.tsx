@@ -244,6 +244,20 @@ const BrushingResultsScreen = () => {
     });
   };
 
+  // Helper to render time streak number with dynamic sizing
+  const renderStreakNumber = (value: number) => {
+    const str = String(value);
+    if (str.length > 1) {
+      return (
+        <Text style={styles.flippedCardNumber}>
+          {str[0]}
+          <Text style={styles.flippedCardNumberSmall}>{str.slice(1)}</Text>
+        </Text>
+      );
+    }
+    return <Text style={styles.flippedCardNumber}>{str}</Text>;
+  };
+
   if (!fontsLoaded) {
     return null;
   }
@@ -350,10 +364,10 @@ const BrushingResultsScreen = () => {
                   <View style={styles.flippedCardLayout}>
                     <View style={styles.flippedCardTop}>
                       <View style={[styles.metricDonutContainer, styles.flippedNumberContainer]}>
-                        <ThemedText style={styles.flippedCardNumber}>{brushingLogData?.timeStreak ?? 0}</ThemedText>
+                        {renderStreakNumber(brushingLogData?.timeStreak ?? 0)}
                       </View>
                       <View style={styles.metricTextContainer}>
-                        <ThemedText style={styles.flippedCardValue}>{t('brushingResultsScreen.pointsCardDetailsValue')}</ThemedText>
+                        <ThemedText style={[styles.flippedCardValue, (brushingLogData?.timeStreak ?? 0) >= 10 && styles.flippedCardValueSmall]}>{t('brushingResultsScreen.pointsCardDetailsValue')}</ThemedText>
                       </View>
                     </View>
                     <View style={styles.flippedCardBottom}>
@@ -730,7 +744,7 @@ const styles = StyleSheet.create({
     width: 70,
     height: 85,
     marginLeft: -10,
-    marginRight: -5,
+    marginRight: -10,
     paddingTop: 10,
     overflow: 'visible',
   },
@@ -782,6 +796,18 @@ const styles = StyleSheet.create({
   },
   errorButton: {
     marginTop: 10,
+  },
+  flippedCardNumberSmall: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: Colors.primary[500],
+    fontFamily: 'Merienda-Bold',
+    lineHeight: 40,
+    includeFontPadding: false,
+  },
+  flippedCardValueSmall: {
+    fontSize: 14,
+    lineHeight: 20,
   },
 });
 

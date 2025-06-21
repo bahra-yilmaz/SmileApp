@@ -270,17 +270,17 @@ export default function TimerScreen() {
     // Calculate actual brushed time based on timer state
     let actualMinutes, actualSeconds, actualTimeInSec;
     
-    if (hasCompleted) {
-      // If timer completed, they brushed for the full target time
-      actualMinutes = Math.floor(brushingGoalMinutes);
-      actualSeconds = Math.round((brushingGoalMinutes % 1) * 60);
-      actualTimeInSec = Math.round(brushingGoalMinutes * 60);
-    } else if (isOvertime) {
+    if (isOvertime) {
       // If in overtime, they brushed target time + overtime seconds
       const targetTimeInSec = Math.round(brushingGoalMinutes * 60);
       actualTimeInSec = targetTimeInSec + overtimeCounter;
       actualMinutes = Math.floor(actualTimeInSec / 60);
       actualSeconds = actualTimeInSec % 60;
+    } else if (hasCompleted) {
+      // Timer reached exactly the target time (no overtime)
+      actualMinutes = Math.floor(brushingGoalMinutes);
+      actualSeconds = Math.round((brushingGoalMinutes % 1) * 60);
+      actualTimeInSec = Math.round(brushingGoalMinutes * 60);
     } else if (isRunning) {
       // If currently running, calculate time elapsed
       const targetTimeInSec = Math.round(brushingGoalMinutes * 60);

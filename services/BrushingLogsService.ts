@@ -91,15 +91,21 @@ export async function insertBrushingLog(params: {
   );
 
   // -------------------------------------------------------------------------
-  // 4) Insert the new brushing log
+  // 4) Insert the new brushing log (store REAL brushed duration)
   // -------------------------------------------------------------------------
+  //  If the user brushed longer than their goal, we still want to persist the
+  //  full duration, not just the goal duration.  This value will be used for
+  //  analytics and future streak calculations.
+
+  const durationSecondsToInsert = actualTimeInSec; // always real brushed time
+
   const todayDateStr = new Date().toISOString().slice(0, 10);
 
   const { data: insertData, error: insertError } = await supabase
     .from('brushing_logs')
     .insert({
       user_id: userId,
-      'duration-seconds': actualTimeInSec,
+      'duration-seconds': durationSecondsToInsert,
       date: todayDateStr,
       earned_points: points.total,
     })
