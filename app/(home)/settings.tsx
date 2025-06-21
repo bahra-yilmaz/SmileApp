@@ -33,10 +33,10 @@ import { BlurView } from 'expo-blur';
 import supabase from '../../services/supabaseClient';
 import { useAuth } from '../../context/AuthContext';
 import { LanguageService } from '../../services/LanguageService';
+import { useBrushingGoal } from '../../context/BrushingGoalContext';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const NUBO_TONE_KEY = 'nubo_tone';
-const BRUSHING_TARGET_KEY = 'brushing_target';
 
 // Mascot tone interface
 interface MascotTone {
@@ -47,16 +47,44 @@ interface MascotTone {
   image: any;
 }
 
-
-
-
-
 export default function SettingsScreen() {
   const { theme } = useTheme();
   const { spacing, activeColors } = theme;
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { t, i18n } = useTranslation();
+  
+  // Brushing target options
+  const TARGET_OPTIONS: BrushingTarget[] = [
+    {
+      id: 'quick',
+      minutes: 90,
+      label: t('settings.brushingTarget.options.quick_label', '1.5 minutes'),
+      description: t('settings.brushingTarget.options.quick_description', 'Quick but effective'),
+      icon: 'flash-outline'
+    },
+    {
+      id: 'standard',
+      minutes: 120,
+      label: t('settings.brushingTarget.options.standard_label', '2 minutes'),
+      description: t('settings.brushingTarget.options.standard_description', 'Dentist recommended'),
+      icon: 'checkmark-circle-outline'
+    },
+    {
+      id: 'thorough',
+      minutes: 180,
+      label: t('settings.brushingTarget.options.thorough_label', '3 minutes'),
+      description: t('settings.brushingTarget.options.thorough_description', 'Extra thorough cleaning'),
+      icon: 'star-outline'
+    },
+    {
+      id: 'comprehensive',
+      minutes: 240,
+      label: t('settings.brushingTarget.options.comprehensive_label', '4 minutes'),
+      description: t('settings.brushingTarget.options.comprehensive_description', 'Comprehensive care'),
+      icon: 'diamond-outline'
+    }
+  ];
   
   // Animation values
   const translateX = useSharedValue(screenWidth);
@@ -126,6 +154,7 @@ export default function SettingsScreen() {
   const [isAccountExpanded, setIsAccountExpanded] = useState(false);
 
   const { user: authUser } = useAuth();
+  const { brushingGoalMinutes, setBrushingGoalMinutes } = useBrushingGoal();
 
   useEffect(() => {
     // Animate in from the right
@@ -140,7 +169,15 @@ export default function SettingsScreen() {
     
     // Load current mascot tone
     loadCurrentTone();
-  }, []);
+    
+    // For authenticated users, ensure context stays in sync with backend
+    if (authUser?.id) {
+      OnboardingService.getBrushingTarget(authUser.id).then(timeInSeconds => {
+        const goalMinutes = timeInSeconds / 60;
+        setBrushingGoalMinutes(goalMinutes); // this also updates AsyncStorage & context state
+      });
+    }
+  }, [authUser]);
   
   useEffect(() => {
     // Update current language when i18n language changes
@@ -160,6 +197,14 @@ export default function SettingsScreen() {
       }
     })();
   }, []);
+  
+  // Keep currentTarget in sync with context value
+  useEffect(() => {
+    const match = TARGET_OPTIONS.find(opt => opt.minutes === Math.round(brushingGoalMinutes * 60));
+    if (match) {
+      setCurrentTarget(match);
+    }
+  }, [brushingGoalMinutes]);
   
   const loadCurrentTone = async () => {
     try {
@@ -308,6 +353,32 @@ export default function SettingsScreen() {
     setIsTargetModalVisible(true);
   };
 
+  const handleTargetUpdate = async (target: BrushingTarget) => {
+    setCurrentTarget(target); // Optimistic UI update
+    // Update context/local storage immediately
+    const minutesValue = target.minutes / 60;
+    await setBrushingGoalMinutes(minutesValue);
+    if (authUser?.id) {
+      try {
+        await OnboardingService.updateBrushingTarget(authUser.id, target.minutes);
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      } catch (error) {
+        Alert.alert(
+          t('settings.brushingTarget.error.title', 'Update Failed'),
+          t('settings.brushingTarget.error.message', 'Could not save your brushing target. Please try again.')
+        );
+        // Optional: revert optimistic UI update by re-fetching
+        OnboardingService.getBrushingTarget(authUser.id).then(timeInSeconds => {
+          const matchingTarget = TARGET_OPTIONS.find(option => option.minutes === timeInSeconds);
+          if (matchingTarget) {
+            setCurrentTarget(matchingTarget);
+          }
+        });
+      }
+    }
+    closeModalIfConfigured(setIsTargetModalVisible);
+  };
+
   const handleFrequencyPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setIsFrequencyModalVisible(true);
@@ -452,7 +523,6 @@ export default function SettingsScreen() {
       </View>
     </Pressable>
   );
-
 
   
   return (
@@ -708,7 +778,7 @@ export default function SettingsScreen() {
         <BrushingTargetSelector
           visible={isTargetModalVisible}
           onClose={() => setIsTargetModalVisible(false)}
-          onUpdate={(target) => setCurrentTarget(target)}
+          onUpdate={handleTargetUpdate}
           autoClose={MODAL_AUTO_CLOSE}
         />
 

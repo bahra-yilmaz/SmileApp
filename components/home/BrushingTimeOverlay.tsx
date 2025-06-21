@@ -27,6 +27,7 @@ import { shareContent } from '../../utils/share';
 import { useBrushingGoal } from '../../context/BrushingGoalContext';
 import { updateUserBrushingGoal } from '../../services/DashboardService';
 import { useAuth } from '../../context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface BrushingTimeOverlayProps {
   isVisible: boolean;
@@ -37,6 +38,13 @@ interface BrushingTimeOverlayProps {
 
 // Define common target time options (in minutes)
 const TARGET_TIME_OPTIONS = [1.5, 2, 3, 4];
+const BRUSHING_TARGET_KEY = 'brushing_target';
+const TARGET_MAP = {
+  1.5: { id: 'quick', minutes: 90, labelKey: 'quick_label', descriptionKey: 'quick_description' },
+  2: { id: 'standard', minutes: 120, labelKey: 'standard_label', descriptionKey: 'standard_description' },
+  3: { id: 'thorough', minutes: 180, labelKey: 'thorough_label', descriptionKey: 'thorough_description' },
+  4: { id: 'comprehensive', minutes: 240, labelKey: 'comprehensive_label', descriptionKey: 'comprehensive_description' },
+} as const;
 
 export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({ 
   isVisible, 
@@ -128,13 +136,19 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
       // Update local context first
       await setBrushingGoalMinutes(newTarget);
       
+      // Persist full target object for Settings screen / selector
+      const storeObj = TARGET_MAP[newTarget as keyof typeof TARGET_MAP];
+      if (storeObj) {
+        await AsyncStorage.setItem(BRUSHING_TARGET_KEY, JSON.stringify({ id: storeObj.id, minutes: storeObj.minutes, label: '', description: '' }));
+      }
+      
       // If user is authenticated, also update their target in the database
       if (user?.id) {
         const targetTimeInSec = Math.round(newTarget * 60);
         await updateUserBrushingGoal(user.id, targetTimeInSec);
       }
       
-      setIsTargetOptionsVisible(false); // Collapse options after selection
+      // Keep options visible after selection so user can manually close
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     } catch (error) {
       console.error('Error setting brushing goal:', error);

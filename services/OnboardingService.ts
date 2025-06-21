@@ -171,6 +171,65 @@ export class OnboardingService {
       await OnboardingService.setUserLanguage(userId, languageCode);
     }
   }
+
+  /**
+   * Fetches the user's current brushing target time from the database.
+   * @param userId The ID of the user.
+   * @returns The target time in seconds, or a default of 120 if not set.
+   */
+  static async getBrushingTarget(userId: string): Promise<number> {
+    if (!userId) {
+      console.warn('⚠️ No user ID provided to getBrushingTarget, returning default.');
+      return 120; // Default to 2 minutes
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('target_time_in_sec')
+        .eq('id', userId)
+        .single();
+
+      if (error) {
+        console.error('❌ Error fetching brushing target:', error);
+        // Return default if record doesn't exist or another error occurs
+        return 120;
+      }
+
+      // data.target_time_in_sec can be null, so we provide a default
+      return data?.target_time_in_sec ?? 120;
+    } catch (err) {
+      console.error('❌ Exception in getBrushingTarget:', err);
+      return 120; // Default on exception
+    }
+  }
+
+  /**
+   * Updates the user's brushing target time.
+   * @param userId The ID of the user.
+   * @param targetInSeconds The new target time in seconds.
+   */
+  static async updateBrushingTarget(userId: string, targetInSeconds: number): Promise<void> {
+    if (!userId) {
+      throw new Error('User ID is required to update brushing target.');
+    }
+
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({ target_time_in_sec: targetInSeconds })
+        .eq('id', userId);
+
+      if (error) {
+        throw error;
+      }
+      
+      console.log('✅ Brushing target updated successfully to', targetInSeconds);
+    } catch (err) {
+      console.error('❌ Failed to update brushing target:', err);
+      throw err;
+    }
+  }
 }
 
 interface OnboardingPayload {

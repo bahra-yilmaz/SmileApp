@@ -71,8 +71,10 @@ export default function BrushingTargetSelector({
   ];
 
   useEffect(() => {
-    loadCurrentTarget();
-  }, []);
+    if (visible) {
+      loadCurrentTarget();
+    }
+  }, [visible]);
 
   const loadCurrentTarget = async () => {
     try {
@@ -84,8 +86,13 @@ export default function BrushingTargetSelector({
           setCurrentTarget(target);
         }
       } else {
-        // Default to standard (2 minutes) if no target is stored
-        setCurrentTarget(TARGET_OPTIONS[1]);
+        // fallback to minutes key
+        const minutesStr = await AsyncStorage.getItem('brushing_time_goal');
+        if (minutesStr) {
+          const min = parseFloat(minutesStr);
+          const target = TARGET_OPTIONS.find(opt => opt.minutes/60 === min);
+          if (target) setCurrentTarget(target);
+        }
       }
     } catch (error) {
       console.error('Error loading brushing target:', error);
