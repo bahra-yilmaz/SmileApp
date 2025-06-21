@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, Pressable, Animated } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, Pressable, Animated, Alert } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -18,7 +18,7 @@ import { eventBus } from '../../utils/EventBus';
 import AnimatedProgressBar from '../../components/ui/AnimatedProgressBar';
 import * as Haptics from 'expo-haptics';
 import { shareContent } from '../../utils/share';
-import { insertBrushingLog, InsertBrushingLogResult } from '../../services/BrushingLogsService';
+import { insertBrushingLog, deleteBrushingLog, InsertBrushingLogResult } from '../../services/BrushingLogsService';
 import { GuestUserService } from '../../services/GuestUserService';
 import { useBrushingGoal } from '../../context/BrushingGoalContext';
 import { useAuth } from '../../context/AuthContext';
@@ -181,12 +181,39 @@ const BrushingResultsScreen = () => {
   };
 
   const handleConfirmRevert = () => {
-    setIsConfirmModalVisible(false);
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start(() => router.back());
+    const runRevert = async () => {
+      try {
+        if (!brushingLogData?.id || brushingLogData.id === 'loading') {
+          // Nothing to revert
+          return;
+        }
+
+        // Delete log from backend/local depending on auth status
+        if (user?.id) {
+          await deleteBrushingLog(brushingLogData.id, user.id);
+        } else {
+          await GuestUserService.deleteGuestBrushingLog(brushingLogData.id);
+        }
+
+        // Notify other parts of app
+        eventBus.emit('brushing-reverted', brushingLogData.id);
+
+        // Reset the timer but keep the screen open
+        eventBus.emit('reset-timer');
+      } catch (error) {
+        console.error('Failed to revert brushing log:', error);
+        Alert.alert(t('common.error', 'Error'), t('brushingResultsScreen.revertError', 'Could not revert session.'));
+      } finally {
+        setIsConfirmModalVisible(false);
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }).start(() => router.back());
+      }
+    };
+
+    runRevert();
   };
 
   const [fontsLoaded] = useFonts({

@@ -120,4 +120,21 @@ export async function insertBrushingLog(params: {
     id: insertData.id,
     ...points,
   };
+}
+
+export async function deleteBrushingLog(logId: string, userId?: string): Promise<void> {
+  let query = supabase
+    .from('brushing_logs')
+    .delete();
+
+  if (userId) {
+    query = query.eq('user_id', userId);
+  }
+
+  const { error } = await query.eq('id', logId);
+
+  if (error) {
+    console.error('❌ Error deleting brushing log:', error);
+    throw error;
+  }
 } 

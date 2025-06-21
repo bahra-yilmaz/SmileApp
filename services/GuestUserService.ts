@@ -400,4 +400,26 @@ export class GuestUserService {
       throw error;
     }
   }
+
+  static async deleteGuestBrushingLog(logId: string): Promise<void> {
+    try {
+      const guestUserId = await this.getCurrentGuestUserId();
+      if (!guestUserId) {
+        throw new Error('Guest user ID not found');
+      }
+      const { error } = await supabase
+        .from('brushing_logs')
+        .delete()
+        .eq('id', logId)
+        .eq('user_id', guestUserId);
+      if (error) {
+        console.error('❌ Error deleting guest brushing log:', error);
+        throw error;
+      }
+      console.log('🗑️ Guest brushing log deleted:', logId);
+    } catch (error) {
+      console.error('❌ Error in deleteGuestBrushingLog:', error);
+      throw error;
+    }
+  }
 } 

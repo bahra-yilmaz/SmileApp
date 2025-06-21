@@ -177,6 +177,16 @@ export default function TimerScreen() {
     };
   }, [swipeDownGesture]);
 
+  // Listen for timer reset request (from ResultsScreen revert)
+  useEffect(() => {
+    const unsubReset = eventBus.on('reset-timer', () => {
+      resetTimer(false); // reset without closing UI
+    });
+    return () => {
+      eventBus.off('reset-timer', unsubReset);
+    };
+  }, []);
+
   // Timer countdown logic
   useEffect(() => {
     if (isRunning) {
