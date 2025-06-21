@@ -582,6 +582,19 @@
         "message": "Não foi possível alterar o tempo alvo. Tente novamente."
       }
     },
+    "brushingTrend": {
+  "loading": "Analisando suas escovações recentes…",
+  "improvingConsistently": "Ótima consistência! Seu tempo de escovação está aumentando de forma constante.",
+  "improvingSlightly": "Bom progresso! Você está escovando por mais tempo do que antes.",
+  "declining": "Parece que seus tempos de escovação estão diminuindo. Vamos voltar ao ritmo!",
+  "consistentHigh": "Excelente! Você está atingindo sua meta de escovação de forma consistente.",
+  "consistentLow": "Você é consistente, mas que tal escovar um pouco mais para atingir sua meta?",
+  "erratic": "Seus tempos de escovação estão um pouco irregulares. Vamos buscar mais consistência.",
+  "stable": "Você tem uma rotina de escovação estável. Continue assim!",
+  "notEnoughData": "Continue escovando para desbloquear sua análise de tendência!",
+  "newUser": "Bem-vindo! Complete mais algumas sessões para ver seu progresso."
+},
+
     "about": {
       "title": "Sobre"
     },

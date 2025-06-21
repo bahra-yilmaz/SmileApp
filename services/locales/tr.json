@@ -687,6 +687,19 @@
         "message": "Fırçalama hedefi değiştirilemedi. Lütfen tekrar deneyin."
       }
     },
+    "brushingTrend": {
+  "loading": "Son seansların analiz ediliyor…",
+  "improvingConsistently": "Harika bir istikrar! Fırçalama süren düzenli olarak artıyor.",
+  "improvingSlightly": "Güzel ilerleme! Önceye göre daha uzun fırçalıyorsun.",
+  "declining": "Fırçalama sürelerin biraz kısalmış gibi. Hadi tekrar ritme girelim!",
+  "consistentHigh": "Mükemmel! Hedef süreyi düzenli olarak yakalıyorsun.",
+  "consistentLow": "İstikrarlısın ama biraz daha uzun fırçalayarak hedefi yakalayabilirsin.",
+  "erratic": "Fırçalama sürelerin biraz dalgalı. Daha düzenli bir rutin oluşturalım mı?",
+  "stable": "Düzenli bir fırçalama rutinin var. Böyle devam!",
+  "notEnoughData": "Trend analizi için biraz daha fırçalamaya ihtiyacımız var!",
+  "newUser": "Hoş geldin! İlerlemeni görebilmek için birkaç seans daha tamamla."
+},
+
     "about": {
       "title": "Hakkında"
     },

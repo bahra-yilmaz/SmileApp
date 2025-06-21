@@ -630,6 +630,19 @@
         "message": "No se pudo cambiar el tiempo objetivo. Por favor intenta de nuevo."
       }
     },
+    "brushingTrend": {
+  "loading": "Analizando tus sesiones recientes…",
+  "improvingConsistently": "¡Gran consistencia! Tu tiempo de cepillado está aumentando de manera constante.",
+  "improvingSlightly": "¡Buen progreso! Estás cepillándote más tiempo que antes.",
+  "declining": "Parece que tu tiempo de cepillado está disminuyendo. ¡Vamos a ponernos de nuevo en marcha!",
+  "consistentHigh": "¡Excelente! Estás cumpliendo tu meta de cepillado de manera constante.",
+  "consistentLow": "Eres consistente, pero intenta cepillarte un poco más para cumplir tu objetivo.",
+  "erratic": "Tus tiempos de cepillado están algo irregulares. Vamos a trabajar en más consistencia.",
+  "stable": "Tienes una rutina de cepillado consistente. ¡Sigue así!",
+  "notEnoughData": "¡Sigue cepillándote para desbloquear el análisis de tu tendencia!",
+  "newUser": "¡Bienvenido! Completa algunas sesiones más para ver tu progreso."
+},
+
     "about": {
       "title": "Acerca de"
     },

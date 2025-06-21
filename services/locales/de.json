@@ -581,6 +581,19 @@
           "message": "Zielzeit konnte nicht geändert werden. Bitte erneut versuchen."
         }
       },
+      "brushingTrend": {
+  "loading": "Deine letzten Sitzungen werden analysiert…",
+  "improvingConsistently": "Tolle Beständigkeit! Deine Putzzeit nimmt stetig zu.",
+  "improvingSlightly": "Schöner Fortschritt! Du putzt länger als zuvor.",
+  "declining": "Deine Putzzeiten werden kürzer. Zeit, wieder durchzustarten!",
+  "consistentHigh": "Ausgezeichnet! Du erreichst dein Ziel konstant.",
+  "consistentLow": "Du bist konstant, aber versuch ein bisschen länger zu putzen.",
+  "erratic": "Deine Putzzeiten schwanken etwas. Lass uns für mehr Beständigkeit sorgen.",
+  "stable": "Du hast eine verlässliche Putzroutine. Weiter so!",
+  "notEnoughData": "Putz noch ein bisschen mehr, um deine Trendanalyse freizuschalten!",
+  "newUser": "Willkommen! Mach noch ein paar Sitzungen, um deinen Fortschritt zu sehen."
+},
+
       "about": {
         "title": "Über"
       },

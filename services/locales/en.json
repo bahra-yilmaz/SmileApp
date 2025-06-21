@@ -662,6 +662,18 @@
         "message": "Failed to change brushing target. Please try again."
       }
     },
+    "brushingTrend": {
+      "loading": "Analyzing your recent sessions…",
+      "improvingConsistently": "Great consistency! Your brushing time is steadily increasing.",
+      "improvingSlightly": "Nice progress! You're brushing longer than before.",
+      "declining": "Looks like your brushing times are getting shorter. Let's get back on track!",
+      "consistentHigh": "Excellent! You are consistently meeting your brushing goal.",
+      "consistentLow": "You're consistent, but let's try to brush a bit longer to meet your goal.",
+      "erratic": "Your brushing times are a bit varied. Let's aim for more consistency.",
+      "stable": "You have a consistent brushing routine. Keep it up!",
+      "notEnoughData": "Keep brushing to unlock your trend analysis!",
+      "newUser": "Welcome! Complete a few more sessions to see your progress."
+    },
     "about": {
       "title": "About"
     },
