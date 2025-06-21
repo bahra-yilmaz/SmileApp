@@ -25,58 +25,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Start with loading true
     setIsLoading(true);
-
-    // Get the initial session
-    const getSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session);
-      setUser(data.session?.user ?? null);
-      setIsLoading(false);
-    };
     
-    getSession();
-
-    // Listen for auth state changes
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        const previousUser = user;
-        setSession(session);
-        setUser(session?.user ?? null);
-        if (isLoading) setIsLoading(false); // Stop loading once we have a definite state
-        
-        // Handle user sign in
-        if (event === 'SIGNED_IN' && session?.user && !previousUser) {
-          console.log('🔄 User signed in, loading preferences...');
-          try {
-            // Clear guest data
-            await GuestUserService.clearGuestData();
-            console.log('✅ Guest data cache cleared for authenticated user');
-            
-            // Load user's language preference
-            await LanguageService.loadAndApplyUserLanguage(session.user.id);
-            console.log('✅ User language preference loaded');
-          } catch (error) {
-            console.error('❌ Error loading user preferences:', error);
-          }
-        }
+        const currentUser = session?.user ?? null;
 
-        // Handle user sign out
-        if (event === 'SIGNED_OUT') {
-          console.log('🔄 User signed out, loading default language...');
-          try {
-            // Load default language (device or fallback)
-            await LanguageService.loadAndApplyUserLanguage();
-            console.log('✅ Default language loaded');
-          } catch (error) {
-            console.error('❌ Error loading default language:', error);
+        // Use functional update to safely get the previous user state
+        setUser(prevUser => {
+          const isNewSignIn = !prevUser && currentUser;
+          if (isNewSignIn) {
+            console.log('✨ New user signed in! Clearing guest data and loading language.');
+            GuestUserService.clearGuestData();
+            LanguageService.loadAndApplyUserLanguage(currentUser.id);
           }
+          return currentUser;
+        });
+
+        setSession(session);
+
+        if (event === 'SIGNED_OUT') {
+          console.log('💨 User signed out. Loading default language.');
+          LanguageService.loadAndApplyUserLanguage();
         }
+        
+        setIsLoading(false);
       }
     );
 
-    // Cleanup listener on unmount
     return () => {
       authListener.subscription.unsubscribe();
     };

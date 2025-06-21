@@ -51,14 +51,14 @@ export default function OnboardingWelcome() {
 
   const initialStageConfig: MascotConfig = {
     id: 'onboarding-stage-1',
-    greetingTextKey: t('onboarding.mascotGreetingStage1'),
+    greetingTextKey: 'onboarding.mascotGreetingStage1',
     collapsedVariant: 'nubo-wise-1-pp',
     expandedVariant: mascotInitialVariant,
     probability: 1, // Static probability for onboarding
   };
   // Define text for the second stage directly
-  const secondStageGreetingText = t('onboarding.mascotGreetingStage2');
-  const finalStageGreetingText = t('onboarding.mascotGreetingStage3');
+  const secondStageGreetingText = 'onboarding.mascotGreetingStage2';
+  const finalStageGreetingText = 'onboarding.mascotGreetingStage3';
 
   // Define variants for the second stage
   const secondStageCollapsedVariant: PpMascotVariant = 'nubo-brushing-1-pp';
@@ -338,11 +338,11 @@ export default function OnboardingWelcome() {
 
         <View style={styles.mascotCardContainer}>
           <ExpandableMascotCard
+            config={mascotCardConfig}
+            greetingTextKey={mascotCardConfig.greetingTextKey}
             isExpanded={isMascotCardExpanded}
             onPress={handleExpandAndProgress}
-            config={mascotCardConfig}
-            greetingText={t(mascotCardConfig.greetingTextKey)}
-            onPressWhenExpanded={handleCollapseAndUpdate}
+            onPressWhenExpanded={handleExpandAndProgress}
             enablePulse={!isMascotCardExpanded && !isCheckpoint3Done}
           />
         </View>

@@ -6,6 +6,7 @@ import Mascot from '../ui/Mascot';
 import ThemedText from '../ThemedText';
 import { useTypingEffect } from '../../utils/hooks/useTypingEffect';
 import { useTheme } from '../ThemeProvider';
+import { useTranslation } from 'react-i18next';
 import Reanimated, {
   useSharedValue,
   useAnimatedStyle,
@@ -22,7 +23,7 @@ import type { MascotConfig, MascotVariant } from '../../types/mascot';
 
 interface ExpandableMascotCardProps {
   config: MascotConfig;
-  greetingText: string;
+  greetingTextKey: string;
   isExpanded: boolean;
   onPress?: () => void;
   onPressWhenExpanded?: () => void;
@@ -31,12 +32,13 @@ interface ExpandableMascotCardProps {
 
 export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
   config,
-  greetingText,
+  greetingTextKey,
   isExpanded,
   onPress,
   onPressWhenExpanded,
   enablePulse
 }) => {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const { borderRadius } = theme;
@@ -102,7 +104,7 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
   
   // Get typed text using the custom hook
   const typedText = useTypingEffect({
-    text: greetingText,
+    text: t(greetingTextKey),
     enabled: isExpanded,
     typingSpeed: 50,
   });
