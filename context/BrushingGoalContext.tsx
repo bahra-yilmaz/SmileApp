@@ -1,14 +1,19 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '../services/supabaseClient';
+import { OnboardingService } from '../services/OnboardingService';
 
 const BRUSHING_GOAL_KEY = 'brushing_time_goal';
+const BRUSHING_FREQUENCY_KEY = 'brushing_frequency';
 const DEFAULT_BRUSHING_GOAL = 2; // 2 minutes default
+const DEFAULT_BRUSHING_FREQUENCY = 2; // 2 times a day default
 
 interface BrushingGoalContextType {
   brushingGoalMinutes: number;
   setBrushingGoalMinutes: (minutes: number) => Promise<void>;
-  syncBrushingGoalFromDatabase: (userId: string) => Promise<void>;
+  brushingFrequency: number;
+  setBrushingFrequency: (frequency: number) => Promise<void>;
+  syncWithDatabase: (userId: string) => Promise<void>;
   debugCurrentState: () => void;
   isLoading: boolean;
 }
@@ -21,27 +26,36 @@ interface BrushingGoalProviderProps {
 
 export const BrushingGoalProvider: React.FC<BrushingGoalProviderProps> = ({ children }) => {
   const [brushingGoalMinutes, setBrushingGoalState] = useState<number>(DEFAULT_BRUSHING_GOAL);
+  const [brushingFrequency, setBrushingFrequencyState] = useState<number>(DEFAULT_BRUSHING_FREQUENCY);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load brushing goal from storage on app start
+  // Load goals from storage on app start
   useEffect(() => {
-    const loadBrushingGoal = async () => {
+    const loadGoals = async () => {
       try {
-        const stored = await AsyncStorage.getItem(BRUSHING_GOAL_KEY);
-        if (stored !== null) {
-          const goal = parseFloat(stored);
+        const storedGoal = await AsyncStorage.getItem(BRUSHING_GOAL_KEY);
+        if (storedGoal !== null) {
+          const goal = parseFloat(storedGoal);
           if (!isNaN(goal) && goal > 0) {
             setBrushingGoalState(goal);
           }
         }
+        
+        const storedFrequency = await AsyncStorage.getItem(BRUSHING_FREQUENCY_KEY);
+        if (storedFrequency !== null) {
+            const frequency = parseInt(storedFrequency, 10);
+            if (!isNaN(frequency) && frequency > 0) {
+                setBrushingFrequencyState(frequency);
+            }
+        }
       } catch (error) {
-        console.error('Error loading brushing goal:', error);
+        console.error('Error loading brushing goals from storage:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadBrushingGoal();
+    loadGoals();
   }, []);
 
   // Update brushing goal and save to storage
@@ -59,56 +73,61 @@ export const BrushingGoalProvider: React.FC<BrushingGoalProviderProps> = ({ chil
     }
   };
 
-  // Sync brushing goal from database for authenticated users
-  const syncBrushingGoalFromDatabase = async (userId: string) => {
-    console.log('🎯 Starting sync for userId:', userId);
+  // Update brushing frequency and save to storage
+  const setBrushingFrequency = async (frequency: number) => {
     try {
-      const { data: userData, error } = await supabase
-        .from('users')
-        .select('target_time_in_sec')
-        .eq('id', userId)
-        .maybeSingle(); // Use maybeSingle() instead of single()
+      if (frequency <= 0) {
+        throw new Error('Brushing frequency must be positive');
+      }
 
-      console.log('📊 Database response:', { userData, error });
+      setBrushingFrequencyState(frequency);
+      await AsyncStorage.setItem(BRUSHING_FREQUENCY_KEY, frequency.toString());
+    } catch (error) {
+      console.error('Error saving brushing frequency:', error);
+      throw error;
+    }
+  };
+
+
+  // Sync brushing goal from database for authenticated users
+  const syncWithDatabase = async (userId: string) => {
+    console.log('🎯 Starting goal sync for userId:', userId);
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('target_time_in_sec, brushing_target')
+        .eq('id', userId)
+        .maybeSingle();
 
       if (error) {
-        console.error('❌ Error fetching user target time:', error);
+        console.error('❌ Error fetching user goals:', error);
         return;
       }
-
-      // If user record exists and has target_time_in_sec, use it
-      if (userData?.target_time_in_sec) {
-        const goalInMinutes = userData.target_time_in_sec / 60;
-        console.log('✅ Found existing target:', userData.target_time_in_sec, 'sec =', goalInMinutes, 'min');
-        setBrushingGoalState(goalInMinutes);
-        await AsyncStorage.setItem(BRUSHING_GOAL_KEY, goalInMinutes.toString());
-        console.log('💾 Updated local state and storage');
-      } else if (userData) {
-        // User record exists but target_time_in_sec is null, update it to default
-        console.log('🔄 User exists but target_time_in_sec is null, updating to default...');
-        
-        const { error: updateError } = await supabase
-          .from('users')
-          .update({ target_time_in_sec: 120 })
-          .eq('id', userId);
-
-        console.log('🔄 Update result:', { updateError });
-
-        if (!updateError) {
-          const goalInMinutes = 120 / 60; // 2 minutes
-          console.log('✅ Set default target: 120 sec = 2 min');
-          setBrushingGoalState(goalInMinutes);
-          await AsyncStorage.setItem(BRUSHING_GOAL_KEY, goalInMinutes.toString());
-          console.log('💾 Updated local state and storage with default');
+      
+      if (data) {
+        // Sync brushing time
+        if (data.target_time_in_sec) {
+          await setBrushingGoalMinutes(data.target_time_in_sec / 60);
+        } else {
+          // If null in DB, set it to default.
+          await OnboardingService.updateBrushingTarget(userId, DEFAULT_BRUSHING_GOAL * 60);
+          await setBrushingGoalMinutes(DEFAULT_BRUSHING_GOAL);
         }
-      } else {
-        // User doesn't exist - this shouldn't happen for authenticated users
-        // For authenticated users, the user record should exist from signup/onboarding
-        console.warn('⚠️ Authenticated user not found in database. Using current local value.');
-        // Keep the current local value, don't try to create a duplicate record
+        
+        // Sync brushing frequency
+        if (data.brushing_target) {
+          await setBrushingFrequency(data.brushing_target);
+        } else {
+          // If null in DB, set it to default.
+          await OnboardingService.updateBrushingFrequency(userId, DEFAULT_BRUSHING_FREQUENCY);
+          await setBrushingFrequency(DEFAULT_BRUSHING_FREQUENCY);
+        }
       }
     } catch (error) {
-      console.error('💥 Error syncing brushing goal from database:', error);
+      console.error('💥 Error syncing brushing goals from database:', error);
+    } finally {
+        setIsLoading(false);
     }
   };
 
@@ -116,6 +135,7 @@ export const BrushingGoalProvider: React.FC<BrushingGoalProviderProps> = ({ chil
   const debugCurrentState = () => {
     console.log('🐛 CURRENT BRUSHING GOAL STATE:', {
       brushingGoalMinutes,
+      brushingFrequency,
       isLoading,
       timestamp: new Date().toISOString()
     });
@@ -124,7 +144,9 @@ export const BrushingGoalProvider: React.FC<BrushingGoalProviderProps> = ({ chil
   const value = {
     brushingGoalMinutes,
     setBrushingGoalMinutes,
-    syncBrushingGoalFromDatabase,
+    brushingFrequency,
+    setBrushingFrequency,
+    syncWithDatabase,
     debugCurrentState,
     isLoading,
   };

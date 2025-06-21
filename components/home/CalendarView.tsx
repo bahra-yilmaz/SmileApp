@@ -34,7 +34,12 @@ const CalendarView: React.FC<CalendarViewProps> = ({
   const flatListRef = useRef<FlatList>(null);
   
   // Fetch real brushing data
-  const { brushingData, isLoading: isDataLoading, refetch: refetchCalendarData } = useCalendarData();
+  const { 
+    brushingData, 
+    brushingFrequency, 
+    isLoading: isDataLoading, 
+    refetch: refetchCalendarData 
+  } = useCalendarData();
   
   // State to track visible weeks and if we're ready to display
   const [weeks, setWeeks] = useState<WeekData[]>([]);
@@ -133,8 +138,8 @@ const CalendarView: React.FC<CalendarViewProps> = ({
     const dateKey = format(date, 'yyyy-MM-dd', { locale: currentLocale });
     const brushCount = brushingData[dateKey] || 0;
     
-    // Maximum 2 dots (for morning and evening brushing)
-    const maxDots = 2;
+    // Use the fetched brushing frequency as the max number of dots
+    const maxDots = brushingFrequency;
     const dots = [];
     
     for (let i = 0; i < maxDots; i++) {

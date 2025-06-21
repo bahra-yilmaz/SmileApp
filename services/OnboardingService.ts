@@ -230,6 +230,63 @@ export class OnboardingService {
       throw err;
     }
   }
+
+  /**
+   * Fetches the user's daily brushing frequency from the database.
+   * @param userId The ID of the user.
+   * @returns The number of sessions per day, or a default of 2.
+   */
+  static async getBrushingFrequency(userId: string): Promise<number> {
+    if (!userId) {
+      console.warn('⚠️ No user ID provided to getBrushingFrequency, returning default.');
+      return 2; // Default to 2 sessions
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('brushing_target')
+        .eq('id', userId)
+        .single();
+
+      if (error) {
+        console.error('❌ Error fetching brushing frequency:', error);
+        return 2;
+      }
+
+      return data?.brushing_target ?? 2;
+    } catch (err) {
+      console.error('❌ Exception in getBrushingFrequency:', err);
+      return 2;
+    }
+  }
+
+  /**
+   * Updates the user's daily brushing frequency.
+   * @param userId The ID of the user.
+   * @param frequency The new number of sessions per day.
+   */
+  static async updateBrushingFrequency(userId: string, frequency: number): Promise<void> {
+    if (!userId) {
+      throw new Error('User ID is required to update brushing frequency.');
+    }
+
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({ brushing_target: frequency })
+        .eq('id', userId);
+
+      if (error) {
+        throw error;
+      }
+      
+      console.log('✅ Brushing frequency updated successfully to', frequency);
+    } catch (err) {
+      console.error('❌ Failed to update brushing frequency:', err);
+      throw err;
+    }
+  }
 }
 
 interface OnboardingPayload {

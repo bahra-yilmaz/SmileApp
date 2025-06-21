@@ -7,13 +7,13 @@ import { useBrushingGoal } from '../context/BrushingGoalContext';
  */
 export const useBrushingGoalSync = () => {
   const { user } = useAuth();
-  const { syncBrushingGoalFromDatabase } = useBrushingGoal();
+  const { syncWithDatabase } = useBrushingGoal();
 
   useEffect(() => {
     // Sync brushing goal from database when user logs in
     if (user?.id) {
-      console.log('🔄 Syncing brushing goal for user:', user.id);
-      syncBrushingGoalFromDatabase(user.id);
+      console.log('🔄 Syncing brushing goals for user:', user.id);
+      syncWithDatabase(user.id);
     }
-  }, [user?.id]); // Remove syncBrushingGoalFromDatabase from dependencies to prevent infinite loop
+  }, [user?.id]); // Only re-run when user changes
 }; 

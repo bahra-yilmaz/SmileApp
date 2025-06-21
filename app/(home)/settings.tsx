@@ -86,6 +86,37 @@ export default function SettingsScreen() {
     }
   ];
   
+  const FREQUENCY_OPTIONS: DailyBrushingFrequency[] = [
+    {
+      id: 'minimal',
+      count: 1,
+      label: t('settings.dailyFrequency.options.minimal_label', '1 time per day'),
+      description: t('settings.dailyFrequency.options.minimal_description', 'Basic maintenance'),
+      icon: 'sunny-outline'
+    },
+    {
+      id: 'standard',
+      count: 2,
+      label: t('settings.dailyFrequency.options.standard_label', '2 times per day'),
+      description: t('settings.dailyFrequency.options.standard_description', 'Morning and evening'),
+      icon: 'checkmark-circle-outline'
+    },
+    {
+      id: 'recommended',
+      count: 3,
+      label: t('settings.dailyFrequency.options.recommended_label', '3 times per day'),
+      description: t('settings.dailyFrequency.options.recommended_description', 'After each meal'),
+      icon: 'star-outline'
+    },
+    {
+      id: 'comprehensive',
+      count: 4,
+      label: t('settings.dailyFrequency.options.comprehensive_label', '4+ times per day'),
+      description: t('settings.dailyFrequency.options.comprehensive_description', 'Maximum care'),
+      icon: 'diamond-outline'
+    }
+  ];
+  
   // Animation values
   const translateX = useSharedValue(screenWidth);
   const opacity = useSharedValue(0);
@@ -154,7 +185,12 @@ export default function SettingsScreen() {
   const [isAccountExpanded, setIsAccountExpanded] = useState(false);
 
   const { user: authUser } = useAuth();
-  const { brushingGoalMinutes, setBrushingGoalMinutes } = useBrushingGoal();
+  const { 
+    brushingGoalMinutes, 
+    setBrushingGoalMinutes, 
+    brushingFrequency, 
+    setBrushingFrequency 
+  } = useBrushingGoal();
 
   useEffect(() => {
     // Animate in from the right
@@ -175,6 +211,12 @@ export default function SettingsScreen() {
       OnboardingService.getBrushingTarget(authUser.id).then(timeInSeconds => {
         const goalMinutes = timeInSeconds / 60;
         setBrushingGoalMinutes(goalMinutes); // this also updates AsyncStorage & context state
+      });
+      OnboardingService.getBrushingFrequency(authUser.id).then(frequency => {
+        const matchingFrequency = FREQUENCY_OPTIONS.find(option => option.count === frequency);
+        if (matchingFrequency) {
+          setCurrentFrequency(matchingFrequency);
+        }
       });
     }
   }, [authUser]);
@@ -205,6 +247,14 @@ export default function SettingsScreen() {
       setCurrentTarget(match);
     }
   }, [brushingGoalMinutes]);
+  
+  // Keep currentFrequency in sync with context value
+  useEffect(() => {
+    const match = FREQUENCY_OPTIONS.find(opt => opt.count === brushingFrequency);
+    if (match) {
+      setCurrentFrequency(match);
+    }
+  }, [brushingFrequency]);
   
   const loadCurrentTone = async () => {
     try {
@@ -377,6 +427,27 @@ export default function SettingsScreen() {
       }
     }
     closeModalIfConfigured(setIsTargetModalVisible);
+  };
+
+  const handleFrequencyUpdate = async (frequency: DailyBrushingFrequency) => {
+    // Update context/local storage immediately
+    await setBrushingFrequency(frequency.count);
+    
+    // Then, update the database
+    if (authUser?.id) {
+      try {
+        await OnboardingService.updateBrushingFrequency(authUser.id, frequency.count);
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      } catch (error) {
+        Alert.alert(
+          t('settings.dailyFrequency.error.title', 'Update Failed'),
+          t('settings.dailyFrequency.error.message', 'Could not save your brushing frequency. Please try again.')
+        );
+        // Optional: revert by re-syncing from DB
+        // syncWithDatabase(authUser.id);
+      }
+    }
+    closeModalIfConfigured(setIsFrequencyModalVisible);
   };
 
   const handleFrequencyPress = () => {
@@ -786,7 +857,7 @@ export default function SettingsScreen() {
         <DailyBrushingFrequencySelector
           visible={isFrequencyModalVisible}
           onClose={() => setIsFrequencyModalVisible(false)}
-          onUpdate={(frequency) => setCurrentFrequency(frequency)}
+          onUpdate={handleFrequencyUpdate}
           autoClose={MODAL_AUTO_CLOSE}
         />
 
