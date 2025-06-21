@@ -145,6 +145,33 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
 }
 
 /**
+ * Fetches recent brushing logs for a user.
+ * @param userId - The ID of the user.
+ * @returns A promise that resolves to an array of recent brushing logs.
+ */
+export async function getRecentBrushingLogs(userId: string): Promise<any[]> {
+  if (userId === 'guest') {
+    // Trend analysis is not for guest users, so return an empty array.
+    return [];
+  }
+
+  const thirtyDaysAgo = subDays(new Date(), 30);
+  const { data: brushingLogs, error } = await supabase
+    .from('brushing_logs')
+    .select('"duration-seconds", date, created_at')
+    .eq('user_id', userId)
+    .gte('created_at', thirtyDaysAgo.toISOString())
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching recent brushing logs:', error);
+    throw error;
+  }
+  
+  return brushingLogs || [];
+}
+
+/**
  * Calculate consecutive days of successful brushing
  */
 function calculateStreakDays(logs: any[], userTargetSeconds: number): number {

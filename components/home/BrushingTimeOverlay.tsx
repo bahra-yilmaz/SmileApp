@@ -28,6 +28,7 @@ import { useBrushingGoal } from '../../context/BrushingGoalContext';
 import { updateUserBrushingGoal } from '../../services/DashboardService';
 import { useAuth } from '../../context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useBrushingTrend } from '../../hooks/useBrushingTrend';
 
 interface BrushingTimeOverlayProps {
   isVisible: boolean;
@@ -57,6 +58,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   const { activeColors } = theme;
   const { brushingGoalMinutes, setBrushingGoalMinutes } = useBrushingGoal();
   const { user } = useAuth();
+  const { trendText, trendIcon } = useBrushingTrend();
   
   // Animation values for container
   const [fadeAnim] = useState(() => new Animated.Value(0));
@@ -162,10 +164,6 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   
   // If not visible and animation is complete, don't render anything
   if (!isVisible && !animationComplete) return null;
-  
-  // Display trend for average of last 10 brushings
-  const trendIcon = 'trending-up'; // or 'trending-down' or 'trending-neutral'
-  const trendText = t('brushingTimeOverlay.averageTimeImproving');
   
   // Calculate remaining time
   const totalSecondsBrushed = minutes * 60 + seconds;
@@ -290,7 +288,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
             <View style={styles.usageContainer}> 
               <View style={styles.usageIconContainer}>
                 <MaterialCommunityIcons
-                  name={trendIcon as keyof typeof MaterialCommunityIcons.glyphMap}
+                  name={trendIcon as any}
                   size={30}
                   color={Colors.primary[500]} 
                 />
