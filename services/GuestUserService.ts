@@ -225,6 +225,8 @@ export class GuestUserService {
         logsByDate.get(dateKey)!.push(log);
       });
 
+      const aimedSessionsPerDay = 2; // Guest users default frequency
+
       // Check consecutive days backwards from yesterday
       let checkDate = new Date();
       checkDate.setDate(checkDate.getDate() - 1);
@@ -234,7 +236,7 @@ export class GuestUserService {
         const dayLogs = logsByDate.get(dateStr) || [];
         
         // Check if this day had at least one successful session
-        const hasSuccessfulSession = dayLogs.some(log => log['duration-seconds'] >= targetTimeInSec);
+        const hasSuccessfulSession = dayLogs.length >= aimedSessionsPerDay;
         
         if (hasSuccessfulSession) {
           streakDays++;

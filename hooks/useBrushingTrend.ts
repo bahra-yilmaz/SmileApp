@@ -23,7 +23,7 @@ const getTrendDetails = (t: (key: string, options?: { defaultValue: string }) =>
   if (!trendResult) {
     return {
       text: t(PREFIX + 'loading', { defaultValue: 'Analyzing your recent sessions...' }),
-      icon: 'sync-outline',
+      icon: 'progress-clock',
     };
   }
 

@@ -51,7 +51,7 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
     // First, fetch the user's target time from the users table
     const { data: userData, error: userError } = await supabase
       .from('users')
-      .select('target_time_in_sec')
+      .select('target_time_in_sec, brushing_target')
       .eq('id', userId)
       .maybeSingle();
 
@@ -109,8 +109,11 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
 
     const logs = brushingLogs || [];
 
-    // Calculate streak days using the user's actual target
-    const streakDays = calculateStreakDays(logs, userTargetSeconds);
+    // Determine aimed sessions per day (default 2 if null)
+    const aimedSessionsPerDay = (userData?.brushing_target as number | null) ?? 2;
+
+    // Calculate streak days using both time and frequency targets
+    const streakDays = calculateStreakDays(logs, userTargetSeconds, aimedSessionsPerDay);
 
     // Get last brushing time
     const lastBrushingTime = getLastBrushingTime(logs);
@@ -174,7 +177,7 @@ export async function getRecentBrushingLogs(userId: string): Promise<any[]> {
 /**
  * Calculate consecutive days of successful brushing
  */
-function calculateStreakDays(logs: any[], userTargetSeconds: number): number {
+function calculateStreakDays(logs: any[], userTargetSeconds: number, aimedSessionsPerDay: number): number {
   if (!logs.length) return 0;
 
   // Group logs by date
@@ -197,10 +200,8 @@ function calculateStreakDays(logs: any[], userTargetSeconds: number): number {
     const dateStr = format(currentDate, 'yyyy-MM-dd');
     const dayLogs = logsByDate.get(dateStr) || [];
     
-    // Consider a day successful if user brushed at least once and met target
-    const hasSuccessfulBrushing = dayLogs.some(log => {
-      return log['duration-seconds'] >= userTargetSeconds;
-    });
+    // Successful day: brushed at least aimedSessionsPerDay times meeting target
+    const hasSuccessfulBrushing = dayLogs.length >= aimedSessionsPerDay;
 
     if (hasSuccessfulBrushing) {
       streak++;

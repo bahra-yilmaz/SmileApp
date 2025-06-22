@@ -393,7 +393,13 @@ const BrushingResultsScreen = () => {
                       <View style={[styles.metricDonutContainer, styles.flippedNumberContainer]}>
                         {renderStreakNumber(brushingLogData?.timeStreak ?? 0)}
                       </View>
-                      <View style={styles.metricTextContainer}>
+                      <View
+                        style={[
+                          styles.metricTextContainer,
+                          (brushingLogData?.timeStreak ?? 0) >= 10 &&
+                            styles.metricTextContainerLargeNumber,
+                        ]}
+                      >
                         <ThemedText style={[styles.flippedCardValue, (brushingLogData?.timeStreak ?? 0) >= 10 && styles.flippedCardValueSmall]}>{t('brushingResultsScreen.pointsCardDetailsValue')}</ThemedText>
                       </View>
                     </View>
@@ -835,6 +841,9 @@ const styles = StyleSheet.create({
   flippedCardValueSmall: {
     fontSize: 14,
     lineHeight: 20,
+  },
+  metricTextContainerLargeNumber: {
+    marginLeft: 6,
   },
 });
 
