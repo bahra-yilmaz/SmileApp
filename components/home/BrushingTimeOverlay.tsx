@@ -24,6 +24,7 @@ import DonutChart from '../ui/DonutChart';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
 import { shareContent } from '../../utils/share';
+import { getProgressColor } from '../../utils/colorUtils';
 import { useBrushingGoal } from '../../context/BrushingGoalContext';
 import { updateUserBrushingGoal } from '../../services/DashboardService';
 import { useAuth } from '../../context/AuthContext';
@@ -88,16 +89,6 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   const progress = ((minutes + seconds / 60) / brushingGoalMinutes) * 100;
   // Ensure donut never exceeds full circle
   const donutProgress = Math.min(100, progress);
-  
-  // Helper to map progress (0-100) to primary color shades (100-500)
-  const getProgressColor = (pct: number) => {
-    const ratio = Math.min(1, Math.max(0, pct / 100));
-    if (ratio >= 0.8) return Colors.primary[500];
-    if (ratio >= 0.6) return Colors.primary[400];
-    if (ratio >= 0.4) return Colors.primary[300];
-    if (ratio >= 0.2) return Colors.primary[200];
-    return Colors.primary[100];
-  };
   
   const progressBarColor = getProgressColor(progress);
   

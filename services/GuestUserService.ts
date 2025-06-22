@@ -229,10 +229,12 @@ export class GuestUserService {
 
       // Check consecutive days backwards from yesterday
       let checkDate = new Date();
-      checkDate.setDate(checkDate.getDate() - 1);
-      
+      checkDate.setDate(checkDate.getDate() - 1); // Start from yesterday (local) but we'll compare using UTC string
+
+      const dateKey = (d: Date) => d.toISOString().slice(0, 10);
+
       while (true) {
-        const dateStr = checkDate.toISOString().split('T')[0];
+        const dateStr = dateKey(checkDate);
         const dayLogs = logsByDate.get(dateStr) || [];
         
         // Check if this day had at least one successful session

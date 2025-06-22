@@ -192,12 +192,14 @@ function calculateStreakDays(logs: any[], userTargetSeconds: number, aimedSessio
     logsByDate.get(date)!.push(log);
   });
 
-  // Check consecutive days starting from today
+  const dateKey = (d: Date) => d.toISOString().slice(0, 10);
+
+  // Check consecutive days starting from today (UTC-based)
   let streak = 0;
   let currentDate = new Date();
   
   while (true) {
-    const dateStr = format(currentDate, 'yyyy-MM-dd');
+    const dateStr = dateKey(currentDate);
     const dayLogs = logsByDate.get(dateStr) || [];
     
     // Successful day: brushed at least aimedSessionsPerDay times meeting target

@@ -24,6 +24,7 @@ import * as Haptics from 'expo-haptics';
 import * as Sharing from 'expo-sharing';
 import ViewShot from 'react-native-view-shot';
 import ShareCard from '../ui/ShareCard';
+import { getProgressColor } from '../../utils/colorUtils';
 
 interface StreakOverlayProps {
   isVisible: boolean;
@@ -384,8 +385,8 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                    <ThemedText style={[
                       styles.usageText, 
                       {
-                        color: Colors.primary[theme.colorScheme === 'dark' ? 400 : 500], // Apply "Fair" color
-                        fontFamily: theme.typography.fonts.medium // Make it slightly bolder maybe?
+                        color: getProgressColor(progressPercentage),
+                        fontFamily: theme.typography.fonts.medium
                        }
                     ]}>
                       {t('streakOverlay.daysToGoText', { count: phaseLength - currentPhaseProgress })}
@@ -401,7 +402,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                     styles.progressBarFill, 
                     { 
                       width: `${progressPercentage}%`,
-                      backgroundColor: Colors.primary[500] 
+                      backgroundColor: getProgressColor(progressPercentage) 
                     }
                   ]} 
                 />

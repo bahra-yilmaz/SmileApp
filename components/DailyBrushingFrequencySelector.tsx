@@ -25,13 +25,15 @@ interface DailyBrushingFrequencySelectorProps {
   onClose: () => void;
   onUpdate?: (frequency: DailyBrushingFrequency) => void;
   autoClose?: boolean;
+  selectedId?: string;
 }
 
 export default function DailyBrushingFrequencySelector({ 
   visible, 
   onClose, 
   onUpdate,
-  autoClose = false 
+  autoClose = false,
+  selectedId
 }: DailyBrushingFrequencySelectorProps) {
   const { theme } = useTheme();
   const { activeColors } = theme;
@@ -71,8 +73,15 @@ export default function DailyBrushingFrequencySelector({
   ];
 
   useEffect(() => {
-    loadCurrentFrequency();
-  }, []);
+    if (visible) {
+      if (selectedId) {
+        const match = FREQUENCY_OPTIONS.find(opt => opt.id === selectedId);
+        if (match) setCurrentFrequency(match);
+      } else {
+        loadCurrentFrequency();
+      }
+    }
+  }, [visible, selectedId]);
 
   const loadCurrentFrequency = async () => {
     try {

@@ -859,6 +859,7 @@ export default function SettingsScreen() {
           onClose={() => setIsFrequencyModalVisible(false)}
           onUpdate={handleFrequencyUpdate}
           autoClose={MODAL_AUTO_CLOSE}
+          selectedId={currentFrequency?.id}
         />
 
         {/* Toothbrush Management Modal */}
