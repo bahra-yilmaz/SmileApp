@@ -600,7 +600,9 @@
     },
     "appVersion": {
       "name": "Versão do app"
-    }
+    },
+    "updateGoalError": "Falha ao atualizar a meta de escovação. Tente novamente.",
+    "targetAchieved": "Meta alcançada!"
   }
 }
   

@@ -216,7 +216,7 @@ export default function HomeScreen() {
         cachePolicy="disk"
         transition={600}
       />
-      <Pressable style={{ flex: 1 }} >
+      <View style={{ flex: 1 }} >
         <View style={styles.mainContainer}>
           <SafeAreaView style={styles.headerContainer}>
             <ChatButton hasUnreadMessages={hasUnreadMessages} onPress={toggleChat} />
@@ -239,7 +239,7 @@ export default function HomeScreen() {
           <View style={styles.mascotContainer}>
             <ExpandableMascotCard 
               config={selectedMascotConfig}
-              greetingText={greeting}
+              greetingTextKey={selectedMascotConfig.greetingTextKey}
               isExpanded={isHomeMascotExpanded}
               onPress={toggleHomeMascotExpansion}
               onPressWhenExpanded={() => {
@@ -339,7 +339,7 @@ export default function HomeScreen() {
           minutes={dashboardData?.averageLast10Brushings?.minutes ?? 0}
           seconds={dashboardData?.averageLast10Brushings?.seconds ?? 0}
         />
-      </Pressable>
+      </View>
     </>
   );
 

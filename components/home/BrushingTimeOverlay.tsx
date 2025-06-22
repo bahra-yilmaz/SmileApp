@@ -84,8 +84,22 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   const overlayWidth = screenWidth * 0.9;
   const overlayHeight = screenHeight * 0.7;
   
-  // Calculate progress as a percentage
+  // Calculate progress percentage (0-100)
   const progress = ((minutes + seconds / 60) / brushingGoalMinutes) * 100;
+  // Ensure donut never exceeds full circle
+  const donutProgress = Math.min(100, progress);
+  
+  // Helper to map progress (0-100) to primary color shades (100-500)
+  const getProgressColor = (pct: number) => {
+    const ratio = Math.min(1, Math.max(0, pct / 100));
+    if (ratio >= 0.8) return Colors.primary[500];
+    if (ratio >= 0.6) return Colors.primary[400];
+    if (ratio >= 0.4) return Colors.primary[300];
+    if (ratio >= 0.2) return Colors.primary[200];
+    return Colors.primary[100];
+  };
+  
+  const progressBarColor = getProgressColor(progress);
   
   // Handle animations when visibility changes
   useEffect(() => {
@@ -253,7 +267,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
             <View style={styles.headerContainer}>
               <View style={styles.iconBackdrop}>
                 <DonutChart
-                  progress={progress}
+                  progress={donutProgress}
                   size={80}
                   thickness={14}
                   progressColor={theme.colorScheme === 'dark' ? Colors.primary[400] : Colors.primary[700]}
@@ -392,18 +406,28 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
               <View style={styles.progressLabelContainer}>
                 <ThemedText style={styles.usageTitle}>{t('brushingTimeOverlay.targetProgressTitle')}</ThemedText>
                 <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
-                  {remainingSeconds > 0 && (
+                  {remainingSeconds > 0 ? (
                     <ThemedText style={[
                        styles.usageText, 
                        {
-                         color: Colors.primary[theme.colorScheme === 'dark' ? 400 : 500], 
+                         color: progressBarColor,
                          fontFamily: theme.typography.fonts.medium
                        }
                      ]}>
                        {t('brushingTimeOverlay.timeToGoFormat', { time: remainingTimeString })}
                      </ThemedText>
+                  ) : (
+                    <ThemedText style={[
+                       styles.usageText, 
+                       {
+                         color: Colors.primary[500],
+                         fontFamily: theme.typography.fonts.medium
+                       }
+                     ]}>
+                       {t('brushingTimeOverlay.targetAchieved', 'Target achieved!')}
+                     </ThemedText>
                   )}
-                  <ThemedText style={[styles.usageText, { marginLeft: remainingSeconds > 0 ? 4 : 0 }]}> 
+                  <ThemedText style={[styles.usageText, { marginLeft: 2 }]}> 
                     ({Math.round(progress)}%)
                   </ThemedText>
                 </View>
@@ -414,7 +438,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
                     styles.progressBarFill, 
                     { 
                       width: `${Math.min(100, Math.max(0, progress))}%`, // Ensure width is between 0-100
-                      backgroundColor: Colors.primary[500] // Consistent color
+                      backgroundColor: progressBarColor
                     }
                   ]} 
                 />

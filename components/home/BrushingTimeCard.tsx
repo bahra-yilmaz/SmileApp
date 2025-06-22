@@ -24,7 +24,7 @@ const BrushingTimeCard: React.FC<BrushingTimeCardProps> = ({
   const { brushingGoalMinutes } = useBrushingGoal();
   
   // Calculate progress as a percentage using global goal
-  const progress = ((minutes + seconds / 60) / brushingGoalMinutes) * 100;
+  const progress = Math.min(100, ((minutes + seconds / 60) / brushingGoalMinutes) * 100);
   
   return (
     <Pressable 

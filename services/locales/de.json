@@ -468,7 +468,9 @@
       "cancelButton": "Abbrechen",
       "targetUpdatedAlert": "Zielzeit auf {{newTarget}} Minuten aktualisiert!",
       "invalidInputAlert": "Bitte eine gültige Minutenanzahl eingeben.",
-      "chooseTargetPrompt": "Oder wähle aus häufigen Zielen:"
+      "chooseTargetPrompt": "Oder wähle aus häufigen Zielen:",
+      "updateGoalError": "Fehler beim Aktualisieren des Zielwerts. Bitte versuche es erneut.",
+      "targetAchieved": "Ziel erreicht!"
     },
     "brushingResultsScreen": {
       "title": "Bürsten beendet!",

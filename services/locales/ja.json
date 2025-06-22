@@ -601,6 +601,8 @@
     },
     "appVersion": {
       "name": "アプリバージョン"
-    }
+    },
+    "updateGoalError": "目標の更新に失敗しました。もう一度試してください。",
+    "targetAchieved": "目標達成！"
   }
 }  

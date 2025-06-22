@@ -648,7 +648,9 @@
     },
     "appVersion": {
       "name": "Versión de la app"
-    }
+    },
+    "updateGoalError": "No se pudo actualizar la meta. Inténtalo de nuevo.",
+    "targetAchieved": "¡Meta alcanzada!"
   }
 }
   

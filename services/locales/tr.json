@@ -705,6 +705,8 @@
     },
     "appVersion": {
       "name": "Uygulama Sürümü"
-    }
+    },
+    "updateGoalError": "Hedef güncellenemedi. Lütfen tekrar deneyin.",
+    "targetAchieved": "Hedefe ulaşıldı!"
   }
 }

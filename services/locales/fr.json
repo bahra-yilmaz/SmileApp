@@ -582,7 +582,7 @@
       "brushingTrend": {
   "loading": "Analyse de tes séances récentes en cours…",
   "improvingConsistently": "Super régularité ! Ton temps de brossage augmente de façon constante.",
-  "improvingSlightly": "Beaux progrès ! Tu brosses plus longtemps qu’avant.",
+  "improvingSlightly": "Beaux progrès ! Tu brosses plus longtemps qu'avant.",
   "declining": "Tes temps de brossage raccourcissent un peu. On se remet sur les rails ?",
   "consistentHigh": "Excellent ! Tu atteins ton objectif de brossage régulièrement.",
   "consistentLow": "Tu es régulier, mais essaie de brosser un peu plus longtemps pour atteindre ton objectif.",
@@ -597,7 +597,9 @@
       },
       "appVersion": {
         "name": "Version de l'app"
-      }
+      },
+      "updateGoalError": "Échec de la mise à jour de l'objectif. Veuillez réessayer.",
+      "targetAchieved": "Objectif atteint !"
     }
   }
   
