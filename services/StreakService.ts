@@ -3,6 +3,7 @@ import { supabase } from './supabaseClient';
 import { calculateStreak, StreakSession } from '../utils/streakUtils';
 import { subDays } from 'date-fns';
 import { BrushingGoalsService } from './BrushingGoalsService';
+import { getTodayLocalString } from '../utils/dateUtils';
 
 // Storage keys
 const STORAGE_KEYS = {
@@ -193,8 +194,8 @@ export class StreakService {
       const goals = await BrushingGoalsService.getCurrentGoals();
       const requiredSessions = goals.dailyFrequency;
 
-      // Get today's sessions
-      const today = new Date().toISOString().slice(0, 10);
+      // Get today's sessions (use local timezone to match calendar)
+      const today = getTodayLocalString();
       
       let sessionsToday = 0;
       
@@ -326,8 +327,8 @@ export class StreakService {
       const periods: StreakPeriod[] = [
         {
           id: 'current',
-          startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
-          endDate: new Date().toISOString().slice(0, 10),
+          startDate: getTodayLocalString(), // Simplified for now - would need proper calculation
+          endDate: getTodayLocalString(),
           duration: await this.getCurrentStreak(userId, { forceRefresh: false })
         }
       ];

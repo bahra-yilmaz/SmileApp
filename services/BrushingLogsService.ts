@@ -4,6 +4,7 @@ import { subDays } from 'date-fns';
 import { StreakSession } from '../utils/streakUtils';
 import { StreakService } from './StreakService';
 import { BrushingGoalsService } from './BrushingGoalsService';
+import { getTodayLocalString } from '../utils/dateUtils';
 
 export interface InsertBrushingLogResult extends EarnedPointsResult {
   id: string;
@@ -58,7 +59,8 @@ export async function insertBrushingLog(params: {
   // -------------------------------------------------------------------------
   // 3) Calculate earned points for the current session using the helper
   // -------------------------------------------------------------------------
-  const todayDateStr = new Date().toISOString().slice(0, 10);
+  // Use local timezone to match calendar view (prevents date mismatch at midnight)
+  const todayDateStr = getTodayLocalString();
   const currentSession: StreakSession = {
     'duration-seconds': actualTimeInSec,
     date: todayDateStr,
@@ -86,7 +88,7 @@ export async function insertBrushingLog(params: {
     .insert({
       user_id: userId,
       'duration-seconds': durationSecondsToInsert,
-      date: todayDateStr,
+      date: todayDateStr, // Now uses local timezone consistently
       earned_points: points.total,
     })
     .select('id')

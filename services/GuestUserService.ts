@@ -4,6 +4,7 @@ import { calculateEarnedPoints } from '../utils/calculateEarnedPoints';
 import { StreakSession } from '../utils/streakUtils';
 import { StreakService } from './StreakService';
 import { BrushingGoalsService } from './BrushingGoalsService';
+import { getTodayLocalString } from '../utils/dateUtils';
 
 // Generate a proper UUID v4 format for React Native (compatible with PostgreSQL UUID type)
 function generateGuestUserId(): string {
@@ -152,7 +153,8 @@ export class GuestUserService {
         created_at: session.created_at,
       }));
 
-      const todayDateStr = new Date().toISOString().slice(0, 10);
+      // Use local timezone to match calendar view (prevents date mismatch at midnight)
+      const todayDateStr = getTodayLocalString();
       const currentSession: StreakSession = {
         'duration-seconds': actualTimeInSec,
         date: todayDateStr,
@@ -173,7 +175,7 @@ export class GuestUserService {
         .insert({
           user_id: guestUserId,
           'duration-seconds': actualTimeInSec,
-          date: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+          date: todayDateStr, // Now uses local timezone consistently
           earned_points: points.total,
         })
         .select('id')

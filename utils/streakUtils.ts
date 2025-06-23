@@ -1,4 +1,5 @@
 import { subDays } from 'date-fns';
+import { getLocalDateString } from './dateUtils';
 
 /**
  * Represents a single brushing session.
@@ -43,14 +44,14 @@ export function calculateStreak(
     logsByDate.get(date)!.push(log);
   });
 
-  const getUTCKey = (d: Date) => d.toISOString().slice(0, 10);
+  const getLocalKey = (d: Date) => getLocalDateString(d);
 
   // Check consecutive days starting from today
   let streak = 0;
-  let currentDate = new Date(); // Starts with today in local time, but converted to UTC key
+  let currentDate = new Date(); // Starts with today in local time
 
   while (true) {
-    const dateStr = getUTCKey(currentDate);
+    const dateStr = getLocalKey(currentDate);
     const dayLogs = logsByDate.get(dateStr) || [];
 
     // A day is successful if the user brushed at least the aimed number of times.
