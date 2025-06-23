@@ -51,50 +51,9 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
   
   // Authenticated user logic
   try {
-    // First, fetch the user's target time from the users table
-    const { data: userData, error: userError } = await supabase
-      .from('users')
-      .select('target_time_in_sec, brushing_target')
-      .eq('id', userId)
-      .maybeSingle();
-
-    console.log('🎯 User target query result:', { userData, userError });
-    console.log('🔍 Detailed user query debug:', {
-      queryUserId: userId,
-      userIdType: typeof userId,
-      userIdLength: userId?.length,
-      hasUserData: !!userData,
-      userDataKeys: userData ? Object.keys(userData) : 'no data'
-    });
-
-    let userTargetSeconds = brushingGoalMinutes * 60; // Default fallback
-
-    if (userError) {
-      console.error('❌ Error fetching user data:', userError);
-    } else if (userData?.target_time_in_sec) {
-      userTargetSeconds = userData.target_time_in_sec;
-      console.log('✅ Using user target:', userTargetSeconds, 'seconds');
-    } else if (userData) {
-      // User exists but target_time_in_sec is null, update it to default
-      console.log('🔄 User exists but target_time_in_sec is null, updating to default...');
-      
-      const { error: updateError } = await supabase
-        .from('users')
-        .update({ target_time_in_sec: 120 })
-        .eq('id', userId);
-
-      console.log('🔄 Update result:', { updateError });
-
-      if (!updateError) {
-        userTargetSeconds = 120;
-        console.log('✅ Set and using default target: 120 seconds');
-      }
-    } else {
-      // User doesn't exist - this shouldn't happen for authenticated users
-      // For authenticated users, the user record should exist from signup/onboarding
-      console.warn('⚠️ Authenticated user not found in database. Using fallback target time.');
-      userTargetSeconds = brushingGoalMinutes * 60; // Use the provided goal as fallback
-    }
+    // Use centralized BrushingGoalsService for goals data
+    const goals = await BrushingGoalsService.getCurrentGoals();
+    console.log('🎯 Using centralized goals:', goals);
     
     // Fetch brushing logs for the past 30 days to calculate stats
     const thirtyDaysAgo = subDays(new Date(), 30);

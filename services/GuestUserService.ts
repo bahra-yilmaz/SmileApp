@@ -2,6 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from './supabaseClient';
 import { calculateEarnedPoints } from '../utils/calculateEarnedPoints';
 import { StreakSession } from '../utils/streakUtils';
+import { StreakService } from './StreakService';
+import { BrushingGoalsService } from './BrushingGoalsService';
 
 // Generate a proper UUID v4 format for React Native (compatible with PostgreSQL UUID type)
 function generateGuestUserId(): string {
@@ -124,7 +126,10 @@ export class GuestUserService {
     targetTimeInSec: number;
   }): Promise<{ id: string; basePoints: number; bonusPoints: number; total: number; timeStreak: number; dailyStreak: number }> {
     const { actualTimeInSec, targetTimeInSec } = params;
-    const aimedSessionsPerDay = 2; // Guest users always default to 2
+    
+    // Use centralized goals service for consistency
+    const goals = await BrushingGoalsService.getCurrentGoals();
+    const aimedSessionsPerDay = goals.dailyFrequency;
     
     console.log('👻 Inserting guest brushing log:', { actualTimeInSec, targetTimeInSec, aimedSessionsPerDay });
     
@@ -219,42 +224,8 @@ export class GuestUserService {
         };
       }
 
-      // Calculate streak days
-      let streakDays = 0;
-      const today = new Date().toISOString().split('T')[0];
-      
-      // Group logs by date
-      const logsByDate = new Map<string, Array<{ 'duration-seconds': number; date: string; created_at: string }>>();
-      logs.forEach(log => {
-        const dateKey = log.date;
-        if (!logsByDate.has(dateKey)) {
-          logsByDate.set(dateKey, []);
-        }
-        logsByDate.get(dateKey)!.push(log);
-      });
-
-      const aimedSessionsPerDay = 2; // Guest users default frequency
-
-      // Check consecutive days backwards from yesterday
-      let checkDate = new Date();
-      checkDate.setDate(checkDate.getDate() - 1); // Start from yesterday (local) but we'll compare using UTC string
-
-      const dateKey = (d: Date) => d.toISOString().slice(0, 10);
-
-      while (true) {
-        const dateStr = dateKey(checkDate);
-        const dayLogs = logsByDate.get(dateStr) || [];
-        
-        // Check if this day had at least one successful session
-        const hasSuccessfulSession = dayLogs.length >= aimedSessionsPerDay;
-        
-        if (hasSuccessfulSession) {
-          streakDays++;
-          checkDate.setDate(checkDate.getDate() - 1);
-        } else {
-          break;
-        }
-      }
+      // Use centralized StreakService for consistency
+      const streakDays = await StreakService.getCurrentStreak(guestUserId);
 
       // Get last brushing time
       const lastLog = logs[logs.length - 1];

@@ -176,6 +176,7 @@ export class OnboardingService {
    * Fetches the user's current brushing target time from the database.
    * @param userId The ID of the user.
    * @returns The target time in seconds, or a default of 120 if not set.
+   * @deprecated Use BrushingGoalsService.getCurrentGoals() instead
    */
   static async getBrushingTarget(userId: string): Promise<number> {
     if (!userId) {
@@ -208,6 +209,7 @@ export class OnboardingService {
    * Updates the user's brushing target time.
    * @param userId The ID of the user.
    * @param targetInSeconds The new target time in seconds.
+   * @deprecated Use BrushingGoalsService.updateTimeTarget() instead
    */
   static async updateBrushingTarget(userId: string, targetInSeconds: number): Promise<void> {
     if (!userId) {
@@ -235,6 +237,7 @@ export class OnboardingService {
    * Fetches the user's daily brushing frequency from the database.
    * @param userId The ID of the user.
    * @returns The number of sessions per day, or a default of 2.
+   * @deprecated Use BrushingGoalsService.getCurrentGoals() instead
    */
   static async getBrushingFrequency(userId: string): Promise<number> {
     if (!userId) {
@@ -265,6 +268,7 @@ export class OnboardingService {
    * Updates the user's daily brushing frequency.
    * @param userId The ID of the user.
    * @param frequency The new number of sessions per day.
+   * @deprecated Use BrushingGoalsService.updateFrequency() instead
    */
   static async updateBrushingFrequency(userId: string, frequency: number): Promise<void> {
     if (!userId) {
