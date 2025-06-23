@@ -35,6 +35,11 @@ import { useAuth } from '../../context/AuthContext';
 import { LanguageService } from '../../services/LanguageService';
 import { useBrushingGoal } from '../../context/BrushingGoalContext';
 import { eventBus } from '../../utils/EventBus';
+import { 
+  BrushingGoalsService, 
+  TIME_TARGET_OPTIONS, 
+  FREQUENCY_OPTIONS 
+} from '../../services/BrushingGoalsService';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const NUBO_TONE_KEY = 'nubo_tone';
@@ -55,68 +60,19 @@ export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
   const { t, i18n } = useTranslation();
   
-  // Brushing target options
-  const TARGET_OPTIONS: BrushingTarget[] = [
-    {
-      id: 'quick',
-      minutes: 90,
-      label: t('settings.brushingTarget.options.quick_label', '1.5 minutes'),
-      description: t('settings.brushingTarget.options.quick_description', 'Quick but effective'),
-      icon: 'flash-outline'
-    },
-    {
-      id: 'standard',
-      minutes: 120,
-      label: t('settings.brushingTarget.options.standard_label', '2 minutes'),
-      description: t('settings.brushingTarget.options.standard_description', 'Dentist recommended'),
-      icon: 'checkmark-circle-outline'
-    },
-    {
-      id: 'thorough',
-      minutes: 180,
-      label: t('settings.brushingTarget.options.thorough_label', '3 minutes'),
-      description: t('settings.brushingTarget.options.thorough_description', 'Extra thorough cleaning'),
-      icon: 'star-outline'
-    },
-    {
-      id: 'comprehensive',
-      minutes: 240,
-      label: t('settings.brushingTarget.options.comprehensive_label', '4 minutes'),
-      description: t('settings.brushingTarget.options.comprehensive_description', 'Comprehensive care'),
-      icon: 'diamond-outline'
-    }
-  ];
+  // Use centralized brushing target options
+  const TARGET_OPTIONS: BrushingTarget[] = TIME_TARGET_OPTIONS.map(option => ({
+    ...option,
+    label: t(option.label, option.label),
+    description: t(option.description, option.description)
+  }));
   
-  const FREQUENCY_OPTIONS: DailyBrushingFrequency[] = [
-    {
-      id: 'minimal',
-      count: 1,
-      label: t('settings.dailyFrequency.options.minimal_label', '1 time per day'),
-      description: t('settings.dailyFrequency.options.minimal_description', 'Basic maintenance'),
-      icon: 'sunny-outline'
-    },
-    {
-      id: 'standard',
-      count: 2,
-      label: t('settings.dailyFrequency.options.standard_label', '2 times per day'),
-      description: t('settings.dailyFrequency.options.standard_description', 'Morning and evening'),
-      icon: 'checkmark-circle-outline'
-    },
-    {
-      id: 'recommended',
-      count: 3,
-      label: t('settings.dailyFrequency.options.recommended_label', '3 times per day'),
-      description: t('settings.dailyFrequency.options.recommended_description', 'After each meal'),
-      icon: 'star-outline'
-    },
-    {
-      id: 'comprehensive',
-      count: 4,
-      label: t('settings.dailyFrequency.options.comprehensive_label', '4+ times per day'),
-      description: t('settings.dailyFrequency.options.comprehensive_description', 'Maximum care'),
-      icon: 'diamond-outline'
-    }
-  ];
+  // Use centralized frequency options  
+  const FREQUENCY_OPTIONS_TRANSLATED: DailyBrushingFrequency[] = FREQUENCY_OPTIONS.map(option => ({
+    ...option,
+    label: t(option.label, option.label),
+    description: t(option.description, option.description)
+  }));
   
   // Animation values
   const translateX = useSharedValue(screenWidth);
@@ -209,15 +165,23 @@ export default function SettingsScreen() {
     
     // For authenticated users, ensure context stays in sync with backend
     if (authUser?.id) {
-      OnboardingService.getBrushingTarget(authUser.id).then(timeInSeconds => {
-        const goalMinutes = timeInSeconds / 60;
-        setBrushingGoalMinutes(goalMinutes); // this also updates AsyncStorage & context state
-      });
-      OnboardingService.getBrushingFrequency(authUser.id).then(frequency => {
-        const matchingFrequency = FREQUENCY_OPTIONS.find(option => option.count === frequency);
+      // Sync goals from database using centralized service
+      BrushingGoalsService.syncFromDatabase(authUser.id).then(goals => {
+        const matchingTarget = TARGET_OPTIONS.find(option => 
+          Math.abs(option.minutes - goals.timeTargetMinutes) < 0.01
+        );
+        if (matchingTarget) {
+          setCurrentTarget(matchingTarget);
+        }
+        
+        const matchingFrequency = FREQUENCY_OPTIONS_TRANSLATED.find(option => 
+          option.count === goals.dailyFrequency
+        );
         if (matchingFrequency) {
           setCurrentFrequency(matchingFrequency);
         }
+      }).catch(error => {
+        console.error('Failed to sync goals in settings:', error);
       });
     }
   }, [authUser]);
@@ -406,51 +370,77 @@ export default function SettingsScreen() {
 
   const handleTargetUpdate = async (target: BrushingTarget) => {
     setCurrentTarget(target); // Optimistic UI update
-    // Update context/local storage immediately
-    const minutesValue = target.minutes / 60;
-    await setBrushingGoalMinutes(minutesValue);
-    if (authUser?.id) {
-      try {
-        await OnboardingService.updateBrushingTarget(authUser.id, target.minutes);
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      } catch (error) {
-        Alert.alert(
-          t('settings.brushingTarget.error.title', 'Update Failed'),
-          t('settings.brushingTarget.error.message', 'Could not save your brushing target. Please try again.')
-        );
-        // Optional: revert optimistic UI update by re-fetching
-        OnboardingService.getBrushingTarget(authUser.id).then(timeInSeconds => {
-          const matchingTarget = TARGET_OPTIONS.find(option => option.minutes === timeInSeconds);
-          if (matchingTarget) {
-            setCurrentTarget(matchingTarget);
+    
+    try {
+      // Update via centralized service with user context
+      await setBrushingGoalMinutes(target.minutes, { 
+        userId: authUser?.id,
+        source: 'user' 
+      });
+      
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    } catch (error) {
+      console.error('Failed to update brushing target:', error);
+      Alert.alert(
+        t('settings.brushingTarget.error.title', 'Update Failed'),
+        t('settings.brushingTarget.error.message', 'Could not save your brushing target. Please try again.')
+      );
+      
+      // Revert optimistic UI update
+      if (authUser?.id) {
+        try {
+          const goals = await BrushingGoalsService.getCurrentGoals();
+          const revertTarget = TARGET_OPTIONS.find(option => 
+            Math.abs(option.minutes - goals.timeTargetMinutes) < 0.01
+          );
+          if (revertTarget) {
+            setCurrentTarget(revertTarget);
           }
-        });
+        } catch (revertError) {
+          console.error('Failed to revert target update:', revertError);
+        }
       }
     }
+    
     closeModalIfConfigured(setIsTargetModalVisible);
   };
 
   const handleFrequencyUpdate = async (frequency: DailyBrushingFrequency) => {
-    // Update context/local storage immediately
-    await setBrushingFrequency(frequency.count);
+    setCurrentFrequency(frequency); // Optimistic UI update
     
-    // Then, update the database
-    if (authUser?.id) {
-      try {
-        await OnboardingService.updateBrushingFrequency(authUser.id, frequency.count);
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      } catch (error) {
-        Alert.alert(
-          t('settings.dailyFrequency.error.title', 'Update Failed'),
-          t('settings.dailyFrequency.error.message', 'Could not save your brushing frequency. Please try again.')
-        );
-        // Optional: revert by re-syncing from DB
-        // syncWithDatabase(authUser.id);
+    try {
+      // Update via centralized service with user context
+      await setBrushingFrequency(frequency.count, { 
+        userId: authUser?.id,
+        source: 'user' 
+      });
+      
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      
+      // Notify other parts of app to refresh (e.g., HomeScreen streak calculations)
+      eventBus.emit('frequency-updated');
+    } catch (error) {
+      console.error('Failed to update brushing frequency:', error);
+      Alert.alert(
+        t('settings.dailyFrequency.error.title', 'Update Failed'),
+        t('settings.dailyFrequency.error.message', 'Could not save your brushing frequency. Please try again.')
+      );
+      
+      // Revert optimistic UI update
+      if (authUser?.id) {
+        try {
+          const goals = await BrushingGoalsService.getCurrentGoals();
+          const revertFrequency = FREQUENCY_OPTIONS_TRANSLATED.find(option => 
+            option.count === goals.dailyFrequency
+          );
+          if (revertFrequency) {
+            setCurrentFrequency(revertFrequency);
+          }
+        } catch (revertError) {
+          console.error('Failed to revert frequency update:', revertError);
+        }
       }
     }
-
-    // Notify other parts of app to refresh (e.g., HomeScreen streak calculations)
-    eventBus.emit('frequency-updated');
 
     closeModalIfConfigured(setIsFrequencyModalVisible);
   };

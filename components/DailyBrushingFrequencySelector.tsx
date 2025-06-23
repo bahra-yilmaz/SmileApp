@@ -5,20 +5,17 @@ import ThemedText from './ThemedText';
 import BottomSheetModal from './ui/BottomSheetModal';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
+import { 
+  BrushingGoalsService, 
+  BrushingFrequencyOption, 
+  FREQUENCY_OPTIONS 
+} from '../services/BrushingGoalsService';
 
 const { width: screenWidth } = Dimensions.get('window');
-const DAILY_FREQUENCY_KEY = 'daily_brushing_frequency';
 
-// Daily brushing frequency interface
-export interface DailyBrushingFrequency {
-  id: string;
-  count: number;
-  label: string;
-  description: string;
-  icon: string;
-}
+// Use the centralized option type
+export interface DailyBrushingFrequency extends BrushingFrequencyOption {}
 
 interface DailyBrushingFrequencySelectorProps {
   visible: boolean;
@@ -40,78 +37,58 @@ export default function DailyBrushingFrequencySelector({
   const { t } = useTranslation();
   const [currentFrequency, setCurrentFrequency] = useState<DailyBrushingFrequency | null>(null);
 
-  // Daily brushing frequency options
-  const FREQUENCY_OPTIONS: DailyBrushingFrequency[] = [
-    {
-      id: 'minimal',
-      count: 1,
-      label: t('settings.dailyFrequency.options.minimal_label', '1 time per day'),
-      description: t('settings.dailyFrequency.options.minimal_description', 'Basic maintenance'),
-      icon: 'sunny-outline'
-    },
-    {
-      id: 'standard',
-      count: 2,
-      label: t('settings.dailyFrequency.options.standard_label', '2 times per day'),
-      description: t('settings.dailyFrequency.options.standard_description', 'Morning and evening'),
-      icon: 'checkmark-circle-outline'
-    },
-    {
-      id: 'recommended',
-      count: 3,
-      label: t('settings.dailyFrequency.options.recommended_label', '3 times per day'),
-      description: t('settings.dailyFrequency.options.recommended_description', 'After each meal'),
-      icon: 'star-outline'
-    },
-    {
-      id: 'comprehensive',
-      count: 4,
-      label: t('settings.dailyFrequency.options.comprehensive_label', '4+ times per day'),
-      description: t('settings.dailyFrequency.options.comprehensive_description', 'Maximum care'),
-      icon: 'diamond-outline'
-    }
-  ];
+  // Use centralized frequency options with translations
+  const FREQUENCY_OPTIONS_TRANSLATED: DailyBrushingFrequency[] = FREQUENCY_OPTIONS.map(option => ({
+    ...option,
+    label: t(option.label, option.label), // Apply translation
+    description: t(option.description, option.description)
+  }));
 
   useEffect(() => {
     if (visible) {
       if (selectedId) {
-        const match = FREQUENCY_OPTIONS.find(opt => opt.id === selectedId);
+        const match = FREQUENCY_OPTIONS_TRANSLATED.find(opt => opt.id === selectedId);
         if (match) setCurrentFrequency(match);
       } else {
         loadCurrentFrequency();
       }
     }
-  }, [visible, selectedId]);
+  }, [visible, selectedId, t]); // Add t as dependency
 
   const loadCurrentFrequency = async () => {
     try {
-      const storedFrequency = await AsyncStorage.getItem(DAILY_FREQUENCY_KEY);
-      if (storedFrequency) {
-        const frequencyData = JSON.parse(storedFrequency);
-        const frequency = FREQUENCY_OPTIONS.find(option => option.id === frequencyData.id);
-        if (frequency) {
-          setCurrentFrequency(frequency);
-        }
+      const goals = await BrushingGoalsService.getCurrentGoals();
+      const frequencyOption = BrushingGoalsService.getFrequencyOption(goals.dailyFrequency);
+      
+      if (frequencyOption) {
+        const frequencyWithTranslations = {
+          ...frequencyOption,
+          label: t(frequencyOption.label, frequencyOption.label),
+          description: t(frequencyOption.description, frequencyOption.description)
+        };
+        setCurrentFrequency(frequencyWithTranslations);
       } else {
-        // Default to standard (2 times per day) if no frequency is stored
-        setCurrentFrequency(FREQUENCY_OPTIONS[1]);
+        // Fallback to standard if no match
+        const standardOption = FREQUENCY_OPTIONS_TRANSLATED.find(opt => opt.id === 'standard');
+        if (standardOption) setCurrentFrequency(standardOption);
       }
     } catch (error) {
       console.error('Error loading daily brushing frequency:', error);
-      setCurrentFrequency(FREQUENCY_OPTIONS[1]); // Default to standard
+      // Fallback to standard (2 times per day)
+      const standardOption = FREQUENCY_OPTIONS_TRANSLATED.find(opt => opt.id === 'standard');
+      if (standardOption) setCurrentFrequency(standardOption);
     }
   };
 
   const handleFrequencySelect = async (frequency: DailyBrushingFrequency) => {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      const frequencyData = {
-        id: frequency.id,
-        count: frequency.count,
-        label: frequency.label,
-        description: frequency.description
-      };
-      await AsyncStorage.setItem(DAILY_FREQUENCY_KEY, JSON.stringify(frequencyData));
+      
+      // Update via centralized service
+      await BrushingGoalsService.updateFrequency(frequency.count, {
+        source: 'user'
+      });
+      
       setCurrentFrequency(frequency);
       
       // Call the update callback if provided
@@ -186,7 +163,7 @@ export default function DailyBrushingFrequencySelector({
       visible={visible}
       onClose={onClose}
       title={t('settings.dailyFrequency.selectTitle', 'Choose Daily Frequency')}
-      data={FREQUENCY_OPTIONS}
+      data={FREQUENCY_OPTIONS_TRANSLATED}
       renderItem={renderFrequencyItem}
       keyExtractor={(item) => item.id}
     />

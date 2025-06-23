@@ -1,160 +1,197 @@
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase } from '../services/supabaseClient';
-import { OnboardingService } from '../services/OnboardingService';
-
-const BRUSHING_GOAL_KEY = 'brushing_time_goal';
-const BRUSHING_FREQUENCY_KEY = 'brushing_frequency';
-const DEFAULT_BRUSHING_GOAL = 2; // 2 minutes default
-const DEFAULT_BRUSHING_FREQUENCY = 2; // 2 times a day default
+import { 
+  BrushingGoalsService, 
+  BrushingGoals, 
+  DEFAULT_VALUES,
+  BrushingTimeOption,
+  BrushingFrequencyOption 
+} from '../services/BrushingGoalsService';
 
 interface BrushingGoalContextType {
+  // Current values
   brushingGoalMinutes: number;
-  setBrushingGoalMinutes: (minutes: number) => Promise<void>;
   brushingFrequency: number;
-  setBrushingFrequency: (frequency: number) => Promise<void>;
+  
+  // Update methods
+  setBrushingGoalMinutes: (minutes: number, options?: { userId?: string; source?: 'user' | 'database' | 'onboarding' }) => Promise<void>;
+  setBrushingFrequency: (frequency: number, options?: { userId?: string; source?: 'user' | 'database' | 'onboarding' }) => Promise<void>;
+  
+  // Sync and utility methods
   syncWithDatabase: (userId: string) => Promise<void>;
-  debugCurrentState: () => void;
+  getCurrentGoals: () => Promise<BrushingGoals>;
+  
+  // Convenience methods for options
+  getCurrentTimeTargetOption: () => BrushingTimeOption | null;
+  getCurrentFrequencyOption: () => BrushingFrequencyOption | null;
+  
+  // State
   isLoading: boolean;
+  lastSyncTimestamp?: number;
+  
+  // Debug (keeping for backward compatibility)
+  debugCurrentState: () => void;
 }
-
-const BrushingGoalContext = createContext<BrushingGoalContextType | undefined>(undefined);
 
 interface BrushingGoalProviderProps {
   children: ReactNode;
 }
 
-export const BrushingGoalProvider: React.FC<BrushingGoalProviderProps> = ({ children }) => {
-  const [brushingGoalMinutes, setBrushingGoalState] = useState<number>(DEFAULT_BRUSHING_GOAL);
-  const [brushingFrequency, setBrushingFrequencyState] = useState<number>(DEFAULT_BRUSHING_FREQUENCY);
-  const [isLoading, setIsLoading] = useState(true);
+const BrushingGoalContext = createContext<BrushingGoalContextType | undefined>(undefined);
 
-  // Load goals from storage on app start
+export const BrushingGoalProvider: React.FC<BrushingGoalProviderProps> = ({ children }) => {
+  const [brushingGoalMinutes, setBrushingGoalState] = useState<number>(DEFAULT_VALUES.BRUSHING_TIME_MINUTES);
+  const [brushingFrequency, setBrushingFrequencyState] = useState<number>(DEFAULT_VALUES.BRUSHING_FREQUENCY);
+  const [isLoading, setIsLoading] = useState(true);
+  const [lastSyncTimestamp, setLastSyncTimestamp] = useState<number | undefined>();
+
+  // Initialize and load goals on app start
   useEffect(() => {
-    const loadGoals = async () => {
+    const initializeGoals = async () => {
       try {
-        const storedGoal = await AsyncStorage.getItem(BRUSHING_GOAL_KEY);
-        if (storedGoal !== null) {
-          const goal = parseFloat(storedGoal);
-          if (!isNaN(goal) && goal > 0) {
-            setBrushingGoalState(goal);
-          }
-        }
-        
-        const storedFrequency = await AsyncStorage.getItem(BRUSHING_FREQUENCY_KEY);
-        if (storedFrequency !== null) {
-            const frequency = parseInt(storedFrequency, 10);
-            if (!isNaN(frequency) && frequency > 0) {
-                setBrushingFrequencyState(frequency);
-            }
-        }
+        setIsLoading(true);
+        const goals = await BrushingGoalsService.initialize();
+        setBrushingGoalState(goals.timeTargetMinutes);
+        setBrushingFrequencyState(goals.dailyFrequency);
+        setLastSyncTimestamp(goals.lastSyncTimestamp);
       } catch (error) {
-        console.error('Error loading brushing goals from storage:', error);
+        console.error('Error initializing brushing goals in context:', error);
+        // Fall back to defaults
+        setBrushingGoalState(DEFAULT_VALUES.BRUSHING_TIME_MINUTES);
+        setBrushingFrequencyState(DEFAULT_VALUES.BRUSHING_FREQUENCY);
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadGoals();
+    initializeGoals();
+
+    // Subscribe to service events to keep context in sync
+    const unsubscribeTimeTarget = BrushingGoalsService.on('time-target-changed', (data: any) => {
+      setBrushingGoalState(data.timeTargetMinutes);
+    });
+
+    const unsubscribeFrequency = BrushingGoalsService.on('frequency-changed', (data: any) => {
+      setBrushingFrequencyState(data.dailyFrequency);
+    });
+
+    const unsubscribeSync = BrushingGoalsService.on('goals-synced', (goals: BrushingGoals) => {
+      setBrushingGoalState(goals.timeTargetMinutes);
+      setBrushingFrequencyState(goals.dailyFrequency);
+      setLastSyncTimestamp(goals.lastSyncTimestamp);
+    });
+
+    return () => {
+      unsubscribeTimeTarget();
+      unsubscribeFrequency();
+      unsubscribeSync();
+    };
   }, []);
 
-  // Update brushing goal and save to storage
-  const setBrushingGoalMinutes = async (minutes: number) => {
+  // Update brushing goal and save to storage/database
+  const setBrushingGoalMinutes = async (
+    minutes: number, 
+    options: { userId?: string; source?: 'user' | 'database' | 'onboarding' } = {}
+  ) => {
     try {
-      if (minutes <= 0) {
-        throw new Error('Brushing goal must be positive');
-      }
-      
-      setBrushingGoalState(minutes);
-      await AsyncStorage.setItem(BRUSHING_GOAL_KEY, minutes.toString());
+      await BrushingGoalsService.updateTimeTarget(minutes, {
+        userId: options.userId,
+        syncToDatabase: true,
+        source: options.source || 'user'
+      });
+      // State will be updated via event subscription
     } catch (error) {
       console.error('Error saving brushing goal:', error);
       throw error;
     }
   };
 
-  // Update brushing frequency and save to storage
-  const setBrushingFrequency = async (frequency: number) => {
+  // Update brushing frequency and save to storage/database
+  const setBrushingFrequency = async (
+    frequency: number, 
+    options: { userId?: string; source?: 'user' | 'database' | 'onboarding' } = {}
+  ) => {
     try {
-      if (frequency <= 0) {
-        throw new Error('Brushing frequency must be positive');
-      }
-
-      setBrushingFrequencyState(frequency);
-      await AsyncStorage.setItem(BRUSHING_FREQUENCY_KEY, frequency.toString());
+      await BrushingGoalsService.updateFrequency(frequency, {
+        userId: options.userId,
+        syncToDatabase: true,
+        source: options.source || 'user'
+      });
+      // State will be updated via event subscription
     } catch (error) {
       console.error('Error saving brushing frequency:', error);
       throw error;
     }
   };
 
-
   // Sync brushing goal from database for authenticated users
   const syncWithDatabase = async (userId: string) => {
     console.log('🎯 Starting goal sync for userId:', userId);
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('target_time_in_sec, brushing_target')
-        .eq('id', userId)
-        .maybeSingle();
-
-      if (error) {
-        console.error('❌ Error fetching user goals:', error);
-        return;
-      }
-      
-      if (data) {
-        // Sync brushing time
-        if (data.target_time_in_sec) {
-          await setBrushingGoalMinutes(data.target_time_in_sec / 60);
-        } else {
-          // If null in DB, set it to default.
-          await OnboardingService.updateBrushingTarget(userId, DEFAULT_BRUSHING_GOAL * 60);
-          await setBrushingGoalMinutes(DEFAULT_BRUSHING_GOAL);
-        }
-        
-        // Sync brushing frequency
-        if (data.brushing_target) {
-          await setBrushingFrequency(data.brushing_target);
-        } else {
-          // If null in DB, set it to default.
-          await OnboardingService.updateBrushingFrequency(userId, DEFAULT_BRUSHING_FREQUENCY);
-          await setBrushingFrequency(DEFAULT_BRUSHING_FREQUENCY);
-        }
-      }
+      const goals = await BrushingGoalsService.syncFromDatabase(userId);
+      // State will be updated via event subscription
+      console.log('✅ Goals synced successfully:', goals);
     } catch (error) {
       console.error('💥 Error syncing brushing goals from database:', error);
+      throw error;
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
-  // Debug function to check current state
+  // Get current goals
+  const getCurrentGoals = async (): Promise<BrushingGoals> => {
+    return await BrushingGoalsService.getCurrentGoals();
+  };
+
+  // Get current time target option
+  const getCurrentTimeTargetOption = (): BrushingTimeOption | null => {
+    return BrushingGoalsService.getTimeTargetOption(brushingGoalMinutes);
+  };
+
+  // Get current frequency option
+  const getCurrentFrequencyOption = (): BrushingFrequencyOption | null => {
+    return BrushingGoalsService.getFrequencyOption(brushingFrequency);
+  };
+
+  // Debug current state (keeping for backward compatibility)
   const debugCurrentState = () => {
-    console.log('🐛 CURRENT BRUSHING GOAL STATE:', {
-      brushingGoalMinutes,
-      brushingFrequency,
-      isLoading,
-      timestamp: new Date().toISOString()
-    });
+    BrushingGoalsService.debugCurrentState();
   };
 
-  const value = {
+  const value: BrushingGoalContextType = {
+    // Current values
     brushingGoalMinutes,
-    setBrushingGoalMinutes,
     brushingFrequency,
+    
+    // Update methods
+    setBrushingGoalMinutes,
     setBrushingFrequency,
+    
+    // Sync and utility methods
     syncWithDatabase,
-    debugCurrentState,
+    getCurrentGoals,
+    
+    // Convenience methods
+    getCurrentTimeTargetOption,
+    getCurrentFrequencyOption,
+    
+    // State
     isLoading,
+    lastSyncTimestamp,
+    
+    // Debug
+    debugCurrentState,
   };
 
-  return <BrushingGoalContext.Provider value={value}>{children}</BrushingGoalContext.Provider>;
+  return (
+    <BrushingGoalContext.Provider value={value}>
+      {children}
+    </BrushingGoalContext.Provider>
+  );
 };
 
-export const useBrushingGoal = () => {
+export const useBrushingGoal = (): BrushingGoalContextType => {
   const context = useContext(BrushingGoalContext);
   if (context === undefined) {
     throw new Error('useBrushingGoal must be used within a BrushingGoalProvider');
