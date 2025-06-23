@@ -291,7 +291,6 @@ export default function HomeScreen() {
                 onPress={() => setIsBrushingTimeVisible(true)} 
               />
               <ToothbrushCard 
-                daysInUse={dashboardData?.toothbrushDaysInUse ?? 0} 
                 fontFamily={fontFamily} 
                 onPress={() => setIsToothbrushVisible(true)} 
               />
@@ -343,7 +342,6 @@ export default function HomeScreen() {
         <ToothbrushOverlay 
           isVisible={isToothbrushVisible} 
           onClose={() => setIsToothbrushVisible(false)} 
-          daysInUse={dashboardData?.toothbrushDaysInUse ?? 0}
         />
         <StreakOverlay 
           isVisible={isStreakVisible} 
@@ -394,7 +392,6 @@ export default function HomeScreen() {
       <ToothbrushOverlay 
         isVisible={isToothbrushVisible} 
         onClose={() => setIsToothbrushVisible(false)} 
-        daysInUse={dashboardData?.toothbrushDaysInUse ?? 0} 
       />
       <StreakOverlay 
         isVisible={isStreakVisible} 

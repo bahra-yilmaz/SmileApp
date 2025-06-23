@@ -12,6 +12,8 @@ import { Image as ExpoImage } from 'expo-image';
 import { cardStyles, buttonStyles } from '../utils/sharedStyles';
 import InlineToothbrushPicker from './InlineToothbrushPicker';
 import ReminderItem, { ReminderTime, ReminderItemRef } from './ReminderItem';
+import { ToothbrushService } from '../services/ToothbrushService';
+import { useAuth } from '../context/AuthContext';
 
 const { width: screenWidth } = Dimensions.get('window');
 const TOOTHBRUSH_DATA_KEY = 'toothbrush_data';
@@ -49,6 +51,7 @@ export default function ToothbrushManager({
   const { theme } = useTheme();
   const { activeColors } = theme;
   const { t } = useTranslation();
+  const { user } = useAuth();
   
   // Expandable menu state
   const [showToothbrushPicker, setShowToothbrushPicker] = useState(false);
@@ -86,11 +89,9 @@ export default function ToothbrushManager({
 
   const loadToothbrushData = async () => {
     try {
-      const storedData = await AsyncStorage.getItem(TOOTHBRUSH_DATA_KEY);
-      if (storedData) {
-        const data: ToothbrushData = JSON.parse(storedData);
-        setToothbrushData(data);
-      }
+      // Use the centralized service to load data
+      const data = await ToothbrushService.getToothbrushData();
+      setToothbrushData(data);
     } catch (error) {
       console.error('Error loading toothbrush data:', error);
     }
@@ -98,7 +99,8 @@ export default function ToothbrushManager({
 
   const saveToothbrushData = async (data: ToothbrushData) => {
     try {
-      await AsyncStorage.setItem(TOOTHBRUSH_DATA_KEY, JSON.stringify(data));
+      // Use the centralized service which handles local storage and database sync
+      await ToothbrushService.updateToothbrushData(data, user?.id);
       setToothbrushData(data);
       if (onUpdate) {
         onUpdate(data);
@@ -251,7 +253,7 @@ export default function ToothbrushManager({
         id: Date.now().toString(),
         type: toothbrushConfig.type,
         category: toothbrushConfig.category,
-        name: toothbrushConfig.name || undefined,
+        name: toothbrushConfig.name || (newData.history.length === 0 ? 'First Brush' : undefined),
         startDate: startDateIso,
         brand: toothbrushConfig.brand || undefined,
         model: toothbrushConfig.model || undefined,

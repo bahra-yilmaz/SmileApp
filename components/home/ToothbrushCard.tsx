@@ -1,27 +1,102 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, Dimensions, Image, Pressable } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import StatCard from '../ui/StatCard';
 import ThemedText from '../ThemedText';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '../../constants/Colors';
+import { useToothbrushStats } from '../../hooks/useToothbrushStats';
+import { useAuth } from '../../context/AuthContext';
 
 interface ToothbrushCardProps {
-  daysInUse: number;
-  replaceSoonText?: string;
   fontFamily?: string;
   onPress?: () => void;
 }
 
 const ToothbrushCard: React.FC<ToothbrushCardProps> = ({
-  daysInUse,
-  replaceSoonText,
   fontFamily,
   onPress,
 }) => {
   const { t } = useTranslation();
+  const { stats, simpleDaysInUse, isLoading, refreshStats } = useToothbrushStats();
+  const { user } = useAuth();
   
-  const actualReplaceSoonText = replaceSoonText ?? t('homeScreen.toothbrushCard.replaceSoon');
+  // For the card, show calendar days (toothbrush age) as it's more intuitive for users
+  // The detailed stats with actual brushing days are shown in the overlay
+  const displayDays = stats?.totalCalendarDays ?? simpleDaysInUse;
+  const replacementText = stats?.replacementText ?? t('homeScreen.toothbrushCard.replaceSoon');
+  
+  // Force refresh when user changes to ensure we have the right data
+  useEffect(() => {
+    if (user?.id && displayDays === 0 && !isLoading) {
+      console.log('🦷 ToothbrushCard: User authenticated but showing 0 days, debugging...');
+      console.log('🦷 Current stats:', stats);
+      console.log('🦷 Simple days in use:', simpleDaysInUse);
+      console.log('🦷 User ID:', user.id);
+      
+      // Force a complete refresh
+      setTimeout(() => {
+        console.log('🦷 Forcing toothbrush stats refresh...');
+        refreshStats();
+      }, 1000);
+    }
+  }, [user?.id, displayDays, isLoading, refreshStats, stats, simpleDaysInUse]);
+  
+  // Show loading state
+  if (isLoading) {
+    return (
+      <Pressable 
+        onPress={onPress}
+        style={({ pressed }) => [
+          styles.pressableContainer,
+          pressed && styles.pressed
+        ]}
+      >
+        <StatCard
+          title=""
+          value={
+            <View style={styles.toothbrushContentContainer}>
+              <View style={styles.toothbrushHealthContainer}>
+                <View style={styles.heartContainer}>
+                  <MaterialCommunityIcons 
+                    name="heart-half-full" 
+                    size={48} 
+                    color={Colors.primary[200]} 
+                  />
+                </View>
+                <View style={styles.daysTextContainer}>
+                  <ThemedText 
+                    variant="title" 
+                    style={[styles.daysValue, fontFamily && { fontFamily }]}
+                  >
+                    --
+                  </ThemedText>
+                  <ThemedText variant="caption" style={styles.daysText}>
+                    {t('homeScreen.toothbrushCard.daysUnit')}
+                  </ThemedText>
+                </View>
+                <ThemedText variant="caption" style={styles.replaceSoonText} numberOfLines={2}>
+                  {t('common.loading', 'Loading...')}
+                </ThemedText>
+              </View>
+              <Image 
+                source={require('../../assets/images/toothbrush.png')}
+                style={styles.toothbrushImage}
+                resizeMode="contain"
+              />
+            </View>
+          }
+          maxValue=""
+          progress={0}
+          progressLabels={[]}
+          height={165}
+          containerStyle={styles.toothbrushCardContainer}
+          contentStyle={styles.toothbrushCardContent}
+          cardStyle={styles.toothbrushCardStyle}
+        />
+      </Pressable>
+    );
+  }
 
   return (
     <Pressable 
@@ -45,29 +120,29 @@ const ToothbrushCard: React.FC<ToothbrushCardProps> = ({
               />
             </View>
             <View style={styles.daysTextContainer}>
-              <ThemedText 
-                variant="title" 
-                style={[
-                  styles.daysValue,
-                  fontFamily && { fontFamily }
-                ]}
-              >
-                {daysInUse}
-              </ThemedText>
+                              <ThemedText 
+                  variant="title" 
+                  style={[
+                    styles.daysValue,
+                    fontFamily && { fontFamily }
+                  ]}
+                >
+                  {displayDays}
+                </ThemedText>
+                <ThemedText 
+                  variant="caption" 
+                  style={styles.daysText}
+                >
+                  {t('homeScreen.toothbrushCard.daysUnit')}
+                </ThemedText>
+              </View>
               <ThemedText 
                 variant="caption" 
-                style={styles.daysText}
+                style={styles.replaceSoonText}
+                numberOfLines={2}
               >
-                {t('homeScreen.toothbrushCard.daysUnit')}
+                {replacementText}
               </ThemedText>
-            </View>
-            <ThemedText 
-              variant="caption" 
-              style={styles.replaceSoonText}
-              numberOfLines={2}
-            >
-              {actualReplaceSoonText}
-            </ThemedText>
           </View>
           
           <Image 

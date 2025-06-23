@@ -19,23 +19,23 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ThemedText from '../ThemedText';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
+import { useToothbrushStats } from '../../hooks/useToothbrushStats';
+import { useAuth } from '../../context/AuthContext';
 
 interface ToothbrushOverlayProps {
   isVisible: boolean;
   onClose: () => void;
-  daysInUse: number;
-  usageCycles?: number;
 }
 
 export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({ 
   isVisible, 
   onClose, 
-  daysInUse,
-  usageCycles = 123 // Default value if not provided
 }) => {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const { activeColors } = theme; // Destructure activeColors
+  const { stats, simpleDaysInUse, isLoading, refreshStats } = useToothbrushStats();
+  const { user } = useAuth();
   
   // Animation values for container
   const [fadeAnim] = useState(() => new Animated.Value(0));
@@ -64,18 +64,43 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   const overlayWidth = screenWidth * 0.9;
   const overlayHeight = screenHeight * 0.7;
   
-  // Calculate progress percentage and status
+  // Calculate progress percentage and status using comprehensive stats
+  const daysInUse = stats?.totalCalendarDays ?? simpleDaysInUse;
+  const usageCycles = stats?.totalBrushingSessions ?? Math.floor(daysInUse * 1.5); // Fallback estimation
+  
   const maxDays = 90;
   const healthPercentage = Math.max(0, Math.min(100, Math.round((1 - daysInUse / maxDays) * 100)));
-  let healthStatus = t('toothbrushOverlay.healthStatusGood');
-  let healthColor = Colors.feedback.success[theme.colorScheme]; // Use feedback color
-  if (daysInUse > maxDays * 0.66) { // Over 60 days
-    healthStatus = t('toothbrushOverlay.healthStatusReplaceSoon');
-    healthColor = Colors.feedback.warning[theme.colorScheme]; // Use feedback color
-  } else if (daysInUse > maxDays * 0.33) { // Over 30 days
-    healthStatus = t('toothbrushOverlay.healthStatusFair');
-    healthColor = Colors.primary[theme.colorScheme === 'dark' ? 400 : 500]; // Use primary, adjust shade for theme
-  } // Else it stays Good (Green)
+  let healthStatus = stats?.replacementText ?? t('toothbrushOverlay.healthStatusGood');
+  let healthColor = stats?.replacementColor ?? Colors.feedback.success[theme.colorScheme];
+  
+  // Use stats for more accurate health calculation if available
+  if (stats) {
+    healthColor = stats.replacementColor;
+    healthStatus = stats.replacementText;
+  } else {
+    // Fallback logic
+    if (daysInUse > maxDays * 0.66) {
+      healthStatus = t('toothbrushOverlay.healthStatusReplaceSoon');
+      healthColor = Colors.feedback.warning[theme.colorScheme];
+    } else if (daysInUse > maxDays * 0.33) {
+      healthStatus = t('toothbrushOverlay.healthStatusFair');
+      healthColor = Colors.primary[theme.colorScheme === 'dark' ? 400 : 500];
+    }
+  }
+  
+  // Force refresh when overlay becomes visible
+  useEffect(() => {
+    if (isVisible && !isLoading) {
+      refreshStats();
+    }
+  }, [isVisible, refreshStats, isLoading]);
+
+  // Force refresh when user changes (sign in/out)
+  useEffect(() => {
+    if (user?.id) {
+      refreshStats();
+    }
+  }, [user?.id, refreshStats]);
   
   // Handle animations when visibility changes
   useEffect(() => {
@@ -218,9 +243,11 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                 >
                   {t('toothbrushOverlay.title')}
                 </ThemedText>
-                <ThemedText style={styles.daysInUse}>
-                  {`${daysInUse} ${t('toothbrushOverlay.daysInUseText')}`}
-                </ThemedText>
+                <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                  <ThemedText style={styles.daysInUse}>
+                    {`${daysInUse} ${t('toothbrushOverlay.daysInUseText')}`}
+                  </ThemedText>
+                </View>
               </View>
             </View>
             <View style={[styles.separator, { 
@@ -233,7 +260,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
             <View style={styles.usageContainer}>
               <View style={styles.usageIconContainer}>
                 <MaterialCommunityIcons
-                  name="clock-outline" 
+                  name="chart-timeline-variant" 
                   size={30}
                   color={theme.colorScheme === 'dark' ? Colors.primary[400] : Colors.primary[700]}
                 />
@@ -242,9 +269,17 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                 <ThemedText style={styles.usageTitle}>
                 {t('toothbrushOverlay.brushingTrackerTitle')}
                 </ThemedText>
-                <ThemedText style={styles.usageText}>
-                {t('toothbrushOverlay.brushesOnThisToothbrushText', { count: usageCycles })}
-                </ThemedText>
+                <View style={styles.usageSection}>
+                  <ThemedText style={styles.usageText}>
+                    {t('toothbrushOverlay.brushesOnThisToothbrushText', { count: usageCycles })}
+                  </ThemedText>
+                  {/* Show indicator if data includes estimates from onboarding */}
+                  {stats?.totalCalendarDays && stats.totalCalendarDays > 7 && stats.totalCalendarDays > stats.actualBrushingDays * 1.5 && (
+                    <ThemedText style={styles.estimatedDataHint}>
+                      {t('toothbrushOverlay.includesEstimatedData', 'Includes estimated historical data')}
+                    </ThemedText>
+                  )}
+                </View>
               </View>
             </View>
 
@@ -463,6 +498,18 @@ const styles = StyleSheet.create({
   usageText: {
     fontSize: 14,
     opacity: 0.8,
+  },
+  usageSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  usageIcon: {
+    marginRight: 8,
+  },
+  estimatedDataHint: {
+    fontSize: 12,
+    opacity: 0.7,
+    color: Colors.light.icon,
   },
   progressContainer: {
     marginHorizontal: 16,

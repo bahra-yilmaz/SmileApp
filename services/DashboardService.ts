@@ -5,6 +5,7 @@ import { GuestUserService } from './GuestUserService';
 import { calculateStreak } from '../utils/streakUtils';
 import { StreakService } from './StreakService';
 import { BrushingGoalsService } from './BrushingGoalsService';
+import { ToothbrushService } from './ToothbrushService';
 
 export interface DashboardStats {
   streakDays: number;
@@ -83,8 +84,8 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
     // Calculate average of last 10 brushings
     const averageLast10Brushings = calculateAverageLast10Brushings(logs);
 
-    // Get toothbrush days in use
-    const toothbrushDaysInUse = await getToothbrushDaysInUse();
+    // Get toothbrush days in use using centralized service
+    const toothbrushDaysInUse = await ToothbrushService.getSimpleDaysInUse();
 
     return {
       streakDays,
@@ -180,28 +181,7 @@ function calculateAverageLast10Brushings(logs: any[]): { minutes: number; second
   return { minutes, seconds };
 }
 
-/**
- * Get toothbrush age in days from local storage
- */
-async function getToothbrushDaysInUse(): Promise<number> {
-  try {
-    const stored = await AsyncStorage.getItem(TOOTHBRUSH_DATA_KEY);
-    if (!stored) return 0;
-
-    const data = JSON.parse(stored);
-    if (!data.current?.startDate) return 0;
-
-    const startDate = new Date(data.current.startDate);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - startDate.getTime());
-    const days = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    return days;
-  } catch (error) {
-    console.error('Error getting toothbrush age:', error);
-    return 0;
-  }
-}
+// Removed: getToothbrushDaysInUse - now handled by ToothbrushService
 
 /**
  * Get calendar brushing data for the calendar view

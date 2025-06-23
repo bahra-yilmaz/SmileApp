@@ -3,6 +3,7 @@ import { Session, User } from '@supabase/supabase-js';
 import supabase from '../services/supabaseClient';
 import { GuestUserService } from '../services/GuestUserService';
 import { LanguageService } from '../services/LanguageService';
+import { ToothbrushService } from '../services/ToothbrushService';
 
 // Define the shape of the context's value
 interface AuthContextType {
@@ -34,10 +35,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Use functional update to safely get the previous user state
         setUser(prevUser => {
           const isNewSignIn = !prevUser && currentUser;
-          if (isNewSignIn) {
-            console.log('✨ New user signed in! Clearing guest data and loading language.');
-            GuestUserService.clearGuestData();
-            LanguageService.loadAndApplyUserLanguage(currentUser.id);
+          if (isNewSignIn && currentUser) {
+            console.log('✨ New user signed in! Initializing user data.');
+            
+            // Initialize user data in parallel
+            Promise.all([
+              GuestUserService.clearGuestData(),
+              LanguageService.loadAndApplyUserLanguage(currentUser.id),
+              ToothbrushService.initializeFromDatabase(currentUser.id)
+            ]).catch(error => {
+              console.error('❌ Error initializing user data:', error);
+            });
           }
           return currentUser;
         });

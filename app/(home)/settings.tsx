@@ -40,6 +40,7 @@ import {
   TIME_TARGET_OPTIONS, 
   FREQUENCY_OPTIONS 
 } from '../../services/BrushingGoalsService';
+import { useToothbrushStats } from '../../hooks/useToothbrushStats';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const NUBO_TONE_KEY = 'nubo_tone';
@@ -148,6 +149,7 @@ export default function SettingsScreen() {
     brushingFrequency, 
     setBrushingFrequency 
   } = useBrushingGoal();
+  const { stats: toothbrushStats, simpleDaysInUse } = useToothbrushStats();
 
   useEffect(() => {
     // Animate in from the right
@@ -783,7 +785,7 @@ export default function SettingsScreen() {
               <View style={styles.languageInfo}>
                 <ThemedText style={styles.currentLanguageText}>
                   {toothbrushData.current 
-                    ? t('toothbrush.current.age', { days: Math.ceil((new Date().getTime() - new Date(toothbrushData.current.startDate).getTime()) / (1000 * 60 * 60 * 24)) })
+                    ? `${toothbrushStats?.actualBrushingDays ?? simpleDaysInUse} ${t('toothbrushOverlay.daysInUseText', 'days used')}`
                     : t('toothbrush.current.none', 'None')
                   }
                 </ThemedText>

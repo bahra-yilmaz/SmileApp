@@ -11,6 +11,7 @@ import * as Haptics from 'expo-haptics';
 import { useOnboarding } from '../../context/OnboardingContext';
 import { useAuth } from '../../context/AuthContext';
 import { OnboardingService, updateUserOnboarding } from '../../services/OnboardingService';
+import { ToothbrushService } from '../../services/ToothbrushService';
 import ConfirmModal from '../modals/ConfirmModal';
 
 interface NuboToneScreenProps {
@@ -93,6 +94,10 @@ export default function NuboToneScreen({
       
       // Mark onboarding as completed in local storage
       await OnboardingService.markOnboardingAsCompleted();
+      
+      // Initialize toothbrush data from the database after onboarding completion
+      console.log('🦷 Initializing toothbrush data from onboarding...');
+      await ToothbrushService.initializeFromDatabase(user.id);
       
       // Small delay to ensure database commit is complete before navigation
       await new Promise(resolve => setTimeout(resolve, 500));

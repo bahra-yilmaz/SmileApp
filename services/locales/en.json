@@ -486,6 +486,7 @@
     "healthStatusFair": "Fair",
     "brushingTrackerTitle": "Brushing Tracker",
     "brushesOnThisToothbrushText": "That's {{count}} brushes on this toothbrush",
+    "includesEstimatedData": "Includes estimated historical data",
     "replaceHistoryTitle": "Replacement History",
     "replaceHistorySubtitle": "Track your brush change timeline",
     "replacedOnDate": "Replaced on: {{date}}",
