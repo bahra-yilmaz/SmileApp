@@ -446,7 +446,7 @@ const BrushingResultsScreen = () => {
                         <ThemedText style={styles.flippedCardNumber}>{brushingLogData?.dailyStreak ?? 0}</ThemedText>
                       </View>
                       <View style={styles.metricTextContainer}>
-                        <ThemedText style={styles.flippedCardValue}>{t('brushingResultsScreen.bonusCardDetailsValue')}</ThemedText>
+                        <ThemedText style={styles.flippedCardValue}>{t('brushingResultsScreen.bonusCardDetailsValue', 'Day Streak')}</ThemedText>
                       </View>
                     </View>
                     <View style={styles.flippedCardBottom}>

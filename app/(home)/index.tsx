@@ -53,6 +53,9 @@ export default function HomeScreen() {
   // Fetch dashboard data from backend
   const { data: dashboardData, isLoading: isDashboardLoading, error: dashboardError, refetch } = useDashboardData();
   
+  // Local state to temporarily override the streak from the server
+  const [overrideStreak, setOverrideStreak] = useState<number | null>(null);
+  
   // Get screen dimensions
   const { height: screenHeight } = Dimensions.get('window');
   // Calculate container height to fit all content
@@ -192,12 +195,26 @@ export default function HomeScreen() {
 
   // Refresh dashboard data when returning from timer or other screens
   useEffect(() => {
-    const unsubscribe = eventBus.on('brushing-completed', () => {
+    const unsubscribeCompleted = eventBus.on('brushing-completed', (payload?: { dailyStreak: number }) => {
+      if (payload && typeof payload.dailyStreak === 'number') {
+        setOverrideStreak(payload.dailyStreak);
+      }
+      refetch();
+    });
+
+    const unsubscribeReverted = eventBus.on('brushing-reverted', () => {
+      setOverrideStreak(null); // Clear override on revert
+      refetch();
+    });
+
+    const unsubscribeFrequency = eventBus.on('frequency-updated', () => {
       refetch();
     });
 
     return () => {
-      eventBus.off('brushing-completed', unsubscribe);
+      unsubscribeCompleted();
+      unsubscribeReverted();
+      unsubscribeFrequency();
     };
   }, [refetch]);
   
@@ -263,7 +280,7 @@ export default function HomeScreen() {
               }}
             >
               <StreakCard 
-                streakDays={dashboardData?.streakDays ?? 0} 
+                streakDays={overrideStreak ?? dashboardData?.streakDays ?? 0} 
                 fontFamily={fontFamily} 
                 onPress={() => setIsStreakVisible(true)} 
               />
@@ -331,7 +348,7 @@ export default function HomeScreen() {
         <StreakOverlay 
           isVisible={isStreakVisible} 
           onClose={() => setIsStreakVisible(false)}
-          streakDays={dashboardData?.streakDays ?? 0}
+          streakDays={overrideStreak ?? dashboardData?.streakDays ?? 0}
         />
         <BrushingTimeOverlay 
           isVisible={isBrushingTimeVisible}
@@ -382,7 +399,7 @@ export default function HomeScreen() {
       <StreakOverlay 
         isVisible={isStreakVisible} 
         onClose={() => setIsStreakVisible(false)} 
-        streakDays={dashboardData?.streakDays ?? 0} 
+        streakDays={overrideStreak ?? dashboardData?.streakDays ?? 0} 
       />
       <BrushingTimeOverlay 
         isVisible={isBrushingTimeVisible} 

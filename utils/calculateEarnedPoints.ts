@@ -1,4 +1,5 @@
 import { subDays, startOfDay } from 'date-fns';
+import { calculateStreak, StreakSession } from './streakUtils';
 
 export interface BrushingSession {
   /** Duration user brushed in seconds */
@@ -17,7 +18,7 @@ export interface BrushingSession {
  *   hit the target consecutively.
  *
  * @param targetTimeInSec   Global brushing goal (seconds)
- * @param actualTimeInSec   Duration of current session (seconds)
+ * @param currentSession    Current session
  * @param recentSessions    Previous sessions (newest first)
  * @param aimedSessionsPerDay  Aimed sessions per day
  * @returns Total points earned for this session
@@ -32,9 +33,9 @@ export interface EarnedPointsResult {
 
 export function calculateEarnedPoints(
   targetTimeInSec: number,
-  actualTimeInSec: number,
-  recentSessions: BrushingSession[] = [],
-  aimedSessionsPerDay: number,
+  currentSession: StreakSession,
+  recentSessions: StreakSession[] = [],
+  aimedSessionsPerDay: number
 ): EarnedPointsResult {
   if (targetTimeInSec <= 0) {
     throw new Error('targetTimeInSec must be greater than 0');
@@ -44,15 +45,15 @@ export function calculateEarnedPoints(
   }
 
   // ---------------------------------------------------------------------------
-  // 1) Base points — ratio of actual to target time
+  // 1) Base points — ratio of actual to target time & time-based streak
   // ---------------------------------------------------------------------------
+  const { 'duration-seconds': actualTimeInSec } = currentSession;
   const ratio = actualTimeInSec / targetTimeInSec;
 
-  // Determine consecutive previous sessions that also hit >= 100 % of target
+  // Determine consecutive previous sessions that also hit >= 100% of target
   let timeStreak = 0;
   for (const session of recentSessions) {
-    const targetForSession = session.targetTimeInSec ?? targetTimeInSec;
-    if (session.actualTimeInSec >= targetForSession) {
+    if (session['duration-seconds'] >= targetTimeInSec) {
       timeStreak += 1;
     } else {
       break; // streak broken
@@ -61,7 +62,8 @@ export function calculateEarnedPoints(
 
   let basePoints: number;
   if (actualTimeInSec >= targetTimeInSec) {
-    basePoints = 100 + 10 * timeStreak;
+    // If the current session meets the target, it extends the time-based streak
+    basePoints = 100 + 10 * (timeStreak + 1);
   } else {
     basePoints = Math.round(ratio * 100);
     // Ensure cannot exceed 100 when brushing < target
@@ -69,29 +71,11 @@ export function calculateEarnedPoints(
   }
 
   // ---------------------------------------------------------------------------
-  // 2) Bonus points — consecutive previous days hitting daily brushing target
+  // 2) Bonus points — daily brushing frequency streak
   // ---------------------------------------------------------------------------
-  // Build a map of date (YYYY-MM-DD) -> count of sessions on that date
-  const countByDate = new Map<string, number>();
-  for (const session of recentSessions) {
-    const dateStr = session.date ?? (session as any).created_at?.slice(0, 10);
-    if (!dateStr) continue;
-    countByDate.set(dateStr, (countByDate.get(dateStr) ?? 0) + 1);
-  }
-
-  let dailyStreak = 0;
-  // Start from yesterday; current day should not be considered
-  let dayPointer = subDays(startOfDay(new Date()), 1);
-  while (true) {
-    const dateStr = dayPointer.toISOString().slice(0, 10);
-    const count = countByDate.get(dateStr) ?? 0;
-    if (count >= aimedSessionsPerDay) {
-      dailyStreak += 1;
-      dayPointer = subDays(dayPointer, 1);
-    } else {
-      break;
-    }
-  }
+  // Combine the new session with recent ones to get the updated streak
+  const allSessions = [currentSession, ...recentSessions];
+  const dailyStreak = calculateStreak(allSessions, aimedSessionsPerDay);
 
   const bonusPoints = dailyStreak * 50;
 
@@ -99,7 +83,7 @@ export function calculateEarnedPoints(
     basePoints,
     bonusPoints,
     total: basePoints + bonusPoints,
-    timeStreak,
+    timeStreak: actualTimeInSec >= targetTimeInSec ? timeStreak + 1 : 0, // Reset if target not met
     dailyStreak,
   };
 } 

@@ -2,6 +2,7 @@ import { supabase } from './supabaseClient';
 import { subDays, startOfDay, format } from 'date-fns';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GuestUserService } from './GuestUserService';
+import { calculateStreak } from '../utils/streakUtils';
 
 export interface DashboardStats {
   streakDays: number;
@@ -113,7 +114,7 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
     const aimedSessionsPerDay = (userData?.brushing_target as number | null) ?? 2;
 
     // Calculate streak days using both time and frequency targets
-    const streakDays = calculateStreakDays(logs, userTargetSeconds, aimedSessionsPerDay);
+    const streakDays = calculateStreak(logs, aimedSessionsPerDay);
 
     // Get last brushing time
     const lastBrushingTime = getLastBrushingTime(logs);
@@ -172,48 +173,6 @@ export async function getRecentBrushingLogs(userId: string): Promise<any[]> {
   }
   
   return brushingLogs || [];
-}
-
-/**
- * Calculate consecutive days of successful brushing
- */
-function calculateStreakDays(logs: any[], userTargetSeconds: number, aimedSessionsPerDay: number): number {
-  if (!logs.length) return 0;
-
-  // Group logs by date
-  const logsByDate = new Map<string, any[]>();
-  logs.forEach(log => {
-    const date = log.date || log.created_at?.slice(0, 10);
-    if (!date) return;
-    
-    if (!logsByDate.has(date)) {
-      logsByDate.set(date, []);
-    }
-    logsByDate.get(date)!.push(log);
-  });
-
-  const dateKey = (d: Date) => d.toISOString().slice(0, 10);
-
-  // Check consecutive days starting from today (UTC-based)
-  let streak = 0;
-  let currentDate = new Date();
-  
-  while (true) {
-    const dateStr = dateKey(currentDate);
-    const dayLogs = logsByDate.get(dateStr) || [];
-    
-    // Successful day: brushed at least aimedSessionsPerDay times meeting target
-    const hasSuccessfulBrushing = dayLogs.length >= aimedSessionsPerDay;
-
-    if (hasSuccessfulBrushing) {
-      streak++;
-      currentDate = subDays(currentDate, 1);
-    } else {
-      break;
-    }
-  }
-
-  return streak;
 }
 
 /**

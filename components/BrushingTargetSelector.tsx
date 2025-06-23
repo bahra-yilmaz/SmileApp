@@ -25,13 +25,15 @@ interface BrushingTargetSelectorProps {
   onClose: () => void;
   onUpdate?: (target: BrushingTarget) => void;
   autoClose?: boolean;
+  selectedId?: string;
 }
 
 export default function BrushingTargetSelector({ 
   visible, 
   onClose, 
   onUpdate,
-  autoClose = false 
+  autoClose = false,
+  selectedId
 }: BrushingTargetSelectorProps) {
   const { theme } = useTheme();
   const { activeColors } = theme;
@@ -72,9 +74,14 @@ export default function BrushingTargetSelector({
 
   useEffect(() => {
     if (visible) {
-      loadCurrentTarget();
+      if (selectedId) {
+        const match = TARGET_OPTIONS.find(opt => opt.id === selectedId);
+        if (match) setCurrentTarget(match);
+      } else {
+        loadCurrentTarget();
+      }
     }
-  }, [visible]);
+  }, [visible, selectedId]);
 
   const loadCurrentTarget = async () => {
     try {

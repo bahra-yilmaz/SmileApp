@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from './supabaseClient';
 import { calculateEarnedPoints } from '../utils/calculateEarnedPoints';
+import { StreakSession } from '../utils/streakUtils';
 
 // Generate a proper UUID v4 format for React Native (compatible with PostgreSQL UUID type)
 function generateGuestUserId(): string {
@@ -121,9 +122,9 @@ export class GuestUserService {
   static async insertGuestBrushingLog(params: {
     actualTimeInSec: number;
     targetTimeInSec: number;
-    aimedSessionsPerDay: number;
   }): Promise<{ id: string; basePoints: number; bonusPoints: number; total: number; timeStreak: number; dailyStreak: number }> {
-    const { actualTimeInSec, targetTimeInSec, aimedSessionsPerDay } = params;
+    const { actualTimeInSec, targetTimeInSec } = params;
+    const aimedSessionsPerDay = 2; // Guest users always default to 2
     
     console.log('👻 Inserting guest brushing log:', { actualTimeInSec, targetTimeInSec, aimedSessionsPerDay });
     
@@ -133,23 +134,30 @@ export class GuestUserService {
       // Get recent sessions for points calculation
       const { data: recentSessions } = await supabase
         .from('brushing_logs')
-        .select('"duration-seconds", date')
+        .select('"duration-seconds", date, created_at')
         .eq('user_id', guestUserId)
         .gte('created_at', new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()) // Last 10 days
         .order('created_at', { ascending: false });
 
       // Convert to the format expected by calculateEarnedPoints
       // Use current target time for all sessions since we don't store it in logs
-      const formattedSessions = (recentSessions || []).map(session => ({
-        actualTimeInSec: session['duration-seconds'],
-        targetTimeInSec: targetTimeInSec, // Use current session's target for all
+      const formattedSessions: StreakSession[] = (recentSessions || []).map(session => ({
+        'duration-seconds': session['duration-seconds'],
         date: session.date,
+        created_at: session.created_at,
       }));
+
+      const todayDateStr = new Date().toISOString().slice(0, 10);
+      const currentSession: StreakSession = {
+        'duration-seconds': actualTimeInSec,
+        date: todayDateStr,
+        created_at: new Date().toISOString(),
+      };
 
       // Calculate earned points
       const points = calculateEarnedPoints(
         targetTimeInSec,
-        actualTimeInSec,
+        currentSession,
         formattedSessions,
         aimedSessionsPerDay
       );

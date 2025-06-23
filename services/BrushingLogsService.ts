@@ -1,6 +1,7 @@
 import { supabase } from './supabaseClient';
 import { calculateEarnedPoints, BrushingSession, EarnedPointsResult } from '../utils/calculateEarnedPoints';
 import { subDays } from 'date-fns';
+import { StreakSession } from '../utils/streakUtils';
 
 export interface InsertBrushingLogResult extends EarnedPointsResult {
   id: string;
@@ -20,36 +21,29 @@ export async function insertBrushingLog(params: {
   userId: string;
   actualTimeInSec: number;
   targetTimeInSec?: number; // Make optional since we'll fetch from users table
-  aimedSessionsPerDay: number;
 }): Promise<InsertBrushingLogResult> {
-  const { userId, actualTimeInSec, aimedSessionsPerDay } = params;
+  const { userId, actualTimeInSec } = params;
 
   // -------------------------------------------------------------------------
-  // 1) Fetch user's target time from users table
+  // 1) Fetch user's target time and frequency from users table
   // -------------------------------------------------------------------------
   const { data: userData, error: userError } = await supabase
     .from('users')
-    .select('target_time_in_sec')
+    .select('target_time_in_sec, brushing_target')
     .eq('id', userId)
     .maybeSingle();
 
   let targetTimeInSec = params.targetTimeInSec || 120; // Default 2 minutes
+  let aimedSessionsPerDay = 2; // Default 2 sessions
 
   if (userError) {
     console.error('Error fetching user target time:', userError);
-  } else if (userData?.target_time_in_sec) {
-    targetTimeInSec = userData.target_time_in_sec;
   } else if (userData) {
-    // User exists but target_time_in_sec is null, update it to default
-    console.log('User exists but target_time_in_sec is null, updating to default...');
-    
-    const { error: updateError } = await supabase
-      .from('users')
-      .update({ target_time_in_sec: 120 })
-      .eq('id', userId);
-
-    if (!updateError) {
-      targetTimeInSec = 120;
+    if (userData.target_time_in_sec) {
+      targetTimeInSec = userData.target_time_in_sec;
+    }
+    if (userData.brushing_target) {
+      aimedSessionsPerDay = userData.brushing_target;
     }
   } else {
     // User doesn't exist - this shouldn't happen for authenticated users
@@ -74,20 +68,27 @@ export async function insertBrushingLog(params: {
     throw fetchError;
   }
 
-  const recentSessions: BrushingSession[] = (recent ?? []).map((row: any) => ({
-    actualTimeInSec: row['duration-seconds'],
-    targetTimeInSec: targetTimeInSec, // Use the current session's target
+  const recentSessions: StreakSession[] = (recent ?? []).map((row: any) => ({
+    'duration-seconds': row['duration-seconds'],
     date: row.date ?? row.created_at?.slice(0, 10),
+    created_at: row.created_at,
   }));
 
   // -------------------------------------------------------------------------
   // 3) Calculate earned points for the current session using the helper
   // -------------------------------------------------------------------------
+  const todayDateStr = new Date().toISOString().slice(0, 10);
+  const currentSession: StreakSession = {
+    'duration-seconds': actualTimeInSec,
+    date: todayDateStr,
+    created_at: new Date().toISOString(),
+  };
+
   const points = calculateEarnedPoints(
     targetTimeInSec,
-    actualTimeInSec,
+    currentSession,
     recentSessions,
-    aimedSessionsPerDay,
+    aimedSessionsPerDay
   );
 
   // -------------------------------------------------------------------------
@@ -98,8 +99,6 @@ export async function insertBrushingLog(params: {
   //  analytics and future streak calculations.
 
   const durationSecondsToInsert = actualTimeInSec; // always real brushed time
-
-  const todayDateStr = new Date().toISOString().slice(0, 10);
 
   const { data: insertData, error: insertError } = await supabase
     .from('brushing_logs')

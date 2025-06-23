@@ -34,6 +34,7 @@ import supabase from '../../services/supabaseClient';
 import { useAuth } from '../../context/AuthContext';
 import { LanguageService } from '../../services/LanguageService';
 import { useBrushingGoal } from '../../context/BrushingGoalContext';
+import { eventBus } from '../../utils/EventBus';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const NUBO_TONE_KEY = 'nubo_tone';
@@ -447,6 +448,10 @@ export default function SettingsScreen() {
         // syncWithDatabase(authUser.id);
       }
     }
+
+    // Notify other parts of app to refresh (e.g., HomeScreen streak calculations)
+    eventBus.emit('frequency-updated');
+
     closeModalIfConfigured(setIsFrequencyModalVisible);
   };
 
@@ -851,6 +856,7 @@ export default function SettingsScreen() {
           onClose={() => setIsTargetModalVisible(false)}
           onUpdate={handleTargetUpdate}
           autoClose={MODAL_AUTO_CLOSE}
+          selectedId={currentTarget?.id}
         />
 
         {/* Daily Brushing Frequency Selection Modal */}

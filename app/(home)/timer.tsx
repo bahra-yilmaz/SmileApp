@@ -333,52 +333,30 @@ export default function TimerScreen() {
     
     // Save brushing log in background after navigation
     const saveBrushingLogInBackground = async () => {
-      if (actualTimeInSec <= 0) {
-        console.log('⚠️ actualTimeInSec is 0 or negative, skipping save');
-        return;
-      }
+      const totalSeconds = calculateTotalSeconds();
+      if (totalSeconds <= 0) return; // Don't save if no time has passed
 
       try {
-        console.log('🦷 SAVING BRUSHING LOG IN BACKGROUND:', {
-          actualTimeInSec,
-          actualMinutes,
-          actualSeconds,
-          brushingGoalMinutes,
-          userId: user?.id || 'guest'
-        });
-
         const targetTimeInSec = Math.round(brushingGoalMinutes * 60);
-        let result: InsertBrushingLogResult;
 
-        if (user?.id) {
-          console.log('👤 Authenticated user, saving to backend...');
-          // Authenticated user - save to backend
-          result = await insertBrushingLog({
-            userId: user.id,
-            actualTimeInSec,
-            aimedSessionsPerDay: 2, // Default to 2 sessions per day
-          });
-          console.log('✅ Backend save result:', result);
-        } else {
-          console.log('👻 Guest user, saving to local storage...');
-          // Guest user - save to local storage
-          result = await GuestUserService.insertGuestBrushingLog({
-            actualTimeInSec,
-            targetTimeInSec,
-            aimedSessionsPerDay: 2,
-          });
-          console.log('✅ Guest save result:', result);
-        }
-        
-        // Emit event with saved data for results screen to pick up
+        const result = user?.id
+          ? await insertBrushingLog({
+              userId: user.id,
+              actualTimeInSec: totalSeconds,
+            })
+          : await GuestUserService.insertGuestBrushingLog({
+              actualTimeInSec: totalSeconds,
+              targetTimeInSec,
+            });
+
+        console.log('✅ Background save successful, emitting event.');
         eventBus.emit('brushing-data-saved', result);
-        
-        // Emit event to refresh dashboard data
-        eventBus.emit('brushing-completed');
+        eventBus.emit('brushing-completed', { dailyStreak: result.dailyStreak });
       } catch (error) {
-        console.error('Failed to save brushing log in background:', error);
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+        console.error('❌ Background save failed:', errorMessage);
         // Emit error event for results screen to handle
-        eventBus.emit('brushing-save-error', error instanceof Error ? error.message : 'Failed to save brushing log');
+        eventBus.emit('brushing-save-error', errorMessage);
       }
     };
 
@@ -426,6 +404,11 @@ export default function TimerScreen() {
     onStartPress: handleStartPress,
     onBrushedPress: handleBrushedPress,
     onResetPress: () => resetTimer(),
+  };
+
+  const calculateTotalSeconds = () => {
+    const elapsedSeconds = initialTimeInSeconds.current - (minutes * 60 + seconds);
+    return elapsedSeconds + overtimeCounter;
   };
 
   return (
