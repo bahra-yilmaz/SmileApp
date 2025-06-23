@@ -5,19 +5,25 @@ import StatCard from '../ui/StatCard';
 import ThemedText from '../ThemedText';
 import { Colors } from '../../constants/Colors';
 import { useTranslation } from 'react-i18next';
+import { useStreak } from '../../context/StreakContext';
 
 interface StreakCardProps {
-  streakDays: number;
+  streakDays?: number; // Make optional - will use context if not provided
   fontFamily?: string;
   onPress?: () => void;
 }
 
 const StreakCard: React.FC<StreakCardProps> = ({
-  streakDays,
+  streakDays: propStreakDays,
   fontFamily,
   onPress,
 }) => {
   const { t } = useTranslation();
+  const { currentStreak } = useStreak();
+  
+  // Use prop value if provided, otherwise use context value
+  const streakDays = propStreakDays ?? currentStreak;
+
   return (
     <Pressable 
       onPress={onPress}

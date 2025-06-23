@@ -25,17 +25,25 @@ import * as Sharing from 'expo-sharing';
 import ViewShot from 'react-native-view-shot';
 import ShareCard from '../ui/ShareCard';
 import { getProgressColor } from '../../utils/colorUtils';
+import { StreakService } from '../../services/StreakService';
+import { useAuth } from '../../context/AuthContext';
 
 interface StreakOverlayProps {
   isVisible: boolean;
   onClose: () => void;
-  streakDays: number;
+  streakDays?: number; // Make optional - will fetch from service if not provided
 }
 
-export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose, streakDays }) => {
+export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose, streakDays: propStreakDays }) => {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const { activeColors } = theme;
+  const { user } = useAuth();
+  
+  // State for streak data
+  const [streakDays, setStreakDays] = useState(propStreakDays ?? 0);
+  const [longestStreak, setLongestStreak] = useState(0);
+  const [streakHistory, setStreakHistory] = useState<any[]>([]);
   
   // Animation values for container
   const [fadeAnim] = useState(() => new Animated.Value(0));
@@ -46,12 +54,51 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
   
   // State for streak history visibility and data
   const [showHistory, setShowHistory] = useState(false);
-  // Updated dummy data to represent streak periods
-  const [historyData, setHistoryData] = useState([ 
-    { id: 'sp1', startDate: '2024-07-16', endDate: '2024-07-20', duration: 5 },
-    { id: 'sp2', startDate: '2024-05-01', endDate: '2024-05-03', duration: 3 },
-    { id: 'sp3', startDate: '2024-02-10', endDate: '2024-02-11', duration: 2 },
-  ]);
+
+  // Load comprehensive streak data when overlay becomes visible
+  useEffect(() => {
+    const loadStreakData = async () => {
+      if (isVisible && user?.id) {
+        try {
+          const data = await StreakService.getStreakData(user.id);
+          setStreakDays(data.currentStreak);
+          setLongestStreak(data.longestStreak);
+          setStreakHistory(data.streakHistory);
+        } catch (error) {
+          console.error('Error loading streak data in StreakOverlay:', error);
+        }
+      }
+    };
+
+    loadStreakData();
+  }, [isVisible, user?.id]);
+
+  // Subscribe to streak updates
+  useEffect(() => {
+    const unsubscribe = StreakService.on('streak-updated', (data: any) => {
+      if (data.userId === user?.id) {
+        setStreakDays(data.newStreak);
+        // Optionally refresh full data when streak changes
+        if (isVisible) {
+                     StreakService.getStreakData(user!.id, { forceRefresh: true })
+            .then(fullData => {
+              setLongestStreak(fullData.longestStreak);
+              setStreakHistory(fullData.streakHistory);
+            })
+            .catch(console.error);
+        }
+      }
+    });
+
+    return unsubscribe;
+  }, [user?.id, isVisible]);
+
+  // Update local state when prop changes
+  useEffect(() => {
+    if (propStreakDays !== undefined) {
+      setStreakDays(propStreakDays);
+    }
+  }, [propStreakDays]);
   
   // Calculate progress towards next phase (assuming 7-day phases)
   const phaseLength = 7;
@@ -309,12 +356,12 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
             {/* Conditional History List */}
             {showHistory && (
               <View style={styles.historyListContainer}>
-                {historyData.map((item, index) => (
+                {streakHistory.map((item: any, index: number) => (
                   <View 
                     key={item.id} 
                     style={[
                       styles.historyItem,
-                      index < historyData.length - 1 && [
+                      index < streakHistory.length - 1 && [
                         styles.historyItemSeparator,
                         { 
                           borderBottomColor: theme.colorScheme === 'dark' 

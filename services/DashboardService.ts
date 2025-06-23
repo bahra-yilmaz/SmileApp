@@ -3,6 +3,8 @@ import { subDays, startOfDay, format } from 'date-fns';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GuestUserService } from './GuestUserService';
 import { calculateStreak } from '../utils/streakUtils';
+import { StreakService } from './StreakService';
+import { BrushingGoalsService } from './BrushingGoalsService';
 
 export interface DashboardStats {
   streakDays: number;
@@ -110,11 +112,8 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
 
     const logs = brushingLogs || [];
 
-    // Determine aimed sessions per day (default 2 if null)
-    const aimedSessionsPerDay = (userData?.brushing_target as number | null) ?? 2;
-
-    // Calculate streak days using both time and frequency targets
-    const streakDays = calculateStreak(logs, aimedSessionsPerDay);
+    // Calculate streak days using centralized service
+    const streakDays = await StreakService.getCurrentStreak(userId);
 
     // Get last brushing time
     const lastBrushingTime = getLastBrushingTime(logs);
@@ -339,18 +338,12 @@ export async function getStreakData(userId: string, brushingGoalMinutes: number 
       }
     }
     
-    // For now, return the current streak and mock data for history
-    // In a real implementation, you'd want to store streak history in the database
-    const stats = await getDashboardStats(userId, userTargetMinutes);
-    
+    // Use centralized StreakService for authenticated users
+    const data = await StreakService.getStreakData(userId);
     return {
-      currentStreak: stats.streakDays,
-      longestStreak: Math.max(stats.streakDays, 14), // Mock longest streak
-      streakHistory: [
-        { startDate: '2024-01-01', endDate: '2024-01-14', duration: 14 },
-        { startDate: '2023-11-15', endDate: '2023-11-28', duration: 14 },
-        { startDate: '2023-09-01', endDate: '2023-09-21', duration: 21 },
-      ],
+      currentStreak: data.currentStreak,
+      longestStreak: data.longestStreak,
+      streakHistory: data.streakHistory,
     };
   } catch (error) {
     console.error('Error fetching streak data:', error);

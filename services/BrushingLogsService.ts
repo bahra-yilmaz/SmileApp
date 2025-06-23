@@ -2,6 +2,8 @@ import { supabase } from './supabaseClient';
 import { calculateEarnedPoints, BrushingSession, EarnedPointsResult } from '../utils/calculateEarnedPoints';
 import { subDays } from 'date-fns';
 import { StreakSession } from '../utils/streakUtils';
+import { StreakService } from './StreakService';
+import { BrushingGoalsService } from './BrushingGoalsService';
 
 export interface InsertBrushingLogResult extends EarnedPointsResult {
   id: string;
@@ -25,32 +27,11 @@ export async function insertBrushingLog(params: {
   const { userId, actualTimeInSec } = params;
 
   // -------------------------------------------------------------------------
-  // 1) Fetch user's target time and frequency from users table
+  // 1) Get brushing goals from centralized service
   // -------------------------------------------------------------------------
-  const { data: userData, error: userError } = await supabase
-    .from('users')
-    .select('target_time_in_sec, brushing_target')
-    .eq('id', userId)
-    .maybeSingle();
-
-  let targetTimeInSec = params.targetTimeInSec || 120; // Default 2 minutes
-  let aimedSessionsPerDay = 2; // Default 2 sessions
-
-  if (userError) {
-    console.error('Error fetching user target time:', userError);
-  } else if (userData) {
-    if (userData.target_time_in_sec) {
-      targetTimeInSec = userData.target_time_in_sec;
-    }
-    if (userData.brushing_target) {
-      aimedSessionsPerDay = userData.brushing_target;
-    }
-  } else {
-    // User doesn't exist - this shouldn't happen for authenticated users
-    // For authenticated users, the user record should exist from signup/onboarding
-    console.warn('⚠️ Authenticated user not found in database. Using default target time.');
-    targetTimeInSec = 120;
-  }
+  const goals = await BrushingGoalsService.getCurrentGoals();
+  let targetTimeInSec = params.targetTimeInSec || Math.round(goals.timeTargetMinutes * 60);
+  const aimedSessionsPerDay = goals.dailyFrequency;
 
   // -------------------------------------------------------------------------
   // 2) Fetch recent sessions (last 10 days, newest first)
@@ -113,6 +94,16 @@ export async function insertBrushingLog(params: {
 
   if (insertError || !insertData) {
     throw insertError ?? new Error('Failed to insert brushing log');
+  }
+
+  // -------------------------------------------------------------------------
+  // 5) Update streak service with the new session
+  // -------------------------------------------------------------------------
+  try {
+    await StreakService.updateStreakAfterBrushing(userId, currentSession);
+  } catch (error) {
+    console.error('Error updating streak after brushing:', error);
+    // Don't throw - streak update failure shouldn't break the main flow
   }
 
   return {
