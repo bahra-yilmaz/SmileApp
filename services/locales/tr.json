@@ -549,7 +549,8 @@
     "currentStreakBrushingsText": "{{days}} günlük serinde {{count}} fırçalama seansı",
     "streakHistoryTitle": "En İyi Seriler",
     "streakHistorySubtitle": "Tüm zamanların en iyi serilerin",
-    "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}} Gün{{duration, plural, one {} other {}}})",
+    "streakPeriodText": "{{startDate}} - {{endDate}} (1 Gün)",
+    "streakPeriodText_plural": "{{startDate}} - {{endDate}} ({{count}} Gün})",
 
     "nuboMotivationTitle": "Nubo'nun Tırmanışı!",
     "nuboMotivationText": "Her seri günüyle birlikte Nubo dağda daha yükseğe tırmanıyor!",

@@ -446,7 +446,8 @@
     "currentStreakBrushingsText": "{{count}} sessions de brossage dans ta série de {{days}} jours",
       "streakHistoryTitle": "Meilleures séries",
       "streakHistorySubtitle": "Tes meilleures séries de tous les temps",
-      "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}} jour{{duration, plural, one {} other {s}}})",
+      "streakPeriodText": "{{startDate}} - {{endDate}} (1 jour)",
+      "streakPeriodText_plural": "{{startDate}} - {{endDate}} ({{count}} jours})",
 
       "nuboMotivationTitle": "L'ascension de Nubo !",
       "nuboMotivationText": "Chaque jour de série maintenue, Nubo grimpe plus haut dans la montagne !",

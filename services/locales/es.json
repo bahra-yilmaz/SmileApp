@@ -497,7 +497,8 @@
     "currentStreakBrushingsText": "{{count}} sesiones de cepillado en tu racha de {{days}} días",
       "streakHistoryTitle": "Mejores rachas",
       "streakHistorySubtitle": "Tus mejores rachas de todos los tiempos",
-      "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}} día{{duration, plural, one {} other {s}}})",
+      "streakPeriodText": "{{startDate}} - {{endDate}} (1 día)",
+      "streakPeriodText_plural": "{{startDate}} - {{endDate}} ({{count}} días})",
 
       "nuboMotivationTitle": "¡El ascenso de Nubo!",
       "nuboMotivationText": "Cada día que mantengas tu racha, Nubo sube más alto en la montaña",

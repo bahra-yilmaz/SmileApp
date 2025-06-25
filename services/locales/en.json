@@ -524,7 +524,8 @@
     "currentStreakBrushingsText": "{{count}} brushing sessions in your {{days}}-day streak",
     "streakHistoryTitle": "Best Streaks",
     "streakHistorySubtitle": "Your all-time best streaks",
-    "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}} Day{{duration, plural, one {} other {s}}})",
+    "streakPeriodText": "{{startDate}} - {{endDate}} (1 Day)",
+    "streakPeriodText_plural": "{{startDate}} - {{endDate}} ({{count}} Days})",
 
     "nuboMotivationTitle": "Nubo's Ascent!",
     "nuboMotivationText": "Every day you keep your streak, Nubo climbs higher up the mountain!",

@@ -446,7 +446,8 @@
     "currentStreakBrushingsText": "{{count}} Putz-Sessions in deiner {{days}}-Tage-Serie",
       "streakHistoryTitle": "Beste Serien",
       "streakHistorySubtitle": "Deine besten Serien",
-      "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}} Tag{{duration, plural, one {} other {e}}})",
+      "streakPeriodText": "{{startDate}} - {{endDate}} (1 Tag)",
+      "streakPeriodText_plural": "{{startDate}} - {{endDate}} ({{count}} Tage})",
 
       "nuboMotivationTitle": "Nubos Aufstieg!",
       "nuboMotivationText": "Jeden Tag den du dranbleibst, klettert Nubo höher!",

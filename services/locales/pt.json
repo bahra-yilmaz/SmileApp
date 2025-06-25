@@ -450,7 +450,8 @@
     "currentStreakBrushingsText": "{{count}} sessões de escovação em sua sequência de {{days}} dias",
     "streakHistoryTitle": "Melhores Sequências",
     "streakHistorySubtitle": "Suas melhores sequências até agora",
-    "streakPeriodText": "{{startDate}} - {{endDate}} ({{duration}} Dia{{duration, plural, one {} other {s}}})",
+    "streakPeriodText": "{{startDate}} - {{endDate}} (1 Dia)",
+    "streakPeriodText_plural": "{{startDate}} - {{endDate}} ({{count}} Dias})",
 
     "nuboMotivationTitle": "A Subida do Nubo!",
     "nuboMotivationText": "A cada dia de sequência, o Nubo sobe mais alto na montanha!",

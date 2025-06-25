@@ -355,7 +355,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                 </ThemedText>
               </View>
                <MaterialCommunityIcons
-                  name={showHistory ? "chevron-up" : "chevron-down"}
+                  name={showHistory ? "chevron-down" : "chevron-right"}
                   size={24}
                   color={activeColors.textSecondary}
                   style={{ marginLeft: 8 }} 
@@ -381,7 +381,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                     ]}
                   >
                     <ThemedText style={styles.historyItemText}>
-                      {t('streakOverlay.streakPeriodText', { startDate: item.startDate, endDate: item.endDate, duration: item.duration })}
+                      {t('streakOverlay.streakPeriodText', { startDate: item.startDate, endDate: item.endDate, count: item.duration })}
                     </ThemedText>
                   </View>
                 ))}
