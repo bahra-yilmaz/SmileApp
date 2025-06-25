@@ -20,7 +20,6 @@ import ThemedText from '../ThemedText';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
 import { useToothbrushStats } from '../../hooks/useToothbrushStats';
-import { useAuth } from '../../context/AuthContext';
 
 interface ToothbrushOverlayProps {
   isVisible: boolean;
@@ -33,110 +32,61 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
 }) => {
   const { t } = useTranslation();
   const { theme } = useTheme();
-  const { activeColors } = theme; // Destructure activeColors
-  const { stats, simpleDaysInUse, isLoading, refreshStats } = useToothbrushStats();
-  const { user } = useAuth();
+  const { activeColors } = theme;
+  const { stats, displayData, isLoading, refreshStats } = useToothbrushStats();
   
-  // Animation values for container
+  // Animation values
   const [fadeAnim] = useState(() => new Animated.Value(0));
   const [scaleAnim] = useState(() => new Animated.Value(0.95));
   
-  // State to track if animation is completed
+  // UI state
   const [animationComplete, setAnimationComplete] = useState(false);
-
-  // State for toothbrush history
   const [showHistory, setShowHistory] = useState(false);
+  
+  // Mock history data (replace with real data from service later)
   const [historyData, setHistoryData] = useState([
     { id: 'h3', date: '2024-03-15' },
     { id: 'h2', date: '2023-12-10' },
     { id: 'h1', date: '2023-09-01' },
   ]);
   
-  // Load Merienda font for header
+  // Fonts
   const [fontsLoaded] = useFonts({
     'Merienda-Regular': require('../../assets/fonts/Merienda-Regular.ttf'),
     'Merienda-Bold': require('../../assets/fonts/Merienda-Bold.ttf'),
   });
   
   const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
-  
-  // Calculate dimensions to leave space around edges
   const overlayWidth = screenWidth * 0.9;
   const overlayHeight = screenHeight * 0.7;
-  
-  // Calculate progress percentage and status using comprehensive stats
-  const daysInUse = stats?.totalCalendarDays ?? simpleDaysInUse;
-  const usageCycles = stats?.totalBrushingSessions ?? Math.floor(daysInUse * 1.5); // Fallback estimation
-  
-  const maxDays = 90;
-  const healthPercentage = Math.max(0, Math.min(100, Math.round((1 - daysInUse / maxDays) * 100)));
-  let healthStatus = stats?.replacementText ?? t('toothbrushOverlay.healthStatusGood');
-  let healthColor = stats?.replacementColor ?? Colors.feedback.success[theme.colorScheme];
-  
-  // Use stats for more accurate health calculation if available
-  if (stats) {
-    healthColor = stats.replacementColor;
-    healthStatus = stats.replacementText;
-  } else {
-    // Fallback logic
-    if (daysInUse > maxDays * 0.66) {
-      healthStatus = t('toothbrushOverlay.healthStatusReplaceSoon');
-      healthColor = Colors.feedback.warning[theme.colorScheme];
-    } else if (daysInUse > maxDays * 0.33) {
-      healthStatus = t('toothbrushOverlay.healthStatusFair');
-      healthColor = Colors.primary[theme.colorScheme === 'dark' ? 400 : 500];
-    }
-  }
-  
-  // Force refresh when overlay becomes visible
-  useEffect(() => {
-    if (isVisible && !isLoading) {
-      refreshStats();
-    }
-  }, [isVisible, refreshStats, isLoading]);
 
-  // Force refresh when user changes (sign in/out)
+  // Use derived data from the hook
+  const daysInUse = displayData?.daysInUse ?? 0;
+  const healthPercentage = displayData?.healthPercentage ?? 100;
+  const healthStatus = displayData?.healthStatusText ?? t('common.loading');
+  const healthColor = displayData?.healthColor ?? Colors.primary[500];
+  const usageCycles = stats?.totalBrushingSessions ?? 0;
+
+  // Refresh data when the overlay becomes visible
   useEffect(() => {
-    if (user?.id) {
+    if (isVisible) {
       refreshStats();
     }
-  }, [user?.id, refreshStats]);
+  }, [isVisible, refreshStats]);
   
-  // Handle animations when visibility changes
+  // Handle enter/exit animations
   useEffect(() => {
     if (isVisible) {
       setAnimationComplete(true);
-      // Animate in
       Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          friction: 6,
-          tension: 80,
-          useNativeDriver: true,
-        }),
+        Animated.timing(fadeAnim, { toValue: 1, duration: 250, useNativeDriver: true }),
+        Animated.spring(scaleAnim, { toValue: 1, friction: 6, tension: 80, useNativeDriver: true }),
       ]).start();
     } else {
-      // Animate out
       Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(scaleAnim, {
-          toValue: 0.95,
-          duration: 250,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        // Set animation complete to false after animation is done
-        setAnimationComplete(false);
-      });
+        Animated.timing(fadeAnim, { toValue: 0, duration: 200, useNativeDriver: true }),
+        Animated.timing(scaleAnim, { toValue: 0.95, duration: 250, useNativeDriver: true }),
+      ]).start(() => setAnimationComplete(false));
     }
   }, [isVisible, fadeAnim, scaleAnim]);
   
@@ -144,38 +94,22 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
     onClose();
   };
   
-  // If not visible and animation is complete, don't render anything
   if (!isVisible && !animationComplete) return null;
   
   return (
     <View style={[StyleSheet.absoluteFill, styles.mainContainer]}>
-      {/* Backdrop - covers the entire screen and handles touches outside the overlay */}
       <TouchableWithoutFeedback onPress={handleClose}>
         <View style={StyleSheet.absoluteFill}>
-          <Animated.View 
-            style={[
-              StyleSheet.absoluteFill,
-              {
-                opacity: fadeAnim,
-                backgroundColor: 'rgba(0,0,0,0.5)',
-              }
-            ]}
-          >
-            <BlurView
-              intensity={20}
-              tint={theme.colorScheme}
-              style={StyleSheet.absoluteFill}
-            />
+          <Animated.View style={[StyleSheet.absoluteFill, { opacity: fadeAnim, backgroundColor: 'rgba(0,0,0,0.5)' }]}>
+            <BlurView intensity={20} tint={theme.colorScheme} style={StyleSheet.absoluteFill} />
           </Animated.View>
         </View>
       </TouchableWithoutFeedback>
       
-      {/* Overlay Container - contains the actual overlay content */}
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'position' : 'height'} 
         style={styles.centerContainer} 
         pointerEvents="box-none"
-        keyboardVerticalOffset={0}
       >
         <Animated.View 
           style={[
@@ -185,10 +119,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
               height: overlayHeight,
               borderRadius: 45,
               opacity: fadeAnim,
-              transform: [
-                { scale: scaleAnim },
-              ],
-              // Enhanced shadow
+              transform: [{ scale: scaleAnim }],
               shadowColor: '#000000',
               shadowOffset: { width: 0, height: 12 },
               shadowOpacity: 0.25,
@@ -205,19 +136,14 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
             style={[
               StyleSheet.absoluteFill,
               {
-                backgroundColor: theme.colorScheme === 'dark'
-                  ? 'rgba(30, 40, 60, 0.7)' 
-                  : 'rgba(255, 255, 255, 0.7)',
+                backgroundColor: theme.colorScheme === 'dark' ? 'rgba(30, 40, 60, 0.7)' : 'rgba(255, 255, 255, 0.7)',
                 borderWidth: StyleSheet.hairlineWidth,
-                borderColor: theme.colorScheme === 'dark' 
-                  ? 'rgba(255, 255, 255, 0.1)' 
-                  : 'rgba(0, 0, 0, 0.05)',
+                borderColor: theme.colorScheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
                 borderRadius: 45,
               }
             ]}
           />
           
-          {/* Content Area: ScrollView for content, separate View for Button */}
           <ScrollView 
             style={styles.scrollView}
             contentContainerStyle={styles.scrollContentContainer}
@@ -233,30 +159,20 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
               </View>
               <View style={styles.headerTextContainer}>
                 <ThemedText
-                  style={[
-                    styles.toothbrushTitle,
-                    { fontFamily: fontsLoaded ? 'Merienda-Bold' : undefined }
-                  ]}
+                  style={[styles.toothbrushTitle, { fontFamily: fontsLoaded ? 'Merienda-Bold' : undefined }]}
                   variant="subtitle"
                   lightColor={Colors.primary[700]}
                   darkColor={Colors.primary[400]}
                 >
                   {t('toothbrushOverlay.title')}
                 </ThemedText>
-                <View style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-                  <ThemedText style={styles.daysInUse}>
-                    {`${daysInUse} ${t('toothbrushOverlay.daysInUseText')}`}
-                  </ThemedText>
-                </View>
+                <ThemedText style={styles.daysInUse}>
+                  {t('toothbrushOverlay.daysInUseText', { count: daysInUse })}
+                </ThemedText>
               </View>
             </View>
-            <View style={[styles.separator, { 
-              borderBottomColor: theme.colorScheme === 'dark' 
-                ? 'rgba(255, 255, 255, 0.1)' 
-                : 'rgba(0, 0, 0, 0.05)' 
-            }]} />
+            <View style={[styles.separator, { borderBottomColor: theme.colorScheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)' }]} />
             
-            {/* Usage Stats Section */}
             <View style={styles.usageContainer}>
               <View style={styles.usageIconContainer}>
                 <MaterialCommunityIcons
@@ -267,23 +183,14 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
               </View>
               <View style={styles.usageTextContainer}>
                 <ThemedText style={styles.usageTitle}>
-                {t('toothbrushOverlay.brushingTrackerTitle')}
+                  {t('toothbrushOverlay.brushingTrackerTitle')}
                 </ThemedText>
-                <View style={styles.usageSection}>
-                  <ThemedText style={styles.usageText}>
-                    {t('toothbrushOverlay.brushesOnThisToothbrushText', { count: usageCycles })}
-                  </ThemedText>
-                  {/* Show indicator if data includes estimates from onboarding */}
-                  {stats?.totalCalendarDays && stats.totalCalendarDays > 7 && stats.totalCalendarDays > stats.actualBrushingDays * 1.5 && (
-                    <ThemedText style={styles.estimatedDataHint}>
-                      {t('toothbrushOverlay.includesEstimatedData', 'Includes estimated historical data')}
-                    </ThemedText>
-                  )}
-                </View>
+                <ThemedText style={styles.usageText}>
+                  {t('toothbrushOverlay.brushesOnThisToothbrushText', { count: usageCycles })}
+                </ThemedText>
               </View>
             </View>
 
-            {/* Replace History Section */}
             <Pressable 
               style={styles.usageContainer} 
               onPress={() => {
@@ -303,7 +210,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                   {t('toothbrushOverlay.replaceHistoryTitle')}
                 </ThemedText>
                 <ThemedText style={styles.usageText}>
-                {t('toothbrushOverlay.replaceHistorySubtitle')}
+                  {t('toothbrushOverlay.replaceHistorySubtitle')}
                 </ThemedText>
               </View>
               <MaterialCommunityIcons 
@@ -314,7 +221,6 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
               />
             </Pressable>
 
-            {/* Conditional History List */}
             {showHistory && (
               <View style={styles.historyListContainer}>
                 {historyData.map((item, index) => (
@@ -322,14 +228,9 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                     key={item.id} 
                     style={[
                       styles.historyItem,
-                      // Add a separator line unless it's the last item
                       index < historyData.length - 1 && [
                         styles.historyItemSeparator,
-                        { 
-                          borderBottomColor: theme.colorScheme === 'dark' 
-                            ? 'rgba(255, 255, 255, 0.1)' 
-                            : 'rgba(0, 0, 0, 0.05)'
-                        }
+                        { borderBottomColor: theme.colorScheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)' }
                       ]
                     ]}
                   >
@@ -341,18 +242,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
               </View>
             )}
 
-            {/* NEW Toothbrush Renewal Info Section */}
-            <View style={{
-              marginHorizontal: 16,
-              marginBottom: 16,
-              marginTop: 12,
-              borderRadius: 20,
-              padding: 16,
-              borderWidth: 1,
-              borderColor: theme.colorScheme === 'dark' 
-                ? Colors.primary[400] + '60'  
-                : Colors.primary[700] + '40',
-            }}>
+            <View style={styles.infoBox}>
               <ThemedText style={styles.usageTitle}>
                 {t('toothbrushOverlay.whyReplaceTitle')}
               </ThemedText>
@@ -361,7 +251,6 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
               </ThemedText>
             </View>
 
-            {/* Toothbrush Health Progress Bar */}
             <View style={styles.progressContainer}>
               <View style={styles.progressLabelContainer}>
                 <ThemedText style={styles.usageTitle}>{t('toothbrushOverlay.toothbrushHealthTitle')}</ThemedText>
@@ -378,29 +267,21 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                 <View 
                   style={[
                     styles.progressBarFill, 
-                    { 
-                      width: `${healthPercentage}%`,
-                      backgroundColor: healthColor // Use dynamic health color
-                    }
+                    { width: `${healthPercentage}%`, backgroundColor: healthColor }
                   ]} 
                 />
               </View>
             </View>
           </ScrollView>
 
-          {/* Button Container - Positioned below ScrollView -> Now positioned absolutely */}
           <View style={styles.buttonShadowContainer}>
             <Pressable
               style={({ pressed }) => [
                 styles.button,
                 {
                   backgroundColor: pressed 
-                    ? theme.colorScheme === 'dark' 
-                      ? Colors.primary[600] 
-                      : Colors.primary[500]
-                    : theme.colorScheme === 'dark' 
-                      ? Colors.primary[500] 
-                      : Colors.primary[600],
+                    ? theme.colorScheme === 'dark' ? Colors.primary[600] : Colors.primary[500]
+                    : theme.colorScheme === 'dark' ? Colors.primary[500] : Colors.primary[600],
                 }
               ]}
               onPress={() => {
@@ -499,17 +380,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     opacity: 0.8,
   },
-  usageSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  usageIcon: {
-    marginRight: 8,
-  },
-  estimatedDataHint: {
-    fontSize: 12,
-    opacity: 0.7,
-    color: Colors.light.icon,
+  infoBox: {
+    marginHorizontal: 16,
+    marginBottom: 16,
+    marginTop: 12,
+    borderRadius: 20,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.1)', // Will be themed later
   },
   progressContainer: {
     marginHorizontal: 16,
@@ -568,15 +446,14 @@ const styles = StyleSheet.create({
   historyListContainer: {
     marginHorizontal: 16, 
     marginBottom: 16, 
-    marginTop: 4, // Small gap after the history button
+    marginTop: 4,
   },
   historyItem: {
     paddingVertical: 10,
-    paddingHorizontal: 16, // Indent slightly from container edges
+    paddingHorizontal: 16,
   },
   historyItemSeparator: {
     borderBottomWidth: StyleSheet.hairlineWidth,
-    // borderBottomColor will be applied dynamically
   },
   historyItemText: {
     fontSize: 14,

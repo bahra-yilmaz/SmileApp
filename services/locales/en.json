@@ -263,6 +263,12 @@
       "signInLink": "Sign-in"
     }
   },
+  "notifications": {
+    "reminderTitle": "Time to brush! ✨",
+    "reminderBody": "Your smile is waiting for you. Let's keep up the great habit!",
+    "morningReminder": "Good morning! Time for your morning brush.",
+    "eveningReminder": "Good evening! Ready for your evening brush?"
+  },
   "toothbrush": {
     "title": "Toothbrush Menu",
     "error": {
@@ -303,10 +309,10 @@
       "days": "{{count}} days"
     },
     "status": {
-      "brandNew": "Brand New",
+      "brand_new": "Brand New",
       "fresh": "Fresh",
       "good": "Good",
-      "due": "Replace Soon",
+      "replace_soon": "Replace Soon",
       "overdue": "Overdue"
     },
     "newBrush": {
@@ -479,13 +485,14 @@
     }
   },
   "toothbrushOverlay": {
-    "title": "Your Toothbrush",
-    "daysInUseText": "days in use", 
+    "title": "My Toothbrush",
+    "daysInUseText": "{{count}} Day In Use",
+    "daysInUseText_plural": "{{count}} Days In Use",
     "healthStatusGood": "Good",
     "healthStatusReplaceSoon": "Replace Soon",
     "healthStatusFair": "Fair",
     "brushingTrackerTitle": "Brushing Tracker",
-    "brushesOnThisToothbrushText": "That's {{count}} brushes on this toothbrush",
+    "brushesOnThisToothbrushText": "{{count}} brushes on this toothbrush",
     "includesEstimatedData": "Includes estimated historical data",
     "replaceHistoryTitle": "Replacement History",
     "replaceHistorySubtitle": "Track your brush change timeline",

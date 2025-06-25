@@ -3,7 +3,7 @@ import { Session, User } from '@supabase/supabase-js';
 import supabase from '../services/supabaseClient';
 import { GuestUserService } from '../services/GuestUserService';
 import { LanguageService } from '../services/LanguageService';
-import { ToothbrushService } from '../services/ToothbrushService';
+import { ToothbrushService } from '../services/toothbrush';
 
 // Define the shape of the context's value
 interface AuthContextType {
@@ -42,7 +42,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             Promise.all([
               GuestUserService.clearGuestData(),
               LanguageService.loadAndApplyUserLanguage(currentUser.id),
-              ToothbrushService.initializeFromDatabase(currentUser.id)
+              // ToothbrushService is now initialized on-demand by useToothbrushStats
             ]).catch(error => {
               console.error('❌ Error initializing user data:', error);
             });

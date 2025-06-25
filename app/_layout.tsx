@@ -1,3 +1,6 @@
+import 'react-native-get-random-values';
+import 'react-native-reanimated';
+import 'react-native-gesture-handler';
 import { Slot } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from 'expo-font';

@@ -6,7 +6,6 @@ import ThemedText from '../ThemedText';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '../../constants/Colors';
 import { useToothbrushStats } from '../../hooks/useToothbrushStats';
-import { useAuth } from '../../context/AuthContext';
 
 interface ToothbrushCardProps {
   fontFamily?: string;
@@ -18,39 +17,17 @@ const ToothbrushCard: React.FC<ToothbrushCardProps> = ({
   onPress,
 }) => {
   const { t } = useTranslation();
-  const { stats, simpleDaysInUse, isLoading, refreshStats } = useToothbrushStats();
-  const { user } = useAuth();
-  
-  // For the card, show calendar days (toothbrush age) as it's more intuitive for users
-  // The detailed stats with actual brushing days are shown in the overlay
-  const displayDays = stats?.totalCalendarDays ?? simpleDaysInUse;
-  const replacementText = stats?.replacementText ?? t('homeScreen.toothbrushCard.replaceSoon');
-  
-  // Force refresh when user changes to ensure we have the right data
-  useEffect(() => {
-    if (user?.id && displayDays === 0 && !isLoading) {
-      console.log('🦷 ToothbrushCard: User authenticated but showing 0 days, debugging...');
-      console.log('🦷 Current stats:', stats);
-      console.log('🦷 Simple days in use:', simpleDaysInUse);
-      console.log('🦷 User ID:', user.id);
-      
-      // Force a complete refresh
-      setTimeout(() => {
-        console.log('🦷 Forcing toothbrush stats refresh...');
-        refreshStats();
-      }, 1000);
-    }
-  }, [user?.id, displayDays, isLoading, refreshStats, stats, simpleDaysInUse]);
-  
+  const { displayData, isLoading } = useToothbrushStats();
+
+  const daysInUse = displayData?.daysInUse ?? 0;
+  const statusText = displayData?.healthStatusText ?? t('common.loading');
+
   // Show loading state
-  if (isLoading) {
+  if (isLoading && !displayData) {
     return (
-      <Pressable 
+      <Pressable
         onPress={onPress}
-        style={({ pressed }) => [
-          styles.pressableContainer,
-          pressed && styles.pressed
-        ]}
+        style={({ pressed }) => [styles.pressableContainer, pressed && styles.pressed]}
       >
         <StatCard
           title=""
@@ -58,15 +35,15 @@ const ToothbrushCard: React.FC<ToothbrushCardProps> = ({
             <View style={styles.toothbrushContentContainer}>
               <View style={styles.toothbrushHealthContainer}>
                 <View style={styles.heartContainer}>
-                  <MaterialCommunityIcons 
-                    name="heart-half-full" 
-                    size={48} 
-                    color={Colors.primary[200]} 
+                  <MaterialCommunityIcons
+                    name="heart-half-full"
+                    size={48}
+                    color={Colors.primary[200]}
                   />
                 </View>
                 <View style={styles.daysTextContainer}>
-                  <ThemedText 
-                    variant="title" 
+                  <ThemedText
+                    variant="title"
                     style={[styles.daysValue, fontFamily && { fontFamily }]}
                   >
                     --
@@ -79,7 +56,7 @@ const ToothbrushCard: React.FC<ToothbrushCardProps> = ({
                   {t('common.loading', 'Loading...')}
                 </ThemedText>
               </View>
-              <Image 
+              <Image
                 source={require('../../assets/images/toothbrush.png')}
                 style={styles.toothbrushImage}
                 resizeMode="contain"
@@ -99,67 +76,54 @@ const ToothbrushCard: React.FC<ToothbrushCardProps> = ({
   }
 
   return (
-    <Pressable 
+    <Pressable
       onPress={onPress}
-      style={({ pressed }) => [
-        styles.pressableContainer,
-        pressed && styles.pressed
-      ]}
+      style={({ pressed }) => [styles.pressableContainer, pressed && styles.pressed]}
     >
-    <StatCard
-      title=""
-      value={
-        <View style={styles.toothbrushContentContainer}>
-          {/* Health indicator (heart) and days */}
-          <View style={styles.toothbrushHealthContainer}>
-            <View style={styles.heartContainer}>
-              <MaterialCommunityIcons 
-                name="heart-half-full" 
-                size={48} 
-                color={Colors.primary[200]} 
-              />
-            </View>
-            <View style={styles.daysTextContainer}>
-                              <ThemedText 
-                  variant="title" 
-                  style={[
-                    styles.daysValue,
-                    fontFamily && { fontFamily }
-                  ]}
+      <StatCard
+        title=""
+        value={
+          <View style={styles.toothbrushContentContainer}>
+            {/* Health indicator (heart) and days */}
+            <View style={styles.toothbrushHealthContainer}>
+              <View style={styles.heartContainer}>
+                <MaterialCommunityIcons
+                  name="heart-half-full"
+                  size={48}
+                  color={Colors.primary[200]}
+                />
+              </View>
+              <View style={styles.daysTextContainer}>
+                <ThemedText
+                  variant="title"
+                  style={[styles.daysValue, fontFamily && { fontFamily }]}
                 >
-                  {displayDays}
+                  {daysInUse}
                 </ThemedText>
-                <ThemedText 
-                  variant="caption" 
-                  style={styles.daysText}
-                >
+                <ThemedText variant="caption" style={styles.daysText}>
                   {t('homeScreen.toothbrushCard.daysUnit')}
                 </ThemedText>
               </View>
-              <ThemedText 
-                variant="caption" 
-                style={styles.replaceSoonText}
-                numberOfLines={2}
-              >
-                {replacementText}
+              <ThemedText variant="caption" style={styles.replaceSoonText} numberOfLines={2}>
+                {statusText}
               </ThemedText>
+            </View>
+
+            <Image
+              source={require('../../assets/images/toothbrush.png')}
+              style={styles.toothbrushImage}
+              resizeMode="contain"
+            />
           </View>
-          
-          <Image 
-            source={require('../../assets/images/toothbrush.png')}
-            style={styles.toothbrushImage}
-            resizeMode="contain"
-          />
-        </View>
-      }
-      maxValue=""
-      progress={0}
-      progressLabels={[]}
-      height={165}
-      containerStyle={styles.toothbrushCardContainer}
-      contentStyle={styles.toothbrushCardContent}
-      cardStyle={styles.toothbrushCardStyle}
-    />
+        }
+        maxValue=""
+        progress={0}
+        progressLabels={[]}
+        height={165}
+        containerStyle={styles.toothbrushCardContainer}
+        contentStyle={styles.toothbrushCardContent}
+        cardStyle={styles.toothbrushCardStyle}
+      />
     </Pressable>
   );
 };
@@ -204,10 +168,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: -25,
     top: '50%',
-    transform: [
-      { translateY: -75 },
-      { scale: 1.1 }
-    ],
+    transform: [{ translateY: -75 }, { scale: 1.1 }],
   },
   toothbrushHealthContainer: {
     position: 'absolute',
@@ -248,19 +209,17 @@ const styles = StyleSheet.create({
     fontFamily: 'Quicksand-Medium',
     opacity: 0.8,
     color: Colors.primary[800],
-    paddingTop: 0,
-    lineHeight: 16,
   },
   replaceSoonText: {
-    fontSize: 10,
-    fontFamily: 'Quicksand-Medium',
-    color: Colors.primary[800],
-    opacity: 0.6,
-    textAlign: 'right',
-    marginTop: 18,
-    width: 80,
-    marginLeft: 33,
-    lineHeight: 12,
+    fontFamily: 'Quicksand-Regular',
+    fontSize: 12,
+    textAlign: 'center',
+    marginTop: 8, // Increased top margin
+    lineHeight: 14,
+    paddingHorizontal: 4,
+    width: 110,
+    left: 2,
+    color: Colors.primary[700],
   },
 });
 

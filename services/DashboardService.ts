@@ -5,7 +5,7 @@ import { GuestUserService } from './GuestUserService';
 import { calculateStreak } from '../utils/streakUtils';
 import { StreakService } from './StreakService';
 import { BrushingGoalsService } from './BrushingGoalsService';
-import { ToothbrushService } from './ToothbrushService';
+import { ToothbrushService } from './toothbrush';
 
 export interface DashboardStats {
   streakDays: number;
