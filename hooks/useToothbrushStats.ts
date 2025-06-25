@@ -4,6 +4,7 @@ import {
   ToothbrushService,
   ToothbrushUsageStats,
   ToothbrushDisplayData,
+  Toothbrush,
 } from '../services/toothbrush';
 import { useAuth } from '../context/AuthContext';
 import { eventBus } from '../utils/EventBus';
@@ -11,6 +12,7 @@ import { eventBus } from '../utils/EventBus';
 export interface UseToothbrushStatsReturn {
   stats: ToothbrushUsageStats | null;
   displayData: ToothbrushDisplayData | null;
+  currentToothbrush: Toothbrush | null;
   isLoading: boolean;
   error: string | null;
   refreshStats: () => Promise<void>;
@@ -24,6 +26,7 @@ export interface UseToothbrushStatsReturn {
 export function useToothbrushStats(): UseToothbrushStatsReturn {
   const [stats, setStats] = useState<ToothbrushUsageStats | null>(null);
   const [displayData, setDisplayData] = useState<ToothbrushDisplayData | null>(null);
+  const [currentToothbrush, setCurrentToothbrush] = useState<Toothbrush | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
@@ -49,6 +52,10 @@ export function useToothbrushStats(): UseToothbrushStatsReturn {
         setStats(null);
         setDisplayData(null);
       }
+
+      // Also get current toothbrush data for components that need the name, brand, etc.
+      const toothbrush = await ToothbrushService.getCurrentToothbrush();
+      setCurrentToothbrush(toothbrush);
     } catch (err) {
       console.error('Error fetching toothbrush stats:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch toothbrush stats');
@@ -84,6 +91,7 @@ export function useToothbrushStats(): UseToothbrushStatsReturn {
   return {
     stats,
     displayData,
+    currentToothbrush,
     isLoading,
     error,
     refreshStats,

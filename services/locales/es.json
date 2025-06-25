@@ -299,11 +299,12 @@
         "days": "{{count}} días"
       },
       "status": {
-        "brandNew": "Nuevo",
+        "brand_new": "Nuevo",
         "fresh": "Fresco",
         "good": "Bueno",
-        "due": "Cambiar pronto",
-        "overdue": "Vencido"
+        "replace_soon": "Reemplazar Pronto",
+        "overdue": "Vencido",
+        "addToothbrush": "Agregar cepillo"
       },
       "newBrush": {
         "addNew": "Agregar cepillo"
@@ -660,7 +661,9 @@
       "name": "Versión de la app"
     },
     "updateGoalError": "No se pudo actualizar la meta. Inténtalo de nuevo.",
-    "targetAchieved": "¡Meta alcanzada!"
+    "targetAchieved": "¡Meta alcanzada!",
+    "item": "Cepillo",
+    "firstBrush": "Primer Cepillo"
   }
 }
   

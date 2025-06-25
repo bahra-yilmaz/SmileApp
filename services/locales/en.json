@@ -313,7 +313,8 @@
       "fresh": "Fresh",
       "good": "Good",
       "replace_soon": "Replace Soon",
-      "overdue": "Overdue"
+      "overdue": "Overdue",
+      "addToothbrush": "Add toothbrush"
     },
     "newBrush": {
       "addNew": "Add New Toothbrush"
@@ -700,6 +701,7 @@
     "appVersion": {
       "name": "App Version"
     },
-    "item": "Toothbrush"
+    "item": "Toothbrush",
+    "firstBrush": "First Brush"
   }
 } 

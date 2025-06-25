@@ -217,6 +217,23 @@ export default function HomeScreen() {
       unsubscribeFrequency();
     };
   }, [refetch]);
+
+  // Check if user needs a first brush created (for existing users without toothbrushes)
+  useEffect(() => {
+    const ensureFirstBrushExists = async () => {
+      if (!user?.id || user.id === 'guest') return;
+
+      try {
+        const { ToothbrushService } = await import('../../services/toothbrush');
+        await ToothbrushService.createFirstBrushForNewUser(user.id, t);
+      } catch (error) {
+        console.error('❌ Error ensuring first brush exists:', error);
+        // Don't show error to user - this is a background operation
+      }
+    };
+
+    ensureFirstBrushExists();
+  }, [user?.id, t]);
   
   const introOpacity = React.useRef(new Animated.Value(0)).current;
 

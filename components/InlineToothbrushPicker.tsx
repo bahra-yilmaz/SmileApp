@@ -16,8 +16,6 @@ interface ToothbrushConfig {
    * User friendly identifier for this toothbrush (e.g., "My Snow-White Brush").
    */
   name: string;
-  brand: string;
-  model: string;
   /** Whether the user is already using this brush */
   isUsed: boolean;
   /** Age offset in days */
@@ -81,14 +79,6 @@ export default function InlineToothbrushPicker({
 
   const handleNameChange = (text: string) => {
     onConfigChange({ ...config, name: text });
-  };
-
-  const handleBrandChange = (brand: string) => {
-    onConfigChange({ ...config, brand });
-  };
-
-  const handleModelChange = (model: string) => {
-    onConfigChange({ ...config, model });
   };
 
   const handleIsUsedToggle = () => {

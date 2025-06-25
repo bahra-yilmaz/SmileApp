@@ -160,16 +160,57 @@ export class OnboardingService {
   }
 
   /**
-   * @deprecated Existing onboarding screens call this. It now just ensures the
-   *              language column is set so the app won\'t show onboarding again.
+   * Marks onboarding as completed by setting the user's language (and if provided, user ID).
    */
-  static async markOnboardingAsCompleted(userId?: string, languageCode?: string): Promise<void> {
-    if (!userId) return;
+  static async markOnboardingAsCompleted(userId?: string, selectedLanguage?: string): Promise<void> {
+    console.log('🔄 OnboardingService: Marking onboarding as completed...', { userId, selectedLanguage });
 
-    // If a language code is provided, set it. Otherwise leave as-is.
-    if (languageCode) {
-      await OnboardingService.setUserLanguage(userId, languageCode);
+    // Always store language preference locally for immediate access
+    if (selectedLanguage) {
+      try {
+        await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, selectedLanguage);
+        console.log('✅ Language preference saved locally:', selectedLanguage);
+      } catch (error) {
+        console.error('❌ Failed to save language preference locally:', error);
+      }
     }
+
+    // If we have a user ID, try to update the database
+    if (userId && selectedLanguage) {
+      try {
+        console.log('🔄 Updating user language in database...');
+        
+        const { error } = await supabase
+          .from('users')
+          .update({ language: selectedLanguage })
+          .eq('id', userId);
+
+        if (error) {
+          console.error('❌ Database update failed:', error);
+          throw error;
+        }
+
+        console.log('✅ User language updated in database');
+
+        // Create first brush for the new user
+        try {
+          const { ToothbrushService } = await import('./toothbrush');
+          const i18n = (await import('./i18n')).default;
+          
+          await ToothbrushService.createFirstBrushForNewUser(userId, i18n.t);
+          console.log('✅ First brush created for new user');
+        } catch (brushError) {
+          console.error('❌ Failed to create first brush:', brushError);
+          // Don't throw - this shouldn't break the onboarding flow
+        }
+
+      } catch (error) {
+        console.error('❌ Failed to update database during onboarding completion:', error);
+        // Continue with local storage approach - don't block user
+      }
+    }
+
+    console.log('✅ Onboarding completion process finished');
   }
 
   /**

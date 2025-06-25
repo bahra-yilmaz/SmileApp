@@ -110,14 +110,9 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   const getToothbrushName = () => {
     if (!currentToothbrush) return t('toothbrushOverlay.title');
     
-    // Use name if available, otherwise construct from brand/model, or fall back to type
-    if (currentToothbrush.name) {
+    // Use name if available, otherwise fall back to type
+    if (currentToothbrush.name && currentToothbrush.name.trim()) {
       return currentToothbrush.name;
-    }
-    
-    const brandModel = `${currentToothbrush.brand || ''} ${currentToothbrush.model || ''}`.trim();
-    if (brandModel) {
-      return brandModel;
     }
     
     return `${t(`toothbrush.type.${currentToothbrush.type}`)} ${t('toothbrush.item')}`;

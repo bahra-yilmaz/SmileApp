@@ -11,8 +11,6 @@ export interface Toothbrush {
   endDate?: string; // ISO 8601, only for history items
   type: 'manual' | 'electric'; // Type of toothbrush
   purpose: 'regular' | 'braces' | 'sensitive' | 'whitening';
-  brand?: string;
-  model?: string;
   created_at: string;
 }
 

@@ -50,8 +50,6 @@ export default function ToothbrushManager({
     type: 'manual' as 'manual' | 'electric',
     category: 'regular' as 'regular' | 'braces' | 'sensitive' | 'whitening',
     name: '',
-    brand: '',
-    model: '',
     isUsed: false,
     ageDays: 0,
   });
@@ -87,10 +85,8 @@ export default function ToothbrushManager({
   const fetchCountsForHistory = useCallback(async (hist: Toothbrush[], userId: string) => {
     const counts: Record<string, number> = {};
     for (const brush of hist) {
-      const startDateStr = brush.startDate.slice(0,10);
-      const endDateStr = brush.endDate ? brush.endDate.slice(0,10) : getTodayLocalString();
-      const logs = await ToothbrushDataService.getBrushingLogsForPeriod(userId, startDateStr, endDateStr);
-      counts[brush.id] = logs.length;
+      const count = await ToothbrushDataService.getBrushingCountForToothbrush(userId, brush);
+      counts[brush.id] = count;
     }
     setHistoryCounts(counts);
   }, []);
@@ -133,7 +129,7 @@ export default function ToothbrushManager({
     }
     
     setToothbrushConfig({
-      type: 'manual', category: 'regular', name: '', brand: '', model: '', isUsed: false, ageDays: 0,
+      type: 'manual', category: 'regular', name: '', isUsed: false, ageDays: 0,
     });
     
     setShowToothbrushPicker(true);
@@ -155,16 +151,25 @@ export default function ToothbrushManager({
   const handleSaveToothbrush = async () => {
     try {
       const userId = user?.id || 'guest';
+      
+      console.log('🦷 Saving toothbrush for user:', userId);
+      
       await ToothbrushService.replaceToothbrush(userId, {
         type: toothbrushConfig.type,
         purpose: toothbrushConfig.category,
-        brand: toothbrushConfig.brand,
-        model: toothbrushConfig.model,
+        name: toothbrushConfig.name || undefined, // Include name if provided
+        ageDays: toothbrushConfig.isUsed ? toothbrushConfig.ageDays : 0,
       });
 
-      // Refresh data
-      await refreshStats();
-      await fetchData();
+      console.log('✅ Toothbrush saved successfully, refreshing data...');
+
+      // Refresh data - ensure both sources are updated
+      await Promise.all([
+        refreshStats(), // Refresh hook data
+        fetchData()     // Refresh local data
+      ]);
+      
+      console.log('✅ Data refreshed successfully');
       
       handleCancelToothbrushAdd(); // Close and reset picker
       
@@ -174,7 +179,7 @@ export default function ToothbrushManager({
         onClose();
       }
     } catch (error) {
-      console.error('Error creating new toothbrush:', error);
+      console.error('❌ Error creating new toothbrush:', error);
        Alert.alert(
         t('toothbrush.error.title', 'Error'),
         t('toothbrush.error.message', 'Failed to save toothbrush data. Please try again.')
@@ -218,7 +223,7 @@ export default function ToothbrushManager({
           <View style={styles.toothbrushTextContainer}>
             <View style={styles.titleRow}>
               <ThemedText style={styles.toothbrushCardTitle} numberOfLines={2}>
-                {currentBrush.name || `${currentBrush.brand || ''} ${currentBrush.model || ''}`.trim() || `${t(`toothbrush.type.${currentBrush.type}`)} ${t('toothbrush.item')}`}
+                {currentBrush.name || `${t(`toothbrush.type.${currentBrush.type}`)} ${t('toothbrush.item')}`}
               </ThemedText>
               <View style={[styles.statusBadge, { backgroundColor: displayData.healthColor }]}> 
                 <ThemedText style={styles.statusText}>{displayData.healthStatusText}</ThemedText>
@@ -370,7 +375,7 @@ export default function ToothbrushManager({
                 const startDate = new Date(brush.startDate);
                 const endDate = brush.endDate ? new Date(brush.endDate) : new Date();
                 const usageDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-                const brushingCount = historyCounts[brush.id] ?? usageDays * 2;
+                const brushingCount = historyCounts[brush.id] ?? 0;
 
                 const fallbackName = `${t(`toothbrush.type.${brush.type}`)} ${t('toothbrush.item')}`;
                 const purposeKey = brush.purpose ?? 'regular';
@@ -389,6 +394,7 @@ export default function ToothbrushManager({
                     reminder={reminderLike}
                     showToggle={false}
                     rightTop={t(`toothbrush.category.${purposeKey}`)}
+                    rightBottom={t('toothbrush.history.brushings', { count: brushingCount })}
                     onToggle={() => {}}
                     onDelete={async (id) => {
                       await ToothbrushDataService.deleteBrushFromHistory(id);

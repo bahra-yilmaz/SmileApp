@@ -281,11 +281,12 @@
         "days": "{{count}} jours"
       },
       "status": {
-        "brandNew": "Neuve",
-        "fresh": "Fraîche",
-        "good": "Bonne",
-        "due": "À changer bientôt",
-        "overdue": "À changer"
+        "brand_new": "Nouveau",
+        "fresh": "Frais",
+        "good": "Bon",
+        "replace_soon": "Remplacer Bientôt",
+        "overdue": "En Retard",
+        "addToothbrush": "Ajouter une brosse"
       },
       "newBrush": {
         "addNew": "Ajouter une brosse"
@@ -609,7 +610,9 @@
         "name": "Version de l'app"
       },
       "updateGoalError": "Échec de la mise à jour de l'objectif. Veuillez réessayer.",
-      "targetAchieved": "Objectif atteint !"
-    }
+          "targetAchieved": "Objectif atteint !",
+    "item": "Brosse",
+    "firstBrush": "Première Brosse"
   }
+}
   
