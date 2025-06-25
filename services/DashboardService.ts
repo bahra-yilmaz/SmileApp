@@ -231,6 +231,7 @@ export async function getCalendarBrushingData(userId: string): Promise<Record<st
 
 /**
  * Get streak data for the streak overlay
+ * @deprecated Use StreakService.getStreakData() directly instead
  */
 export async function getStreakData(userId: string, brushingGoalMinutes: number = 2): Promise<{
   currentStreak: number;
@@ -248,36 +249,8 @@ export async function getStreakData(userId: string, brushingGoalMinutes: number 
     };
   }
 
-  // Authenticated user logic
+  // For authenticated users, delegate to the centralized StreakService
   try {
-    // Fetch the user's specific brushing goal first
-    const { data: userData, error: userError } = await supabase
-      .from('users')
-      .select('target_time_in_sec')
-      .eq('id', userId)
-      .maybeSingle();
-
-    let userTargetMinutes = brushingGoalMinutes;
-
-    if (userError) {
-      console.error('Error fetching user target time in streak data:', userError);
-    } else if (userData?.target_time_in_sec) {
-      userTargetMinutes = userData.target_time_in_sec / 60;
-    } else if (userData) {
-      // User exists but target_time_in_sec is null, update it to default
-      console.log('User exists but target_time_in_sec is null, updating to default...');
-      
-      const { error: updateError } = await supabase
-        .from('users')
-        .update({ target_time_in_sec: 120 })
-        .eq('id', userId);
-
-      if (!updateError) {
-        userTargetMinutes = 2; // 2 minutes
-      }
-    }
-    
-    // Use centralized StreakService for authenticated users
     const data = await StreakService.getStreakData(userId);
     return {
       currentStreak: data.currentStreak,

@@ -430,6 +430,8 @@
   "streakOverlay": {
     "title": "{{count, number}}-दिनों की स्ट्रिक",
     "subtitle": "आप शानदार कर रहे हैं!",
+    "headerTitle": "वर्तमान प्रगति",
+    "headerSubtitle": "{{count, number}}-दिनों की स्ट्रिक",
     "achievementsTitle": "उपलब्धियां",
     "achievementsDescription": "आपकी अर्जित बैज और माइलस्टोन देखें",
     "shareStreakTitle": "स्ट्रिक साझा करें",

@@ -1,7 +1,7 @@
 import { supabase } from './supabaseClient';
 import { calculateEarnedPoints, BrushingSession, EarnedPointsResult } from '../utils/calculateEarnedPoints';
 import { subDays } from 'date-fns';
-import { StreakSession } from '../utils/streakUtils';
+import { StreakSession } from './StreakService';
 import { StreakService } from './StreakService';
 import { BrushingGoalsService } from './BrushingGoalsService';
 import { getTodayLocalString } from '../utils/dateUtils';

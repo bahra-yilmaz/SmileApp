@@ -141,7 +141,6 @@ const BrushingResultsScreen = () => {
           result = await insertBrushingLog({
             userId: user.id,
             actualTimeInSec,
-            aimedSessionsPerDay: 2, // Default to 2 sessions per day
           });
           console.log('✅ Backend save result:', result);
         } else {
@@ -150,7 +149,6 @@ const BrushingResultsScreen = () => {
           result = await GuestUserService.insertGuestBrushingLog({
             actualTimeInSec,
             targetTimeInSec,
-            aimedSessionsPerDay: 2,
           });
           console.log('✅ Guest save result:', result);
         }

@@ -504,6 +504,8 @@
   "streakOverlay": {
     "title": "{{count}}-Day Streak",
     "subtitle": "You're on fire!",
+    "headerTitle": "Current Progress",
+    "headerSubtitle": "{{count}}-Day Streak",
     "achievementsTitle": "Achievements",
     "achievementsDescription": "View your earned badges and milestones",
     "shareStreakTitle": "Share Streak",

@@ -1,3 +1,6 @@
+// Main service
+export { StreakService } from './StreakService';
+
 // Individual service modules
 export { StreakDataService } from './StreakDataService';
 export { StreakCalculationService } from './StreakCalculationService';
@@ -15,7 +18,4 @@ export {
   createStreakService, 
   createStreakServiceWithDebug 
 } from './StreakServiceFactory';
-export type { StreakServiceConfig } from './StreakServiceFactory';
-
-// Main streak service exported from the legacy location for backward compatibility
-// The actual StreakService implementation is in the main services directory 
+export type { StreakServiceConfig } from './StreakServiceFactory'; 

@@ -477,6 +477,8 @@
     "streakOverlay": {
       "title": "Racha de {{count}} días",
       "subtitle": "¡Estás en llamas!",
+      "headerTitle": "Progreso Actual",
+      "headerSubtitle": "Racha de {{count}} días",
       "achievementsTitle": "Logros",
       "achievementsDescription": "Mira tus insignias y metas alcanzadas",
       "shareStreakTitle": "Compartir racha",

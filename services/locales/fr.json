@@ -426,6 +426,8 @@
     "streakOverlay": {
       "title": "{{count}} jours d'affilée",
       "subtitle": "Tu es en feu !",
+      "headerTitle": "Progrès Actuel",
+      "headerSubtitle": "{{count}} jours d'affilée",
       "achievementsTitle": "Réalisations",
       "achievementsDescription": "Voir tes badges et jalons obtenus",
       "shareStreakTitle": "Partager ta série",

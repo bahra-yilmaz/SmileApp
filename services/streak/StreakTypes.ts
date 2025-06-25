@@ -21,8 +21,8 @@ export interface StreakHistory {
 
 export interface StreakSession {
   'duration-seconds': number;
-  date: string;
-  created_at: string;
+  date?: string; // Make optional to match streakUtils.ts
+  created_at?: string; // Make optional to match streakUtils.ts
 }
 
 // Comprehensive streak information

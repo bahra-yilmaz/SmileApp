@@ -430,6 +430,8 @@
   "streakOverlay": {
     "title": "{{count}} Dias de Sequência",
     "subtitle": "Você está mandando bem!",
+    "headerTitle": "Progresso Atual",
+    "headerSubtitle": "{{count}} Dias de Sequência",
     "achievementsTitle": "Conquistas",
     "achievementsDescription": "Veja suas medalhas e marcos conquistados",
     "shareStreakTitle": "Compartilhar sequência",

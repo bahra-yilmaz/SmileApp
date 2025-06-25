@@ -430,6 +430,8 @@
   "streakOverlay": {
     "title": "{{count, number}}日連続達成",
     "subtitle": "素晴らしい！",
+    "headerTitle": "現在の進捗",
+    "headerSubtitle": "{{count, number}}日連続達成",
     "achievementsTitle": "実績",
     "achievementsDescription": "獲得したバッジとマイルストーンを見る",
     "shareStreakTitle": "連続記録を共有",

@@ -2,28 +2,44 @@
 
 This directory contains the modular streak service architecture, designed for clean separation of concerns and high maintainability.
 
+## Architecture & Cleanup
+
+### Resolved Overlaps (Latest Update)
+
+To ensure clean, non-overlapping functionality, the following consolidations were made:
+
+1. **Import Consistency**: All components now import from the main `services/StreakService` entry point rather than individual modular services
+2. **Deprecated Functions**: `DashboardService.getStreakData()` is now deprecated and delegates to `StreakService.getStreakData()`
+3. **Removed Duplicates**: Old methods like `streaksKeptAlive` have been completely removed
+4. **Unified API**: All streak functionality accessed through the main `StreakService` class
+
+### Current Clean Architecture
+
+```
+StreakService (Main API) 
+├── StreakDataService (Data & Caching)
+├── StreakCalculationService (Business Logic)  
+├── StreakDisplayService (UI Logic)
+└── StreakEventService (Events)
+```
+
+### Import Guidelines
+
+✅ **Correct**: 
+```typescript
+import { StreakService, StreakDisplayService, ComprehensiveStreakData } from '../../services/StreakService';
+```
+
+❌ **Avoid**: 
+```typescript
+import { StreakDisplayService } from '../../services/streak/StreakDisplayService';
+import { ComprehensiveStreakData } from '../../services/streak/StreakTypes';
+```
+
 ## Architecture Overview
 
 ### 🏗️ **Modular Design**
 The streak functionality is split into focused, single-responsibility services:
-
-```
-services/streak/
-├── StreakService.ts          # Main orchestrator - unified API
-├── StreakDataService.ts      # Data access and caching
-├── StreakCalculationService.ts # Business logic and calculations
-├── StreakDisplayService.ts   # UI logic and formatting
-├── StreakEventService.ts     # Event management
-├── StreakConfig.ts          # Configuration and constants
-├── StreakTypes.ts           # TypeScript interfaces
-├── StreakServiceFactory.ts  # Service creation utilities
-└── index.ts                 # Clean exports
-```
-
-## Services
-
-### 🎯 **StreakService** (Main API)
-The primary interface for all streak operations. Orchestrates other services.
 
 ```typescript
 import { StreakService } from './services/streak';
@@ -39,6 +55,11 @@ const unsubscribe = StreakService.on('streak-updated', (data) => {
   console.log('Streak updated:', data);
 });
 ```
+
+## Services
+
+### 🎯 **StreakService** (Main API)
+The primary interface for all streak operations. Orchestrates other services.
 
 ### 💾 **StreakDataService** (Data Layer)
 Handles all data access, caching, and persistence operations.

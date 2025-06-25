@@ -1,5 +1,6 @@
 import { subDays, startOfDay } from 'date-fns';
-import { calculateStreak, StreakSession } from './streakUtils';
+import { calculateStreak } from './streakUtils';
+import { StreakSession } from '../services/StreakService';
 
 export interface BrushingSession {
   /** Duration user brushed in seconds */

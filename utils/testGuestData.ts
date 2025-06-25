@@ -12,7 +12,7 @@ export const testGuestUserData = async () => {
     const result = await GuestUserService.insertGuestBrushingLog({
       actualTimeInSec: 150, // 2:30
       targetTimeInSec: 120, // 2:00 goal
-      aimedSessionsPerDay: 2,
+
     });
     
     console.log('✅ Guest log saved:', result);

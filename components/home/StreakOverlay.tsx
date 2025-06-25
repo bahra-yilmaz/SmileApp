@@ -25,9 +25,7 @@ import * as Sharing from 'expo-sharing';
 import ViewShot from 'react-native-view-shot';
 import ShareCard from '../ui/ShareCard';
 import { getProgressColor } from '../../utils/colorUtils';
-import { StreakService } from '../../services/streak';
-import { StreakDisplayService } from '../../services/streak/StreakDisplayService';
-import { ComprehensiveStreakData } from '../../services/streak/StreakTypes';
+import { StreakService, StreakDisplayService, ComprehensiveStreakData } from '../../services/StreakService';
 import { useAuth } from '../../context/AuthContext';
 
 interface StreakOverlayProps {
@@ -301,10 +299,10 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                   lightColor={Colors.primary[700]}
                   darkColor={Colors.primary[400]}
                 >
-                  {t('streakOverlay.title', { count: streakDays })}
+                  {t('streakOverlay.headerTitle', { defaultValue: 'Current Progress' })}
                 </ThemedText>
                 <ThemedText style={styles.streakText}> 
-                  {t('streakOverlay.subtitle')}
+                  {t('streakOverlay.headerSubtitle', { count: streakDays, defaultValue: `${streakDays}-Day Streak` })}
                 </ThemedText>
               </View>
             </View>

@@ -59,12 +59,18 @@ export class StreakCalculationService {
     userId: string, 
     currentStreak: number
   ): Promise<number> {
-    if (currentStreak === 0) return 0;
+    if (currentStreak === 0) {
+      return 0;
+    }
     
     try {
-      // Calculate the start date of the current streak
-      const streakStartDate = new Date();
-      streakStartDate.setDate(streakStartDate.getDate() - currentStreak + 1);
+      // Calculate the start date of the current streak - use START OF DAY!
+      const today = new Date();
+      const streakStartDate = new Date(today);
+      streakStartDate.setDate(today.getDate() - currentStreak + 1);
+      
+      // Set to start of day (00:00:00.000) to capture all sessions from that day
+      streakStartDate.setHours(0, 0, 0, 0);
       
       // Fetch sessions in the current streak period
       const sessions = await StreakDataService.fetchBrushingSessions(userId, streakStartDate);

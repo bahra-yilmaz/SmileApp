@@ -529,6 +529,8 @@
   "streakOverlay": {
     "title": "{{count}} Günlük Seri",
     "subtitle": "Harikasın!",
+    "headerTitle": "Mevcut İlerleme",
+    "headerSubtitle": "{{count}} Günlük Seri",
     "achievementsTitle": "Başarılar",
     "achievementsDescription": "Kazanılan rozet ve hedefleri görüntüle",
     "shareStreakTitle": "Seriyi Paylaş",
