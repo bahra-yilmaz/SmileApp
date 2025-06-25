@@ -117,4 +117,20 @@ export class ToothbrushDataService {
       return null;
     }
   }
+
+  static async deleteBrushFromHistory(brushId: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('toothbrushes')
+        .delete()
+        .eq('id', brushId);
+
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      console.error('Error deleting brush from history:', error);
+      // Decide if you want to re-throw or handle it silently
+    }
+  }
 }

@@ -5,11 +5,15 @@
  */
 export interface Toothbrush {
   id: string; // Unique ID for the toothbrush instance
+  user_id: string;
+  name?: string; // User-provided name for the toothbrush
   startDate: string; // ISO string for when this brush was first used
+  endDate?: string; // ISO 8601, only for history items
   type: 'manual' | 'electric'; // Type of toothbrush
-  purpose?: 'regular' | 'sensitive' | 'braces' | 'whitening'; // New field for purpose
+  purpose: 'regular' | 'braces' | 'sensitive' | 'whitening';
   brand?: string;
   model?: string;
+  created_at: string;
 }
 
 /**

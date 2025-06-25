@@ -486,8 +486,9 @@
   },
   "toothbrushOverlay": {
     "title": "My Toothbrush",
-    "daysInUseText": "{{count}} Day In Use",
-    "daysInUseText_plural": "{{count}} Days In Use",
+    "daysInUseText": "day",
+    "daysInUseText_plural": "days",
+    "inUse": "in use",
     "healthStatusGood": "Good",
     "healthStatusReplaceSoon": "Replace Soon",
     "healthStatusFair": "Fair",

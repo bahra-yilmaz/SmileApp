@@ -9,7 +9,10 @@ import ReminderTimeManager from '../../components/ReminderTimeManager';
 import { ReminderTime } from '../../components/ReminderItem';
 import BrushingTargetSelector, { BrushingTarget } from '../../components/BrushingTargetSelector';
 import DailyBrushingFrequencySelector, { DailyBrushingFrequency } from '../../components/DailyBrushingFrequencySelector';
-import ToothbrushManager, { ToothbrushData } from '../../components/ToothbrushManager';
+import ToothbrushManager from '../../components/ToothbrushManager';
+import { ToothbrushData } from '../../services/toothbrush/ToothbrushTypes';
+import { ToothbrushDataService } from '../../services/toothbrush/ToothbrushDataService';
+import { ToothbrushDisplayService } from '../../services/toothbrush/ToothbrushDisplayService';
 import { OnboardingService } from '../../services/OnboardingService';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -149,7 +152,7 @@ export default function SettingsScreen() {
     brushingFrequency, 
     setBrushingFrequency 
   } = useBrushingGoal();
-  const { stats: toothbrushStats, simpleDaysInUse } = useToothbrushStats();
+  const { stats: toothbrushStats } = useToothbrushStats();
 
   useEffect(() => {
     // Animate in from the right
@@ -164,6 +167,9 @@ export default function SettingsScreen() {
     
     // Load current mascot tone
     loadCurrentTone();
+    
+    // Load toothbrush data
+    loadToothbrushData();
     
     // For authenticated users, ensure context stays in sync with backend
     if (authUser?.id) {
@@ -240,6 +246,38 @@ export default function SettingsScreen() {
       console.error('Error loading mascot tone:', error);
       setCurrentTone(TONE_OPTIONS[0]); // Default to supportive
     }
+  };
+
+  const loadToothbrushData = async () => {
+    try {
+      const data = await ToothbrushDataService.getToothbrushData();
+      setToothbrushData(data);
+    } catch (error) {
+      console.error('Error loading toothbrush data:', error);
+    }
+  };
+
+  const getToothbrushAgeText = () => {
+    if (!toothbrushData.current || !toothbrushStats) return t('toothbrush.current.none', 'None');
+    
+    const displayData = ToothbrushDisplayService.getDisplayData(toothbrushStats, t);
+    const { daysInUse } = displayData;
+    const weeks = Math.floor(daysInUse / 7);
+    const months = Math.floor(daysInUse / 30);
+
+    if (months > 0) {
+      return months === 1 
+        ? t('toothbrush.age.oneMonth', { count: months }) 
+        : t('toothbrush.age.months', { count: months });
+    }
+    if (weeks > 0) {
+      return weeks === 1
+        ? t('toothbrush.age.oneWeek', { count: weeks })
+        : t('toothbrush.age.weeks', { count: weeks });
+    }
+    return daysInUse === 1
+      ? t('toothbrush.age.oneDay', { count: daysInUse })
+      : t('toothbrush.age.days', { count: daysInUse });
   };
 
   const handleBackPress = () => {
@@ -784,10 +822,7 @@ export default function SettingsScreen() {
               </View>
               <View style={styles.languageInfo}>
                 <ThemedText style={styles.currentLanguageText}>
-                  {toothbrushData.current 
-                    ? `${toothbrushStats?.actualBrushingDays ?? simpleDaysInUse} ${t('toothbrushOverlay.daysInUseText', 'days used')}`
-                    : t('toothbrush.current.none', 'None')
-                  }
+                  {getToothbrushAgeText()}
                 </ThemedText>
                 <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
               </View>

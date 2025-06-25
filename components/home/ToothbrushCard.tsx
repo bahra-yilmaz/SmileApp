@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     fontSize: 34,
     fontWeight: '700',
     color: Colors.primary[800],
-    lineHeight: 34,
+    lineHeight: 40,
     marginRight: 6,
   },
   daysText: {
@@ -213,12 +213,12 @@ const styles = StyleSheet.create({
   replaceSoonText: {
     fontFamily: 'Quicksand-Regular',
     fontSize: 12,
-    textAlign: 'center',
-    marginTop: 8, // Increased top margin
+    textAlign: 'right',
+    marginTop: 8,
     lineHeight: 14,
     paddingHorizontal: 4,
     width: 110,
-    left: 2,
+    left: 8,
     color: Colors.primary[700],
   },
 });

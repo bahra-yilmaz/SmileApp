@@ -20,6 +20,8 @@ import ThemedText from '../ThemedText';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
 import { useToothbrushStats } from '../../hooks/useToothbrushStats';
+import { ToothbrushDataService } from '../../services/toothbrush/ToothbrushDataService';
+import { Toothbrush } from '../../services/toothbrush/ToothbrushTypes';
 
 interface ToothbrushOverlayProps {
   isVisible: boolean;
@@ -42,6 +44,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   // UI state
   const [animationComplete, setAnimationComplete] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [currentToothbrush, setCurrentToothbrush] = useState<Toothbrush | null>(null);
   
   // Mock history data (replace with real data from service later)
   const [historyData, setHistoryData] = useState([
@@ -71,8 +74,18 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   useEffect(() => {
     if (isVisible) {
       refreshStats();
+      loadToothbrushData();
     }
   }, [isVisible, refreshStats]);
+
+  const loadToothbrushData = async () => {
+    try {
+      const data = await ToothbrushDataService.getToothbrushData();
+      setCurrentToothbrush(data.current);
+    } catch (error) {
+      console.error('Error loading toothbrush data:', error);
+    }
+  };
   
   // Handle enter/exit animations
   useEffect(() => {
@@ -92,6 +105,41 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   
   const handleClose = () => {
     onClose();
+  };
+
+  const getToothbrushName = () => {
+    if (!currentToothbrush) return t('toothbrushOverlay.title');
+    
+    // Use name if available, otherwise construct from brand/model, or fall back to type
+    if (currentToothbrush.name) {
+      return currentToothbrush.name;
+    }
+    
+    const brandModel = `${currentToothbrush.brand || ''} ${currentToothbrush.model || ''}`.trim();
+    if (brandModel) {
+      return brandModel;
+    }
+    
+    return `${t(`toothbrush.type.${currentToothbrush.type}`)} ${t('toothbrush.item')}`;
+  };
+
+  const getAgeText = () => {
+    const weeks = Math.floor(daysInUse / 7);
+    const months = Math.floor(daysInUse / 30);
+
+    if (months > 0) {
+      return months === 1 
+        ? t('toothbrush.age.oneMonth', { count: months })
+        : t('toothbrush.age.months', { count: months });
+    }
+    if (weeks > 0) {
+      return weeks === 1
+        ? t('toothbrush.age.oneWeek', { count: weeks })
+        : t('toothbrush.age.weeks', { count: weeks });
+    }
+    return daysInUse === 1
+      ? t('toothbrush.age.oneDay', { count: daysInUse })
+      : t('toothbrush.age.days', { count: daysInUse });
   };
   
   if (!isVisible && !animationComplete) return null;
@@ -164,10 +212,10 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                   lightColor={Colors.primary[700]}
                   darkColor={Colors.primary[400]}
                 >
-                  {t('toothbrushOverlay.title')}
+                  {getToothbrushName()}
                 </ThemedText>
                 <ThemedText style={styles.daysInUse}>
-                  {t('toothbrushOverlay.daysInUseText', { count: daysInUse })}
+                  {getAgeText()}
                 </ThemedText>
               </View>
             </View>
