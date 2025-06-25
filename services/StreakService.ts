@@ -110,6 +110,7 @@ export class StreakService {
     currentStreak: number;
     longestStreak: number;
     streakHistory: StreakPeriod[];
+    currentStreakBrushings: number;
   }> {
     const { forceRefresh = false } = options;
 
@@ -139,10 +140,14 @@ export class StreakService {
       await this.saveHistoryCache(this.historyCache);
     }
 
+    // Calculate total brushings in current streak
+    const currentStreakBrushings = await this.calculateCurrentStreakBrushings(userId, currentStreak);
+
     return {
       currentStreak,
       longestStreak,
-      streakHistory
+      streakHistory,
+      currentStreakBrushings
     };
   }
 
@@ -313,6 +318,60 @@ export class StreakService {
         userId,
         aimedSessionsPerDay: 2
       };
+    }
+  }
+
+  /**
+   * Calculate total brushing sessions in current streak
+   */
+  private static async calculateCurrentStreakBrushings(userId: string, currentStreak: number): Promise<number> {
+    if (currentStreak === 0) return 0;
+    
+    try {
+      // Get user's daily frequency goal
+      const goals = await BrushingGoalsService.getCurrentGoals();
+      const dailyTarget = goals.dailyFrequency;
+      
+      if (userId === 'guest') {
+        // Handle guest users - count actual brushing sessions in current streak period
+        const guestLogs = await AsyncStorage.getItem('guest_brushing_logs');
+        if (guestLogs) {
+          const logs = JSON.parse(guestLogs);
+          // Get logs from the current streak period (last currentStreak days)
+          const streakStartDate = new Date();
+          streakStartDate.setDate(streakStartDate.getDate() - currentStreak + 1);
+          
+          const streakLogs = logs.filter((log: any) => {
+            const logDate = new Date(log.date || log.created_at);
+            return logDate >= streakStartDate;
+          });
+          
+          return streakLogs.length;
+        }
+        return 0;
+      } else {
+        // Handle authenticated users - count actual brushing sessions
+        const streakStartDate = new Date();
+        streakStartDate.setDate(streakStartDate.getDate() - currentStreak + 1);
+        
+        const { data: brushingLogs, error } = await supabase
+          .from('brushing_logs')
+          .select('id, date, created_at')
+          .eq('user_id', userId)
+          .gte('created_at', streakStartDate.toISOString())
+          .order('created_at', { ascending: false });
+
+        if (!error && brushingLogs) {
+          return brushingLogs.length;
+        }
+      }
+      
+      // Fallback: estimate based on streak days and daily target
+      return currentStreak * dailyTarget;
+    } catch (error) {
+      console.error('Error calculating current streak brushings:', error);
+      // Fallback: estimate based on streak days and assumed 2 daily brushings
+      return currentStreak * 2;
     }
   }
 

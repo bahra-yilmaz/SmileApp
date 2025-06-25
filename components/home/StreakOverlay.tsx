@@ -44,6 +44,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
   const [streakDays, setStreakDays] = useState(propStreakDays ?? 0);
   const [longestStreak, setLongestStreak] = useState(0);
   const [streakHistory, setStreakHistory] = useState<any[]>([]);
+  const [currentStreakBrushings, setCurrentStreakBrushings] = useState(0);
   
   // Animation values for container
   const [fadeAnim] = useState(() => new Animated.Value(0));
@@ -55,6 +56,8 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
   // State for streak history visibility and data
   const [showHistory, setShowHistory] = useState(false);
 
+
+
   // Load comprehensive streak data when overlay becomes visible
   useEffect(() => {
     const loadStreakData = async () => {
@@ -64,6 +67,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
           setStreakDays(data.currentStreak);
           setLongestStreak(data.longestStreak);
           setStreakHistory(data.streakHistory);
+          setCurrentStreakBrushings(data.currentStreakBrushings);
         } catch (error) {
           console.error('Error loading streak data in StreakOverlay:', error);
         }
@@ -84,6 +88,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
             .then(fullData => {
               setLongestStreak(fullData.longestStreak);
               setStreakHistory(fullData.streakHistory);
+              setCurrentStreakBrushings(fullData.currentStreakBrushings);
             })
             .catch(console.error);
         }
@@ -117,6 +122,29 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
   // Calculate dimensions to leave space around edges
   const overlayWidth = screenWidth * 0.9;
   const overlayHeight = screenHeight * 0.7;
+
+  // Responsive title for "Keep It Going" section based on streak days and brushings
+  const getKeepGoingTitle = (streakDays: number, totalBrushings: number): string => {
+    if (streakDays === 0) {
+      return t('streakOverlay.keepGoingTitleStart', { defaultValue: 'Start Your Journey!' });
+    } else if (streakDays === 1) {
+      return t('streakOverlay.keepGoingTitleFirst', { defaultValue: 'Great Start!' });
+    } else if (streakDays <= 3) {
+      return t('streakOverlay.keepGoingTitleEarly', { defaultValue: 'Building Momentum!' });
+    } else if (streakDays <= 7) {
+      return t('streakOverlay.keepGoingTitleWeek', { defaultValue: 'One Week Strong!' });
+    } else if (streakDays <= 14) {
+      return t('streakOverlay.keepGoingTitleTwoWeeks', { defaultValue: 'Two Weeks Champion!' });
+    } else if (streakDays <= 30) {
+      return t('streakOverlay.keepGoingTitleMonth', { defaultValue: 'Monthly Master!' });
+    } else if (streakDays <= 60) {
+      return t('streakOverlay.keepGoingTitleTwoMonths', { defaultValue: 'Habit Hero!' });
+    } else if (streakDays <= 100) {
+      return t('streakOverlay.keepGoingTitleHundred', { defaultValue: 'Century Achiever!' });
+    } else {
+      return t('streakOverlay.keepGoingTitleLegendary', { defaultValue: 'Legendary Keeper!' });
+    }
+  };
   
   // Handle animations when visibility changes
   useEffect(() => {
@@ -302,7 +330,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                 : 'rgba(0, 0, 0, 0.05)' 
             }]} />
 
-            {/* NEW Continuous Brushings Section */}
+            {/* Keep It Going Section with Dynamic Title */}
             <View style={styles.usageContainer}> 
               <View style={styles.usageIconContainer}>
                 <MaterialCommunityIcons
@@ -313,11 +341,14 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
               </View>
               <View style={styles.usageTextContainer}>
                 <ThemedText style={styles.usageTitle}>
-                  {t('streakOverlay.continuousBrushingsTitle')}
+                  {getKeepGoingTitle(streakDays, currentStreakBrushings)}
                 </ThemedText>
                 <ThemedText style={styles.usageText}>
-                  {/* Placeholder value - replace with actual count */}
-                  {t('streakOverlay.continuousBrushingsText', { count: 12 })}{/* TODO: Replace 12 with actual count */}
+                  {t('streakOverlay.currentStreakBrushingsText', { 
+                    count: currentStreakBrushings,
+                    days: streakDays,
+                    defaultValue: `${currentStreakBrushings} brushing sessions in your ${streakDays}-day streak`
+                  })}
                 </ThemedText>
               </View>
             </View>
@@ -378,31 +409,6 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                 ))}
               </View>
             )}
-
-            {/* Set Reminder Section */}
-            <Pressable 
-              style={styles.usageContainer}
-              onPress={() => {
-                console.log('Set Reminder pressed');
-                // Add navigation or modal logic here
-              }}
-            >
-              <View style={styles.usageIconContainer}>
-                <MaterialCommunityIcons 
-                  name="bell-outline" 
-                  size={30}
-                  color={Colors.primary[500]}
-                />
-              </View>
-              <View style={styles.usageTextContainer}>
-                <ThemedText style={styles.usageTitle}>
-                  {t('streakOverlay.setReminderTitle')}
-                </ThemedText>
-                <ThemedText style={styles.usageText}>
-                {t('streakOverlay.setReminderSubtitle')}
-                </ThemedText>
-              </View>
-            </Pressable>
 
             {/* Nubo Motivation Info Section */}
             <View style={[
