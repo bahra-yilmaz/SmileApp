@@ -25,7 +25,9 @@ import * as Sharing from 'expo-sharing';
 import ViewShot from 'react-native-view-shot';
 import ShareCard from '../ui/ShareCard';
 import { getProgressColor } from '../../utils/colorUtils';
-import { StreakService } from '../../services/StreakService';
+import { StreakService } from '../../services/streak';
+import { StreakDisplayService } from '../../services/streak/StreakDisplayService';
+import { ComprehensiveStreakData } from '../../services/streak/StreakTypes';
 import { useAuth } from '../../context/AuthContext';
 
 interface StreakOverlayProps {
@@ -85,7 +87,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
         // Optionally refresh full data when streak changes
         if (isVisible) {
                      StreakService.getStreakData(user!.id, { forceRefresh: true })
-            .then(fullData => {
+            .then((fullData: ComprehensiveStreakData) => {
               setLongestStreak(fullData.longestStreak);
               setStreakHistory(fullData.streakHistory);
               setCurrentStreakBrushings(fullData.currentStreakBrushings);
@@ -123,27 +125,9 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
   const overlayWidth = screenWidth * 0.9;
   const overlayHeight = screenHeight * 0.7;
 
-  // Responsive title for "Keep It Going" section based on streak days and brushings
-  const getKeepGoingTitle = (streakDays: number, totalBrushings: number): string => {
-    if (streakDays === 0) {
-      return t('streakOverlay.keepGoingTitleStart', { defaultValue: 'Start Your Journey!' });
-    } else if (streakDays === 1) {
-      return t('streakOverlay.keepGoingTitleFirst', { defaultValue: 'Great Start!' });
-    } else if (streakDays <= 3) {
-      return t('streakOverlay.keepGoingTitleEarly', { defaultValue: 'Building Momentum!' });
-    } else if (streakDays <= 7) {
-      return t('streakOverlay.keepGoingTitleWeek', { defaultValue: 'One Week Strong!' });
-    } else if (streakDays <= 14) {
-      return t('streakOverlay.keepGoingTitleTwoWeeks', { defaultValue: 'Two Weeks Champion!' });
-    } else if (streakDays <= 30) {
-      return t('streakOverlay.keepGoingTitleMonth', { defaultValue: 'Monthly Master!' });
-    } else if (streakDays <= 60) {
-      return t('streakOverlay.keepGoingTitleTwoMonths', { defaultValue: 'Habit Hero!' });
-    } else if (streakDays <= 100) {
-      return t('streakOverlay.keepGoingTitleHundred', { defaultValue: 'Century Achiever!' });
-    } else {
-      return t('streakOverlay.keepGoingTitleLegendary', { defaultValue: 'Legendary Keeper!' });
-    }
+  // Get display information using the new modular service
+  const getDisplayInfo = (streakDays: number, totalBrushings: number) => {
+    return StreakDisplayService.getStreakDisplayInfo(streakDays, totalBrushings, t);
   };
   
   // Handle animations when visibility changes
@@ -334,21 +318,17 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
             <View style={styles.usageContainer}> 
               <View style={styles.usageIconContainer}>
                 <MaterialCommunityIcons
-                  name="trending-up"
+                  name={StreakDisplayService.getStreakIcon(streakDays) as keyof typeof MaterialCommunityIcons.glyphMap}
                   size={30}
                   color={Colors.primary[500]} 
                 />
               </View>
               <View style={styles.usageTextContainer}>
                 <ThemedText style={styles.usageTitle}>
-                  {getKeepGoingTitle(streakDays, currentStreakBrushings)}
+                  {getDisplayInfo(streakDays, currentStreakBrushings).title}
                 </ThemedText>
                 <ThemedText style={styles.usageText}>
-                  {t('streakOverlay.currentStreakBrushingsText', { 
-                    count: currentStreakBrushings,
-                    days: streakDays,
-                    defaultValue: `${currentStreakBrushings} brushing sessions in your ${streakDays}-day streak`
-                  })}
+                  {getDisplayInfo(streakDays, currentStreakBrushings).description}
                 </ThemedText>
               </View>
             </View>
