@@ -13,7 +13,7 @@ import InlineToothbrushPicker from './InlineToothbrushPicker';
 import ReminderItem, { ReminderTime, ReminderItemRef } from './ReminderItem';
 import { useAuth } from '../context/AuthContext';
 import { useToothbrushStats } from '../hooks/useToothbrushStats';
-import { ToothbrushService, ToothbrushDataService } from '../services/toothbrush';
+import { ToothbrushService } from '../services/toothbrush';
 import type { Toothbrush, ToothbrushData } from '../services/toothbrush/ToothbrushTypes';
 import { getTodayLocalString } from '../utils/dateUtils';
 
@@ -68,7 +68,8 @@ export default function ToothbrushManager({
 
   const fetchData = async () => {
     try {
-      const data = await ToothbrushDataService.getToothbrushData();
+      const userId = user?.id || 'guest';
+      const data = await ToothbrushService.getAllToothbrushData(userId);
       setCurrentBrush(data.current);
       setHistory(data.history);
       if (onUpdate) {
@@ -85,7 +86,7 @@ export default function ToothbrushManager({
   const fetchCountsForHistory = useCallback(async (hist: Toothbrush[], userId: string) => {
     const counts: Record<string, number> = {};
     for (const brush of hist) {
-      const count = await ToothbrushDataService.getBrushingCountForToothbrush(userId, brush);
+      const count = await ToothbrushService.getBrushingCount(userId, brush.id);
       counts[brush.id] = count;
     }
     setHistoryCounts(counts);
@@ -151,6 +152,16 @@ export default function ToothbrushManager({
   const handleSaveToothbrush = async () => {
     try {
       const userId = user?.id || 'guest';
+      
+      // Check if user is guest
+      if (userId === 'guest') {
+        Alert.alert(
+          t('toothbrush.error.title'),
+          t('toothbrush.guestMode'),
+          [{ text: t('common.ok'), style: 'default' }]
+        );
+        return;
+      }
       
       console.log('🦷 Saving toothbrush for user:', userId);
       
@@ -397,7 +408,8 @@ export default function ToothbrushManager({
                     rightBottom={t('toothbrush.history.brushings', { count: brushingCount })}
                     onToggle={() => {}}
                     onDelete={async (id) => {
-                      await ToothbrushDataService.deleteBrushFromHistory(id);
+                      const userId = user?.id || 'guest';
+                      await ToothbrushService.deleteFromHistory(userId, id);
                       fetchData(); // Re-fetch data to update UI
                     }}
                   />

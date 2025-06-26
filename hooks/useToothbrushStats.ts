@@ -54,7 +54,7 @@ export function useToothbrushStats(): UseToothbrushStatsReturn {
       }
 
       // Also get current toothbrush data for components that need the name, brand, etc.
-      const toothbrush = await ToothbrushService.getCurrentToothbrush();
+      const toothbrush = await ToothbrushService.getCurrentToothbrush(userId);
       setCurrentToothbrush(toothbrush);
     } catch (err) {
       console.error('Error fetching toothbrush stats:', err);

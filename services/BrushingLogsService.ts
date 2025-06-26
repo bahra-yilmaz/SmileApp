@@ -112,8 +112,8 @@ export async function insertBrushingLog(params: {
   // 6) Link brushing session to current toothbrush
   // -------------------------------------------------------------------------
   try {
-    const { ToothbrushDataService } = await import('./toothbrush/ToothbrushDataService');
-    await ToothbrushDataService.linkBrushingToCurrentToothbrush(userId, insertData.id);
+    const { ToothbrushService } = await import('./toothbrush');
+    await ToothbrushService.linkBrushingSession(userId, insertData.id);
   } catch (error) {
     console.error('Error linking brushing to toothbrush:', error);
     // Don't throw - toothbrush linking failure shouldn't break the main flow

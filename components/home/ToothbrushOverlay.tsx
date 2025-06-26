@@ -35,7 +35,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   const { t } = useTranslation();
   const { theme } = useTheme();
   const { activeColors } = theme;
-  const { stats, displayData, isLoading, refreshStats } = useToothbrushStats();
+  const { stats, displayData, currentToothbrush, isLoading, refreshStats } = useToothbrushStats();
   
   // Animation values
   const [fadeAnim] = useState(() => new Animated.Value(0));
@@ -44,7 +44,6 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   // UI state
   const [animationComplete, setAnimationComplete] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
-  const [currentToothbrush, setCurrentToothbrush] = useState<Toothbrush | null>(null);
   
   // Mock history data (replace with real data from service later)
   const [historyData, setHistoryData] = useState([
@@ -74,19 +73,9 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   useEffect(() => {
     if (isVisible) {
       refreshStats();
-      loadToothbrushData();
     }
   }, [isVisible, refreshStats]);
 
-  const loadToothbrushData = async () => {
-    try {
-      const data = await ToothbrushDataService.getToothbrushData();
-      setCurrentToothbrush(data.current);
-    } catch (error) {
-      console.error('Error loading toothbrush data:', error);
-    }
-  };
-  
   // Handle enter/exit animations
   useEffect(() => {
     if (isVisible) {

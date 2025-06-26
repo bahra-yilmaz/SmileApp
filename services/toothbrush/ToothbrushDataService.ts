@@ -55,23 +55,25 @@ export class ToothbrushDataService {
     startDate: string,
     endDate: string
   ): Promise<Pick<StreakSession, 'created_at' | 'date'>[]> {
-    if (!userId || userId === 'guest') return [];
-
     try {
+      // Only authenticated users have toothbrush tracking
+      if (!userId || userId === 'guest') {
+        return [];
+      }
+
       const { data, error } = await supabase
         .from('brushing_logs')
         .select('created_at, date')
         .eq('user_id', userId)
         .gte('date', startDate)
         .lte('date', endDate)
-        .order('created_at', { ascending: true });
+        .order('date', { ascending: true });
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
+
       return data || [];
     } catch (error) {
-      console.error('Error fetching brushing logs for period:', error);
+      console.error('❌ Error fetching brushing logs for period:', error);
       return [];
     }
   }
@@ -79,25 +81,26 @@ export class ToothbrushDataService {
   /**
    * Updates the `toothbrush_start_date` for a user in the `users` table.
    */
-  private static async syncStartDateWithUsersTable(
-    startDate: string,
-    userId: string
-  ): Promise<void> {
-    // Skip for guest users
-    if (!userId || userId === 'guest') {
-      console.log('Skipping users table sync for guest user');
-      return;
-    }
-
+  static async syncStartDateWithUsersTable(startDate: string, userId: string): Promise<void> {
     try {
+      console.log('🔄 Syncing start_date with users table:', { userId, startDate });
+      
       const { error } = await supabase
         .from('users')
-        .update({ toothbrush_start_date: startDate })
+        .update({ 
+          toothbrush_start_date: startDate
+        })
         .eq('id', userId);
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Error syncing start_date with users table:', error);
+        throw error;
+      }
+
+      console.log('✅ Start date synced with users table successfully');
     } catch (error) {
-      console.error('Error syncing toothbrush start date with users table:', error);
+      console.error('❌ Failed to sync start_date with users table:', error);
+      throw error;
     }
   }
 
@@ -105,27 +108,29 @@ export class ToothbrushDataService {
    * Fetches the `toothbrush_start_date` for a user from the `users` table.
    */
   static async fetchStartDateFromUsersTable(userId: string): Promise<string | null> {
-    // Skip for guest users
-    if (!userId || userId === 'guest') {
-      console.log('Skipping users table fetch for guest user');
-      return null;
-    }
-
     try {
+      console.log('📡 Fetching start_date from users table for user:', userId);
+
       const { data, error } = await supabase
         .from('users')
         .select('toothbrush_start_date')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
-      if (error) throw error;
-      
-      return data?.toothbrush_start_date || null;
-    } catch (error: any) {
-      // Gracefully handle cases where the user or column might not exist yet
-      if (error.code !== 'PGRST116') { // PGRST116 is "0 rows returned"
-        console.error('Error fetching toothbrush start date from users table:', error);
+      if (error) {
+        console.error('❌ Error fetching start_date from users table:', error);
+        return null;
       }
+
+      if (data?.toothbrush_start_date) {
+        console.log('✅ Fetched start_date from users table:', data.toothbrush_start_date);
+        return data.toothbrush_start_date;
+      }
+
+      console.log('📝 No start_date found in users table');
+      return null;
+    } catch (error) {
+      console.error('❌ Failed to fetch start_date from users table:', error);
       return null;
     }
   }
@@ -154,8 +159,6 @@ export class ToothbrushDataService {
     userId: string,
     toothbrush: Toothbrush
   ): Promise<Pick<StreakSession, 'created_at' | 'date'>[]> {
-    if (!userId || userId === 'guest') return [];
-
     const startDate = toothbrush.startDate.slice(0, 10); // Extract YYYY-MM-DD
     const endDate = toothbrush.endDate 
       ? toothbrush.endDate.slice(0, 10) 
@@ -171,22 +174,49 @@ export class ToothbrushDataService {
     userId: string,
     toothbrush: Toothbrush
   ): Promise<number> {
-    if (!userId || userId === 'guest') return 0;
-
     try {
+      console.log('📊 Getting brushing count for toothbrush:', toothbrush.id);
+
       // First try to get count using direct toothbrush_id relationship
-      const directCount = await this.getBrushingLogsByToothbrushId(userId, toothbrush.id);
-      
-      // If we have direct relationships, use that count
-      if (directCount.length > 0) {
-        return directCount.length;
+      const { data: directData, error: directError } = await supabase
+        .from('brushing_logs')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .eq('toothbrush_id', toothbrush.id);
+
+      if (!directError && directData !== null) {
+        const directCount = directData.length || 0;
+        console.log('✅ Direct count via toothbrush_id:', directCount);
+        
+        // If we have a direct count, return it
+        if (directCount > 0) {
+          return directCount;
+        }
       }
 
-      // Fall back to date-based query for older data or if no direct relationships exist
-      const dateBased = await this.getBrushingLogsForToothbrush(userId, toothbrush);
-      return dateBased.length;
+      // Fallback: Get count using date range (for historical data without toothbrush_id)
+      const startDate = new Date(toothbrush.startDate);
+      const endDate = toothbrush.endDate ? new Date(toothbrush.endDate) : new Date();
+
+      let query = supabase
+        .from('brushing_logs')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .gte('completed_at', startDate.toISOString())
+        .lte('completed_at', endDate.toISOString());
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error('❌ Error getting brushing count by date range:', error);
+        return 0;
+      }
+
+      const fallbackCount = data?.length || 0;
+      console.log('✅ Fallback count via date range:', fallbackCount);
+      return fallbackCount;
     } catch (error) {
-      console.error('Error getting brushing count for toothbrush:', error);
+      console.error('❌ Failed to get brushing count for toothbrush:', error);
       return 0;
     }
   }
@@ -195,11 +225,6 @@ export class ToothbrushDataService {
    * Gets the current toothbrush ID for a user (for linking new brushing sessions)
    */
   static async getCurrentToothbrushId(userId: string): Promise<string | null> {
-    if (!userId || userId === 'guest') {
-      console.log('getCurrentToothbrushId: Skipping for guest user');
-      return null;
-    }
-
     try {
       console.log('🔍 Looking for current toothbrush for user:', userId);
       
@@ -232,56 +257,39 @@ export class ToothbrushDataService {
    * Links a brushing session to the current toothbrush
    */
   static async linkBrushingToCurrentToothbrush(userId: string, brushingLogId: string): Promise<void> {
-    if (!userId || userId === 'guest') {
-      console.log('Skipping toothbrush linking for guest user');
-      return;
-    }
-
-    console.log('🔗 Attempting to link brushing session to toothbrush:', { userId, brushingLogId });
-
     try {
-      // First, try to get current toothbrush ID from backend
-      let currentToothbrushId = await this.getCurrentToothbrushId(userId);
-      
-      if (!currentToothbrushId) {
-        console.log('❌ No current toothbrush found in backend, trying to sync local data...');
-        
-        // Try to get local toothbrush data and sync to backend
-        const localData = await this.getToothbrushData();
-        if (localData.current) {
-          console.log('📤 Found local toothbrush, syncing to backend:', localData.current.id);
-          
-          // Sync to backend with proper is_current flag
-          const toothbrushToSync = { ...localData.current, user_id: userId };
-          await this.syncToothbrushToBackend(toothbrushToSync);
-          
-          // Try again to get the ID
-          currentToothbrushId = await this.getCurrentToothbrushId(userId);
-        }
-      }
+      console.log('🔗 Linking brushing session to current toothbrush:', { userId, brushingLogId });
 
-      if (!currentToothbrushId) {
-        console.log('❌ Still no current toothbrush found after sync attempt');
+      // Get current toothbrush
+      const toothbrushData = await this.getToothbrushData();
+      const currentToothbrush = toothbrushData.current;
+
+      if (!currentToothbrush) {
+        console.warn('⚠️ No current toothbrush found, cannot link brushing session');
         return;
       }
 
-      console.log('✅ Found current toothbrush ID:', currentToothbrushId);
+      console.log('🦷 Found current toothbrush:', currentToothbrush.id);
 
-      // Link the brushing session
+      // Update the brushing log with toothbrush_id
       const { error } = await supabase
         .from('brushing_logs')
-        .update({ toothbrush_id: currentToothbrushId })
+        .update({ 
+          toothbrush_id: currentToothbrush.id
+        })
         .eq('id', brushingLogId)
-        .eq('user_id', userId);
+        .eq('user_id', userId); // Additional security check
 
       if (error) {
-        console.error('❌ Error updating brushing log with toothbrush_id:', error);
+        console.error('❌ Error linking brushing to toothbrush:', error);
         throw error;
       }
 
-      console.log('✅ Successfully linked brushing session to toothbrush');
+      console.log('✅ Successfully linked brushing session to toothbrush:', currentToothbrush.id);
     } catch (error) {
-      console.error('❌ Error linking brushing to toothbrush:', error);
+      console.error('❌ Failed to link brushing to current toothbrush:', error);
+      // Don't throw the error - this is not critical for the brushing session
+      // Just log it and continue
     }
   }
 
@@ -292,8 +300,6 @@ export class ToothbrushDataService {
     userId: string,
     toothbrushId: string
   ): Promise<Pick<StreakSession, 'created_at' | 'date'>[]> {
-    if (!userId || userId === 'guest') return [];
-
     try {
       const { data, error } = await supabase
         .from('brushing_logs')
@@ -311,14 +317,77 @@ export class ToothbrushDataService {
   }
 
   /**
+   * Update toothbrush data in backend
+   */
+  static async updateToothbrushDataInBackend(userId: string, data: ToothbrushData): Promise<void> {
+    try {
+      console.log('🔄 Updating toothbrush data in backend for user:', userId, data);
+
+      // First, handle the current toothbrush
+      if (data.current) {
+        const { error: upsertError } = await supabase
+          .from('toothbrushes')
+          .upsert({
+            id: data.current.id,
+            user_id: userId,
+            type: data.current.type,
+            purpose: data.current.purpose,
+            name: data.current.name || null,
+            start_date: data.current.startDate,
+            end_date: data.current.endDate || null,
+            is_current: true,
+            created_at: data.current.created_at || new Date().toISOString(),
+          }, {
+            onConflict: 'id'
+          });
+
+        if (upsertError) {
+          console.error('❌ Error upserting current toothbrush:', upsertError);
+          throw upsertError;
+        }
+
+        console.log('✅ Current toothbrush updated successfully');
+      }
+
+      // Then handle history (mark old ones as not current)
+      if (data.history.length > 0) {
+        for (const brush of data.history) {
+          const { error: historyError } = await supabase
+            .from('toothbrushes')
+            .upsert({
+              id: brush.id,
+              user_id: userId,
+              type: brush.type,
+              purpose: brush.purpose,
+              name: brush.name || null,
+              start_date: brush.startDate,
+              end_date: brush.endDate || null,
+              is_current: false,
+              created_at: brush.created_at || new Date().toISOString(),
+            }, {
+              onConflict: 'id'
+            });
+
+          if (historyError) {
+            console.error('❌ Error upserting history toothbrush:', historyError);
+            // Don't throw here, continue with other history items
+          }
+        }
+
+        console.log('✅ History toothbrushes updated successfully');
+      }
+
+      console.log('✅ All toothbrush data updated in backend');
+    } catch (error) {
+      console.error('❌ Failed to update toothbrush data in backend:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Syncs current toothbrush data to the backend
    */
   static async syncToothbrushToBackend(toothbrush: Toothbrush): Promise<void> {
-    if (!toothbrush.user_id || toothbrush.user_id === 'guest') {
-      console.log('Skipping backend sync for guest user');
-      return;
-    }
-
     try {
       console.log('📤 Syncing toothbrush to backend:', {
         id: toothbrush.id,
@@ -358,8 +427,6 @@ export class ToothbrushDataService {
    * Loads toothbrush data from the backend for authenticated users
    */
   static async pullToothbrushFromBackend(userId: string): Promise<ToothbrushData | null> {
-    if (!userId || userId === 'guest') return null;
-
     try {
       // Get current toothbrush (is_current = true)
       const { data: currentData, error: currentError } = await supabase
@@ -415,28 +482,26 @@ export class ToothbrushDataService {
   }
 
   /**
-   * Updates toothbrush data locally and syncs to backend for authenticated users
+   * Updates toothbrush data locally and syncs to backend for all users
    */
   static async updateToothbrushDataWithSync(data: ToothbrushData, userId: string): Promise<void> {
     // Always update local storage first
     await this.updateToothbrushData(data, userId);
 
-    // Only sync to backend for authenticated users
-    if (userId && userId !== 'guest') {
-      try {
-        // Sync current toothbrush
-        if (data.current) {
-          await this.syncToothbrushToBackend({ ...data.current, user_id: userId });
-        }
-
-        // Sync history items
-        for (const item of data.history) {
-          await this.syncToothbrushToBackend({ ...item, user_id: userId });
-        }
-      } catch (error) {
-        console.error('Error syncing to backend:', error);
-        // Don't throw - local update succeeded
+    // Sync to backend for all users (including guests)
+    try {
+      // Sync current toothbrush
+      if (data.current) {
+        await this.syncToothbrushToBackend({ ...data.current, user_id: userId });
       }
+
+      // Sync history items
+      for (const item of data.history) {
+        await this.syncToothbrushToBackend({ ...item, user_id: userId });
+      }
+    } catch (error) {
+      console.error('Error syncing to backend:', error);
+      // Don't throw - local update succeeded
     }
   }
 
@@ -444,11 +509,6 @@ export class ToothbrushDataService {
    * Smart sync method that loads from backend if available, falls back to local storage
    */
   static async smartSyncToothbrushData(userId: string): Promise<ToothbrushData> {
-    if (!userId || userId === 'guest') {
-      // For guest users, always use local storage
-      return await this.getToothbrushData();
-    }
-
     try {
       // Try to load from backend first
       const backendData = await this.pullToothbrushFromBackend(userId);

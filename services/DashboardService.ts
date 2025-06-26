@@ -85,7 +85,7 @@ export async function getDashboardStats(userId: string, brushingGoalMinutes: num
     const averageLast10Brushings = calculateAverageLast10Brushings(logs);
 
     // Get toothbrush days in use using centralized service
-    const toothbrushDaysInUse = await ToothbrushService.getSimpleDaysInUse();
+    const toothbrushDaysInUse = await ToothbrushService.getSimpleDaysInUse(userId);
 
     return {
       streakDays,

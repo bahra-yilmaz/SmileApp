@@ -169,21 +169,40 @@ export class GuestUserService {
         aimedSessionsPerDay
       );
 
-      // Insert the brushing log
+      // Get current toothbrush ID for guest user (from local storage)
+      let toothbrushId: string | null = null;
+      try {
+        const { ToothbrushDataService } = await import('./toothbrush/ToothbrushDataService');
+        const toothbrushData = await ToothbrushDataService.getToothbrushData();
+        toothbrushId = toothbrushData.current?.id || null;
+        console.log('🦷 Found guest toothbrush for linking:', toothbrushId);
+      } catch (error) {
+        console.error('❌ Error getting guest toothbrush for linking:', error);
+      }
+
+      // Insert the brushing log (without toothbrush_id since guest toothbrushes aren't in backend)
+      const insertData: any = {
+        user_id: guestUserId,
+        'duration-seconds': actualTimeInSec,
+        date: todayDateStr, // Now uses local timezone consistently
+        earned_points: points.total,
+      };
+
       const { data: insertedLog, error } = await supabase
         .from('brushing_logs')
-        .insert({
-          user_id: guestUserId,
-          'duration-seconds': actualTimeInSec,
-          date: todayDateStr, // Now uses local timezone consistently
-          earned_points: points.total,
-        })
+        .insert(insertData)
         .select('id')
         .single();
 
       if (error) {
         console.error('❌ Error inserting guest brushing log:', error);
         throw error;
+      }
+
+      // Store toothbrush linking information locally for guest users
+      if (toothbrushId) {
+        await this.storeGuestBrushingToothbrushLink(insertedLog.id, toothbrushId);
+        console.log('🔗 Stored local guest brushing-toothbrush link:', { logId: insertedLog.id, toothbrushId });
       }
 
       console.log('✅ Guest brushing log inserted:', insertedLog.id);
@@ -405,6 +424,53 @@ export class GuestUserService {
     } catch (error) {
       console.error('❌ Error in deleteGuestBrushingLog:', error);
       throw error;
+    }
+  }
+
+  private static async storeGuestBrushingToothbrushLink(logId: string, toothbrushId: string): Promise<void> {
+    try {
+      await AsyncStorage.setItem(`guest_brushing_${logId}_toothbrush_id`, toothbrushId);
+    } catch (error) {
+      console.error('❌ Error storing guest brushing-toothbrush link:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get the count of brushing sessions for a specific toothbrush for guest users
+   */
+  static async getGuestBrushingCountForToothbrush(toothbrushId: string): Promise<number> {
+    try {
+      const guestUserId = await this.getCurrentGuestUserId();
+      if (!guestUserId) return 0;
+
+      // Get all brushing logs for the guest user
+      const { data: logs } = await supabase
+        .from('brushing_logs')
+        .select('id')
+        .eq('user_id', guestUserId)
+        .order('created_at', { ascending: true });
+
+      if (!logs) return 0;
+
+      // Check which logs are linked to this toothbrush via local storage
+      let count = 0;
+      for (const log of logs) {
+        try {
+          const linkedToothbrushId = await AsyncStorage.getItem(`guest_brushing_${log.id}_toothbrush_id`);
+          if (linkedToothbrushId === toothbrushId) {
+            count++;
+          }
+        } catch (error) {
+          // Ignore individual link retrieval errors
+        }
+      }
+
+      console.log(`🦷 Guest brushing count for toothbrush ${toothbrushId}: ${count}`);
+      return count;
+    } catch (error) {
+      console.error('❌ Error getting guest brushing count for toothbrush:', error);
+      return 0;
     }
   }
 } 

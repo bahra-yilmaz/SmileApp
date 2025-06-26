@@ -316,6 +316,7 @@
       "overdue": "Overdue",
       "addToothbrush": "Add toothbrush"
     },
+    "guestMode": "Sign in for toothbrush tracking",
     "newBrush": {
       "addNew": "Add New Toothbrush"
     },
