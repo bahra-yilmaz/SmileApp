@@ -203,6 +203,9 @@ export class ToothbrushService {
       // Save to repository (handles both backend and local cache)
       await ToothbrushRepository.saveData(userId, newData);
 
+      // Clear stats cache to prevent showing stale data for the new toothbrush
+      await ToothbrushDataService.clearStatsCache();
+
       console.log('✅ Successfully replaced toothbrush');
 
       // Emit event to notify other components of toothbrush update
@@ -262,6 +265,9 @@ export class ToothbrushService {
 
       // Save to repository
       await ToothbrushRepository.saveData(userId, newData);
+
+      // Clear stats cache to ensure fresh data for the new toothbrush
+      await ToothbrushDataService.clearStatsCache();
       
       console.log('✅ Successfully created first toothbrush');
 
@@ -348,6 +354,10 @@ export class ToothbrushService {
       };
 
       await ToothbrushRepository.saveData(userId, newData);
+
+      // Clear stats cache since history has changed
+      await ToothbrushDataService.clearStatsCache();
+
       console.log('✅ Successfully deleted toothbrush from history');
     } catch (error) {
       console.error('❌ Error deleting toothbrush from history:', error);

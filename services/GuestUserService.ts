@@ -205,6 +205,14 @@ export class GuestUserService {
         console.log('🔗 Stored local guest brushing-toothbrush link:', { logId: insertedLog.id, toothbrushId });
       }
 
+      // Clear toothbrush stats cache for consistency with authenticated users
+      try {
+        const { ToothbrushDataService } = await import('./toothbrush/ToothbrushDataService');
+        await ToothbrushDataService.clearStatsCache();
+      } catch (error) {
+        console.warn('⚠️ Could not clear toothbrush stats cache after guest brushing:', error);
+      }
+
       console.log('✅ Guest brushing log inserted:', insertedLog.id);
 
       return {

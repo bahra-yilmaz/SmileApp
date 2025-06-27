@@ -172,6 +172,19 @@ export class ToothbrushDataService {
     }
   }
 
+  /**
+   * Clears the toothbrush stats cache
+   * Should be called when toothbrushes are created, replaced, or updated
+   */
+  static async clearStatsCache(): Promise<void> {
+    try {
+      await AsyncStorage.removeItem(TOOTHBRUSH_CONFIG.STORAGE_KEYS.TOOTHBRUSH_STATS_CACHE);
+      console.log('🗑️ Toothbrush stats cache cleared');
+    } catch (error) {
+      console.warn('⚠️ Could not clear toothbrush stats cache:', error);
+    }
+  }
+
   static async deleteBrushFromHistory(brushId: string): Promise<void> {
     try {
       const { error } = await supabase
@@ -363,7 +376,20 @@ export class ToothbrushDataService {
     try {
       console.log('🔄 Updating toothbrush data in backend for user:', userId, data);
 
-      // First, handle the current toothbrush
+      // CRITICAL: First clear any existing current toothbrushes to avoid unique constraint violation
+      console.log('🔄 Clearing existing current toothbrushes for user:', userId);
+      const { error: clearError } = await supabase
+        .from('toothbrushes')
+        .update({ is_current: false })
+        .eq('user_id', userId)
+        .eq('is_current', true);
+
+      if (clearError) {
+        console.error('❌ Error clearing existing current toothbrushes:', clearError);
+        throw clearError;
+      }
+
+      // Now, handle the current toothbrush (safe to set is_current = true)
       if (data.current) {
         const { error: upsertError } = await supabase
           .from('toothbrushes')
@@ -436,6 +462,24 @@ export class ToothbrushDataService {
         is_current: !toothbrush.endDate
       });
 
+      const willBeCurrent = !toothbrush.endDate;
+
+      // If this toothbrush will be current, clear existing current toothbrushes first
+      if (willBeCurrent) {
+        console.log('🔄 Clearing existing current toothbrushes before syncing:', toothbrush.user_id);
+        const { error: clearError } = await supabase
+          .from('toothbrushes')
+          .update({ is_current: false })
+          .eq('user_id', toothbrush.user_id)
+          .eq('is_current', true)
+          .neq('id', toothbrush.id); // Don't clear this toothbrush itself
+
+        if (clearError) {
+          console.error('❌ Error clearing existing current toothbrushes:', clearError);
+          // Don't throw - continue with the sync
+        }
+      }
+
       const { data, error } = await supabase
         .from('toothbrushes')
         .upsert({
@@ -446,7 +490,7 @@ export class ToothbrushDataService {
           end_date: toothbrush.endDate,
           type: toothbrush.type,
           purpose: toothbrush.purpose,
-          is_current: !toothbrush.endDate, // Current if no end date
+          is_current: willBeCurrent, // Current if no end date
           created_at: toothbrush.created_at
         })
         .select();

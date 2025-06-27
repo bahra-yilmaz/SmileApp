@@ -265,6 +265,20 @@ export class ToothbrushRepository {
     try {
       // Save current toothbrush to backend
       if (data.current) {
+        // CRITICAL: First clear any existing current toothbrushes to avoid unique constraint violation
+        console.log('🔄 Clearing existing current toothbrushes for user:', userId);
+        const { error: updateError } = await supabase
+          .from('toothbrushes')
+          .update({ is_current: false })
+          .eq('user_id', userId)
+          .eq('is_current', true);
+
+        if (updateError) {
+          console.error('❌ Error clearing existing current toothbrushes:', updateError);
+          throw updateError;
+        }
+
+        // Now safely insert/update the new current toothbrush
         const { error: upsertError } = await supabase
           .from('toothbrushes')
           .upsert({
@@ -285,17 +299,6 @@ export class ToothbrushRepository {
         if (upsertError) {
           console.error('❌ Error upserting current toothbrush:', upsertError);
           throw upsertError;
-        }
-
-        // Ensure only one toothbrush is marked as current
-        const { error: updateError } = await supabase
-          .from('toothbrushes')
-          .update({ is_current: false })
-          .eq('user_id', userId)
-          .neq('id', data.current.id);
-
-        if (updateError) {
-          console.warn('⚠️ Warning updating other toothbrushes:', updateError);
         }
       }
 

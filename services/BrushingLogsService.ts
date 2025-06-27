@@ -111,6 +111,14 @@ export async function insertBrushingLog(params: {
   // Note: Toothbrush counter is now automatically incremented by database trigger
   // No manual linking needed - the trigger handles this atomically and reliably
 
+  // Clear toothbrush stats cache since the counter has been updated
+  try {
+    const { ToothbrushDataService } = await import('./toothbrush/ToothbrushDataService');
+    await ToothbrushDataService.clearStatsCache();
+  } catch (error) {
+    console.warn('⚠️ Could not clear toothbrush stats cache after brushing:', error);
+  }
+
   return {
     id: insertData.id,
     ...points,
