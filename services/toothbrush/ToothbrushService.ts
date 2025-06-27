@@ -109,6 +109,25 @@ export class ToothbrushService {
   }
 
   /**
+   * Get comprehensive toothbrush information from already calculated stats (for caching)
+   */
+  static async getToothbrushInfoFromStats(
+    userId: string,
+    t: (key: string) => string,
+    stats: ToothbrushUsageStats
+  ): Promise<{ displayData: ToothbrushDisplayData; stats: ToothbrushUsageStats }> {
+    // For guests or if stats are somehow invalid, return default guest/error state
+    if (userId === 'guest' || !stats) {
+      return this.getToothbrushInfo(userId, t);
+    }
+    
+    // Generate display data from the provided stats
+    const displayData = ToothbrushDisplayService.getDisplayData(stats, t);
+    
+    return { displayData, stats };
+  }
+
+  /**
    * Replace the current toothbrush with a new one
    */
   static async replaceToothbrush(

@@ -301,6 +301,7 @@
       "save": "Add Brush"
     },
     "age": {
+      "brandNew": "Brand new",
       "oneMonth": "1 month",
       "months": "{{count}} months",
       "oneWeek": "1 week",

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '../supabaseClient';
 import { TOOTHBRUSH_CONFIG } from './ToothbrushConfig';
-import { Toothbrush, ToothbrushData } from './ToothbrushTypes';
+import { Toothbrush, ToothbrushData, ToothbrushUsageStats } from './ToothbrushTypes';
 import { getLocalDateString } from '../../utils/dateUtils';
 import { StreakSession } from '../streak/StreakTypes'; // Assuming StreakSession is defined elsewhere
 
@@ -131,6 +131,43 @@ export class ToothbrushDataService {
       return null;
     } catch (error) {
       console.error('❌ Failed to fetch start_date from users table:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Saves toothbrush usage stats to local cache.
+   * @param stats The stats data to cache.
+   */
+  static async saveStatsToCache(stats: ToothbrushUsageStats): Promise<void> {
+    try {
+      await AsyncStorage.setItem(
+        TOOTHBRUSH_CONFIG.STORAGE_KEYS.TOOTHBRUSH_STATS_CACHE,
+        JSON.stringify(stats)
+      );
+    } catch (error) {
+      console.warn('⚠️ Could not save toothbrush stats to cache:', error);
+    }
+  }
+
+  /**
+   * Retrieves toothbrush usage stats from local cache.
+   * @returns The cached stats, or null if not found or expired.
+   */
+  static async getStatsFromCache(): Promise<ToothbrushUsageStats | null> {
+    try {
+      const cachedStats = await AsyncStorage.getItem(
+        TOOTHBRUSH_CONFIG.STORAGE_KEYS.TOOTHBRUSH_STATS_CACHE
+      );
+      if (!cachedStats) return null;
+
+      const stats = JSON.parse(cachedStats) as ToothbrushUsageStats;
+      
+      // Optional: Add cache invalidation logic here if needed (e.g., based on a timestamp)
+      
+      return stats;
+    } catch (error) {
+      console.warn('⚠️ Could not retrieve toothbrush stats from cache:', error);
       return null;
     }
   }

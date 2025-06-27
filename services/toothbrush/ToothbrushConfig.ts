@@ -35,8 +35,8 @@ export const TOOTHBRUSH_CONFIG = {
    * Local storage keys for caching and data persistence.
    */
   STORAGE_KEYS: {
-    TOOTHBRUSH_DATA: 'toothbrush_data_v2', // Store current/history
-    TOOTHBRUSH_STATS_CACHE: 'toothbrush_stats_cache_v2', // Cache for calculated stats
+    TOOTHBRUSH_DATA: 'app_toothbrush_data',
+    TOOTHBRUSH_STATS_CACHE: 'app_toothbrush_stats_cache',
   },
 
   /**
@@ -44,4 +44,7 @@ export const TOOTHBRUSH_CONFIG = {
    * 5 minutes: 5 * 60 * 1000
    */
   CACHE_DURATION_MS: 300000,
+
+  RECOMMENDED_REPLACEMENT_DAYS: 90, // 3 months
+  REPLACE_SOON_THRESHOLD_DAYS: 75, // Approx 2.5 months
 } as const;

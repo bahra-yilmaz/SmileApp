@@ -245,8 +245,10 @@ export default function SettingsScreen() {
 
 
   const getToothbrushAgeText = () => {
-    // Use the modern hook's displayData directly instead of legacy data loading
-    if (!toothbrushStats) return t('toothbrush.current.none', 'None');
+    // Follow same pattern as other settings - use meaningful fallback instead of loading indicator
+    if (!toothbrushStats) {
+      return t('toothbrush.age.brandNew', 'Brand new');
+    }
     
     const displayData = ToothbrushDisplayService.getDisplayData(toothbrushStats, t);
     const { daysInUse } = displayData;

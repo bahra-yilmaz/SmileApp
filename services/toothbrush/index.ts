@@ -18,10 +18,8 @@ export { ToothbrushRepository } from './ToothbrushRepository';
 // Export supporting services
 export { ToothbrushCalculationService } from './ToothbrushCalculationService';
 export { ToothbrushDisplayService } from './ToothbrushDisplayService';
+export { ToothbrushDataService } from './ToothbrushDataService';
 
 // Export types
 export * from './ToothbrushTypes';
-export * from './ToothbrushConfig';
-
-// Legacy compatibility exports (these can be removed later)
-export { ToothbrushDataService } from './ToothbrushDataService'; 
+export * from './ToothbrushConfig'; 

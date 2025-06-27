@@ -5,6 +5,7 @@ import {
   ToothbrushUsageStats,
   ToothbrushDisplayData,
   Toothbrush,
+  ToothbrushDataService,
 } from '../services/toothbrush';
 import { useAuth } from '../context/AuthContext';
 import { eventBus } from '../utils/EventBus';
@@ -33,34 +34,59 @@ export function useToothbrushStats(): UseToothbrushStatsReturn {
   const { t } = useTranslation();
 
   const fetchStats = useCallback(async (isRefresh = false) => {
-    // On subsequent fetches (non-refresh), don't show loading spinner
-    // to avoid UI flicker when refreshing in the background.
     if (!isRefresh) {
       setIsLoading(true);
     }
     setError(null);
 
+    // --- Start of new caching logic ---
+    // 1. On initial load, try to populate UI instantly from cache
+    if (!isRefresh) {
+      const cachedStats = await ToothbrushDataService.getStatsFromCache();
+      if (cachedStats) {
+        const userId = user?.id || 'guest';
+        // Get display data from cached stats
+        const info = await ToothbrushService.getToothbrushInfoFromStats(userId, t, cachedStats);
+        // Separately get the current toothbrush object from the LOCAL DATA CACHE
+        const toothbrushData = await ToothbrushDataService.getToothbrushData();
+
+        if (info) {
+          setStats(info.stats);
+          setDisplayData(info.displayData);
+          setCurrentToothbrush(toothbrushData.current); // Set the toothbrush object here
+          setIsLoading(false); // We have data, so loading is done for now
+        }
+      }
+    }
+    // --- End of new caching logic ---
+
     try {
       const userId = user?.id || 'guest';
+      // 2. Always fetch fresh data from the service
       const info = await ToothbrushService.getToothbrushInfo(userId, t);
+      // And the current toothbrush object
+      const toothbrush = await ToothbrushService.getCurrentToothbrush(userId);
 
       if (info) {
         setStats(info.stats);
         setDisplayData(info.displayData);
+        setCurrentToothbrush(toothbrush); // Also update current toothbrush info
+        
+        // 3. Cache the fresh stats for next time
+        await ToothbrushDataService.saveStatsToCache(info.stats);
       } else {
-        // Handle case where there is no toothbrush data
         setStats(null);
         setDisplayData(null);
+        setCurrentToothbrush(null);
       }
-
-      // Also get current toothbrush data for components that need the name, brand, etc.
-      const toothbrush = await ToothbrushService.getCurrentToothbrush(userId);
-      setCurrentToothbrush(toothbrush);
     } catch (err) {
       console.error('Error fetching toothbrush stats:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch toothbrush stats');
     } finally {
-      setIsLoading(false);
+      // Only set loading to false if it wasn't already done by the cache
+      if (isLoading) {
+        setIsLoading(false);
+      }
     }
   }, [user?.id, t]);
 
