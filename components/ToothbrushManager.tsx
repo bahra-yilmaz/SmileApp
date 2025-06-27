@@ -36,11 +36,11 @@ export default function ToothbrushManager({
   const { activeColors } = theme;
   const { t } = useTranslation();
   const { user } = useAuth();
-  const { stats, displayData, refreshStats } = useToothbrushStats();
+  const { stats, displayData, currentToothbrush, isLoading, refreshStats } = useToothbrushStats();
   
-  const [currentBrush, setCurrentBrush] = useState<Toothbrush | null>(null);
   const [history, setHistory] = useState<Toothbrush[]>([]);
   const [historyCounts, setHistoryCounts] = useState<Record<string, number>>({});
+  const [tagWidth, setTagWidth] = useState(0);
 
   const glassStyle = getSecondaryCardStyle(theme);
 
@@ -70,7 +70,6 @@ export default function ToothbrushManager({
     try {
       const userId = user?.id || 'guest';
       const data = await ToothbrushService.getAllToothbrushData(userId);
-      setCurrentBrush(data.current);
       setHistory(data.history);
       if (onUpdate) {
         onUpdate(data);
@@ -95,11 +94,11 @@ export default function ToothbrushManager({
   useEffect(() => {
     if (visible) {
       fetchData();
-      refreshStats(); // Also refresh the stats from the hook
     }
   }, [visible]);
 
   const getAgeDisplayText = () => {
+    if (isLoading && !displayData) return t('common.loading', '...');
     if (!displayData) return '';
     
     const { daysInUse } = displayData;
@@ -198,63 +197,67 @@ export default function ToothbrushManager({
     }
   };
 
-  const renderCurrentBrush = () => {
-    if (!currentBrush || !displayData) {
+  const renderCurrentToothbrushCard = () => {
+    if (isLoading && !currentToothbrush) {
       return (
-        <View style={[styles.toothbrushCard, glassStyle]}>
-          <View style={styles.noBrushContainer}>
-            <ExpoImage 
-              source={require('../assets/images/toothbrush.png')}
-              style={[styles.toothbrushImage, { opacity: 0.4 }]}
-              contentFit="contain"
-            />
-            <View style={styles.noBrushTextContainer}>
-              <ThemedText style={styles.noBrushText}>
-                {t('toothbrush.current.none', 'No toothbrush registered')}
-              </ThemedText>
-              <ThemedText style={styles.noBrushSubtext}>
-                {t('toothbrush.current.addFirst', 'Add your first toothbrush to start tracking')}
-              </ThemedText>
-            </View>
-          </View>
+        <View style={[styles.currentBrushCard, glassStyle]}>
+          <ThemedText>{t('common.loading', '...')}</ThemedText>
+        </View>
+      );
+    }
+
+    if (!currentToothbrush) {
+      return (
+        <View style={[styles.currentBrushCard, glassStyle]}>
+          <ThemedText style={styles.noBrushText}>
+            {t('toothbrush.status.addToothbrush', 'Add your toothbrush')}
+          </ThemedText>
+          <ThemedText style={styles.noBrushSubtext}>
+            {t('toothbrush.guestMode')}
+          </ThemedText>
         </View>
       );
     }
 
     return (
-      <View style={[styles.toothbrushCard, glassStyle]}>
-        <View style={styles.toothbrushCardContent}>
-          <View style={styles.toothbrushIconContainer}>
-            <ExpoImage 
-              source={require('../assets/images/toothbrush.png')}
-              style={styles.toothbrushImage}
-              contentFit="contain"
-            />
+      <View style={[styles.currentBrushCard, glassStyle]}>
+        {/* Status badge positioned at top right, with onLayout to measure its width */}
+        {displayData && (
+          <View
+            style={[styles.statusBadge, { backgroundColor: displayData.healthColor }]}
+            onLayout={(event) => setTagWidth(event.nativeEvent.layout.width)}
+          >
+            <ThemedText style={styles.statusText}>{displayData.healthStatusText}</ThemedText>
           </View>
-          <View style={styles.toothbrushTextContainer}>
-            <View style={styles.titleRow}>
-              <ThemedText style={styles.toothbrushCardTitle} numberOfLines={2}>
-                {currentBrush.name || `${t(`toothbrush.type.${currentBrush.type}`)} ${t('toothbrush.item')}`}
-              </ThemedText>
-              <View style={[styles.statusBadge, { backgroundColor: displayData.healthColor }]}> 
-                <ThemedText style={styles.statusText}>{displayData.healthStatusText}</ThemedText>
-              </View>
-            </View>
-            <ThemedText style={styles.toothbrushCardSubtitle}>
-              {t(`toothbrush.category.${currentBrush.purpose ?? 'regular'}`)}
+        )}
+
+        <View style={styles.cardHeader}>
+          <ExpoImage
+            source={require('../assets/images/toothbrush.png')}
+            style={styles.brushIcon}
+            contentFit="contain"
+          />
+          <View style={[styles.brushInfo, { paddingRight: tagWidth > 0 ? tagWidth + 24 : 12 }]}>
+            <ThemedText variant="subtitle" style={styles.brushName} numberOfLines={2}>
+              {currentToothbrush.name || t('toothbrush.item', 'Toothbrush')}
             </ThemedText>
+            {/* Purpose text now above the age/brushing row */}
+            <ThemedText style={styles.brushPurpose}>
+              {t(`toothbrush.category.${currentToothbrush.purpose ?? 'regular'}`)}
+            </ThemedText>
+            {/* New row for age and brushing count */}
             <View style={styles.ageRow}>
-              <ThemedText style={styles.toothbrushCardAge}>
-                {getAgeDisplayText()}
-              </ThemedText>
-              {stats && (
-                <ThemedText style={styles.toothbrushCardHistoryRight}>
-                  {t('toothbrush.history.brushings', { count: stats.totalBrushingSessions })}
-                </ThemedText>
-              )}
+              <ThemedText style={styles.brushAge}>{getAgeDisplayText()}</ThemedText>
             </View>
           </View>
         </View>
+
+        {/* Brushing count positioned at bottom right of card */}
+        {stats && (
+          <ThemedText style={styles.brushingCount}>
+            {t('toothbrush.history.brushings_other', { count: stats.totalBrushingSessions })}
+          </ThemedText>
+        )}
       </View>
     );
   };
@@ -345,7 +348,7 @@ export default function ToothbrushManager({
       style={styles.scrollContainer}
       showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
-        {renderCurrentBrush()}
+        {renderCurrentToothbrushCard()}
         
         <View style={styles.actionsContainer}>
           <Pressable onPress={handleAddToothbrushPress} style={buttonStyles.addReminderItem}>
@@ -515,7 +518,8 @@ const styles = StyleSheet.create({
   },
   ageRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'baseline',
+    width: '100%',
   },
   noBrushContainer: {
     flexDirection: 'row',
@@ -567,15 +571,18 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   statusBadge: {
-    paddingHorizontal: 8,
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    zIndex: 1,
+    paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
-    marginLeft: 8,
   },
   statusText: {
-    fontSize: 12,
     color: 'white',
-    fontWeight: '600',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
   historyText: {
     fontSize: 12,
@@ -676,5 +683,76 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
+  },
+  currentBrushCard: {
+    ...cardStyles.baseCard,
+    width: screenWidth * 0.85,
+    minHeight: 130,
+    paddingRight: 10,
+    paddingLeft: 0,
+    paddingTop: 10,
+    paddingBottom: 0,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  brushIcon: {
+    width: 120,
+    height: 120,
+    alignSelf: 'flex-end',
+    transform: [{ scaleX: -1 }],
+  },
+  brushInfo: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingLeft: 8,
+  },
+  brushName: {
+    fontSize: 18,
+    lineHeight: 24,
+    marginBottom: 4,
+    fontFamily: 'Quicksand-Bold',
+    color: 'white',
+    flexShrink: 1,
+    flexGrow: 1,
+  },
+  brushAge: {
+    fontSize: 14,
+    marginBottom: 10,
+    color: 'white',
+    opacity: 0.9,
+  },
+  brushPurpose: {
+    fontSize: 12,
+    color: 'white',
+    opacity: 0.7,
+    marginBottom: 2,
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  brushingCount: {
+    position: 'absolute',
+    bottom: 12,
+    right: 12,
+    fontSize: 14,
+    color: 'white',
+    opacity: 0.9,
+  },
+  addButton: {
+    ...buttonStyles.addReminderItem,
+  },
+  contentContainer: {
+    width: screenWidth * 0.85,
+    alignSelf: 'center',
+    paddingVertical: 10,
   },
 }); 
