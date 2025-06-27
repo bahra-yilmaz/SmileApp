@@ -225,7 +225,7 @@ export default function HomeScreen() {
 
       try {
         const { ToothbrushService } = await import('../../services/toothbrush');
-        await ToothbrushService.createFirstBrushForNewUser(user.id, t);
+        await ToothbrushService.createFirstBrush(user.id, t);
       } catch (error) {
         console.error('❌ Error ensuring first brush exists:', error);
         // Don't show error to user - this is a background operation

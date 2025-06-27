@@ -10,8 +10,6 @@ import { ReminderTime } from '../../components/ReminderItem';
 import BrushingTargetSelector, { BrushingTarget } from '../../components/BrushingTargetSelector';
 import DailyBrushingFrequencySelector, { DailyBrushingFrequency } from '../../components/DailyBrushingFrequencySelector';
 import ToothbrushManager from '../../components/ToothbrushManager';
-import { ToothbrushData } from '../../services/toothbrush/ToothbrushTypes';
-import { ToothbrushDataService } from '../../services/toothbrush/ToothbrushDataService';
 import { ToothbrushDisplayService } from '../../services/toothbrush/ToothbrushDisplayService';
 import { OnboardingService } from '../../services/OnboardingService';
 import { useRouter } from 'expo-router';
@@ -101,7 +99,6 @@ export default function SettingsScreen() {
   
   // Toothbrush management state
   const [isToothbrushModalVisible, setIsToothbrushModalVisible] = useState(false);
-  const [toothbrushData, setToothbrushData] = useState<ToothbrushData>({ current: null, history: [] });
   
   // Reminder time selection state
   const [isReminderModalVisible, setIsReminderModalVisible] = useState(false);
@@ -167,9 +164,6 @@ export default function SettingsScreen() {
     
     // Load current mascot tone
     loadCurrentTone();
-    
-    // Load toothbrush data
-    loadToothbrushData();
     
     // For authenticated users, ensure context stays in sync with backend
     if (authUser?.id) {
@@ -248,17 +242,11 @@ export default function SettingsScreen() {
     }
   };
 
-  const loadToothbrushData = async () => {
-    try {
-      const data = await ToothbrushDataService.getToothbrushData();
-      setToothbrushData(data);
-    } catch (error) {
-      console.error('Error loading toothbrush data:', error);
-    }
-  };
+
 
   const getToothbrushAgeText = () => {
-    if (!toothbrushData.current || !toothbrushStats) return t('toothbrush.current.none', 'None');
+    // Use the modern hook's displayData directly instead of legacy data loading
+    if (!toothbrushStats) return t('toothbrush.current.none', 'None');
     
     const displayData = ToothbrushDisplayService.getDisplayData(toothbrushStats, t);
     const { daysInUse } = displayData;
@@ -899,7 +887,7 @@ export default function SettingsScreen() {
         <ToothbrushManager
           visible={isToothbrushModalVisible}
           onClose={() => setIsToothbrushModalVisible(false)}
-          onUpdate={(data) => setToothbrushData(data)}
+          onUpdate={() => {}} // No longer needed - useToothbrushStats handles data refresh automatically
           autoClose={MODAL_AUTO_CLOSE}
         />
         

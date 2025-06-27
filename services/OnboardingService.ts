@@ -197,7 +197,27 @@ export class OnboardingService {
           const { ToothbrushService } = await import('./toothbrush');
           const i18n = (await import('./i18n')).default;
           
-          await ToothbrushService.createFirstBrushForNewUser(userId, i18n.t);
+          // Retrieve the user's toothbrush start date from onboarding data
+          let toothbrushStartDate: string | null = null;
+          try {
+            const { data: userData, error: userError } = await supabase
+              .from('users')
+              .select('toothbrush_start_date')
+              .eq('id', userId)
+              .single();
+
+            if (!userError && userData?.toothbrush_start_date) {
+              // Convert the date string back to ISO format for the toothbrush service
+              toothbrushStartDate = new Date(userData.toothbrush_start_date).toISOString();
+              console.log('📅 Using toothbrush start date from onboarding:', toothbrushStartDate);
+            } else {
+              console.log('📅 No toothbrush start date found in onboarding data, using current date');
+            }
+          } catch (fetchError) {
+            console.warn('⚠️ Could not fetch toothbrush start date from onboarding data:', fetchError);
+          }
+          
+          await ToothbrushService.createFirstBrush(userId, i18n.t, toothbrushStartDate);
           console.log('✅ First brush created for new user');
         } catch (brushError) {
           console.error('❌ Failed to create first brush:', brushError);

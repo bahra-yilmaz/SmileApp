@@ -31,7 +31,7 @@ export default function NuboToneScreen({
 }: NuboToneScreenProps) {
   const { theme, colorScheme } = useTheme();
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const { onboardingData, updateOnboardingData } = useOnboarding();
   
@@ -90,13 +90,15 @@ export default function NuboToneScreen({
     console.log('Final Onboarding Data Payload:', JSON.stringify(finalOnboardingData, null, 2));
 
     try {
+      console.log('🔄 Saving onboarding data to database...');
       await updateUserOnboarding(user.id, finalOnboardingData);
+      console.log('✅ Onboarding data saved successfully');
       
-      // Mark onboarding as completed in local storage
-      await OnboardingService.markOnboardingAsCompleted();
-      
-      // The toothbrush data will now be initialized automatically on the home screen.
-      // No need for an explicit call here anymore.
+      // Mark onboarding as completed and create toothbrush with correct age
+      // Pass user ID and current language to trigger toothbrush creation
+      console.log('🔄 Completing onboarding and creating toothbrush...');
+      await OnboardingService.markOnboardingAsCompleted(user.id, i18n.language);
+      console.log('✅ Onboarding completed and toothbrush created');
       
       // Small delay to ensure database commit is complete before navigation
       await new Promise(resolve => setTimeout(resolve, 500));

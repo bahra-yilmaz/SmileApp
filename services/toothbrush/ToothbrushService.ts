@@ -173,9 +173,10 @@ export class ToothbrushService {
    */
   static async createFirstBrush(
     userId: string,
-    t: (key: string) => string
+    t: (key: string) => string,
+    startDate?: string | null
   ): Promise<void> {
-    console.log('🆕 Creating first brush for user:', userId);
+    console.log('🆕 Creating first brush for user:', userId, 'with startDate:', startDate);
 
     // Guest users don't have toothbrush tracking
     if (userId === 'guest') {
@@ -191,11 +192,14 @@ export class ToothbrushService {
         return;
       }
 
+      // Use provided start date if available, otherwise use current date
+      const toothbrushStartDate = startDate || new Date().toISOString();
+
       // Create the first brush
       const firstBrush: Toothbrush = {
         id: uuidv4(),
         user_id: userId,
-        startDate: new Date().toISOString(),
+        startDate: toothbrushStartDate,
         type: 'manual',
         purpose: 'regular',
         name: t('settings.firstBrush'),
@@ -208,7 +212,7 @@ export class ToothbrushService {
       };
 
       await ToothbrushRepository.saveData(userId, newData);
-      console.log('✅ First brush created successfully');
+      console.log('✅ First brush created successfully with start date:', toothbrushStartDate);
     } catch (error) {
       console.error('❌ Error creating first brush:', error);
       // Don't throw - this shouldn't break user flow
