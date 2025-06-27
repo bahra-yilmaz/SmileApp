@@ -9,16 +9,20 @@
  * - ToothbrushTypes: Type definitions
  */
 
-// Export the new clean service as the main API
+// Export all toothbrush-related services and types
 export { ToothbrushService } from './ToothbrushService';
-
-// Export repository for advanced use cases
 export { ToothbrushRepository } from './ToothbrushRepository';
-
-// Export supporting services
+export { ToothbrushDataService } from './ToothbrushDataService';
 export { ToothbrushCalculationService } from './ToothbrushCalculationService';
 export { ToothbrushDisplayService } from './ToothbrushDisplayService';
-export { ToothbrushDataService } from './ToothbrushDataService';
+export { ToothbrushMigrationService } from './ToothbrushMigrationService';
+
+export type {
+  Toothbrush,
+  ToothbrushData,
+  ToothbrushUsageStats,
+  ToothbrushDisplayData,
+} from './ToothbrushTypes';
 
 // Export types
 export * from './ToothbrushTypes';

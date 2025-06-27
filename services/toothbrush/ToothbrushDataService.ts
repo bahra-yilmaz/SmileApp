@@ -205,55 +205,58 @@ export class ToothbrushDataService {
   }
 
   /**
-   * Gets the count of brushing sessions for a specific toothbrush.
+   * Get brushing count for a specific toothbrush
+   * Now uses the fast brushing_count column
    */
-  static async getBrushingCountForToothbrush(
-    userId: string,
-    toothbrush: Toothbrush
-  ): Promise<number> {
+  static async getBrushingCount(toothbrush: Toothbrush): Promise<number> {
+    console.log('📊 Getting brushing count for toothbrush:', toothbrush.id);
+
     try {
-      console.log('📊 Getting brushing count for toothbrush:', toothbrush.id);
-
-      // First try to get count using direct toothbrush_id relationship
-      const { data: directData, error: directError } = await supabase
-        .from('brushing_logs')
-        .select('id', { count: 'exact', head: true })
-        .eq('user_id', userId)
-        .eq('toothbrush_id', toothbrush.id);
-
-      if (!directError && directData !== null) {
-        const directCount = directData.length || 0;
-        console.log('✅ Direct count via toothbrush_id:', directCount);
-        
-        // If we have a direct count, return it
-        if (directCount > 0) {
-          return directCount;
-        }
-      }
-
-      // Fallback: Get count using date range (for historical data without toothbrush_id)
-      const startDate = new Date(toothbrush.startDate);
-      const endDate = toothbrush.endDate ? new Date(toothbrush.endDate) : new Date();
-
-      let query = supabase
-        .from('brushing_logs')
-        .select('id', { count: 'exact', head: true })
-        .eq('user_id', userId)
-        .gte('completed_at', startDate.toISOString())
-        .lte('completed_at', endDate.toISOString());
-
-      const { data, error } = await query;
+      // Simply read the counter from the toothbrush record (fast!)
+      const { data, error } = await supabase
+        .from('toothbrushes')
+        .select('brushing_count')
+        .eq('id', toothbrush.id)
+        .single();
 
       if (error) {
-        console.error('❌ Error getting brushing count by date range:', error);
+        console.error('❌ Error fetching brushing count:', error);
         return 0;
       }
 
-      const fallbackCount = data?.length || 0;
-      console.log('✅ Fallback count via date range:', fallbackCount);
-      return fallbackCount;
+      const count = data?.brushing_count || 0;
+      console.log('✅ Brushing count:', count);
+      return count;
     } catch (error) {
-      console.error('❌ Failed to get brushing count for toothbrush:', error);
+      console.error('❌ Error in getBrushingCount:', error);
+      return 0;
+    }
+  }
+
+  /**
+   * Legacy method - kept for backward compatibility
+   * Now redirects to the fast counter-based method
+   */
+  static async getBrushingCountForUser(userId: string, toothbrushId: string): Promise<number> {
+    console.log('📊 Getting brushing count (legacy method) for toothbrush:', toothbrushId);
+
+    try {
+      // Get the toothbrush first, then use the counter
+      const { data, error } = await supabase
+        .from('toothbrushes')
+        .select('brushing_count')
+        .eq('id', toothbrushId)
+        .eq('user_id', userId)
+        .single();
+
+      if (error) {
+        console.error('❌ Error fetching brushing count:', error);
+        return 0;
+      }
+
+      return data?.brushing_count || 0;
+    } catch (error) {
+      console.error('❌ Error in getBrushingCountForUser:', error);
       return 0;
     }
   }

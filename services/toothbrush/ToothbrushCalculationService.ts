@@ -1,70 +1,103 @@
 import { Toothbrush, ToothbrushUsageStats } from './ToothbrushTypes';
-import { ToothbrushDataService } from './ToothbrushDataService';
-import { getLocalDateString, getTodayLocalString } from '../../utils/dateUtils';
-import { differenceInCalendarDays } from 'date-fns';
+import { supabase } from '../supabaseClient';
+import { differenceInDays } from 'date-fns';
 
 /**
- * Service for handling all business logic related to toothbrush stats.
+ * Service for calculating toothbrush usage statistics
+ * Now uses the brushing_count column for accurate and fast calculations
  */
 export class ToothbrushCalculationService {
+
   /**
-   * Calculates detailed usage statistics for a given toothbrush and user.
+   * Calculate comprehensive usage statistics for a toothbrush
+   * Uses the new brushing_count column for accurate and fast calculations
    */
   static async calculateUsageStats(
     toothbrush: Toothbrush,
     userId: string
   ): Promise<ToothbrushUsageStats> {
+    console.log('🧮 Calculating usage stats for toothbrush:', toothbrush.id);
+
     try {
+      // Calculate basic metrics
       const startDate = new Date(toothbrush.startDate);
-      const today = new Date();
+      const endDate = toothbrush.endDate ? new Date(toothbrush.endDate) : new Date();
+      const totalCalendarDays = Math.max(1, differenceInDays(endDate, startDate) + 1);
 
-      // 1. Calculate total calendar days since the toothbrush was started
-      const totalCalendarDays = differenceInCalendarDays(today, startDate) + 1;
+      // Get brushing count directly from the toothbrush record (fast!)
+      const { data: toothbrushData, error } = await supabase
+        .from('toothbrushes')
+        .select('brushing_count')
+        .eq('id', toothbrush.id)
+        .single();
 
-      // 2. Get all brushing logs within the toothbrush's usage period
-      const brushingLogs = await ToothbrushDataService.getBrushingLogsForPeriod(
-        userId,
-        getLocalDateString(startDate),
-        getTodayLocalString()
-      );
+      if (error) {
+        console.error('❌ Error fetching toothbrush count:', error);
+        throw error;
+      }
 
-      // 3. Calculate the number of unique days the user actually brushed
-      const brushingDaysSet = new Set(brushingLogs.map(log => log.date || log.created_at?.slice(0, 10)));
-      const actualBrushingDays = brushingDaysSet.size;
+      const totalBrushingSessions = toothbrushData?.brushing_count || 0;
 
-      // 4. Calculate total brushing sessions
-      const totalBrushingSessions = brushingLogs.length;
+      // Calculate actual brushing days (unique dates with brushing sessions)
+      // Note: This still requires a query, but only for unique dates, not counting
+      const { data: uniqueDates, error: datesError } = await supabase
+        .from('brushing_logs')
+        .select('date')
+        .eq('user_id', userId)
+        .gte('date', toothbrush.startDate.split('T')[0]) // Convert ISO to date
+        .lte('date', toothbrush.endDate ? toothbrush.endDate.split('T')[0] : new Date().toISOString().split('T')[0])
+        .order('date');
 
-      // 5. Calculate average brushings per day (only on days the user brushed)
-      const averageBrushingsPerDay =
-        actualBrushingDays > 0 ? totalBrushingSessions / actualBrushingDays : 0;
+      if (datesError) {
+        console.warn('⚠️ Error fetching unique brushing dates, using fallback:', datesError);
+      }
 
-      // 6. Calculate the percentage of days the toothbrush was used
-      const usagePercentage =
-        totalCalendarDays > 0 ? (actualBrushingDays / totalCalendarDays) * 100 : 0;
-        
-      // 7. Determine the last used date
-      const lastUsedDate = brushingLogs.length > 0 
-        ? brushingLogs[brushingLogs.length - 1].date || brushingLogs[brushingLogs.length - 1].created_at?.slice(0, 10)
-        : undefined;
+      // Count unique dates
+      const uniqueDateSet = new Set(uniqueDates?.map(d => d.date) || []);
+      const actualBrushingDays = uniqueDateSet.size;
 
-      // 8. Determine the replacement status based on calendar days
-      const replacementStatus = this.getReplacementStatus(totalCalendarDays);
+      // Calculate derived metrics
+      const averageBrushingsPerDay = totalCalendarDays > 0 
+        ? totalBrushingSessions / totalCalendarDays 
+        : 0;
 
-      return {
+      const usagePercentage = totalCalendarDays > 0 
+        ? (actualBrushingDays / totalCalendarDays) * 100 
+        : 0;
+
+      // Determine replacement status based on usage
+      let replacementStatus: 'brand_new' | 'fresh' | 'good' | 'replace_soon' | 'overdue';
+      
+      if (totalCalendarDays <= 7) {
+        replacementStatus = 'brand_new';
+      } else if (totalCalendarDays <= 30) {
+        replacementStatus = 'fresh';
+      } else if (totalCalendarDays <= 60) {
+        replacementStatus = 'good';
+      } else if (totalCalendarDays <= 90) {
+        replacementStatus = 'replace_soon';
+      } else {
+        replacementStatus = 'overdue';
+      }
+
+      const stats: ToothbrushUsageStats = {
         totalCalendarDays,
         actualBrushingDays,
         totalBrushingSessions,
-        averageBrushingsPerDay: Math.round(averageBrushingsPerDay * 10) / 10,
-        usagePercentage: Math.round(usagePercentage),
-        lastUsedDate,
+        averageBrushingsPerDay: Math.round(averageBrushingsPerDay * 100) / 100,
+        usagePercentage: Math.round(usagePercentage * 100) / 100,
         replacementStatus,
       };
+
+      console.log('✅ Calculated usage stats:', stats);
+      return stats;
+
     } catch (error) {
-      console.error('Error calculating toothbrush stats:', error);
-      // Return a default state in case of an error
+      console.error('❌ Error calculating toothbrush usage stats:', error);
+      
+      // Return safe defaults on error
       return {
-        totalCalendarDays: 0,
+        totalCalendarDays: 1,
         actualBrushingDays: 0,
         totalBrushingSessions: 0,
         averageBrushingsPerDay: 0,
@@ -75,16 +108,11 @@ export class ToothbrushCalculationService {
   }
 
   /**
-   * Determines the replacement status of a toothbrush based on its age in days.
+   * Calculate simple days in use for a toothbrush
    */
-  private static getReplacementStatus(
-    totalDays: number
-  ): ToothbrushUsageStats['replacementStatus'] {
-    // Note: This logic will be used by the DisplayService to get color and text
-    if (totalDays < 7) return 'brand_new';
-    if (totalDays < 30) return 'fresh';
-    if (totalDays < 60) return 'good';
-    if (totalDays < 90) return 'replace_soon';
-    return 'overdue';
+  static calculateDaysInUse(toothbrush: Toothbrush): number {
+    const startDate = new Date(toothbrush.startDate);
+    const endDate = toothbrush.endDate ? new Date(toothbrush.endDate) : new Date();
+    return Math.max(0, differenceInDays(endDate, startDate));
   }
 }

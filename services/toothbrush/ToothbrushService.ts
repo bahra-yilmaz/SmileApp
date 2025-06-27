@@ -4,6 +4,8 @@ import { ToothbrushRepository } from './ToothbrushRepository';
 import { ToothbrushCalculationService } from './ToothbrushCalculationService';
 import { ToothbrushDisplayService } from './ToothbrushDisplayService';
 import { eventBus } from '../../utils/EventBus';
+import { ToothbrushDataService } from './ToothbrushDataService';
+import { ToothbrushMigrationService } from './ToothbrushMigrationService';
 
 /**
  * Clean ToothbrushService - Business Logic Layer
@@ -13,6 +15,7 @@ import { eventBus } from '../../utils/EventBus';
  * - Focused on business logic, not data access
  * - Clean, predictable API
  * - No overlapping methods
+ * - Includes automatic migration to new counter system
  */
 export class ToothbrushService {
   
@@ -28,7 +31,23 @@ export class ToothbrushService {
   }
 
   /**
+   * Ensure user is migrated to the new counter system
+   * Called automatically before any toothbrush operations
+   */
+  private static async ensureMigration(userId: string): Promise<void> {
+    if (userId === 'guest') return;
+    
+    try {
+      await ToothbrushMigrationService.migrateUserToothbrushes(userId);
+    } catch (error) {
+      console.error('❌ Migration failed, but continuing with operation:', error);
+      // Don't throw - migration failure shouldn't break the main functionality
+    }
+  }
+
+  /**
    * Get comprehensive toothbrush information for UI display
+   * Automatically handles migration for existing users
    */
   static async getToothbrushInfo(
     userId: string,
@@ -55,6 +74,9 @@ export class ToothbrushService {
         }
       };
     }
+
+    // Ensure migration is completed before accessing data
+    await this.ensureMigration(userId);
 
     try {
       const toothbrushData = await ToothbrushRepository.getData(userId);
@@ -257,17 +279,23 @@ export class ToothbrushService {
   }
 
   /**
-   * Get current toothbrush object
+   * Get current toothbrush for a user
+   * Automatically handles migration for existing users
    */
   static async getCurrentToothbrush(userId: string): Promise<Toothbrush | null> {
+    console.log('🔍 Getting current toothbrush for user:', userId);
+
     // Guest users don't have toothbrush tracking
     if (userId === 'guest') {
       return null;
     }
 
+    // Ensure migration is completed before accessing data
+    await this.ensureMigration(userId);
+
     try {
-      const data = await ToothbrushRepository.getData(userId);
-      return data.current;
+      const toothbrushData = await ToothbrushRepository.getData(userId);
+      return toothbrushData.current;
     } catch (error) {
       console.error('❌ Error getting current toothbrush:', error);
       return null;
@@ -275,13 +303,19 @@ export class ToothbrushService {
   }
 
   /**
-   * Get all toothbrush data including history
+   * Get all toothbrush data for a user
+   * Automatically handles migration for existing users
    */
   static async getAllToothbrushData(userId: string): Promise<ToothbrushData> {
+    console.log('📋 Getting all toothbrush data for user:', userId);
+
     // Guest users don't have toothbrush tracking
     if (userId === 'guest') {
       return { current: null, history: [] };
     }
+
+    // Ensure migration is completed before accessing data
+    await this.ensureMigration(userId);
 
     try {
       return await ToothbrushRepository.getData(userId);
@@ -295,21 +329,28 @@ export class ToothbrushService {
    * Delete a toothbrush from history
    */
   static async deleteFromHistory(userId: string, toothbrushId: string): Promise<void> {
+    console.log('🗑️ Deleting toothbrush from history:', toothbrushId);
+
     // Guest users don't have toothbrush tracking
     if (userId === 'guest') {
       throw new Error('Toothbrush tracking is not available for guest users');
     }
 
     try {
-      // Delete from backend
-      await ToothbrushRepository.deleteFromHistory(toothbrushId);
+      const currentData = await ToothbrushRepository.getData(userId);
       
-      // Refresh local cache
-      await ToothbrushRepository.getData(userId);
+      // Remove from history
+      const updatedHistory = currentData.history.filter(brush => brush.id !== toothbrushId);
       
-      console.log('✅ Deleted toothbrush from history:', toothbrushId);
+      const newData: ToothbrushData = {
+        current: currentData.current,
+        history: updatedHistory,
+      };
+
+      await ToothbrushRepository.saveData(userId, newData);
+      console.log('✅ Successfully deleted toothbrush from history');
     } catch (error) {
-      console.error('❌ Error deleting from history:', error);
+      console.error('❌ Error deleting toothbrush from history:', error);
       throw error;
     }
   }
@@ -318,52 +359,38 @@ export class ToothbrushService {
    * Get simple days in use for current toothbrush
    */
   static async getSimpleDaysInUse(userId: string): Promise<number> {
+    console.log('📅 Getting simple days in use for user:', userId);
+
     // Guest users don't have toothbrush tracking
     if (userId === 'guest') {
       return 0;
     }
 
     try {
-      const data = await ToothbrushRepository.getData(userId);
-      if (!data.current) return 0;
+      const current = await this.getCurrentToothbrush(userId);
+      if (!current) return 0;
 
-      const stats = await ToothbrushCalculationService.calculateUsageStats(data.current, userId);
-      return stats.totalCalendarDays;
+      return ToothbrushCalculationService.calculateDaysInUse(current);
     } catch (error) {
-      console.error('❌ Error getting days in use:', error);
+      console.error('❌ Error getting simple days in use:', error);
       return 0;
-    }
-  }
-
-  /**
-   * Link a brushing session to the current toothbrush
-   */
-  static async linkBrushingSession(userId: string, brushingLogId: string): Promise<void> {
-    // Guest users don't have toothbrush tracking
-    if (userId === 'guest') {
-      console.log('🚫 Guest users do not have toothbrush linking');
-      return;
-    }
-
-    try {
-      await ToothbrushRepository.linkBrushingSession(userId, brushingLogId);
-    } catch (error) {
-      console.error('❌ Error linking brushing session:', error);
-      // Don't throw - this is not critical for the main flow
     }
   }
 
   /**
    * Get brushing count for a specific toothbrush
+   * Now uses the efficient counter-based system
    */
   static async getBrushingCount(userId: string, toothbrushId: string): Promise<number> {
-    // Guest users don't have toothbrush tracking
+    console.log('🔢 Getting brushing count for toothbrush:', toothbrushId);
+
+    // Guest users don't have toothbrush tracking in backend
     if (userId === 'guest') {
       return 0;
     }
 
     try {
-      return await ToothbrushRepository.getBrushingCount(userId, toothbrushId);
+      return await ToothbrushDataService.getBrushingCountForUser(userId, toothbrushId);
     } catch (error) {
       console.error('❌ Error getting brushing count:', error);
       return 0;

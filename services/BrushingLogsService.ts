@@ -108,16 +108,8 @@ export async function insertBrushingLog(params: {
     // Don't throw - streak update failure shouldn't break the main flow
   }
 
-  // -------------------------------------------------------------------------
-  // 6) Link brushing session to current toothbrush
-  // -------------------------------------------------------------------------
-  try {
-    const { ToothbrushService } = await import('./toothbrush');
-    await ToothbrushService.linkBrushingSession(userId, insertData.id);
-  } catch (error) {
-    console.error('Error linking brushing to toothbrush:', error);
-    // Don't throw - toothbrush linking failure shouldn't break the main flow
-  }
+  // Note: Toothbrush counter is now automatically incremented by database trigger
+  // No manual linking needed - the trigger handles this atomically and reliably
 
   return {
     id: insertData.id,

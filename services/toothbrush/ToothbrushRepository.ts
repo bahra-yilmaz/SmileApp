@@ -205,7 +205,7 @@ export class ToothbrushRepository {
   /**
    * Cache toothbrush data locally
    */
-  static async cacheLocally(data: ToothbrushData): Promise<void> {
+  static async cacheData(data: ToothbrushData): Promise<void> {
     try {
       await AsyncStorage.setItem(this.CACHE_KEY, JSON.stringify(data));
       console.log('💾 Cached toothbrush data locally');
@@ -244,7 +244,7 @@ export class ToothbrushRepository {
       const backendData = await this.fetchFromBackend(userId);
       
       // Cache the result
-      await this.cacheLocally(backendData);
+      await this.cacheData(backendData);
       
       return backendData;
     } catch (error) {
@@ -256,18 +256,80 @@ export class ToothbrushRepository {
   }
 
   /**
-   * Save toothbrush data (backend + cache)
+   * Save toothbrush data to both backend and local cache
+   * Now uses the new counter system automatically via database triggers
    */
   static async saveData(userId: string, data: ToothbrushData): Promise<void> {
-    // Always cache locally first (immediate UI update)
-    await this.cacheLocally(data);
+    console.log('💾 Saving toothbrush data for user:', userId);
 
     try {
-      // Then sync to backend
-      await this.saveToBackend(userId, data);
+      // Save current toothbrush to backend
+      if (data.current) {
+        const { error: upsertError } = await supabase
+          .from('toothbrushes')
+          .upsert({
+            id: data.current.id,
+            user_id: data.current.user_id,
+            name: data.current.name,
+            start_date: data.current.startDate,
+            end_date: data.current.endDate,
+            type: data.current.type,
+            purpose: data.current.purpose,
+            is_current: true,
+            created_at: data.current.created_at,
+            // Note: brushing_count will be managed by database triggers
+          }, {
+            onConflict: 'id'
+          });
+
+        if (upsertError) {
+          console.error('❌ Error upserting current toothbrush:', upsertError);
+          throw upsertError;
+        }
+
+        // Ensure only one toothbrush is marked as current
+        const { error: updateError } = await supabase
+          .from('toothbrushes')
+          .update({ is_current: false })
+          .eq('user_id', userId)
+          .neq('id', data.current.id);
+
+        if (updateError) {
+          console.warn('⚠️ Warning updating other toothbrushes:', updateError);
+        }
+      }
+
+      // Save history items to backend
+      for (const historyItem of data.history) {
+        const { error: historyError } = await supabase
+          .from('toothbrushes')
+          .upsert({
+            id: historyItem.id,
+            user_id: historyItem.user_id,
+            name: historyItem.name,
+            start_date: historyItem.startDate,
+            end_date: historyItem.endDate,
+            type: historyItem.type,
+            purpose: historyItem.purpose,
+            is_current: false,
+            created_at: historyItem.created_at,
+            // Note: brushing_count for history items is preserved
+          }, {
+            onConflict: 'id'
+          });
+
+        if (historyError) {
+          console.warn('⚠️ Warning saving history item:', historyError);
+        }
+      }
+
+      // Cache the data locally
+      await this.cacheData(data);
+      console.log('✅ Successfully saved toothbrush data');
+
     } catch (error) {
-      console.error('❌ Backend save failed, but cached locally:', error);
-      // Don't throw - local save succeeded
+      console.error('❌ Error saving toothbrush data:', error);
+      throw error;
     }
   }
 
