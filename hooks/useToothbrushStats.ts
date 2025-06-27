@@ -1,5 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+
+// Simple debounce function for performance optimization
+function debounce(func: Function, delay: number) {
+  let timeoutId: any;
+  return (...args: any[]) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(null, args), delay);
+  };
+}
 import {
   ToothbrushService,
   ToothbrushUsageStats,
@@ -90,10 +99,19 @@ export function useToothbrushStats(): UseToothbrushStatsReturn {
     }
   }, [user?.id, t]);
 
-  // The refresh function is now just a wrapper around fetchStats
+  // Debounced refresh to prevent event storms (PERFORMANCE FIX)
+  const debouncedRefresh = useCallback(
+    debounce(() => {
+      console.log('🦷 Debounced refresh triggered');
+      fetchStats(true);
+    }, 500), // 500ms debounce (INCREASED FROM 300ms)
+    [fetchStats]
+  );
+
+  // The refresh function now uses debouncing for performance
   const refreshStats = useCallback(async () => {
-    await fetchStats(true);
-  }, [fetchStats]);
+    debouncedRefresh();
+  }, [debouncedRefresh]);
 
   useEffect(() => {
     // Initial fetch

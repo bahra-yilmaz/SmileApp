@@ -10,17 +10,37 @@ import { StreakSession } from '../streak/StreakTypes'; // Assuming StreakSession
  * Handles interactions with AsyncStorage and Supabase.
  */
 export class ToothbrushDataService {
+  // Simple memory cache for frequently accessed data (PERFORMANCE FIX)
+  private static dataCache = new Map<string, { data: ToothbrushData; timestamp: number }>();
+  private static readonly CACHE_TTL = 30000; // 30 seconds cache (PERFORMANCE IMPROVEMENT)
   /**
    * Retrieves the current toothbrush and its history from local storage.
+   * Includes short-term memory cache for performance
    */
   static async getToothbrushData(): Promise<ToothbrushData> {
+    const cacheKey = 'local_data';
+    
+    // Check memory cache first (PERFORMANCE FIX)
+    const cached = this.dataCache.get(cacheKey);
+    if (cached && (Date.now() - cached.timestamp) < this.CACHE_TTL) {
+      return cached.data;
+    }
+    
     try {
       const stored = await AsyncStorage.getItem(TOOTHBRUSH_CONFIG.STORAGE_KEYS.TOOTHBRUSH_DATA);
+      let data: ToothbrushData;
+      
       if (stored) {
-        return JSON.parse(stored) as ToothbrushData;
+        data = JSON.parse(stored) as ToothbrushData;
+      } else {
+        // Return a default empty state if nothing is stored
+        data = { current: null, history: [] };
       }
-      // Return a default empty state if nothing is stored
-      return { current: null, history: [] };
+      
+      // Cache the result
+      this.dataCache.set(cacheKey, { data, timestamp: Date.now() });
+      
+      return data;
     } catch (error) {
       console.error('Error loading toothbrush data from AsyncStorage:', error);
       return { current: null, history: [] };
@@ -179,6 +199,10 @@ export class ToothbrushDataService {
   static async clearStatsCache(): Promise<void> {
     try {
       await AsyncStorage.removeItem(TOOTHBRUSH_CONFIG.STORAGE_KEYS.TOOTHBRUSH_STATS_CACHE);
+      
+      // Also clear memory cache for fresh data (PERFORMANCE FIX)
+      this.dataCache.clear();
+      
       console.log('🗑️ Toothbrush stats cache cleared');
     } catch (error) {
       console.warn('⚠️ Could not clear toothbrush stats cache:', error);
@@ -242,34 +266,6 @@ export class ToothbrushDataService {
       return count;
     } catch (error) {
       console.error('❌ Error in getBrushingCount:', error);
-      return 0;
-    }
-  }
-
-  /**
-   * Legacy method - kept for backward compatibility
-   * Now redirects to the fast counter-based method
-   */
-  static async getBrushingCountForUser(userId: string, toothbrushId: string): Promise<number> {
-    console.log('📊 Getting brushing count (legacy method) for toothbrush:', toothbrushId);
-
-    try {
-      // Get the toothbrush first, then use the counter
-      const { data, error } = await supabase
-        .from('toothbrushes')
-        .select('brushing_count')
-        .eq('id', toothbrushId)
-        .eq('user_id', userId)
-        .single();
-
-      if (error) {
-        console.error('❌ Error fetching brushing count:', error);
-        return 0;
-      }
-
-      return data?.brushing_count || 0;
-    } catch (error) {
-      console.error('❌ Error in getBrushingCountForUser:', error);
       return 0;
     }
   }

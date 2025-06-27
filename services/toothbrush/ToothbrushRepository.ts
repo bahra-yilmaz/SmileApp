@@ -15,6 +15,9 @@ import { Toothbrush, ToothbrushData } from './ToothbrushTypes';
  */
 export class ToothbrushRepository {
   private static readonly CACHE_KEY = 'toothbrush_data';
+  
+  // In-flight request deduplication (PERFORMANCE FIX)
+  private static pendingFetches = new Map<string, Promise<ToothbrushData>>();
 
   // ========================================================================
   // BACKEND OPERATIONS (Primary Data Source)
@@ -237,8 +240,32 @@ export class ToothbrushRepository {
 
   /**
    * Get toothbrush data (backend-first with local fallback)
+   * Includes request deduplication for performance
    */
   static async getData(userId: string): Promise<ToothbrushData> {
+    // Check if there's already a pending fetch for this user (PERFORMANCE FIX)
+    if (this.pendingFetches.has(userId)) {
+      console.log('🔄 Reusing pending fetch for user:', userId);
+      return this.pendingFetches.get(userId)!;
+    }
+
+    // Create and cache the fetch promise
+    const fetchPromise = this.fetchDataInternal(userId);
+    this.pendingFetches.set(userId, fetchPromise);
+
+    try {
+      const result = await fetchPromise;
+      return result;
+    } finally {
+      // Clean up the pending fetch
+      this.pendingFetches.delete(userId);
+    }
+  }
+
+  /**
+   * Internal fetch method (separated for deduplication)
+   */
+  private static async fetchDataInternal(userId: string): Promise<ToothbrushData> {
     try {
       // Try backend first
       const backendData = await this.fetchFromBackend(userId);

@@ -890,8 +890,7 @@ export default function SettingsScreen() {
           visible={isToothbrushModalVisible}
           onClose={() => setIsToothbrushModalVisible(false)}
           onUpdate={() => {
-            // Refresh local data when toothbrush is updated
-            console.log('🦷 Settings: Toothbrush updated, refreshing display...');
+            // Refresh happens automatically via event system now
           }}
         />
         

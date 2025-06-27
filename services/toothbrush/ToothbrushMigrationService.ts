@@ -7,14 +7,36 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
  */
 export class ToothbrushMigrationService {
   private static readonly MIGRATION_KEY = 'toothbrush_counter_migration_completed';
+  
+  // In-memory cache to prevent repeated AsyncStorage checks (PERFORMANCE FIX)
+  private static migrationStatusCache = new Map<string, boolean>();
+  
+  // Session-level flag to prevent repeated migration attempts (PERFORMANCE FIX)
+  private static sessionMigrationAttempts = new Set<string>();
 
   /**
    * Check if migration has been completed for this user
+   * Uses in-memory cache and session tracking for maximum performance
    */
   static async isMigrationCompleted(userId: string): Promise<boolean> {
+    // Check if we already attempted migration this session
+    if (this.sessionMigrationAttempts.has(userId)) {
+      return true; // Assume completed if already attempted this session
+    }
+    
+    // Check in-memory cache first (fastest - no I/O)
+    if (this.migrationStatusCache.has(userId)) {
+      return this.migrationStatusCache.get(userId)!;
+    }
+    
     try {
       const completed = await AsyncStorage.getItem(`${this.MIGRATION_KEY}_${userId}`);
-      return completed === 'true';
+      const isCompleted = completed === 'true';
+      
+      // Cache the result in memory for future calls
+      this.migrationStatusCache.set(userId, isCompleted);
+      
+      return isCompleted;
     } catch (error) {
       console.error('❌ Error checking migration status:', error);
       return false;
@@ -27,6 +49,13 @@ export class ToothbrushMigrationService {
   static async markMigrationCompleted(userId: string): Promise<void> {
     try {
       await AsyncStorage.setItem(`${this.MIGRATION_KEY}_${userId}`, 'true');
+      
+      // Update in-memory cache immediately for performance
+      this.migrationStatusCache.set(userId, true);
+      
+      // Mark session as attempted to prevent future attempts
+      this.sessionMigrationAttempts.add(userId);
+      
       console.log('✅ Migration marked as completed for user:', userId);
     } catch (error) {
       console.error('❌ Error marking migration completed:', error);

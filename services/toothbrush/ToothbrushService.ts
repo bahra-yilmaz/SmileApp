@@ -6,6 +6,7 @@ import { ToothbrushDisplayService } from './ToothbrushDisplayService';
 import { eventBus } from '../../utils/EventBus';
 import { ToothbrushDataService } from './ToothbrushDataService';
 import { ToothbrushMigrationService } from './ToothbrushMigrationService';
+import { supabase } from '../supabaseClient';
 
 /**
  * Clean ToothbrushService - Business Logic Layer
@@ -33,9 +34,16 @@ export class ToothbrushService {
   /**
    * Ensure user is migrated to the new counter system
    * Called automatically before any toothbrush operations
+   * Optimized to avoid repeated migration checks
    */
   private static async ensureMigration(userId: string): Promise<void> {
     if (userId === 'guest') return;
+    
+    // Fast check - if migration is already completed, skip entirely (PERFORMANCE FIX)
+    const isCompleted = await ToothbrushMigrationService.isMigrationCompleted(userId);
+    if (isCompleted) {
+      return; // Skip migration entirely
+    }
     
     try {
       await ToothbrushMigrationService.migrateUserToothbrushes(userId);
@@ -388,21 +396,29 @@ export class ToothbrushService {
   }
 
   /**
-   * Get brushing count for a specific toothbrush
-   * Now uses the efficient counter-based system
+   * Get brushing count for a specific toothbrush by ID (used in settings)
+   * Now uses the fast counter-based method directly
    */
   static async getBrushingCount(userId: string, toothbrushId: string): Promise<number> {
     console.log('🔢 Getting brushing count for toothbrush:', toothbrushId);
 
-    // Guest users don't have toothbrush tracking in backend
-    if (userId === 'guest') {
-      return 0;
-    }
-
     try {
-      return await ToothbrushDataService.getBrushingCountForUser(userId, toothbrushId);
+      // Use the fast counter method directly
+      const { data, error } = await supabase
+        .from('toothbrushes')
+        .select('brushing_count')
+        .eq('id', toothbrushId)
+        .eq('user_id', userId)
+        .single();
+
+      if (error) {
+        console.error('❌ Error fetching toothbrush counter:', error);
+        return 0;
+      }
+
+      return data?.brushing_count || 0;
     } catch (error) {
-      console.error('❌ Error getting brushing count:', error);
+      console.error('❌ Error in getBrushingCount:', error);
       return 0;
     }
   }

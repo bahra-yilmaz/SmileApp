@@ -6,7 +6,7 @@ import BottomSheetModal from './ui/BottomSheetModal';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { Image as ExpoImage } from 'expo-image';
 import { cardStyles, buttonStyles, getSecondaryCardStyle } from '../utils/sharedStyles';
 import InlineToothbrushPicker from './InlineToothbrushPicker';
@@ -16,6 +16,7 @@ import { useToothbrushStats } from '../hooks/useToothbrushStats';
 import { ToothbrushService } from '../services/toothbrush';
 import type { Toothbrush, ToothbrushData } from '../services/toothbrush/ToothbrushTypes';
 import { getTodayLocalString } from '../utils/dateUtils';
+import { supabase } from '../services/supabaseClient';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -41,6 +42,9 @@ export default function ToothbrushManager({
   const [history, setHistory] = useState<Toothbrush[]>([]);
   const [historyCounts, setHistoryCounts] = useState<Record<string, number>>({});
   const [tagWidth, setTagWidth] = useState(0);
+  
+  // PERFORMANCE FIX: Prevent multiple simultaneous fetches
+  const [isFetching, setIsFetching] = useState(false);
 
   const glassStyle = getSecondaryCardStyle(theme);
 
@@ -67,6 +71,14 @@ export default function ToothbrushManager({
   const historyItemRefs = useRef<{ [key: string]: ReminderItemRef | null }>({});
 
   const fetchData = async () => {
+    // PERFORMANCE FIX: Prevent simultaneous fetches
+    if (isFetching) {
+      console.log('🚫 Fetch already in progress, skipping duplicate request');
+      return;
+    }
+    
+    setIsFetching(true);
+    
     try {
       const userId = user?.id || 'guest';
       const data = await ToothbrushService.getAllToothbrushData(userId);
@@ -79,6 +91,8 @@ export default function ToothbrushManager({
       }
     } catch (error) {
       console.error('Error loading toothbrush data:', error);
+    } finally {
+      setIsFetching(false);
     }
   };
 
