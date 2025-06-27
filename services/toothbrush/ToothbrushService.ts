@@ -3,6 +3,7 @@ import { Toothbrush, ToothbrushData, ToothbrushUsageStats, ToothbrushDisplayData
 import { ToothbrushRepository } from './ToothbrushRepository';
 import { ToothbrushCalculationService } from './ToothbrushCalculationService';
 import { ToothbrushDisplayService } from './ToothbrushDisplayService';
+import { eventBus } from '../../utils/EventBus';
 
 /**
  * Clean ToothbrushService - Business Logic Layer
@@ -181,6 +182,14 @@ export class ToothbrushService {
       await ToothbrushRepository.saveData(userId, newData);
 
       console.log('✅ Successfully replaced toothbrush');
+
+      // Emit event to notify other components of toothbrush update
+      eventBus.emit('toothbrush-updated', {
+        userId,
+        action: oldBrush ? 'replaced' : 'created',
+        newToothbrush: newBrush,
+        oldToothbrush: oldBrush
+      });
     } catch (error) {
       console.error('❌ Error replacing toothbrush:', error);
       throw error;
@@ -199,42 +208,51 @@ export class ToothbrushService {
 
     // Guest users don't have toothbrush tracking
     if (userId === 'guest') {
-      console.log('🚫 Guest users do not get automatic first brush creation');
-      return;
+      return; // Silently skip for guests
     }
 
     try {
-      // Check if user already has a toothbrush
-      const existingData = await ToothbrushRepository.getData(userId);
-      if (existingData.current) {
-        console.log('User already has a toothbrush, skipping creation');
+      const currentData = await ToothbrushRepository.getData(userId);
+      
+      // If user already has a toothbrush, don't create another
+      if (currentData.current) {
+        console.log('✅ User already has a toothbrush, skipping creation');
         return;
       }
 
-      // Use provided start date if available, otherwise use current date
-      const toothbrushStartDate = startDate || new Date().toISOString();
+      // Calculate start date
+      const brushStartDate = startDate || new Date().toISOString();
 
-      // Create the first brush
-      const firstBrush: Toothbrush = {
+      // Create default toothbrush
+      const newBrush: Toothbrush = {
         id: uuidv4(),
         user_id: userId,
-        startDate: toothbrushStartDate,
+        startDate: brushStartDate,
         type: 'manual',
         purpose: 'regular',
-        name: t('settings.firstBrush'),
         created_at: new Date().toISOString(),
       };
 
       const newData: ToothbrushData = {
-        current: firstBrush,
-        history: [],
+        current: newBrush,
+        history: currentData.history,
       };
 
+      // Save to repository
       await ToothbrushRepository.saveData(userId, newData);
-      console.log('✅ First brush created successfully with start date:', toothbrushStartDate);
+      
+      console.log('✅ Successfully created first toothbrush');
+
+      // Emit event to notify other components of toothbrush creation
+      eventBus.emit('toothbrush-updated', {
+        userId,
+        action: 'created',
+        newToothbrush: newBrush,
+        oldToothbrush: null
+      });
     } catch (error) {
-      console.error('❌ Error creating first brush:', error);
-      // Don't throw - this shouldn't break user flow
+      console.error('❌ Error creating first toothbrush:', error);
+      throw error;
     }
   }
 

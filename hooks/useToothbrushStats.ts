@@ -107,12 +107,36 @@ export function useToothbrushStats(): UseToothbrushStatsReturn {
       refreshStats();
     };
 
-    const unsubscribe = eventBus.on('brushing-completed', handleBrushingCompleted);
+    const handleFrequencyUpdated = () => {
+      console.log('🦷 Frequency updated, refreshing toothbrush stats...');
+      refreshStats();
+    };
+
+    const handleGoalUpdated = () => {
+      console.log('🦷 Goal updated, refreshing toothbrush stats...');
+      refreshStats();
+    };
+
+    const handleToothbrushUpdated = (payload: any) => {
+      if (payload?.userId === user?.id || payload?.userId === 'guest') {
+        console.log('🦷 Toothbrush updated, refreshing stats...', payload);
+        refreshStats();
+      }
+    };
+
+    const unsubscribeBrushing = eventBus.on('brushing-completed', handleBrushingCompleted);
+    const unsubscribeFrequency = eventBus.on('frequency-updated', handleFrequencyUpdated);
+    // Listen to BrushingGoalsService events that might affect toothbrush calculations
+    const unsubscribeGoal = eventBus.on('brushing-goal-updated', handleGoalUpdated);
+    const unsubscribeToothbrush = eventBus.on('toothbrush-updated', handleToothbrushUpdated);
 
     return () => {
-      eventBus.off('brushing-completed', unsubscribe);
+      unsubscribeBrushing();
+      unsubscribeFrequency();
+      unsubscribeGoal();
+      unsubscribeToothbrush();
     };
-  }, [refreshStats]);
+  }, [refreshStats, user?.id]);
 
   return {
     stats,

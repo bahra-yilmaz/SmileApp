@@ -211,10 +211,25 @@ export default function HomeScreen() {
       refetch();
     });
 
+    const unsubscribeGoalUpdated = eventBus.on('brushing-goal-updated', () => {
+      refetch();
+    });
+
+    const unsubscribeGoalsSynced = eventBus.on('goals-synced', () => {
+      refetch();
+    });
+
+    const unsubscribeToothbrushUpdated = eventBus.on('toothbrush-updated', () => {
+      refetch();
+    });
+
     return () => {
       unsubscribeCompleted();
       unsubscribeReverted();
       unsubscribeFrequency();
+      unsubscribeGoalUpdated();
+      unsubscribeGoalsSynced();
+      unsubscribeToothbrushUpdated();
     };
   }, [refetch]);
 

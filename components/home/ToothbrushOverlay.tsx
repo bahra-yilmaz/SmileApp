@@ -22,6 +22,8 @@ import * as Haptics from 'expo-haptics';
 import { useToothbrushStats } from '../../hooks/useToothbrushStats';
 import { ToothbrushDataService } from '../../services/toothbrush/ToothbrushDataService';
 import { Toothbrush } from '../../services/toothbrush/ToothbrushTypes';
+import { eventBus } from '../../utils/EventBus';
+import { useAuth } from '../../context/AuthContext';
 
 interface ToothbrushOverlayProps {
   isVisible: boolean;
@@ -35,6 +37,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   const { t } = useTranslation();
   const { theme } = useTheme();
   const { activeColors } = theme;
+  const { user } = useAuth();
   const { stats, displayData, currentToothbrush, isLoading, refreshStats } = useToothbrushStats();
   
   // Animation values
@@ -75,6 +78,49 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
       refreshStats();
     }
   }, [isVisible, refreshStats]);
+
+  // Listen to global events that should trigger toothbrush data refresh
+  useEffect(() => {
+    const handleBrushingCompleted = () => {
+      if (isVisible) {
+        console.log('🦷 ToothbrushOverlay: Brushing completed, refreshing toothbrush data...');
+        refreshStats();
+      }
+    };
+
+    const handleFrequencyUpdated = () => {
+      if (isVisible) {
+        console.log('🦷 ToothbrushOverlay: Frequency updated, refreshing toothbrush data...');
+        refreshStats();
+      }
+    };
+
+    const handleGoalUpdated = () => {
+      if (isVisible) {
+        console.log('🦷 ToothbrushOverlay: Goal updated, refreshing toothbrush data...');
+        refreshStats();
+      }
+    };
+
+    const handleToothbrushUpdated = (payload: any) => {
+      if (isVisible && (payload?.userId === user?.id || payload?.userId === 'guest')) {
+        console.log('🦷 ToothbrushOverlay: Toothbrush updated, refreshing data...', payload);
+        refreshStats();
+      }
+    };
+
+    const unsubscribeBrushing = eventBus.on('brushing-completed', handleBrushingCompleted);
+    const unsubscribeFrequency = eventBus.on('frequency-updated', handleFrequencyUpdated);
+    const unsubscribeGoal = eventBus.on('brushing-goal-updated', handleGoalUpdated);
+    const unsubscribeToothbrush = eventBus.on('toothbrush-updated', handleToothbrushUpdated);
+
+    return () => {
+      unsubscribeBrushing();
+      unsubscribeFrequency();
+      unsubscribeGoal();
+      unsubscribeToothbrush();
+    };
+  }, [isVisible, refreshStats, user?.id]);
 
   // Handle enter/exit animations
   useEffect(() => {

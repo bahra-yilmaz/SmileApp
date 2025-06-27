@@ -1,10 +1,45 @@
 import { StreakEvent, StreakEventData, StreakSession } from './StreakTypes';
+import { eventBus } from '../../utils/EventBus';
 
 /**
  * Handles event management and notifications for streak updates
  */
 export class StreakEventService {
   private static listeners: Map<StreakEvent, Function[]> = new Map();
+  private static isInitialized = false;
+
+  /**
+   * Initialize global event listeners to connect with the main EventBus
+   */
+  static initialize(): void {
+    if (this.isInitialized) return;
+
+    // Listen to brushing completion events from the global event bus
+    eventBus.on('brushing-completed', (payload?: { dailyStreak?: number, userId?: string }) => {
+      console.log('🔥 StreakEventService: Received brushing-completed event', payload);
+      
+      // Emit our own streak update event to notify subscribers
+      this.emit('streak-updated', {
+        userId: payload?.userId || 'guest',
+        newStreak: payload?.dailyStreak || 0,
+        reason: 'brushing-completed'
+      });
+    });
+
+    // Listen to goal changes that might affect streak calculations
+    eventBus.on('frequency-updated', () => {
+      console.log('🔥 StreakEventService: Frequency updated, refreshing streak data');
+      this.emit('streak-updated', { 
+        userId: 'global',
+        newStreak: 0,
+        reason: 'frequency-changed',
+        timestamp: Date.now()
+      });
+    });
+
+    this.isInitialized = true;
+    console.log('✅ StreakEventService: Global event listeners initialized');
+  }
 
   /**
    * Subscribe to streak events

@@ -889,8 +889,10 @@ export default function SettingsScreen() {
         <ToothbrushManager
           visible={isToothbrushModalVisible}
           onClose={() => setIsToothbrushModalVisible(false)}
-          onUpdate={() => {}} // No longer needed - useToothbrushStats handles data refresh automatically
-          autoClose={MODAL_AUTO_CLOSE}
+          onUpdate={() => {
+            // Refresh local data when toothbrush is updated
+            console.log('🦷 Settings: Toothbrush updated, refreshing display...');
+          }}
         />
         
         {/* Reminder Times Manager */}

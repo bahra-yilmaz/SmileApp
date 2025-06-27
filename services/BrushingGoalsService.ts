@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from './supabaseClient';
+import { eventBus } from '../utils/EventBus';
 
 // Single storage keys to avoid conflicts
 const STORAGE_KEYS = {
@@ -393,6 +394,19 @@ export class BrushingGoalsService {
           console.error(`Error in ${event} callback:`, error);
         }
       });
+    }
+
+    // Also emit to global EventBus for cross-service reactivity
+    switch (event) {
+      case 'frequency-changed':
+        eventBus.emit('frequency-updated', data);
+        break;
+      case 'time-target-changed':
+        eventBus.emit('brushing-goal-updated', data);
+        break;
+      case 'goals-synced':
+        eventBus.emit('goals-synced', data);
+        break;
     }
   }
 

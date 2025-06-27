@@ -27,6 +27,7 @@ import ShareCard from '../ui/ShareCard';
 import { getProgressColor } from '../../utils/colorUtils';
 import { StreakService, StreakDisplayService, ComprehensiveStreakData } from '../../services/StreakService';
 import { useAuth } from '../../context/AuthContext';
+import { eventBus } from '../../utils/EventBus';
 
 interface StreakOverlayProps {
   isVisible: boolean;
@@ -104,6 +105,45 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
       setStreakDays(propStreakDays);
     }
   }, [propStreakDays]);
+  
+  // Listen to global events that should trigger streak data refresh
+  useEffect(() => {
+    const handleBrushingCompleted = () => {
+      if (isVisible && user?.id) {
+        console.log('🔥 StreakOverlay: Brushing completed, refreshing streak data...');
+        StreakService.getStreakData(user.id, { forceRefresh: true })
+          .then((data: ComprehensiveStreakData) => {
+            setStreakDays(data.currentStreak);
+            setLongestStreak(data.longestStreak);
+            setStreakHistory(data.streakHistory);
+            setCurrentStreakBrushings(data.currentStreakBrushings);
+          })
+          .catch(console.error);
+      }
+    };
+
+    const handleFrequencyUpdated = () => {
+      if (isVisible && user?.id) {
+        console.log('🔥 StreakOverlay: Frequency updated, refreshing streak data...');
+        StreakService.getStreakData(user.id, { forceRefresh: true })
+          .then((data: ComprehensiveStreakData) => {
+            setStreakDays(data.currentStreak);
+            setLongestStreak(data.longestStreak);
+            setStreakHistory(data.streakHistory);
+            setCurrentStreakBrushings(data.currentStreakBrushings);
+          })
+          .catch(console.error);
+      }
+    };
+
+    const unsubscribeBrushing = eventBus.on('brushing-completed', handleBrushingCompleted);
+    const unsubscribeFrequency = eventBus.on('frequency-updated', handleFrequencyUpdated);
+
+    return () => {
+      unsubscribeBrushing();
+      unsubscribeFrequency();
+    };
+  }, [isVisible, user?.id]);
   
   // Calculate progress towards next phase (assuming 7-day phases)
   const phaseLength = 7;

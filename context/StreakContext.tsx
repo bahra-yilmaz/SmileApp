@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { StreakService, StreakData } from '../services/StreakService';
 import { useAuth } from './AuthContext';
+import { eventBus } from '../utils/EventBus';
 
 interface StreakContextType {
   currentStreak: number;
@@ -74,6 +75,31 @@ export function StreakProvider({ children }: StreakProviderProps) {
     });
 
     return unsubscribe;
+  }, [user?.id]);
+
+  // Listen to global events that should trigger streak refreshes
+  useEffect(() => {
+    const handleBrushingCompleted = async () => {
+      if (user?.id) {
+        console.log('🔥 StreakContext: Brushing completed, refreshing streak...');
+        await refreshStreak();
+      }
+    };
+
+    const handleFrequencyUpdated = async () => {
+      if (user?.id) {
+        console.log('🔥 StreakContext: Frequency updated, refreshing streak...');
+        await refreshStreak();
+      }
+    };
+
+    const unsubscribeBrushing = eventBus.on('brushing-completed', handleBrushingCompleted);
+    const unsubscribeFrequency = eventBus.on('frequency-updated', handleFrequencyUpdated);
+
+    return () => {
+      unsubscribeBrushing();
+      unsubscribeFrequency();
+    };
   }, [user?.id]);
 
   const refreshStreak = async () => {

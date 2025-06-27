@@ -34,6 +34,7 @@ export class StreakService {
    */
   static async initialize(): Promise<void> {
     await StreakDataService.initialize();
+    StreakEventService.initialize(); // Initialize global event listeners
   }
 
   /**
