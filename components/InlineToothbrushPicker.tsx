@@ -33,6 +33,7 @@ interface InlineToothbrushPickerProps {
   onCancel: () => void;
   pickerOpacity: SharedValue<number>;
   pickerScale: SharedValue<number>;
+  isLoading?: boolean;
 }
 
 export default function InlineToothbrushPicker({
@@ -43,6 +44,7 @@ export default function InlineToothbrushPicker({
   onCancel,
   pickerOpacity,
   pickerScale,
+  isLoading = false,
 }: InlineToothbrushPickerProps) {
   const { t } = useTranslation();
   const { theme } = useTheme();
@@ -246,10 +248,30 @@ export default function InlineToothbrushPicker({
             {t('common.cancel', 'Cancel')}
           </ThemedText>
         </Pressable>
-        <Pressable style={[styles.saveTimeButton, { backgroundColor: theme.colors.primary[500] }]} onPress={handleSave}>
-          <ThemedText style={styles.saveTimeButtonText}>
-            {t('common.add', 'Add')}
-          </ThemedText>
+        <Pressable 
+          style={[
+            styles.saveTimeButton, 
+            { 
+              backgroundColor: isLoading 
+                ? theme.colors.primary[400] 
+                : theme.colors.primary[500] 
+            }
+          ]} 
+          onPress={isLoading ? undefined : handleSave}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <View style={styles.loadingContainer}>
+              <Ionicons name="hourglass" size={16} color="white" style={styles.loadingIcon} />
+              <ThemedText style={styles.saveTimeButtonText}>
+                {t('common.saving', 'Saving...')}
+              </ThemedText>
+            </View>
+          ) : (
+            <ThemedText style={styles.saveTimeButtonText}>
+              {t('common.add', 'Add')}
+            </ThemedText>
+          )}
         </Pressable>
       </View>
     </Animated.View>
@@ -399,5 +421,13 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: 'white',
     fontWeight: '500',
+  },
+  loadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  loadingIcon: {
+    marginRight: 6,
   },
 }); 

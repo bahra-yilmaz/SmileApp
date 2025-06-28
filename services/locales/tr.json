@@ -149,7 +149,10 @@
       "save": "Kaydet",
       "edit": "Düzenle",
       "delete": "Sil",
-      "add": "Ekle"
+      "add": "Ekle",
+      "loading": "Yükleniyor...",
+      "saving": "Kaydediliyor...",
+      "tryAgain": "Tekrar Dene"
     },
     "languages": {
       "en": "English",
@@ -703,9 +706,9 @@
         "message": "Fırçalama hedefi değiştirilemedi. Lütfen tekrar deneyin."
       }
     },
-    "brushingTrend": {
-  "loading": "Son seansların analiz ediliyor…",
-  "improvingConsistently": "Harika bir istikrar! Fırçalama süren düzenli olarak artıyor.",
+          "brushingTrend": {
+        "loading": "Son seansların analiz ediliyor…",
+    "improvingConsistently": "Harika bir istikrar! Fırçalama süren düzenli olarak artıyor.",
   "improvingSlightly": "Güzel ilerleme! Önceye göre daha uzun fırçalıyorsun.",
   "declining": "Fırçalama sürelerin biraz kısalmış gibi. Hadi tekrar ritme girelim!",
   "consistentHigh": "Mükemmel! Hedef süreyi düzenli olarak yakalıyorsun.",

@@ -152,6 +152,7 @@
     "add": "Add",
     "error": "Error",
     "loading": "Loading...",
+    "saving": "Saving...",
     "tryAgain": "Try Again"
   },
   "languages": {

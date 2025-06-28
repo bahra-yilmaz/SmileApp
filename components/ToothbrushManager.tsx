@@ -45,6 +45,9 @@ export default function ToothbrushManager({
   
   // PERFORMANCE FIX: Prevent multiple simultaneous fetches
   const [isFetching, setIsFetching] = useState(false);
+  
+  // Loading state for saving new toothbrush
+  const [isSavingToothbrush, setIsSavingToothbrush] = useState(false);
 
   const glassStyle = getSecondaryCardStyle(theme);
 
@@ -163,7 +166,14 @@ export default function ToothbrushManager({
   };
 
   const handleSaveToothbrush = async () => {
+    // Prevent multiple simultaneous saves
+    if (isSavingToothbrush) {
+      return;
+    }
+
     try {
+      setIsSavingToothbrush(true);
+      
       const userId = user?.id || 'guest';
       
       // Check if user is guest
@@ -208,6 +218,8 @@ export default function ToothbrushManager({
         t('toothbrush.error.title', 'Error'),
         t('toothbrush.error.message', 'Failed to save toothbrush data. Please try again.')
       );
+    } finally {
+      setIsSavingToothbrush(false);
     }
   };
 
@@ -389,6 +401,7 @@ export default function ToothbrushManager({
           onCancel={handleCancelToothbrushAdd}
           pickerOpacity={pickerOpacity}
           pickerScale={pickerScale}
+          isLoading={isSavingToothbrush}
         />
         
         {history.length > 0 && (
