@@ -11,11 +11,12 @@
 
 // Export all toothbrush-related services and types
 export { ToothbrushService } from './ToothbrushService';
-export { ToothbrushRepository } from './ToothbrushRepository';
 export { ToothbrushDataService } from './ToothbrushDataService';
 export { ToothbrushCalculationService } from './ToothbrushCalculationService';
 export { ToothbrushDisplayService } from './ToothbrushDisplayService';
+export { ToothbrushRepository } from './ToothbrushRepository';
 export { ToothbrushMigrationService } from './ToothbrushMigrationService';
+export { ApproximateBrushingCalculator } from './ApproximateBrushingCalculator';
 
 export type {
   Toothbrush,

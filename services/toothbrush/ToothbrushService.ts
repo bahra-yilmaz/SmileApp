@@ -7,6 +7,7 @@ import { eventBus } from '../../utils/EventBus';
 import { ToothbrushDataService } from './ToothbrushDataService';
 import { ToothbrushMigrationService } from './ToothbrushMigrationService';
 import { supabase } from '../supabaseClient';
+import { ApproximateBrushingCalculator } from './ApproximateBrushingCalculator';
 
 /**
  * Clean ToothbrushService - Business Logic Layer
@@ -160,17 +161,18 @@ export class ToothbrushService {
 
   /**
    * Replace the current toothbrush with a new one
+   * Now includes smart brushing count estimation for aged toothbrushes
    */
   static async replaceToothbrush(
-    userId: string,
-    details: {
+    userId: string, 
+    config: {
       type: 'manual' | 'electric';
-      purpose?: 'regular' | 'sensitive' | 'braces' | 'whitening';
+      purpose: 'regular' | 'braces' | 'sensitive' | 'whitening';
       name?: string;
       ageDays?: number;
     }
   ): Promise<void> {
-    console.log('🔄 Replacing toothbrush for user:', userId, details);
+    console.log('🔄 Replacing toothbrush for user:', userId, config);
 
     // Guest users don't have toothbrush tracking
     if (userId === 'guest') {
@@ -178,51 +180,85 @@ export class ToothbrushService {
     }
 
     try {
-      // Get current data
       const currentData = await ToothbrushRepository.getData(userId);
-      const oldBrush = currentData.current;
-
-      // Calculate start date based on age
-      const startDate = details.ageDays && details.ageDays > 0
-        ? new Date(Date.now() - (details.ageDays * 24 * 60 * 60 * 1000)).toISOString()
-        : new Date().toISOString();
+      const now = new Date();
+      const startDate = config.ageDays 
+        ? new Date(now.getTime() - (config.ageDays * 24 * 60 * 60 * 1000))
+        : now;
 
       // Create new toothbrush
-      const newBrush: Toothbrush = {
+      const newToothbrush: Toothbrush = {
         id: uuidv4(),
         user_id: userId,
-        startDate,
-        type: details.type,
-        purpose: details.purpose || 'regular',
-        name: details.name,
-        created_at: new Date().toISOString(),
+        name: config.name,
+        startDate: startDate.toISOString(),
+        type: config.type,
+        purpose: config.purpose,
+        created_at: now.toISOString(),
       };
 
-      // Move old brush to history with end date
-      const newHistory = oldBrush 
-        ? [...currentData.history, { ...oldBrush, endDate: new Date().toISOString() }] 
+      // Calculate approximate brushing count for aged toothbrushes
+      let initialBrushingCount = 0;
+      if (config.ageDays && config.ageDays > 0) {
+        const estimation = await ApproximateBrushingCalculator.calculateApproximateBrushings({
+          ageDays: config.ageDays,
+          userId,
+          toothbrushPurpose: config.purpose,
+          toothbrushType: config.type
+        });
+
+        // Validate the estimation
+        const validation = ApproximateBrushingCalculator.validateEstimation(
+          estimation.estimatedBrushings, 
+          config.ageDays
+        );
+
+        if (validation.isReasonable) {
+          initialBrushingCount = estimation.estimatedBrushings;
+          console.log('✅ Applied smart brushing estimation:', {
+            ageDays: config.ageDays,
+            estimatedBrushings: initialBrushingCount,
+            explanation: ApproximateBrushingCalculator.generateEstimationExplanation(estimation, config.ageDays)
+          });
+        } else {
+          console.warn('⚠️ Estimation validation failed:', validation.warning);
+          // Fall back to a simple calculation: age_days * 1.5 (reasonable average)
+          initialBrushingCount = Math.round(config.ageDays * 1.5);
+          console.log('🔄 Using fallback calculation:', initialBrushingCount);
+        }
+      }
+
+      // Move current toothbrush to history if it exists
+      const newHistory = currentData.current 
+        ? [...currentData.history, { ...currentData.current, endDate: now.toISOString() }]
         : currentData.history;
 
       const newData: ToothbrushData = {
-        current: newBrush,
+        current: newToothbrush,
         history: newHistory,
       };
 
-      // Save to repository (handles both backend and local cache)
+      // Save to repository
       await ToothbrushRepository.saveData(userId, newData);
 
-      // Clear stats cache to prevent showing stale data for the new toothbrush
+      // If we have an initial brushing count, update it in the backend
+      if (initialBrushingCount > 0) {
+        await this.updateToothbrushBrushingCount(newToothbrush.id, initialBrushingCount);
+      }
+
+      // Clear stats cache since we have a new toothbrush
       await ToothbrushDataService.clearStatsCache();
 
       console.log('✅ Successfully replaced toothbrush');
 
-      // Emit event to notify other components of toothbrush update
+      // Emit event for other components to refresh
       eventBus.emit('toothbrush-updated', {
+        action: 'replaced',
         userId,
-        action: oldBrush ? 'replaced' : 'created',
-        newToothbrush: newBrush,
-        oldToothbrush: oldBrush
+        oldToothbrush: currentData.current,
+        newToothbrush,
       });
+
     } catch (error) {
       console.error('❌ Error replacing toothbrush:', error);
       throw error;
@@ -230,14 +266,43 @@ export class ToothbrushService {
   }
 
   /**
+   * Helper method to update brushing count for a toothbrush
+   */
+  private static async updateToothbrushBrushingCount(toothbrushId: string, count: number): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('toothbrushes')
+        .update({ brushing_count: count })
+        .eq('id', toothbrushId);
+
+      if (error) {
+        console.error('❌ Error updating toothbrush brushing count:', error);
+        throw error;
+      }
+
+      console.log('✅ Updated toothbrush brushing count:', { toothbrushId, count });
+    } catch (error) {
+      console.error('❌ Failed to update brushing count:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Create the first toothbrush for new users
+   * Now supports configuration options and automatic brushing count estimation
    */
   static async createFirstBrush(
     userId: string,
     t: (key: string) => string,
-    startDate?: string | null
+    startDate?: string | null,
+    config?: {
+      type?: 'manual' | 'electric';
+      purpose?: 'regular' | 'braces' | 'sensitive' | 'whitening';
+      name?: string;
+      ageDays?: number; // For aged toothbrushes during onboarding
+    }
   ): Promise<void> {
-    console.log('🆕 Creating first brush for user:', userId, 'with startDate:', startDate);
+    console.log('🆕 Creating first brush for user:', userId, 'with config:', { startDate, config });
 
     // Guest users don't have toothbrush tracking
     if (userId === 'guest') {
@@ -253,18 +318,72 @@ export class ToothbrushService {
         return;
       }
 
-      // Calculate start date
-      const brushStartDate = startDate || new Date().toISOString();
+      // Calculate start date - use provided startDate or derive from ageDays
+      let brushStartDate: string;
+      let calculatedAgeDays = 0;
 
-      // Create default toothbrush
+      if (config?.ageDays && config.ageDays > 0) {
+        // If ageDays is provided, calculate the start date from that
+        const now = new Date();
+        brushStartDate = new Date(now.getTime() - (config.ageDays * 24 * 60 * 60 * 1000)).toISOString();
+        calculatedAgeDays = config.ageDays;
+        console.log('📅 Using ageDays to calculate start date:', { ageDays: config.ageDays, startDate: brushStartDate });
+      } else if (startDate) {
+        // Use the provided start date and calculate age from it
+        brushStartDate = startDate;
+        const now = new Date();
+        const start = new Date(startDate);
+        calculatedAgeDays = Math.max(0, Math.floor((now.getTime() - start.getTime()) / (24 * 60 * 60 * 1000)));
+        console.log('📅 Using provided start date:', { startDate, calculatedAgeDays });
+      } else {
+        // Default to current date (brand new toothbrush)
+        brushStartDate = new Date().toISOString();
+        calculatedAgeDays = 0;
+      }
+
+      // Create toothbrush with configuration or defaults
       const newBrush: Toothbrush = {
         id: uuidv4(),
         user_id: userId,
+        name: config?.name,
         startDate: brushStartDate,
-        type: 'manual',
-        purpose: 'regular',
+        type: config?.type || 'manual',
+        purpose: config?.purpose || 'regular',
         created_at: new Date().toISOString(),
       };
+
+      // Calculate approximate brushing count for aged toothbrushes
+      let initialBrushingCount = 0;
+      if (calculatedAgeDays > 0) {
+        console.log('🧮 Calculating initial brushing count for aged toothbrush:', calculatedAgeDays, 'days');
+        
+        const estimation = await ApproximateBrushingCalculator.calculateApproximateBrushings({
+          ageDays: calculatedAgeDays,
+          userId,
+          toothbrushPurpose: newBrush.purpose,
+          toothbrushType: newBrush.type
+        });
+
+        // Validate the estimation
+        const validation = ApproximateBrushingCalculator.validateEstimation(
+          estimation.estimatedBrushings, 
+          calculatedAgeDays
+        );
+
+        if (validation.isReasonable) {
+          initialBrushingCount = estimation.estimatedBrushings;
+          console.log('✅ Applied smart brushing estimation:', {
+            ageDays: calculatedAgeDays,
+            estimatedBrushings: initialBrushingCount,
+            explanation: ApproximateBrushingCalculator.generateEstimationExplanation(estimation, calculatedAgeDays)
+          });
+        } else {
+          console.warn('⚠️ Estimation validation failed:', validation.warning);
+          // Fall back to a simple calculation: age_days * 1.5 (reasonable average)
+          initialBrushingCount = Math.round(calculatedAgeDays * 1.5);
+          console.log('🔄 Using fallback calculation:', initialBrushingCount);
+        }
+      }
 
       const newData: ToothbrushData = {
         current: newBrush,
@@ -274,10 +393,15 @@ export class ToothbrushService {
       // Save to repository
       await ToothbrushRepository.saveData(userId, newData);
 
+      // If we have an initial brushing count, update it in the backend
+      if (initialBrushingCount > 0) {
+        await this.updateToothbrushBrushingCount(newBrush.id, initialBrushingCount);
+      }
+
       // Clear stats cache to ensure fresh data for the new toothbrush
       await ToothbrushDataService.clearStatsCache();
       
-      console.log('✅ Successfully created first toothbrush');
+      console.log('✅ Successfully created first toothbrush with smart estimation');
 
       // Emit event to notify other components of toothbrush creation
       eventBus.emit('toothbrush-updated', {

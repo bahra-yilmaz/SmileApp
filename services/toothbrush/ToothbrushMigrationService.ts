@@ -1,5 +1,6 @@
 import { supabase } from '../supabaseClient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ApproximateBrushingCalculator } from './ApproximateBrushingCalculator';
 
 /**
  * Service to handle migration from old toothbrush counting system to new counter-based system
@@ -118,6 +119,7 @@ export class ToothbrushMigrationService {
 
   /**
    * Migrate a specific toothbrush to use the counter system
+   * Now includes smart estimation for toothbrushes without existing data
    */
   private static async migrateToothbrushCounter(userId: string, toothbrush: any): Promise<void> {
     console.log('🔄 Migrating toothbrush:', toothbrush.id);
@@ -159,6 +161,46 @@ export class ToothbrushMigrationService {
         if (!rangeError && rangeCount !== null) {
           count = rangeCount.length || 0;
           console.log(`📊 Found ${count} brushings via date range for toothbrush:`, toothbrush.id);
+        }
+      }
+
+      // If still no count and toothbrush has significant age, use smart estimation
+      if (count === 0) {
+        const startDate = new Date(toothbrush.start_date);
+        const endDate = toothbrush.end_date ? new Date(toothbrush.end_date) : new Date();
+        const ageDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+
+        if (ageDays > 1) { // Only estimate for toothbrushes older than 1 day
+          console.log(`🧮 No brushing data found, calculating smart estimation for ${ageDays} day old toothbrush`);
+          
+          try {
+            const estimation = await ApproximateBrushingCalculator.calculateApproximateBrushings({
+              ageDays,
+              userId,
+              toothbrushPurpose: toothbrush.purpose || 'regular',
+              toothbrushType: toothbrush.type || 'manual'
+            });
+
+            const validation = ApproximateBrushingCalculator.validateEstimation(
+              estimation.estimatedBrushings, 
+              ageDays
+            );
+
+            if (validation.isReasonable) {
+              count = estimation.estimatedBrushings;
+              console.log(`✨ Applied smart estimation: ${count} brushings for ${ageDays} day old toothbrush`);
+            } else {
+              console.warn('⚠️ Smart estimation failed validation:', validation.warning);
+              // Fallback to simple estimation
+              count = Math.round(ageDays * 1.5);
+              console.log(`🔄 Using fallback estimation: ${count} brushings`);
+            }
+          } catch (error) {
+            console.warn('⚠️ Smart estimation failed, using fallback:', error);
+            // Simple fallback: age in days * 1.5 (reasonable average)
+            count = Math.round(ageDays * 1.5);
+            console.log(`🔄 Using simple fallback: ${count} brushings`);
+          }
         }
       }
 

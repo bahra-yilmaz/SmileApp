@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, StyleSheet, TextInput, Pressable, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from './ThemeProvider';
@@ -6,6 +6,10 @@ import ThemedText from './ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { SharedValue } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+import PrimaryButton from './ui/PrimaryButton';
+import HourMinutePicker from './HourMinutePicker';
+import { ApproximateBrushingCalculator } from '../services/toothbrush';
+import { useAuth } from '../context/AuthContext';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -44,6 +48,7 @@ export default function InlineToothbrushPicker({
   const { t } = useTranslation();
   const { theme } = useTheme();
   const { activeColors } = theme;
+  const { user } = useAuth();
 
   const toothbrushTypes = [
     { id: 'manual', label: t('toothbrush.type.manual', 'Manual'), icon: 'brush' },
@@ -66,6 +71,45 @@ export default function InlineToothbrushPicker({
     { id: '2_months', label: t('toothbrush.agePreset.twoMonths_short', '2 months'), days: 60 },
     { id: '3_months', label: t('toothbrush.agePreset.threeMonths_short', '3 months'), days: 90 },
   ];
+
+  // State for brushing estimation preview
+  const [brushingEstimation, setBrushingEstimation] = useState<{
+    estimatedBrushings: number;
+    explanation: string;
+  } | null>(null);
+
+  // Calculate estimation when age changes
+  useEffect(() => {
+    const calculateEstimation = async () => {
+      if (config.ageDays > 0 && user?.id) {
+        try {
+          const estimation = await ApproximateBrushingCalculator.calculateApproximateBrushings({
+            ageDays: config.ageDays,
+            userId: user.id,
+            toothbrushPurpose: config.category,
+            toothbrushType: config.type
+          });
+
+          const explanation = ApproximateBrushingCalculator.generateEstimationExplanation(
+            estimation, 
+            config.ageDays
+          );
+
+          setBrushingEstimation({
+            estimatedBrushings: estimation.estimatedBrushings,
+            explanation
+          });
+        } catch (error) {
+          console.warn('Could not calculate brushing estimation:', error);
+          setBrushingEstimation(null);
+        }
+      } else {
+        setBrushingEstimation(null);
+      }
+    };
+
+    calculateEstimation();
+  }, [config.ageDays, config.category, config.type, user?.id]);
 
   const handleTypeSelect = (type: 'manual' | 'electric') => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -162,6 +206,56 @@ export default function InlineToothbrushPicker({
           </View>
         )}
       </View>
+
+             {/* Age Selection with Estimation Preview */}
+       <View style={styles.section}>
+         <ThemedText style={styles.sectionTitle}>
+           {t('toothbrush.picker.age', 'Brush Age')}
+         </ThemedText>
+         
+                   {/* Simple Age Selection */}
+          <View style={styles.ageSelectionContainer}>
+            <ThemedText style={styles.ageInputLabel}>Days old:</ThemedText>
+            <View style={styles.ageInputContainer}>
+              <Pressable 
+                style={styles.ageButton}
+                onPress={() => {
+                  const newAge = Math.max(0, config.ageDays - 7);
+                  onConfigChange({ ...config, ageDays: newAge });
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              >
+                <ThemedText style={styles.ageButtonText}>-</ThemedText>
+              </Pressable>
+              <ThemedText style={styles.ageValue}>{config.ageDays}</ThemedText>
+              <Pressable 
+                style={styles.ageButton}
+                onPress={() => {
+                  const newAge = Math.min(365, config.ageDays + 7);
+                  onConfigChange({ ...config, ageDays: newAge });
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                }}
+              >
+                <ThemedText style={styles.ageButtonText}>+</ThemedText>
+              </Pressable>
+            </View>
+          </View>
+         
+         {/* Brushing Estimation Preview */}
+         {brushingEstimation && (
+           <View style={[styles.estimationPreview, { backgroundColor: activeColors.card, borderColor: activeColors.tint }]}>
+             <ThemedText style={styles.estimationIcon}>🧮</ThemedText>
+             <View style={styles.estimationText}>
+               <ThemedText style={styles.estimationTitle}>
+                 Smart Estimation
+               </ThemedText>
+               <ThemedText style={styles.estimationExplanation}>
+                 {brushingEstimation.explanation}
+               </ThemedText>
+             </View>
+           </View>
+         )}
+       </View>
 
       {/* Type Selection */}
       <View style={styles.section}>
@@ -393,5 +487,63 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: 'white',
     fontWeight: '500',
+  },
+     ageSelectionContainer: {
+     marginBottom: 16,
+   },
+   ageInputLabel: {
+     fontSize: 14,
+     marginBottom: 8,
+     opacity: 0.8,
+   },
+   ageInputContainer: {
+     flexDirection: 'row',
+     alignItems: 'center',
+     justifyContent: 'center',
+     gap: 16,
+   },
+   ageButton: {
+     width: 40,
+     height: 40,
+     borderRadius: 20,
+     backgroundColor: 'rgba(255, 255, 255, 0.2)',
+     alignItems: 'center',
+     justifyContent: 'center',
+   },
+   ageButtonText: {
+     fontSize: 20,
+     fontWeight: 'bold',
+   },
+   ageValue: {
+     fontSize: 18,
+     fontWeight: 'bold',
+     minWidth: 40,
+     textAlign: 'center',
+   },
+   estimationPreview: {
+     flexDirection: 'row',
+     alignItems: 'center',
+     padding: 12,
+     marginTop: 8,
+     borderRadius: 8,
+     borderWidth: 1,
+   },
+  estimationIcon: {
+    fontSize: 20,
+    marginRight: 12,
+  },
+  estimationText: {
+    flex: 1,
+  },
+  estimationTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 2,
+    opacity: 0.9,
+  },
+  estimationExplanation: {
+    fontSize: 12,
+    opacity: 0.7,
+    lineHeight: 16,
   },
 }); 
