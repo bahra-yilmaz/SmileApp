@@ -324,6 +324,11 @@
         }
       },
       "item": "Diş Fırçası",
+      "defaultNames": {
+        "firstBrush": "İlk Fırçam",
+        "manualToothbrush": "Manuel Fırça",
+        "electricToothbrush": "Elektrikli Fırça"
+      },
       "picker": {
         "nameLabel": "İsim",
         "namePlaceholder": "ör. Günlük Fırça",

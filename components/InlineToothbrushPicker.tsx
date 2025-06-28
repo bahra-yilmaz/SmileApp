@@ -71,44 +71,7 @@ export default function InlineToothbrushPicker({
     { id: '3_months', label: t('toothbrush.agePreset.threeMonths_short', '3 months'), days: 90 },
   ];
 
-  // State for brushing estimation preview
-  const [brushingEstimation, setBrushingEstimation] = useState<{
-    estimatedBrushings: number;
-    explanation: string;
-  } | null>(null);
 
-  // Calculate estimation when age changes
-  useEffect(() => {
-    const calculateEstimation = async () => {
-      if (config.ageDays > 0 && user?.id) {
-        try {
-          const estimation = await ApproximateBrushingCalculator.calculateApproximateBrushings({
-            ageDays: config.ageDays,
-            userId: user.id,
-            toothbrushPurpose: config.category,
-            toothbrushType: config.type
-          });
-
-          const explanation = ApproximateBrushingCalculator.generateEstimationExplanation(
-            estimation, 
-            config.ageDays
-          );
-
-          setBrushingEstimation({
-            estimatedBrushings: estimation.estimatedBrushings,
-            explanation
-          });
-        } catch (error) {
-          console.warn('Could not calculate brushing estimation:', error);
-          setBrushingEstimation(null);
-        }
-      } else {
-        setBrushingEstimation(null);
-      }
-    };
-
-    calculateEstimation();
-  }, [config.ageDays, config.category, config.type, user?.id]);
 
   const handleTypeSelect = (type: 'manual' | 'electric') => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -436,63 +399,5 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: 'white',
     fontWeight: '500',
-  },
-     ageSelectionContainer: {
-     marginBottom: 16,
-   },
-   ageInputLabel: {
-     fontSize: 14,
-     marginBottom: 8,
-     opacity: 0.8,
-   },
-   ageInputContainer: {
-     flexDirection: 'row',
-     alignItems: 'center',
-     justifyContent: 'center',
-     gap: 16,
-   },
-   ageButton: {
-     width: 40,
-     height: 40,
-     borderRadius: 20,
-     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-     alignItems: 'center',
-     justifyContent: 'center',
-   },
-   ageButtonText: {
-     fontSize: 20,
-     fontWeight: 'bold',
-   },
-   ageValue: {
-     fontSize: 18,
-     fontWeight: 'bold',
-     minWidth: 40,
-     textAlign: 'center',
-   },
-   estimationPreview: {
-     flexDirection: 'row',
-     alignItems: 'center',
-     padding: 12,
-     marginTop: 8,
-     borderRadius: 8,
-     borderWidth: 1,
-   },
-  estimationIcon: {
-    fontSize: 20,
-    marginRight: 12,
-  },
-  estimationText: {
-    flex: 1,
-  },
-  estimationTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 2,
-    opacity: 0.9,
-  },
-  estimationExplanation: {
-    fontSize: 12,
-    opacity: 0.7,
-    lineHeight: 16,
   },
 }); 

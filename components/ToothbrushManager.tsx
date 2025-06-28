@@ -178,7 +178,7 @@ export default function ToothbrushManager({
       
       console.log('🦷 Saving toothbrush for user:', userId);
       
-      await ToothbrushService.replaceToothbrush(userId, {
+      await ToothbrushService.replaceToothbrush(userId, t, {
         type: toothbrushConfig.type,
         purpose: toothbrushConfig.category,
         name: toothbrushConfig.name || undefined, // Include name if provided
@@ -720,7 +720,7 @@ const styles = StyleSheet.create({
   brushInfo: {
     flex: 1,
     justifyContent: 'center',
-    paddingLeft: 8,
+    paddingLeft: 0,
   },
   brushName: {
     fontSize: 18,

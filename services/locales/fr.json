@@ -322,6 +322,11 @@
         }
       },
       "item": "Brosse à dents",
+      "defaultNames": {
+        "firstBrush": "Première Brosse",
+        "manualToothbrush": "Brosse Manuelle",
+        "electricToothbrush": "Brosse Électrique"
+      },
       "picker": {
         "nameLabel": "Nom",
         "namePlaceholder": "ex. Brosse quotidienne",

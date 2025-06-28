@@ -292,6 +292,11 @@
       "whitening": "Whitening"
     },
     "item": "Toothbrush",
+    "defaultNames": {
+      "firstBrush": "First Brush",
+      "manualToothbrush": "Manual Toothbrush",
+      "electricToothbrush": "Electric Toothbrush"
+    },
     "picker": {
       "nameLabel": "Name",
       "namePlaceholder": "e.g., Daily Driver",

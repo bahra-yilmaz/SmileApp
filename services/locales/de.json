@@ -321,6 +321,11 @@
         }
       },
       "item": "Zahnbürste",
+      "defaultNames": {
+        "firstBrush": "Erste Bürste",
+        "manualToothbrush": "Handzahnbürste",
+        "electricToothbrush": "Elektrische Zahnbürste"
+      },
       "picker": {
         "nameLabel": "Name",
         "namePlaceholder": "z.B. Tagesbürste",

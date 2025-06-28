@@ -282,6 +282,11 @@
         "whitening": "Blanqueador"
       },
       "item": "Cepillo",
+      "defaultNames": {
+        "firstBrush": "Primer Cepillo",
+        "manualToothbrush": "Cepillo Manual",
+        "electricToothbrush": "Cepillo Eléctrico"
+      },
       "picker": {
         "nameLabel": "Nombre",
         "namePlaceholder": "p.ej., Cepillo Diario",

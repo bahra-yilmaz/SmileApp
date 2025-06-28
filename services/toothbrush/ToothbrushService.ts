@@ -164,7 +164,8 @@ export class ToothbrushService {
    * Now includes smart brushing count estimation for aged toothbrushes
    */
   static async replaceToothbrush(
-    userId: string, 
+    userId: string,
+    t: (key: string) => string,
     config: {
       type: 'manual' | 'electric';
       purpose: 'regular' | 'braces' | 'sensitive' | 'whitening';
@@ -186,11 +187,16 @@ export class ToothbrushService {
         ? new Date(now.getTime() - (config.ageDays * 24 * 60 * 60 * 1000))
         : now;
 
-      // Create new toothbrush
+      // Create new toothbrush with type-based default name if no name provided
+      const defaultName = config.name || 
+        (config.type === 'electric' 
+          ? t('toothbrush.defaultNames.electricToothbrush')
+          : t('toothbrush.defaultNames.manualToothbrush'));
+      
       const newToothbrush: Toothbrush = {
         id: uuidv4(),
         user_id: userId,
-        name: config.name,
+        name: defaultName,
         startDate: startDate.toISOString(),
         type: config.type,
         purpose: config.purpose,
@@ -342,10 +348,13 @@ export class ToothbrushService {
       }
 
       // Create toothbrush with configuration or defaults
+      // Use "First Brush" as default name for onboarding
+      const defaultName = config?.name || t('toothbrush.defaultNames.firstBrush');
+      
       const newBrush: Toothbrush = {
         id: uuidv4(),
         user_id: userId,
-        name: config?.name,
+        name: defaultName,
         startDate: brushStartDate,
         type: config?.type || 'manual',
         purpose: config?.purpose || 'regular',

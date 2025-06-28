@@ -22,7 +22,7 @@ export class ToothbrushCalculationService {
       // Calculate basic metrics
       const startDate = new Date(toothbrush.startDate);
       const endDate = toothbrush.endDate ? new Date(toothbrush.endDate) : new Date();
-      const totalCalendarDays = Math.max(1, differenceInDays(endDate, startDate) + 1);
+      const totalCalendarDays = Math.max(0, differenceInDays(endDate, startDate));
 
       // Get brushing count directly from the toothbrush record (fast!)
       const { data: toothbrushData, error } = await supabase
@@ -68,7 +68,9 @@ export class ToothbrushCalculationService {
       // Determine replacement status based on usage
       let replacementStatus: 'brand_new' | 'fresh' | 'good' | 'replace_soon' | 'overdue';
       
-      if (totalCalendarDays <= 7) {
+      if (totalCalendarDays === 0) {
+        replacementStatus = 'brand_new'; // Brand new toothbrush created today
+      } else if (totalCalendarDays <= 7) {
         replacementStatus = 'brand_new';
       } else if (totalCalendarDays <= 30) {
         replacementStatus = 'fresh';
@@ -97,7 +99,7 @@ export class ToothbrushCalculationService {
       
       // Return safe defaults on error
       return {
-        totalCalendarDays: 1,
+        totalCalendarDays: 0,
         actualBrushingDays: 0,
         totalBrushingSessions: 0,
         averageBrushingsPerDay: 0,
