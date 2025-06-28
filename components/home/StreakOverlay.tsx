@@ -56,6 +56,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
   
   // State for streak history visibility and data
   const [showHistory, setShowHistory] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
 
 
@@ -64,6 +65,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
     const loadStreakData = async () => {
       if (isVisible && user?.id) {
         try {
+          setIsLoadingHistory(true);
           const data = await StreakService.getStreakData(user.id);
           setStreakDays(data.currentStreak);
           setLongestStreak(data.longestStreak);
@@ -71,6 +73,8 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
           setCurrentStreakBrushings(data.currentStreakBrushings);
         } catch (error) {
           console.error('Error loading streak data in StreakOverlay:', error);
+        } finally {
+          setIsLoadingHistory(false);
         }
       }
     };
@@ -111,6 +115,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
     const handleBrushingCompleted = () => {
       if (isVisible && user?.id) {
         console.log('🔥 StreakOverlay: Brushing completed, refreshing streak data...');
+        setIsLoadingHistory(true);
         StreakService.getStreakData(user.id, { forceRefresh: true })
           .then((data: ComprehensiveStreakData) => {
             setStreakDays(data.currentStreak);
@@ -118,13 +123,15 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
             setStreakHistory(data.streakHistory);
             setCurrentStreakBrushings(data.currentStreakBrushings);
           })
-          .catch(console.error);
+          .catch(console.error)
+          .finally(() => setIsLoadingHistory(false));
       }
     };
 
     const handleFrequencyUpdated = () => {
       if (isVisible && user?.id) {
         console.log('🔥 StreakOverlay: Frequency updated, refreshing streak data...');
+        setIsLoadingHistory(true);
         StreakService.getStreakData(user.id, { forceRefresh: true })
           .then((data: ComprehensiveStreakData) => {
             setStreakDays(data.currentStreak);
@@ -132,7 +139,8 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
             setStreakHistory(data.streakHistory);
             setCurrentStreakBrushings(data.currentStreakBrushings);
           })
-          .catch(console.error);
+          .catch(console.error)
+          .finally(() => setIsLoadingHistory(false));
       }
     };
 
@@ -405,26 +413,40 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
             {/* Conditional History List */}
             {showHistory && (
               <View style={styles.historyListContainer}>
-                {streakHistory.map((item: any, index: number) => (
-                  <View 
-                    key={item.id} 
-                    style={[
-                      styles.historyItem,
-                      index < streakHistory.length - 1 && [
-                        styles.historyItemSeparator,
-                        { 
-                          borderBottomColor: theme.colorScheme === 'dark' 
-                            ? 'rgba(255, 255, 255, 0.1)' 
-                            : 'rgba(0, 0, 0, 0.05)'
-                        }
-                      ]
-                    ]}
-                  >
-                    <ThemedText style={styles.historyItemText}>
-                      {t('streakOverlay.streakPeriodText', { startDate: item.startDate, endDate: item.endDate, count: item.duration })}
+                {isLoadingHistory ? (
+                  <View style={styles.historyItem}>
+                    <ThemedText style={[styles.historyItemText, { opacity: 0.6 }]}>
+                      {t('common.loading', 'Loading...')}
                     </ThemedText>
                   </View>
-                ))}
+                ) : streakHistory.length > 0 ? (
+                  streakHistory.map((item: any, index: number) => (
+                    <View 
+                      key={item.id} 
+                      style={[
+                        styles.historyItem,
+                        index < streakHistory.length - 1 && [
+                          styles.historyItemSeparator,
+                          { 
+                            borderBottomColor: theme.colorScheme === 'dark' 
+                              ? 'rgba(255, 255, 255, 0.1)' 
+                              : 'rgba(0, 0, 0, 0.05)'
+                          }
+                        ]
+                      ]}
+                    >
+                      <ThemedText style={styles.historyItemText}>
+                        {t('streakOverlay.streakPeriodText', { startDate: item.startDate, endDate: item.endDate, count: item.duration })}
+                      </ThemedText>
+                    </View>
+                  ))
+                ) : (
+                  <View style={styles.historyItem}>
+                    <ThemedText style={[styles.historyItemText, { opacity: 0.6 }]}>
+                      {t('streakOverlay.noHistory', 'No streak history yet. Keep going!')}
+                    </ThemedText>
+                  </View>
+                )}
               </View>
             )}
 
@@ -668,7 +690,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   historyItem: {
-    paddingVertical: 10,
+    paddingVertical: 6,
     paddingHorizontal: 16, 
   },
   historyItemSeparator: {
@@ -678,6 +700,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     opacity: 0.8,
     fontFamily: 'Quicksand-Regular',
+    lineHeight: 18,
   },
   buttonShadowContainer: {
     position: 'absolute',

@@ -529,7 +529,8 @@
     "confirmReplaceTitle": "Değişimi Onayla",
     "confirmReplaceMessage": "Bu fırçayı değiştirildi olarak işaretlemek istediğine emin misin? Gün sayısı sıfırlanacak.",
     "showHistory": "Geçmişi Göster",
-    "hideHistory": "Geçmişi Gizle"
+    "hideHistory": "Geçmişi Gizle",
+    "noHistoryYet": "Henüz değişim geçmişi yok"
   },
   "streakOverlay": {
     "title": "{{count}} Günlük Seri",

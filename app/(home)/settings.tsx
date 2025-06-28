@@ -12,7 +12,7 @@ import DailyBrushingFrequencySelector, { DailyBrushingFrequency } from '../../co
 import ToothbrushManager from '../../components/ToothbrushManager';
 import { ToothbrushDisplayService } from '../../services/toothbrush/ToothbrushDisplayService';
 import { OnboardingService } from '../../services/OnboardingService';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image as ExpoImage } from 'expo-image';
@@ -59,6 +59,7 @@ export default function SettingsScreen() {
   const { theme } = useTheme();
   const { spacing, activeColors } = theme;
   const router = useRouter();
+  const params = useLocalSearchParams();
   const insets = useSafeAreaInsets();
   const { t, i18n } = useTranslation();
   
@@ -222,6 +223,18 @@ export default function SettingsScreen() {
       setCurrentFrequency(match);
     }
   }, [brushingFrequency]);
+  
+  // Auto-open toothbrush modal if requested via URL parameter
+  useEffect(() => {
+    if (params.openToothbrushModal === 'true') {
+      // Small delay to ensure the screen has rendered
+      const timer = setTimeout(() => {
+        setIsToothbrushModalVisible(true);
+      }, 300);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [params.openToothbrushModal]);
   
   const loadCurrentTone = async () => {
     try {

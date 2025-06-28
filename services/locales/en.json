@@ -515,7 +515,8 @@
     "confirmReplaceTitle": "Confirm Replacement",
     "confirmReplaceMessage": "Are you sure you want to mark your toothbrush as replaced? This will reset its usage days.",
     "showHistory": "Show History",
-    "hideHistory": "Hide History"
+    "hideHistory": "Hide History",
+    "noHistoryYet": "No replacement history yet"
   },
   "streakOverlay": {
     "title": "{{count}}-Day Streak",

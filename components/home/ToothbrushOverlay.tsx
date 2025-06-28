@@ -22,8 +22,11 @@ import * as Haptics from 'expo-haptics';
 import { useToothbrushStats } from '../../hooks/useToothbrushStats';
 import { ToothbrushDataService } from '../../services/toothbrush/ToothbrushDataService';
 import { Toothbrush } from '../../services/toothbrush/ToothbrushTypes';
+import { ToothbrushService } from '../../services/toothbrush/ToothbrushService';
+import { format } from 'date-fns';
 import { eventBus } from '../../utils/EventBus';
 import { useAuth } from '../../context/AuthContext';
+import { useRouter } from 'expo-router';
 
 interface ToothbrushOverlayProps {
   isVisible: boolean;
@@ -38,6 +41,7 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   const { theme } = useTheme();
   const { activeColors } = theme;
   const { user } = useAuth();
+  const router = useRouter();
   const { stats, displayData, currentToothbrush, isLoading, refreshStats } = useToothbrushStats();
   
   // Animation values
@@ -48,12 +52,9 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   const [animationComplete, setAnimationComplete] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   
-  // Mock history data (replace with real data from service later)
-  const [historyData, setHistoryData] = useState([
-    { id: 'h3', date: '2024-03-15' },
-    { id: 'h2', date: '2023-12-10' },
-    { id: 'h1', date: '2023-09-01' },
-  ]);
+  // Real history data from backend
+  const [historyData, setHistoryData] = useState<Toothbrush[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   
   // Fonts
   const [fontsLoaded] = useFonts({
@@ -72,12 +73,43 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
   const healthColor = displayData?.healthColor ?? Colors.primary[500];
   const usageCycles = stats?.totalBrushingSessions ?? 0;
 
+  // Function to fetch toothbrush history
+  const fetchToothbrushHistory = async () => {
+    if (!user?.id || user.id === 'guest') {
+      setHistoryData([]);
+      return;
+    }
+
+    try {
+      setIsLoadingHistory(true);
+      const allData = await ToothbrushService.getAllToothbrushData(user.id);
+      
+      // Filter history items that have end dates (replacement dates)
+      const historyWithEndDates = allData.history.filter(brush => brush.endDate);
+      
+      // Sort by end date (most recent first)
+      const sortedHistory = historyWithEndDates.sort((a, b) => {
+        if (!a.endDate || !b.endDate) return 0;
+        return new Date(b.endDate).getTime() - new Date(a.endDate).getTime();
+      });
+      
+      setHistoryData(sortedHistory);
+      console.log('📋 Fetched toothbrush history:', sortedHistory.length, 'items');
+    } catch (error) {
+      console.error('❌ Error fetching toothbrush history:', error);
+      setHistoryData([]);
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  };
+
   // Refresh data when the overlay becomes visible
   useEffect(() => {
     if (isVisible) {
       refreshStats();
+      fetchToothbrushHistory();
     }
-  }, [isVisible, refreshStats]);
+  }, [isVisible, refreshStats, user?.id]);
 
   // Listen to global events that should trigger toothbrush data refresh
   useEffect(() => {
@@ -104,8 +136,9 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
 
     const handleToothbrushUpdated = (payload: any) => {
       if (isVisible && (payload?.userId === user?.id || payload?.userId === 'guest')) {
-        console.log('🦷 ToothbrushOverlay: Toothbrush updated, refreshing data...', payload);
+        console.log('🦷 ToothbrushOverlay: Toothbrush updated, refreshing data and history...', payload);
         refreshStats();
+        fetchToothbrushHistory(); // Also refresh history when toothbrushes are updated
       }
     };
 
@@ -301,22 +334,48 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
 
             {showHistory && (
               <View style={styles.historyListContainer}>
-                {historyData.map((item, index) => (
-                  <View 
-                    key={item.id} 
-                    style={[
-                      styles.historyItem,
-                      index < historyData.length - 1 && [
-                        styles.historyItemSeparator,
-                        { borderBottomColor: theme.colorScheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)' }
-                      ]
-                    ]}
-                  >
-                    <ThemedText style={styles.historyItemText}>
-                      {t('toothbrushOverlay.replacedOnDate', { date: item.date })}
+                {isLoadingHistory ? (
+                  <View style={styles.historyItem}>
+                    <ThemedText style={[styles.historyItemText, { opacity: 0.6 }]}>
+                      {t('common.loading', 'Loading...')}
                     </ThemedText>
                   </View>
-                ))}
+                ) : historyData.length > 0 ? (
+                  historyData.map((item, index) => (
+                    <View 
+                      key={item.id} 
+                      style={[
+                        styles.historyItem,
+                        index < historyData.length - 1 && [
+                          styles.historyItemSeparator,
+                          { borderBottomColor: theme.colorScheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)' }
+                        ]
+                      ]}
+                    >
+                      <View style={styles.historyItemContent}>
+                        <ThemedText style={styles.historyItemText}>
+                          {item.endDate 
+                            ? t('toothbrushOverlay.replacedOnDate', { 
+                                date: format(new Date(item.endDate), 'PPP') 
+                              })
+                            : t('toothbrushOverlay.replacedOnDate', { date: 'Unknown' })
+                          }
+                        </ThemedText>
+                        <ThemedText style={[styles.historyItemText, { fontSize: 12, opacity: 0.6, marginTop: 0, lineHeight: 16 }]}>
+                          {item.name?.trim() || 
+                            `${t(`toothbrush.type.${item.type}`)} ${t('toothbrush.item')}`
+                          }
+                        </ThemedText>
+                      </View>
+                    </View>
+                  ))
+                ) : (
+                  <View style={styles.historyItem}>
+                    <ThemedText style={[styles.historyItemText, { opacity: 0.6 }]}>
+                      {t('toothbrushOverlay.noHistoryYet', 'No replacement history yet')}
+                    </ThemedText>
+                  </View>
+                )}
               </View>
             )}
 
@@ -363,8 +422,14 @@ export const ToothbrushOverlay: React.FC<ToothbrushOverlayProps> = ({
                 }
               ]}
               onPress={() => {
-                console.log('New toothbrush button pressed');
+                console.log('New toothbrush button pressed - navigating to settings');
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                
+                // Close the overlay first
+                onClose();
+                
+                // Navigate to settings with parameter to auto-open toothbrush modal
+                router.push('/(home)/settings?openToothbrushModal=true');
               }}
             >
               <MaterialCommunityIcons
@@ -527,7 +592,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   historyItem: {
-    paddingVertical: 10,
+    paddingVertical: 6,
     paddingHorizontal: 16,
   },
   historyItemSeparator: {
@@ -537,6 +602,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     opacity: 0.8,
     fontFamily: 'Quicksand-Regular',
+    lineHeight: 18,
+  },
+  historyItemContent: {
+    flex: 1,
   },
 });
 
