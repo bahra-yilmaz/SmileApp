@@ -484,9 +484,13 @@ export class ToothbrushService {
     }
 
     try {
+      // First, delete from the database
+      await ToothbrushRepository.deleteFromHistory(toothbrushId);
+      
+      // Then update local data to reflect the deletion
       const currentData = await ToothbrushRepository.getData(userId);
       
-      // Remove from history
+      // Remove from history array
       const updatedHistory = currentData.history.filter(brush => brush.id !== toothbrushId);
       
       const newData: ToothbrushData = {
@@ -494,7 +498,8 @@ export class ToothbrushService {
         history: updatedHistory,
       };
 
-      await ToothbrushRepository.saveData(userId, newData);
+      // Cache the updated data locally (don't save to backend since we already deleted)
+      await ToothbrushRepository.cacheData(newData);
 
       // Clear stats cache since history has changed
       await ToothbrushDataService.clearStatsCache();

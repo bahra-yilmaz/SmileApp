@@ -89,13 +89,15 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
         setStreakDays(data.newStreak);
         // Optionally refresh full data when streak changes
         if (isVisible) {
-                     StreakService.getStreakData(user!.id, { forceRefresh: true })
+          setIsLoadingHistory(true);
+          StreakService.getStreakData(user!.id, { forceRefresh: true })
             .then((fullData: ComprehensiveStreakData) => {
               setLongestStreak(fullData.longestStreak);
               setStreakHistory(fullData.streakHistory);
               setCurrentStreakBrushings(fullData.currentStreakBrushings);
             })
-            .catch(console.error);
+            .catch(console.error)
+            .finally(() => setIsLoadingHistory(false));
         }
       }
     });
