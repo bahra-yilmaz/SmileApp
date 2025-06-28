@@ -33,7 +33,7 @@ export class ToothbrushDataService {
       if (stored) {
         data = JSON.parse(stored) as ToothbrushData;
       } else {
-        // Return a default empty state if nothing is stored
+      // Return a default empty state if nothing is stored
         data = { current: null, history: [] };
       }
       
@@ -246,7 +246,7 @@ export class ToothbrushDataService {
    * Now uses the fast brushing_count column
    */
   static async getBrushingCount(toothbrush: Toothbrush): Promise<number> {
-    console.log('📊 Getting brushing count for toothbrush:', toothbrush.id);
+      console.log('📊 Getting brushing count for toothbrush:', toothbrush.id);
 
     try {
       // Simply read the counter from the toothbrush record (fast!)

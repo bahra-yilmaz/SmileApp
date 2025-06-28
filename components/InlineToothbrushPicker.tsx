@@ -8,7 +8,6 @@ import Animated, { SharedValue } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import PrimaryButton from './ui/PrimaryButton';
 import HourMinutePicker from './HourMinutePicker';
-import { ApproximateBrushingCalculator } from '../services/toothbrush';
 import { useAuth } from '../context/AuthContext';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -206,56 +205,6 @@ export default function InlineToothbrushPicker({
           </View>
         )}
       </View>
-
-             {/* Age Selection with Estimation Preview */}
-       <View style={styles.section}>
-         <ThemedText style={styles.sectionTitle}>
-           {t('toothbrush.picker.age', 'Brush Age')}
-         </ThemedText>
-         
-                   {/* Simple Age Selection */}
-          <View style={styles.ageSelectionContainer}>
-            <ThemedText style={styles.ageInputLabel}>Days old:</ThemedText>
-            <View style={styles.ageInputContainer}>
-              <Pressable 
-                style={styles.ageButton}
-                onPress={() => {
-                  const newAge = Math.max(0, config.ageDays - 7);
-                  onConfigChange({ ...config, ageDays: newAge });
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                }}
-              >
-                <ThemedText style={styles.ageButtonText}>-</ThemedText>
-              </Pressable>
-              <ThemedText style={styles.ageValue}>{config.ageDays}</ThemedText>
-              <Pressable 
-                style={styles.ageButton}
-                onPress={() => {
-                  const newAge = Math.min(365, config.ageDays + 7);
-                  onConfigChange({ ...config, ageDays: newAge });
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                }}
-              >
-                <ThemedText style={styles.ageButtonText}>+</ThemedText>
-              </Pressable>
-            </View>
-          </View>
-         
-         {/* Brushing Estimation Preview */}
-         {brushingEstimation && (
-           <View style={[styles.estimationPreview, { backgroundColor: activeColors.card, borderColor: activeColors.tint }]}>
-             <ThemedText style={styles.estimationIcon}>🧮</ThemedText>
-             <View style={styles.estimationText}>
-               <ThemedText style={styles.estimationTitle}>
-                 Smart Estimation
-               </ThemedText>
-               <ThemedText style={styles.estimationExplanation}>
-                 {brushingEstimation.explanation}
-               </ThemedText>
-             </View>
-           </View>
-         )}
-       </View>
 
       {/* Type Selection */}
       <View style={styles.section}>

@@ -15,7 +15,7 @@ import { Toothbrush, ToothbrushData } from './ToothbrushTypes';
  */
 export class ToothbrushRepository {
   private static readonly CACHE_KEY = 'toothbrush_data';
-  
+
   // In-flight request deduplication (PERFORMANCE FIX)
   private static pendingFetches = new Map<string, Promise<ToothbrushData>>();
 

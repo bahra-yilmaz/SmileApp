@@ -64,7 +64,7 @@ export class ToothbrushCalculationService {
       const usagePercentage = totalCalendarDays > 0 
         ? (actualBrushingDays / totalCalendarDays) * 100 
         : 0;
-
+        
       // Determine replacement status based on usage
       let replacementStatus: 'brand_new' | 'fresh' | 'good' | 'replace_soon' | 'overdue';
       
