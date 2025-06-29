@@ -6,7 +6,6 @@ import HeaderLogo from '../../components/ui/HeaderLogo';
 import LightContainer from '../../components/ui/LightContainer';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
-import { getRandomMascotConfig } from '../../constants/mascotConfig';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
@@ -38,10 +37,46 @@ import {
   BrushingTimeOverlay
 } from '../../components/home';
 
+// Import mascot types for temporary configuration
+import type { MascotConfig } from '../../types/mascot';
+
 // Get dimensions for background
 const { width, height } = Dimensions.get('window');
 
 const FIRST_TIMER_SHOWN_KEY = 'first_timer_shown';
+
+// TEMPORARY: Simple mascot configuration for homescreen
+// This will be replaced with the new robust system later
+const TEMP_HOMESCREEN_MASCOT_CONFIGS: MascotConfig[] = [
+  {
+    id: 'temp-config-1',
+    collapsedVariant: 'nubo-cool-3-pp',
+    expandedVariant: 'nubo-welcoming-wave',
+    greetingTextKey: 'mascotGreetings.defaultHello',
+    probability: 1,
+  },
+  {
+    id: 'temp-config-2', 
+    collapsedVariant: 'nubo-wise-1-pp',
+    expandedVariant: 'nubo-welcoming-1',
+    greetingTextKey: 'mascotGreetings.welcomeBack',
+    probability: 1,
+  },
+  {
+    id: 'temp-config-3',
+    collapsedVariant: 'nubo-brushing-1-pp',
+    expandedVariant: 'nubo-brushing-1',
+    greetingTextKey: 'mascotGreetings.smileJourney',
+    probability: 1,
+  }
+];
+
+// TEMPORARY: Simple random selection function
+// This will be replaced with the new robust system later
+const getSimpleMascotConfig = (): MascotConfig => {
+  const randomIndex = Math.floor(Math.random() * TEMP_HOMESCREEN_MASCOT_CONFIGS.length);
+  return TEMP_HOMESCREEN_MASCOT_CONFIGS[randomIndex];
+};
 
 export default function HomeScreen() {
   const { theme } = useTheme();
@@ -117,8 +152,9 @@ export default function HomeScreen() {
   // Calculate mountain height for responsive mascot positioning
   const mountainHeight = height * 0.4;
 
-  // Get a random mascot and its positioning
-  const [selectedMascotConfig, setSelectedMascotConfig] = useState(getRandomMascotConfig);
+  // TEMPORARY: Simple mascot configuration
+  // This will be replaced with the new robust system later
+  const [selectedMascotConfig, setSelectedMascotConfig] = useState(getSimpleMascotConfig);
   
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -128,9 +164,6 @@ export default function HomeScreen() {
   
   // Font to use for displayed values
   const fontFamily = fontsLoaded ? 'Merienda-Bold' : undefined;
-  
-  // Prepare the greeting text using the translation key
-  const greeting = t(selectedMascotConfig.greetingTextKey, { defaultValue: selectedMascotConfig.greetingTextKey });
   
   // Toggle chat overlay visibility
   const toggleChat = () => setIsChatVisible(!isChatVisible);
@@ -293,7 +326,7 @@ export default function HomeScreen() {
               onPress={toggleHomeMascotExpansion}
               onPressWhenExpanded={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                setSelectedMascotConfig(getRandomMascotConfig());
+                setSelectedMascotConfig(getSimpleMascotConfig());
                 setIsHomeMascotExpanded(false);
               }}
               enablePulse={!isHomeMascotExpanded}

@@ -1,3 +1,12 @@
+// ⚠️ DEPRECATED - COMPLEX COMBINATIONS LOGIC CLEARED
+// This file contains the old complex mascot configuration system that has been 
+// temporarily disabled while preparing for a new, more robust system.
+// 
+// The ExpandableMascotCard now uses simple temporary configurations.
+// This file will be replaced entirely with the new system.
+//
+// DO NOT USE EXPORTS FROM THIS FILE IN ACTIVE CODE
+
 // constants/mascotConfig.ts
 import type { MascotPositioning, PpMascotVariant, NonPpMascotVariant, MascotConfig } from '../types/mascot';
 import { dynamicMascotThemes } from './mascotThemes';
@@ -42,14 +51,14 @@ export const mascotConfigurations: MascotConfig[] = [
   {
     id: 'brushing_anotherPP_text1',
     collapsedVariant: 'nubo-brushing-1-pp',
-    expandedVariant: 'nubo-daily-brush',
+    expandedVariant: 'nubo-brushing-1',
     greetingTextKey: 'mascotGreetings.brushingTime.reminder1',
     probability: 0.001,
   },
   {
     id: 'brushing_anotherPP_text2',
     collapsedVariant: 'nubo-brushing-1-pp',
-    expandedVariant: 'nubo-daily-brush',
+    expandedVariant: 'nubo-brushing-1',
     greetingTextKey: 'mascotGreetings.brushingTime.fact1',
     probability: 0.001,
   },
@@ -83,6 +92,7 @@ export const mascotConfigurations: MascotConfig[] = [
   // These are now handled by the dynamic theme in mascotThemes.ts
 ];
 
+/* DEPRECATED - COMMENTED OUT TO PREVENT USAGE
 const defaultStaticMascotConfig: MascotConfig = {
   id: 'default-static',
   collapsedVariant: 'nubo-welcoming-1-pp',
@@ -136,4 +146,5 @@ export const getRandomMascotConfig = (): MascotConfig => {
     // If no dynamic themes, fall back to default static (though this case is covered by totalOverallChance === 0)
     return defaultStaticMascotConfig;
   }
-}; 
+};
+*/ 

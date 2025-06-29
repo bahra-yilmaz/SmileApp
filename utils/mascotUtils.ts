@@ -1,3 +1,9 @@
+// ⚠️ DEPRECATED - COMPLEX COMBINATIONS LOGIC CLEARED
+// This file contains the old mascot utility functions that have been 
+// temporarily disabled while preparing for a new, more robust system.
+// 
+// DO NOT USE EXPORTS FROM THIS FILE IN ACTIVE CODE
+
 // import { useMemo } from 'react'; // useMemo is not used in this file anymore
 import type { NonPpMascotVariant, MascotPositioning, MascotConfig, DynamicMascotTheme } from '../types/mascot';
 
