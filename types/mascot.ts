@@ -2,36 +2,57 @@
 // Variants ending with '-pp' are considered PP versions.
 export type PpMascotVariant = 
   | 'nubo-wise-1-pp'
+  | 'nubo-wise-2-pp'
+  | 'nubo-wise-3-pp'
   | 'nubo-welcoming-1-pp'
   | 'nubo-brushing-1-pp'
   | 'nubo-brushing-2-pp'
-  | 'nubo-cool-3-pp'
   | 'nubo-cool-1-pp'
-  | 'nubo-cool-2-pp';
+  | 'nubo-cool-2-pp'
+  | 'nubo-cool-3-pp'
+  | 'nubo-supportive-1-pp'
+  | 'nubo-supportive-2-pp'
+  | 'nubo-supportive-3-pp'
+  | 'nubo-supportive-4-pp'
+  | 'nubo-playful-1-pp'
+  | 'nubo-playful-2-pp'
+  | 'nubo-playful-3-pp'
+  | 'nubo-playful-4-pp';
 
 // Define your Non-PP (Expanded/Other) Mascot Variants here
 export type NonPpMascotVariant = 
   | 'nubo-wise-1'
+  | 'nubo-wise-2'
+  | 'nubo-wise-3'
+  | 'nubo-wise-4'
+  | 'nubo-wise-5'
   | 'nubo-welcoming-1'
   | 'nubo-welcoming-2'
+  | 'nubo-welcoming-3'
   | 'nubo-welcoming-wave'
   | 'nubo-brushing-1'
   | 'nubo-brushing-2'
   | 'nubo-brushing-3'
-  | 'nubo-cool-2'
   | 'nubo-cool-1'
+  | 'nubo-cool-2'
   | 'nubo-cool-3'
   | 'nubo-cool-4'
-  | 'nubo-cool-5';
+  | 'nubo-cool-5'
+  | 'nubo-supportive-1'
+  | 'nubo-supportive-2'
+  | 'nubo-supportive-3'
+  | 'nubo-supportive-4'
+  | 'nubo-supportive-5'
+  | 'nubo-supportive-6'
+  | 'nubo-playful-1'
+  | 'nubo-playful-2'
+  | 'nubo-playful-3'
+  | 'nubo-playful-4'
+  | 'nubo-playful-5';
 
 // Combined type for general use, e.g., in the Mascot component itself
-export type MascotVariant = 
-  | 'nubo-welcoming-1'
-  | 'nubo-happy-1'
-  | 'nubo-daily-brush-1'
-  | 'nubo-success-1'
-  | 'nubo-sad-1'
-  | 'nubo-bag-1';
+// This should include ALL possible mascot variants
+export type MascotVariant = PpMascotVariant | NonPpMascotVariant;
 
 export interface MascotPositioning {
   translateX: number;
@@ -39,34 +60,15 @@ export interface MascotPositioning {
   scale: number;
 } 
 
-// ===== V1 TYPES (DEPRECATED) =====
-// Keep these for backward compatibility during transition
+// ===== MASCOT CONFIGURATION =====
+// Simple configuration interface for mascot cards
 
-// Added MascotProfile interface
-export interface MascotProfile {
-  id: string;
-  profilePictureVariant: PpMascotVariant; // Uses existing type for profile pictures
-  poseVariant: NonPpMascotVariant;       // Uses existing type for poses/expanded states
-  greetings: string[];                  // Array of possible texts for this profile
-  // Optional: Consider adding mascotPosition?: MascotPositioning; if it should be tied to the profile
-} 
-
-// Added MascotConfig interface (moved from constants/mascotConfig.ts)
 export interface MascotConfig {
   id: string;
   collapsedVariant: PpMascotVariant;    // Use specific PP type
   expandedVariant: NonPpMascotVariant;   // Use specific Non-PP type
   greetingTextKey: string; // Key for i18n
   probability: number; // For weighted randomness
-} 
-
-// NEW Interface for defining dynamic themes
-export interface DynamicMascotTheme {
-  themeId: string; // e.g., 'cool', 'wise', 'friendly'
-  profilePictureVariants: PpMascotVariant[]; // Pool of PPs for this theme
-  poseVariants: NonPpMascotVariant[];       // Pool of poses for this theme
-  greetingTextKeys: string[];               // Pool of greeting text keys for this theme
-  selectionWeight: number; 
 } 
 
 // ===== V2 TYPES (NEW ROBUST SYSTEM) =====
@@ -152,6 +154,16 @@ export interface GreetingContext {
   // Special flags
   isFirstBrushEver?: boolean;
   isPostAchievement?: boolean;
+
+  // Variables for text interpolation
+  variables?: {
+    username?: string;
+    firstName?: string;
+    streakCount?: number;
+    targetTime?: string;
+    currentStreak?: string;
+    [key: string]: string | number | undefined; // Allow custom variables
+  };
 }
 
 /**

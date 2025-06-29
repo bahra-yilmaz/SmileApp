@@ -7,6 +7,7 @@ import ThemedText from '../ThemedText';
 import { useTypingEffect } from '../../utils/hooks/useTypingEffect';
 import { useTheme } from '../ThemeProvider';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../context/AuthContext';
 import Reanimated, {
   useSharedValue,
   useAnimatedStyle,
@@ -39,6 +40,7 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
   enablePulse
 }) => {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const { borderRadius } = theme;
@@ -102,9 +104,15 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
     };
   }, [widthAnim, cornerRadiusAnim, circleSize, expandedWidth, pillRadius, cardRadius]);
   
-  // Get typed text using the custom hook
+  // Get typed text using the custom hook with variable interpolation
+  const username = user?.email?.split('@')[0] || user?.user_metadata?.first_name || user?.user_metadata?.name || 'there';
+  const translatedText = t(greetingTextKey, { 
+    username,
+    firstName: user?.user_metadata?.first_name || username
+  });
+  
   const typedText = useTypingEffect({
-    text: t(greetingTextKey),
+    text: translatedText,
     enabled: isExpanded,
     typingSpeed: 50,
   });

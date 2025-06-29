@@ -157,9 +157,9 @@
       "supportive": {
         "time_context": {
           "morning": {
-            "1": "Good morning! Let's start the day with a gentle smile boost.",
-            "2": "Morning care for your beautiful smile. You've got this.",
-            "3": "Rise and shine! Your teeth are ready for some loving care."
+            "1": "New day, new chance to care for yourself. You're doing great already 🌞",
+            "2": "You showed up this morning — that's how better days begin.",
+            "3": "You don't need a perfect start — just a caring one, {{username}}."
           },
           "afternoon": {
             "1": "Afternoon refresh time! Your smile deserves this midday care.",
@@ -225,9 +225,9 @@
       "playful": {
         "time_context": {
           "morning": {
-            "1": "Morning sunshine! ☀️ Ready to make those pearly whites SPARKLE?",
-            "2": "Rise and SHINE! Your teeth are practically bouncing with excitement! 🦷✨",
-            "3": "Good morning, smile superstar! Let's start this day with some serious sparkle power! 💫"
+            "1": "Rise and brush, sparkle commander 🪥✨",
+            "2": "Time to give those molars their morning dance party.",
+            "3": "Sun's up! Toothbrushes out! Let's go full sparkle, {{username}}!"
           },
           "evening": {
             "1": "Evening glow-up time! Let's end the day with some serious shine! ✨",
@@ -256,9 +256,9 @@
       "cool": {
         "time_context": {
           "morning": {
-            "1": "Morning efficiency check. Time to lock in that signature shine.",
-            "2": "Start your day sharp. This routine sets the tone for everything.",
-            "3": "Morning protocol: activated. Let's keep this streak clean and strong."
+            "1": "Wake. Brush. Dominate the day.",
+            "2": "Start crisp. Stay sharp.",
+            "3": "Mornings are for quiet wins. You just scored one, {{username}}."
           },
           "evening": {
             "1": "End of day maintenance. Keep the standards high.",
@@ -277,9 +277,9 @@
       "wise": {
         "time_context": {
           "morning": {
-            "1": "Morning wisdom: small consistent actions shape our entire day.",
-            "2": "The disciplined mind begins with disciplined habits. Well chosen.",
-            "3": "Each morning brush is a promise to your future self. Honor it."
+            "1": "The tone of your day begins with how you begin your morning.",
+            "2": "A calm start echoes through the entire day.",
+            "3": "A gentle beginning plants strong roots for the day, {{username}}."
           },
           "evening": {
             "1": "Evening reflection: today's care becomes tomorrow's confidence.",

@@ -45,37 +45,104 @@ const { width, height } = Dimensions.get('window');
 
 const FIRST_TIMER_SHOWN_KEY = 'first_timer_shown';
 
-// TEMPORARY: Simple mascot configuration for homescreen
+// TEMPORARY: Morning text configs using your exact texts!
 // This will be replaced with the new robust system later
-const TEMP_HOMESCREEN_MASCOT_CONFIGS: MascotConfig[] = [
+const TEMP_MORNING_MASCOT_CONFIGS: MascotConfig[] = [
+  // Supportive personality - FIXED to use nubo-supportive variants!
   {
-    id: 'temp-config-1',
+    id: 'temp-supportive-1',
+    collapsedVariant: 'nubo-supportive-1-pp',
+    expandedVariant: 'nubo-supportive-1',
+    greetingTextKey: 'mascotGreetings.v2.supportive.time_context.morning.1',
+    probability: 1,
+  },
+  {
+    id: 'temp-supportive-2',
+    collapsedVariant: 'nubo-supportive-2-pp',
+    expandedVariant: 'nubo-supportive-2',
+    greetingTextKey: 'mascotGreetings.v2.supportive.time_context.morning.2',
+    probability: 1,
+  },
+  {
+    id: 'temp-supportive-3',
+    collapsedVariant: 'nubo-supportive-3-pp',
+    expandedVariant: 'nubo-supportive-3',
+    greetingTextKey: 'mascotGreetings.v2.supportive.time_context.morning.3',
+    probability: 1,
+  },
+  // Playful personality - FIXED to use nubo-playful variants!
+  {
+    id: 'temp-playful-1',
+    collapsedVariant: 'nubo-playful-1-pp',
+    expandedVariant: 'nubo-playful-1',
+    greetingTextKey: 'mascotGreetings.v2.playful.time_context.morning.1',
+    probability: 1,
+  },
+  {
+    id: 'temp-playful-2',
+    collapsedVariant: 'nubo-playful-2-pp',
+    expandedVariant: 'nubo-playful-2',
+    greetingTextKey: 'mascotGreetings.v2.playful.time_context.morning.2',
+    probability: 1,
+  },
+  {
+    id: 'temp-playful-3',
+    collapsedVariant: 'nubo-playful-3-pp',
+    expandedVariant: 'nubo-playful-3',
+    greetingTextKey: 'mascotGreetings.v2.playful.time_context.morning.3',
+    probability: 1,
+  },
+  // Cool personality - Using different cool variants for variety
+  {
+    id: 'temp-cool-1',
+    collapsedVariant: 'nubo-cool-1-pp',
+    expandedVariant: 'nubo-cool-1',
+    greetingTextKey: 'mascotGreetings.v2.cool.time_context.morning.1',
+    probability: 1,
+  },
+  {
+    id: 'temp-cool-2',
+    collapsedVariant: 'nubo-cool-2-pp',
+    expandedVariant: 'nubo-cool-2',
+    greetingTextKey: 'mascotGreetings.v2.cool.time_context.morning.2',
+    probability: 1,
+  },
+  {
+    id: 'temp-cool-3',
     collapsedVariant: 'nubo-cool-3-pp',
-    expandedVariant: 'nubo-welcoming-wave',
-    greetingTextKey: 'mascotGreetings.defaultHello',
+    expandedVariant: 'nubo-cool-3',
+    greetingTextKey: 'mascotGreetings.v2.cool.time_context.morning.3',
     probability: 1,
   },
+  // Wise personality - Using different wise variants for variety
   {
-    id: 'temp-config-2', 
+    id: 'temp-wise-1',
     collapsedVariant: 'nubo-wise-1-pp',
-    expandedVariant: 'nubo-welcoming-1',
-    greetingTextKey: 'mascotGreetings.welcomeBack',
+    expandedVariant: 'nubo-wise-1',
+    greetingTextKey: 'mascotGreetings.v2.wise.time_context.morning.1',
     probability: 1,
   },
   {
-    id: 'temp-config-3',
-    collapsedVariant: 'nubo-brushing-1-pp',
-    expandedVariant: 'nubo-brushing-1',
-    greetingTextKey: 'mascotGreetings.smileJourney',
+    id: 'temp-wise-2',
+    collapsedVariant: 'nubo-wise-2-pp',
+    expandedVariant: 'nubo-wise-2',
+    greetingTextKey: 'mascotGreetings.v2.wise.time_context.morning.2',
+    probability: 1,
+  },
+  {
+    id: 'temp-wise-3',
+    collapsedVariant: 'nubo-wise-3-pp',
+    expandedVariant: 'nubo-wise-3',
+    greetingTextKey: 'mascotGreetings.v2.wise.time_context.morning.3',
     probability: 1,
   }
 ];
 
-// TEMPORARY: Simple random selection function
+// TEMPORARY: Simple random selection function for YOUR morning texts
 // This will be replaced with the new robust system later
-const getSimpleMascotConfig = (): MascotConfig => {
-  const randomIndex = Math.floor(Math.random() * TEMP_HOMESCREEN_MASCOT_CONFIGS.length);
-  return TEMP_HOMESCREEN_MASCOT_CONFIGS[randomIndex];
+const getMorningMascotConfig = (): MascotConfig => {
+  const randomIndex = Math.floor(Math.random() * TEMP_MORNING_MASCOT_CONFIGS.length);
+  return TEMP_MORNING_MASCOT_CONFIGS[randomIndex];
 };
 
 export default function HomeScreen() {
@@ -152,9 +219,9 @@ export default function HomeScreen() {
   // Calculate mountain height for responsive mascot positioning
   const mountainHeight = height * 0.4;
 
-  // TEMPORARY: Simple mascot configuration
+  // TEMPORARY: Morning text mascot configuration using YOUR exact texts!
   // This will be replaced with the new robust system later
-  const [selectedMascotConfig, setSelectedMascotConfig] = useState(getSimpleMascotConfig);
+  const [selectedMascotConfig, setSelectedMascotConfig] = useState(getMorningMascotConfig);
   
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -167,6 +234,20 @@ export default function HomeScreen() {
   
   // Toggle chat overlay visibility
   const toggleChat = () => setIsChatVisible(!isChatVisible);
+  
+  // Function to refresh morning text (for testing)
+  const refreshMorningText = () => {
+    setSelectedMascotConfig(getMorningMascotConfig());
+    console.log('🌅 Refreshed to new morning text!');
+  };
+  
+  // Make refresh function available globally for console testing
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      (window as any).refreshMorningText = refreshMorningText;
+      console.log('🎮 refreshMorningText() available in console for testing!');
+    }
+  }, []);
   
   // FAB breathing animation
   const fabAnim = React.useRef(new Animated.Value(0)).current; // 0..1 for breathing
@@ -326,7 +407,7 @@ export default function HomeScreen() {
               onPress={toggleHomeMascotExpansion}
               onPressWhenExpanded={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                setSelectedMascotConfig(getSimpleMascotConfig());
+                setSelectedMascotConfig(getMorningMascotConfig());
                 setIsHomeMascotExpanded(false);
               }}
               enablePulse={!isHomeMascotExpanded}

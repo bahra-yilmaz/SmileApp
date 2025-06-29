@@ -152,9 +152,9 @@ export class MascotGreetingService implements IMascotGreetingService {
     // Select subcase within the category
     const selectedSubcase = this.selectSubcase(selectedCategory, finalContext);
     
-    // Generate text key and get translated text
+    // Generate text key and get translated text with variables
     const textKey = this.generateTextKey(personality, selectedCategory.id, selectedSubcase);
-    const actualText = this.getTranslatedText(textKey, personality);
+    const actualText = this.getTranslatedText(textKey, personality, finalContext.variables);
     
     // Get visual configuration
     const visualConfig = this.getVisualConfig(personality);
@@ -264,9 +264,9 @@ export class MascotGreetingService implements IMascotGreetingService {
   }
 
   /**
-   * Get translated text with fallback handling
+   * Get translated text with fallback handling and variable interpolation
    */
-  private getTranslatedText(textKey: string, personality: PersonalityType): string {
+  private getTranslatedText(textKey: string, personality: PersonalityType, variables?: Record<string, string | number | undefined>): string {
     const translatedText = this.t(textKey);
     
     // If translation key is returned unchanged, use fallback
@@ -276,13 +276,25 @@ export class MascotGreetingService implements IMascotGreetingService {
       
       // If even fallback fails, return a hardcoded message
       if (fallbackText === fallbackKey) {
-        return this.getHardcodedFallback(personality);
+        return this.interpolateVariables(this.getHardcodedFallback(personality), variables);
       }
       
-      return fallbackText;
+      return this.interpolateVariables(fallbackText, variables);
     }
     
-    return translatedText;
+    return this.interpolateVariables(translatedText, variables);
+  }
+
+  /**
+   * Interpolate variables in text (e.g., {{username}} -> "John")
+   */
+  private interpolateVariables(text: string, variables?: Record<string, string | number | undefined>): string {
+    if (!variables) return text;
+    
+    return text.replace(/\{\{(\w+)\}\}/g, (match, variableName) => {
+      const value = variables[variableName];
+      return value !== undefined ? String(value) : match; // Keep original if variable not found
+    });
   }
 
   /**
@@ -307,12 +319,13 @@ export const mascotGreetingService = new MascotGreetingService();
 
 /**
  * React hook for using the mascot greeting service with translation
+ * Note: Import { useTranslation } from 'react-i18next' in your React component
  */
-export const useMascotGreetingService = (): IMascotGreetingService => {
-  const { t } = useTranslation();
-  
-  // Set translation function on the service
-  mascotGreetingService.setTranslationFunction(t);
+export const useMascotGreetingService = (t?: (key: string, options?: any) => string): IMascotGreetingService => {
+  // If translation function provided, use it
+  if (t) {
+    mascotGreetingService.setTranslationFunction(t);
+  }
   
   return mascotGreetingService;
 }; 
