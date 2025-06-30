@@ -393,16 +393,6 @@ export default function HomeScreen() {
               }}
               enablePulse={!isHomeMascotExpanded}
             />
-            {/* V2 Debug Button - Hidden in top corner for testing */}
-            <TouchableOpacity
-              style={styles.debugButton}
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                refreshMascotText();
-              }}
-            >
-              <Text style={styles.debugButtonText}>V2</Text>
-            </TouchableOpacity>
           </View>
           <View style={styles.contentWrapper}>
             <LightContainer 
@@ -740,23 +730,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 35,
-  },
-  debugButton: {
-    position: 'absolute',
-    top: -10,
-    right: -10,
-    width: 30,
-    height: 30,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 10,
-  },
-  debugButtonText: {
-    color: 'white',
-    fontSize: 10,
-    fontWeight: 'bold',
   },
 });
 

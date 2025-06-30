@@ -22,17 +22,17 @@ const ContextConditions = {
   
   isAfternoon: (context: GreetingContext) => {
     const hour = context.currentTime?.getHours() ?? new Date().getHours();
-    return hour >= 12 && hour < 17;
+    return hour >= 12 && hour < 19;
   },
   
   isEvening: (context: GreetingContext) => {
     const hour = context.currentTime?.getHours() ?? new Date().getHours();
-    return hour >= 17 && hour < 22;
+    return hour >= 19 && hour < 24; // 5 PM - 12 AM (midnight)
   },
   
   isLateNight: (context: GreetingContext) => {
     const hour = context.currentTime?.getHours() ?? new Date().getHours();
-    return hour >= 22 || hour < 5;
+    return hour >= 0 && hour < 5; // 12 AM - 5 AM
   },
   
   isWeekday: (context: GreetingContext) => {

@@ -172,19 +172,19 @@
             "3": "It wasn’t just a long day. It was your day — and you ended it with care."
           },
           "late_night": {
-            "1": "Late night care is still care. Thank you for showing up.",
-            "2": "Better late than never! Your teeth appreciate any attention.",
-            "3": "Night owl brushing session. Your smile still matters at any hour."
+            "1": "Even late care is still care. You made the time, {{username}}.",
+            "2": "Showing up this late? That's quiet strength.",
+            "3": "Even if today was messy, this moment is still yours, {{username}}."
           },
           "weekday": {
-            "1": "Weekday warrior! Keeping up with good habits during busy times.",
-            "2": "Midweek check-in with your smile. You're doing amazing.",
-            "3": "Workday dental care - taking time for what matters: you."
+            "1": "Among the chaos, you made time for you. That's strength.",
+            "2": "Busy days, but you still chose care, {{username}}. Big win.",
+            "3": "Brushing in the grind? You're showing up for real."
           },
           "weekend": {
-            "1": "Weekend self-care time! Relax and enjoy this gentle routine.",
-            "2": "Weekend vibes: slow, steady, and caring for your smile.",
-            "3": "No rush today. Just peaceful moments with your dental care."
+            "1": "Rest is important. So is keeping your glow ✨",
+            "2": "Weekend care = next-level self-love, {{username}}.",
+            "3": "Off-days still count. Especially when you care like this."
           }
         },
         "brushing_behaviour": {
@@ -239,10 +239,20 @@
             "2": "Your pillow called — said to brush first.",
             "3": "No monsters under the bed when the molars are minty 😏"
           },
+          "late_night": {
+            "1": "The moon's up. Your brush is too. We love to see it.",
+            "2": "Late night? More like fate night — time to sparkle.",
+            "3": "Teeth tucked in. You ready too, {{username}}?"
+          },
+          "weekday": {
+            "1": "Work. Hustle. Brush like a boss.",
+            "2": "Weekday warriors keep it minty.",
+            "3": "Weekday warriors brush with flair 💃"
+          },
           "weekend": {
-            "1": "Weekend party for your teeth! No work stress, just pure sparkle vibes! 🎉",
-            "2": "Saturday/Sunday funday with your favorite dental buddy - ME! 🎈",
-            "3": "Weekend warrior mode: activated! Time for some FUN dental adventures! 🚀"
+            "1": "Weekend sparkle squad reporting for duty!",
+            "2": "Brushing on a weekend? That's elite energy, {{username}}!",
+            "3": "Weekend sparkle is like brunch for your teeth 🍳✨"
           }
         },
         "brushing_behaviour": {
@@ -274,6 +284,21 @@
             "1": "Night mode activated. Clean. Calm. Done.",
             "2": "Brush. Lights out. Vibes in check.",
             "3": "Last brush. Full chill. Let’s fade out clean, {{username}}."
+          },
+          "late_night": {
+            "1": "No one's watching. You still showed up. Power move.",
+            "2": "Midnight mint hit different.",
+            "3": "Past midnight? That's loyalty to the glow, {{username}}."
+          },
+          "weekday": {
+            "1": "Let's keep things sharp this week.",
+            "2": "Workday fresh. Like you should be.",
+            "3": "Clean slate, clean smile, {{username}}. Let's get it."
+          },
+          "weekend": {
+            "1": "Off-day, still on point. Respect.",
+            "2": "Lazy day. Clean vibe.",
+            "3": "Free time. Fresh vibes, {{username}}."
           }
         },
         "brushing_behaviour": {
@@ -300,6 +325,21 @@
             "1": 	"How you close the day shapes how you greet the next.",
             "2": "Stillness. Routine. Progress.",
             "3": "How you close one day whispers into the next, {{username}}."
+          },
+          "late_night": {
+            "1": "Discipline doesn't ask for the perfect hour — only the will to act.",
+            "2": "Even the stars honor routines kept in silence, {{username}}.",
+            "3": "There's quiet power in choosing order before sleep."
+          },
+          "weekday": {
+            "1": "Structure creates freedom. You're building both.",
+            "2": "Routine is the compass. You're steering well.",
+            "3": "The rhythm of the week is made of tiny actions, {{username}}."
+          },
+          "weekend": {
+            "1": "The best habits live beyond the schedule.",
+            "2": "Freedom reveals what matters — and you showed up, {{username}}.",
+            "3": "When you have all the time, how do you use it? You chose right."
           }
         },
         "brushing_behaviour": {
