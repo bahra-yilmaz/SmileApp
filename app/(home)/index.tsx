@@ -47,14 +47,24 @@ const { width, height } = Dimensions.get('window');
 const FIRST_TIMER_SHOWN_KEY = 'first_timer_shown';
 
 // V2 MASCOT SYSTEM: Get time-aware mascot configuration
-const getTimeContextMascotConfig = async (t: (key: string, options?: any) => string, personality: PersonalityType = 'supportive'): Promise<MascotConfig> => {
+const getTimeContextMascotConfig = async (
+  t: (key: string, options?: any) => string, 
+  personality: PersonalityType = 'supportive',
+  userState?: {
+    userId?: string;
+    streakDays?: number;
+    lastBrushDate?: Date;
+    totalBrushCount?: number;
+    isFirstBrushEver?: boolean;
+  }
+): Promise<MascotConfig> => {
   const service = new MascotGreetingService();
   service.setTranslationFunction(t);
   
-  // Create context with current time for time detection
-  const context = ContextDetector.detectFullContext();
+  // Create context with current time and user data for milestone detection
+  const context = ContextDetector.detectFullContext(userState);
   
-  // Get greeting from V2 system
+  // Get greeting from V2 system (now with milestone conditions)
   const greeting = await service.getGreeting(personality, context);
   
   // Convert V2 result to V1 MascotConfig format for compatibility
@@ -204,7 +214,7 @@ export default function HomeScreen() {
   const [currentPersonalityIndex, setCurrentPersonalityIndex] = useState(0);
   const personalities: PersonalityType[] = ['supportive', 'playful', 'cool', 'wise'];
 
-  // Function to refresh mascot text using V2 system with time context
+  // Function to refresh mascot text using V2 system with full context
   const refreshMascotText = async () => {
     try {
       // Cycle through personalities for testing
@@ -212,10 +222,22 @@ export default function HomeScreen() {
       const nextIndex = (currentPersonalityIndex + 1) % personalities.length;
       setCurrentPersonalityIndex(nextIndex);
       
-      // Get a time-context-aware greeting from V2 system
-      const v2Config = await getTimeContextMascotConfig(t, currentPersonality);
+      // Prepare user state for milestone detection
+      const userId = user?.id || 'guest';
+      const userState = {
+        userId,
+        streakDays: overrideStreak ?? dashboardData?.streakDays ?? 0,
+        // Note: lastBrushDate and totalBrushCount are not part of DashboardStats yet
+        // They will be calculated inside the milestone services when needed
+        lastBrushDate: undefined, // Will be fetched by milestone services
+        totalBrushCount: 0, // Will be fetched by milestone services  
+        isFirstBrushEver: false, // Will be determined by milestone services
+      };
+      
+      // Get a context-aware greeting from V2 system with milestone detection
+      const v2Config = await getTimeContextMascotConfig(t, currentPersonality, userState);
       setSelectedMascotConfig(v2Config);
-      console.log(`🆕 V2 System: ${currentPersonality} personality with time context!`, v2Config);
+      console.log(`🆕 V2 System: ${currentPersonality} personality with full context!`, v2Config, userState);
     } catch (error) {
       console.warn('⚠️ V2 System failed, using fallback:', error);
       setSelectedMascotConfig(getFallbackMascotConfig());

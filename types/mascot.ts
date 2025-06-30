@@ -85,7 +85,7 @@ export type GreetingCategoryType =
   | 'time_context'        // Morning, evening, weekend, etc.
   | 'brushing_behaviour'  // First brush, missed days, consistency, etc.
   | 'streak_state'        // New streak, long streak, broken streak, etc.
-  | 'achievement'         // Goals reached, milestones, personal bests
+  | 'milestone_enhancements' // Special milestones and user journey markers
   | 'reminder'            // Gentle nudges, motivation, encouragement
   | 'seasonal'            // Holidays, seasons, special events
   | 'mood_boost'          // Positive reinforcement, confidence building
@@ -125,18 +125,31 @@ export type StreakStateSubcase =
   | 'streak_broken';
 
 /**
+ * Subcases for Milestone Enhancements category
+ */
+export type MilestoneEnhancementsSubcase =
+  | 'brush_count_milestones'
+  | 'monthly_brush_20'
+  | 'day_7'
+  | 'returning_user_milestone';
+
+/**
  * Generic subcase type - can be extended as we add more categories
  */
 export type GreetingSubcase = 
   | TimeContextSubcase 
   | BrushingBehaviourSubcase 
   | StreakStateSubcase
+  | MilestoneEnhancementsSubcase
   | string; // Allow for future expansion
 
 /**
  * Context data that can be passed to the greeting service
  */
 export interface GreetingContext {
+  // User identification
+  userId?: string;
+  
   // Auto-detected context
   currentTime?: Date;
   dayOfWeek?: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
@@ -176,7 +189,13 @@ export interface CategoryConfig {
   subcases: {
     [subcase: string]: {
       weight: number;
-      conditions?: (context: GreetingContext) => boolean; // Optional condition checker
+      conditions?: (context: GreetingContext) => boolean | Promise<boolean>; // Optional condition checker (sync or async)
+      subConditions?: {
+        [subCondition: string]: {
+          weight: number;
+          conditions?: (context: GreetingContext) => boolean | Promise<boolean>;
+        };
+      };
     };
   };
 }
@@ -211,6 +230,7 @@ export interface MascotGreetingResult {
   personality: PersonalityType;
   category: GreetingCategoryType;
   subcase: GreetingSubcase;
+  subCondition?: string; // Optional sub-condition for nested categories
   visualConfig: {
     collapsedVariant: PpMascotVariant;
     expandedVariant: NonPpMascotVariant;

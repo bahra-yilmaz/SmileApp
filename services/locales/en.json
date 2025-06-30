@@ -32,92 +32,16 @@
       "mirrorLosesRespect": "Miss a day, and your mirror loses respect for you. Trust me."
     },
     "cool": {
-      "routineLocked": "Routine locked in. Let's keep the streak shining.",
-      "sharpenTheSmile": "Time to sharpen that smile. It's your best weapon.",
-      "smileInsurance": "Think of this as smile insurance. You'll thank me later.",
-      "mirrorsWaiting": "Your mirrors are waiting for that signature glow.",
-      "brushingBigFlex": "Brushing twice daily? That's a big flex, and I'm here for it.",
-      "shadesForShine": "You might need shades for how bright that smile's about to be.",
-      "lessCavitiesMoreConfidence": "Less cavities, more confidence. That's the goal.",
-      "brushGameStrong": "Your brush game is strong. Let's keep that energy up.",
-      "dentistJealous": "Your dentist is going to be jealous of this routine.",
-      "dullTeethCouldnBeUs": "Dull teeth? Couldn't be us.",
-      "goodHabitsShinyStats": "Good habits = shiny stats. You're winning.",
-      "toothbrushReady": "Your toothbrush is ready to level up your day.",
-      "morningFlex": "Morning flex: perfect teeth. Let's make it happen.",
-      "noPlaqueZone": "This is a no-plaque zone. Let's keep it that way.",
-      "futureSmile": "Your future smile is calling. Time to answer.",
-      "confidenceLoaded": "Confidence loaded. Brush activated. Let's go.",
-      "shineProtocol": "Shine protocol: activated. Ready when you are.",
-      "nextLevelSmile": "Next level smile incoming. Are you ready?",
-      "tinyMoveBigWin": "Tiny move, big win. That's how we roll.",
-      "sparkleUpgrade": "Time for a sparkle upgrade. You deserve it."
+      "fallback": "Looking sharp starts with sharp habits. Let's go."
     },
     "wise": {
-      "smallSteps": "Small steps taken consistently create lasting transformation.",
-      "dailyDiscipline": "Daily discipline in small acts builds extraordinary results.",
-      "foundationOfConfidence": "This simple act becomes the foundation of confidence.",
-      "eachBrushMatters": "Each brush matters more than you realize. Trust the process.",
-      "investInFuture": "You're investing in your future self with every brush.",
-      "quietProgress": "Quiet progress is still progress. You're building something great.",
-      "healthIsWealth": "Health is wealth, and you're making a valuable deposit.",
-      "showUpDaily": "Success is showing up daily, especially when you don't feel like it.",
-      "patternsCreateDestiny": "Small patterns create destiny. You're on the right path.",
-      "strongRoots": "Strong roots grow in daily routine. You're planting seeds of success.",
-      "smallActOfMastery": "This small act of mastery strengthens your entire day.",
-      "disciplineToday": "The discipline you show today shapes who you become tomorrow.",
-      "lastingResults": "Lasting results come from consistent, intentional action.",
-      "precisionCreatesStrength": "Precision in small things creates strength in large things.",
-      "habitsShapeYou": "You don't just build habits. Habits build you.",
-      "disciplineSharpens": "Discipline sharpens both mind and smile.",
-      "neverWasteBrush": "Never waste a brush. Each one compounds your progress.",
-      "controlWhatYouCan": "Control what you can control. Start here, start now.",
-      "precisionMatters": "Precision matters in the smallest moments.",
-      "riseEveryDay": "You rise to your level of daily systems. Keep building."
+      "fallback": "Small consistent actions lead to lasting results."
     },
     "playful": {
-      "letThePartyBegin": "Teeth party time! Let the sparkling begin! ✨",
-      "dontLeaveMeHanging": "Don't leave me hanging! Your teeth are ready for their glow-up!",
-      "missionSparkle": "Mission: Sparkle activated! Are you ready to shine?",
-      "teethMissMe": "Your teeth called—they miss me! Time for a reunion! 🦷",
-      "noPlaqueParty": "No plaque allowed at this party! Let's brush it away!",
-      "squadGoals": "Squad goals: You, me, and that fresh minty feeling! 💫",
-      "toothFairtyProud": "The tooth fairy would be SO proud right now! 🧚‍♀️",
-      "shinyAttack": "Shiny attack mode: ON! Let's make those pearly whites sparkle!",
-      "plaqueWho": "Plaque who? We don't know her! 💅✨",
-      "timeToShine": "It's time to SHINE! Your smile is waiting!",
-      "dailySmileQuest": "Daily smile quest: ACTIVATED! Ready for adventure?",
-      "brushingRemix": "Time for the brushing remix! Let's make it fun!",
-      "smileRecipe": "Smile recipe: 2 minutes + good vibes = MAGIC! ✨",
-      "sparkleGame": "Sparkle game strong! Let's keep this energy going!",
-      "streakDance": "Streak dance time! Your consistency is amazing! 💃",
-      "zeroBrushDrama": "Zero brush drama, maximum sparkle! That's how we roll!",
-      "partyStarter": "You're the party starter for your own glow-up! 🎉",
-      "shineChampion": "Shine champion reporting for duty! Let's do this!",
-      "toothbrushHype": "Toothbrush hype squad activated! We're here for it! 🎯",
-      "tinyMovesBigSmile": "Tiny moves, BIG smile energy! You've got this! ⚡"
+      "fallback": "Time to sparkle and shine! Let's make this fun!"
     },
     "supportive": {
-      "youShowedUp": "You showed up today. That's what matters most.",
-      "smallWinsBigSmiles": "Small wins lead to big smiles. You're doing great.",
-      "littleByLittle": "Little by little, you're building something beautiful.",
-      "freshStart": "Every brush is a fresh start. Be gentle with yourself.",
-      "rightHereWithYou": "I'm right here with you, cheering you on.",
-      "progressNotPerfection": "Progress, not perfection. You're exactly where you need to be.",
-      "tinyHabitsMatter": "Tiny habits matter more than you know. You're doing wonderfully.",
-      "yourSmileDeservesThis": "Your smile deserves this care. You deserve this care.",
-      "brighterStep": "Each brush is a step toward a brighter you.",
-      "gentleReminder": "Gentle reminder: You're doing better than you think.",
-      "strongerEachDay": "You're getting stronger each day, one brush at a time.",
-      "kindToYourself": "Be kind to yourself. You're making real progress.",
-      "thisMatters": "This matters. You matter. Your health matters.",
-      "quietProgress": "Quiet progress is still progress. You're moving forward.",
-      "consistentCare": "Consistent care creates lasting change. You're on the right path.",
-      "keepShowingUp": "Keep showing up for yourself. That's courage.",
-      "showingUpStrong": "Showing up is already showing strength.",
-      "streakOrNoStreak": "Streak or no streak, you're here. That's what counts.",
-      "gentleVictory": "This gentle victory is yours to celebrate.",
-      "todayCounts": "Today counts. This moment counts. You count."
+      "fallback": "You're doing great! Every step forward matters."
     },
     "neutral": {
       "brushTime": "Brush time! Let's keep those teeth clean and healthy.",
@@ -140,18 +64,6 @@
       "mintMode": "Mint mode: ON. Fresh breath incoming.",
       "quickWin": "Quick win for your oral health starting now.",
       "smallMoveBigFresh": "Small move, big fresh feeling coming up."
-    },
-    "supportive": {
-      "fallback": "You're doing great! Every step forward matters."
-    },
-    "playful": {
-      "fallback": "Time to sparkle and shine! Let's make this fun!"
-    },
-    "cool": {
-      "fallback": "Looking sharp starts with sharp habits. Let's go."
-    },
-    "wise": {
-      "fallback": "Small consistent actions lead to lasting results."
     },
     "v2": {
       "supportive": {
@@ -230,6 +142,28 @@
             "2": "Streak broke, not your worth. Let's bounce back.",
             "3": "A missed day doesn't undo your progress, {{username}}. You're still moving."
           }
+        },
+        "milestone_enhancements": {
+          "monthly_brush_20": {
+            "1": "20 times this month, {{username}}. That’s real commitment.",
+            "2": "",
+            "3": ""
+          },
+          "day_7": {
+            "1": "One week with us, {{username}} — and look how far you’ve come.",
+            "2": "",
+            "3": ""
+          },
+          "returning_user_milestone": {
+            "1": "You came back, {{username}}. That takes courage. And we see you.",
+            "2": "",
+            "3": ""
+          },
+          "brush_count_milestones": {
+            "exactly_10": "10 brushes in, {{username}}. That's 10 promises you kept to yourself.",
+            "exactly_50": "50 brushes, {{username}}. That's 50 moments of showing up. Huge.",
+            "exactly_100": "100 brushes, {{username}}. That's 100 times you showed care. That's huge."
+          }
         }
       },
       "playful": {
@@ -303,6 +237,28 @@
             "2": "RIP to that streak 🪦 But hey… resurrection arc starts now!",
             "3": "Streak KO'd… but you're brushing like a comeback king 👑"
           }
+        },
+        "milestone_enhancements": {
+          "monthly_brush_20": {
+            "1": "20 brushes in a month? We need confetti and a parade 🎉",
+            "2": "",
+            "3": ""
+          },
+          "day_7": {
+            "1": "7 days together? Feels like a minty friendship already 🫶",
+            "2": "",
+            "3": ""
+          },
+          "returning_user_milestone": {
+            "1": "They tried to keep you away… but sparkle calls you home 💫",
+            "2": "",
+            "3": ""
+          },
+          "brush_count_milestones": {
+            "exactly_10": "Ten brushes?! You're basically toothbrush royalty 👑",
+            "exactly_50": "50?! That brush must be asking for a raise 😎",
+            "exactly_100": "100?! That brush is practically a part of you now 😂"
+          }
         }
       },
       "cool": {
@@ -371,6 +327,28 @@
             "2": "Streak's gone. But the legend continues, {{username}}.",
             "3": "Reset. Reload. Still clean."
           }
+        },
+        "milestone_enhancements": {
+          "monthly_brush_20": {
+            "1": "That’s 20 clean calls this month. Respect, {{username}}.",
+            "2": "",
+            "3": ""
+          },
+          "day_7": {
+            "1": "Week one? Crushed it. Let’s keep rolling, {{username}}.",
+            "2": "",
+            "3": ""
+          },
+          "returning_user_milestone": {
+            "1": "Break’s over. Streak’s reloading. Welcome back, {{username}}.",
+            "2": "",
+            "3": ""
+          },
+          "brush_count_milestones": {
+            "exactly_10": "Double digits. You're leveling up smooth, {{username}}.",
+            "exactly_50": "Half a hundred. Full dedication, {{username}}.",
+            "exactly_100": "A hundred? Legend verified, {{username}}."
+          }
         }
       },
       "wise": {
@@ -386,7 +364,7 @@
             "3": "Between moments of rush, choose clarity, {{username}}."
           },
           "evening": {
-            "1": 	"How you close the day shapes how you greet the next.",
+            "1": "How you close the day shapes how you greet the next.",
             "2": "Stillness. Routine. Progress.",
             "3": "How you close one day whispers into the next, {{username}}."
           },
@@ -438,6 +416,28 @@
             "1": "The streak paused. The path didn't.",
             "2": "Failure is just feedback — and you're listening.",
             "3": "Imperfection is human. Persistence is wisdom."
+          }
+        },
+        "milestone_enhancements": {
+          "monthly_brush_20": {
+            "1": "",
+            "2": "",
+            "3": ""
+          },
+          "day_7": {
+            "1": "",
+            "2": "",
+            "3": ""
+          },
+          "returning_user_milestone": {
+            "1": "",
+            "2": "",
+            "3": ""
+          },
+          "brush_count_milestones": {
+            "exactly_10": "Ten repetitions. One pattern begins.",
+            "exactly_50": "Fifty isn't just a number. It's proof of a pattern.",
+            "exactly_100": "Triple digits. The discipline is real now."
           }
         }
       }
@@ -1013,4 +1013,4 @@
     "item": "Toothbrush",
     "firstBrush": "First Brush"
   }
-} 
+}

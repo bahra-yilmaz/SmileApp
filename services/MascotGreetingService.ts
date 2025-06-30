@@ -77,6 +77,7 @@ export class ContextDetector {
   }
 
   static detectFullContext(userState?: {
+    userId?: string;
     streakDays?: number;
     lastBrushDate?: Date;
     totalBrushCount?: number;
@@ -86,6 +87,7 @@ export class ContextDetector {
     
     return {
       ...timeContext,
+      userId: userState?.userId,
       streakDays: userState?.streakDays,
       lastBrushDate: userState?.lastBrushDate,
       totalBrushCount: userState?.totalBrushCount,
@@ -146,14 +148,14 @@ export class MascotGreetingService implements IMascotGreetingService {
     // Detect context if not provided
     const finalContext = context || ContextDetector.detectFullContext();
 
-    // Select category based on context and weights
-    const selectedCategory = this.selectCategory(finalContext);
+    // Select category based on context and weights (now async)
+    const selectedCategory = await this.selectCategory(finalContext);
     
-    // Select subcase within the category
-    const selectedSubcase = this.selectSubcase(selectedCategory, finalContext);
+    // Select subcase within the category (now async, returns object)
+    const subcaseSelection = await this.selectSubcase(selectedCategory, finalContext);
     
     // Generate text key and get translated text with variables
-    const textKey = this.generateTextKey(personality, selectedCategory.id, selectedSubcase);
+    const textKey = this.generateTextKey(personality, selectedCategory.id, subcaseSelection.subcase, subcaseSelection.subCondition);
     const actualText = this.getTranslatedText(textKey, personality, finalContext.variables);
     
     // Get visual configuration
@@ -164,7 +166,8 @@ export class MascotGreetingService implements IMascotGreetingService {
       actualText,
       personality,
       category: selectedCategory.id,
-      subcase: selectedSubcase,
+      subcase: subcaseSelection.subcase,
+      subCondition: subcaseSelection.subCondition,
       visualConfig: {
         collapsedVariant: visualConfig.collapsedVariant,
         expandedVariant: visualConfig.expandedVariant,
@@ -196,7 +199,7 @@ export class MascotGreetingService implements IMascotGreetingService {
   /**
    * Select a category based on context and weights
    */
-  private selectCategory(context: GreetingContext): CategoryConfig {
+  private async selectCategory(context: GreetingContext): Promise<CategoryConfig> {
     const availableCategories = getAvailableCategories();
     
     // Handle forced category
@@ -205,11 +208,14 @@ export class MascotGreetingService implements IMascotGreetingService {
       if (forcedCategory) return forcedCategory;
     }
 
-    // Calculate weights for each category
-    const weightedCategories = availableCategories.map(category => ({
+    // Calculate weights for each category (now async)
+    const weightPromises = availableCategories.map(async category => ({
       item: category,
-      weight: calculateCategoryWeight(category, context),
-    })).filter(item => item.weight > 0);
+      weight: await calculateCategoryWeight(category, context),
+    }));
+    
+    const weightedCategories = (await Promise.all(weightPromises))
+      .filter(item => item.weight > 0);
 
     // Select based on weights
     const selected = WeightedSelector.selectByWeight(weightedCategories);
@@ -221,32 +227,89 @@ export class MascotGreetingService implements IMascotGreetingService {
   /**
    * Select a subcase within a category
    */
-  private selectSubcase(category: CategoryConfig, context: GreetingContext): GreetingSubcase {
+  private async selectSubcase(category: CategoryConfig, context: GreetingContext): Promise<{ subcase: GreetingSubcase; subCondition?: string }> {
     // Handle forced subcase
     if (context.forceSubcase) {
-      return context.forceSubcase;
+      return { subcase: context.forceSubcase };
     }
 
-    // Get available subcases with weights
-    const availableSubcases = Object.entries(category.subcases)
-      .map(([subcaseKey, subcaseConfig]) => ({
-        item: subcaseKey as GreetingSubcase,
-        weight: subcaseConfig.weight,
-        conditions: subcaseConfig.conditions,
-      }))
-      .filter(item => {
-        // Check weight and conditions
-        if (item.weight === 0) return false;
-        if (item.conditions && !item.conditions(context)) return false;
-        return true;
+    // Get available subcases with weights (now handling async conditions)
+    const subcasePromises = Object.entries(category.subcases)
+      .map(async ([subcaseKey, subcaseConfig]) => {
+        // Check weight first
+        if (subcaseConfig.weight === 0) return null;
+        
+        // Check conditions (can be async now)
+        let conditionsMet = true;
+        if (subcaseConfig.conditions) {
+          const result = subcaseConfig.conditions(context);
+          conditionsMet = result instanceof Promise ? await result : result;
+        }
+        
+        if (!conditionsMet) return null;
+        
+        return {
+          item: subcaseKey as GreetingSubcase,
+          weight: subcaseConfig.weight,
+          config: subcaseConfig,
+        };
       });
+    
+    const availableSubcases = (await Promise.all(subcasePromises))
+      .filter((item): item is { item: GreetingSubcase; weight: number; config: any } => item !== null);
 
     // Select based on weights
-    const selected = WeightedSelector.selectByWeight(availableSubcases);
+    const selectedSubcase = WeightedSelector.selectByWeight(availableSubcases);
     
-    // Fallback to first available subcase
-    const firstAvailable = Object.keys(category.subcases)[0] as GreetingSubcase;
-    return selected || firstAvailable;
+    if (!selectedSubcase) {
+      // Fallback to first available subcase
+      const firstAvailable = Object.keys(category.subcases)[0] as GreetingSubcase;
+      return { subcase: firstAvailable };
+    }
+
+    // Find the full configuration for the selected subcase
+    const selectedConfig = category.subcases[selectedSubcase];
+    
+    // Check if selected subcase has sub-conditions
+    if (selectedConfig?.subConditions) {
+      const subCondition = await this.selectSubCondition(selectedConfig.subConditions, context);
+      return { subcase: selectedSubcase, subCondition };
+    }
+
+    return { subcase: selectedSubcase };
+  }
+
+  /**
+   * Select a sub-condition within a subcase
+   */
+  private async selectSubCondition(subConditions: Record<string, any>, context: GreetingContext): Promise<string | undefined> {
+    const subConditionPromises = Object.entries(subConditions)
+      .map(async ([subConditionKey, subConditionConfig]) => {
+        // Check weight first
+        if (subConditionConfig.weight === 0) return null;
+        
+        // Check conditions (can be async)
+        let conditionsMet = true;
+        if (subConditionConfig.conditions) {
+          const result = subConditionConfig.conditions(context);
+          conditionsMet = result instanceof Promise ? await result : result;
+        }
+        
+        if (!conditionsMet) return null;
+        
+        return {
+          item: subConditionKey,
+          weight: subConditionConfig.weight,
+        };
+      });
+    
+    const availableSubConditions = (await Promise.all(subConditionPromises))
+      .filter((item): item is { item: string; weight: number } => item !== null);
+
+    // Select based on weights
+    const selected = WeightedSelector.selectByWeight(availableSubConditions);
+    
+    return selected || Object.keys(subConditions)[0];
   }
 
   /**
@@ -255,9 +318,15 @@ export class MascotGreetingService implements IMascotGreetingService {
   private generateTextKey(
     personality: PersonalityType,
     category: GreetingCategoryType,
-    subcase: GreetingSubcase
+    subcase: GreetingSubcase,
+    subCondition?: string
   ): string {
-    // Generate random variant (1, 2, or 3)
+    if (subCondition) {
+      // For sub-conditions, use single text (no variant)
+      return `mascotGreetings.v2.${personality}.${category}.${subcase}.${subCondition}`;
+    }
+    
+    // Generate random variant (1, 2, or 3) for regular subcases
     const variant = Math.floor(Math.random() * 3) + 1;
     
     return `mascotGreetings.v2.${personality}.${category}.${subcase}.${variant}`;

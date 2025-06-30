@@ -9,6 +9,7 @@ import type {
   BrushingBehaviourSubcase,
   StreakStateSubcase
 } from '../types/mascot';
+import { MilestoneService } from '../services/milestones';
 
 /**
  * Helper functions for context condition checking
@@ -50,15 +51,24 @@ const ContextConditions = {
   isNewStreak: (context: GreetingContext) => (context.streakDays ?? 0) === 1,
   isAlmostWeekStreak: (context: GreetingContext) => (context.streakDays ?? 0) >= 5 && (context.streakDays ?? 0) <= 7,
   isOverTenDayStreak: (context: GreetingContext) => (context.streakDays ?? 0) >= 10,
-  isBestStreakReached: (context: GreetingContext) => {
+  isBestStreakReached: async (context: GreetingContext) => {
     const currentStreak = context.streakDays ?? 0;
-    const previousBest = typeof context.variables?.previousBestStreak === 'number' 
-      ? context.variables.previousBestStreak 
-      : 0;
+    const userId = context.userId || 'guest';
     
-    // Personal best reached if current streak is higher than previous record
-    // and current streak is at least 2 days (to avoid noise on day 1)
-    return currentStreak > previousBest && currentStreak >= 2;
+    if (currentStreak < 2) return false; // Need at least 2 days to be meaningful
+    
+    try {
+      const comparison = await MilestoneService.getMilestoneState(
+        userId, 
+        currentStreak, 
+        context.totalBrushCount ?? 0, 
+        context.lastBrushDate
+      );
+      return comparison.isNewBestStreak;
+    } catch (error) {
+      console.error('❌ Error checking best streak milestone:', error);
+      return false;
+    }
   },
   isStreakBroken: (context: GreetingContext) => {
     const streakDays = context.streakDays ?? 0;
@@ -79,6 +89,59 @@ const ContextConditions = {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     return context.lastBrushDate < yesterday;
+  },
+
+  // Milestone Enhancement conditions
+  isBrushCountMilestone: (context: GreetingContext) => {
+    const count = context.totalBrushCount ?? 0;
+    return count === 10 || count === 50 || count === 100;
+  },
+  isBrushCount10: (context: GreetingContext) => (context.totalBrushCount ?? 0) === 10,
+  isBrushCount50: (context: GreetingContext) => (context.totalBrushCount ?? 0) === 50,
+  isBrushCount100: (context: GreetingContext) => (context.totalBrushCount ?? 0) === 100,
+  isMonthlyBrush20: async (context: GreetingContext) => {
+    const userId = context.userId || 'guest';
+    
+    try {
+      const milestoneState = await MilestoneService.getMilestoneState(
+        userId, 
+        context.streakDays ?? 0, 
+        context.totalBrushCount ?? 0, 
+        context.lastBrushDate
+      );
+      return milestoneState.hasReached20MonthlyBrushes;
+    } catch (error) {
+      console.error('❌ Error checking monthly brush milestone:', error);
+      return false;
+    }
+  },
+  isDay7Install: async (context: GreetingContext) => {
+    try {
+      const milestoneState = await MilestoneService.getMilestoneState(
+        context.userId || 'guest', 
+        context.streakDays ?? 0, 
+        context.totalBrushCount ?? 0, 
+        context.lastBrushDate
+      );
+      return milestoneState.isDay7;
+    } catch (error) {
+      console.error('❌ Error checking install date milestone:', error);
+      return false;
+    }
+  },
+  isReturningUserMilestone: (context: GreetingContext) => {
+    const lastBrushDate = context.lastBrushDate;
+    const totalBrushCount = context.totalBrushCount ?? 0;
+    
+    if (!lastBrushDate || totalBrushCount <= 5) return false;
+    
+    // Calculate days since last brush using available data
+    const daysSinceLastBrush = Math.floor(
+      (new Date().getTime() - lastBrushDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
+    
+    // Returning after 5+ day break, but has brush history
+    return daysSinceLastBrush >= 5;
   },
 };
 
@@ -174,7 +237,7 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
         conditions: ContextConditions.isOverTenDayStreak,
       },
       best_streak_reached: {
-        weight: 5.0, // Highest priority for personal achievements
+        weight: 5.0, // ENABLED - Very high weight for personal achievements
         conditions: ContextConditions.isBestStreakReached,
       },
       streak_broken: {
@@ -184,19 +247,43 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
     },
   },
 
-  // 4. ACHIEVEMENT  
+  // 4. MILESTONE ENHANCEMENTS  
   {
-    id: 'achievement',
-    name: 'Achievement',
-    description: 'Greetings for milestones, goals, and accomplishments',
-    baseWeight: 1.5, // Moderate weight, triggered by specific events
+    id: 'milestone_enhancements',
+    name: 'Milestone Enhancements',
+    description: 'Special milestone celebrations and user journey markers',
+    baseWeight: 3.0, // High weight for milestone moments
     subcases: {
-      goal_reached: { weight: 0, conditions: () => false }, // TODO: Implement when achievement system is ready
-      milestone_hit: { weight: 0, conditions: () => false },
-      personal_best: { weight: 0, conditions: () => false },
-      consistency_badge: { weight: 0, conditions: () => false },
-      improvement_noted: { weight: 0, conditions: () => false },
-      target_exceeded: { weight: 0, conditions: () => false },
+      brush_count_milestones: {
+        weight: 4.0, // High priority for celebrating brush count milestones
+        conditions: ContextConditions.isBrushCountMilestone,
+        subConditions: {
+          exactly_10: {
+            weight: 1.0,
+            conditions: ContextConditions.isBrushCount10,
+          },
+          exactly_50: {
+            weight: 1.0,
+            conditions: ContextConditions.isBrushCount50,
+          },
+          exactly_100: {
+            weight: 1.0,
+            conditions: ContextConditions.isBrushCount100,
+          },
+        },
+      },
+      monthly_brush_20: {
+        weight: 4.0, // ENABLED - High priority for monthly achievements
+        conditions: ContextConditions.isMonthlyBrush20,
+      },
+      day_7: {
+        weight: 3.0, // ENABLED - Important first week milestone
+        conditions: ContextConditions.isDay7Install,
+      },
+      returning_user_milestone: {
+        weight: 5.0, // Very high priority - should definitely show up - WORKING
+        conditions: ContextConditions.isReturningUserMilestone,
+      },
     },
   },
 
@@ -297,14 +384,22 @@ export const getAvailableCategories = (): CategoryConfig[] => {
 
 /**
  * Calculate total weight for a category based on context
+ * Now supports async conditions
  */
-export const calculateCategoryWeight = (category: CategoryConfig, context: GreetingContext): number => {
+export const calculateCategoryWeight = async (category: CategoryConfig, context: GreetingContext): Promise<number> => {
   let totalWeight = 0;
   
   // Check each subcase and add its weight if conditions are met
   for (const [subcaseKey, subcaseConfig] of Object.entries(category.subcases)) {
     if (subcaseConfig.weight > 0) {
-      const conditionsMet = subcaseConfig.conditions ? subcaseConfig.conditions(context) : true;
+      let conditionsMet = true;
+      
+      if (subcaseConfig.conditions) {
+        const result = subcaseConfig.conditions(context);
+        // Handle both sync and async conditions
+        conditionsMet = result instanceof Promise ? await result : result;
+      }
+      
       if (conditionsMet) {
         totalWeight += subcaseConfig.weight;
       }

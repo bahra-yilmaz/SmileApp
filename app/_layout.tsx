@@ -19,6 +19,7 @@ import { BrushingGoalProvider } from '../context/BrushingGoalContext';
 import { StreakProvider } from '../context/StreakContext';
 import { useBrushingGoalSync } from '../hooks/useBrushingGoalSync';
 import { LanguageService } from '../services/LanguageService';
+import { MilestoneService } from '../services/milestones';
 
 // Get dimensions for background
 const { width, height } = Dimensions.get('window');
@@ -59,10 +60,11 @@ export default function RootLayout() {
   useEffect(() => {
     async function prepareApp() {
       try {
-        // In parallel, load general assets and decode critical home screen images
+        // In parallel, load general assets, decode critical home screen images, and initialize services
         await Promise.all([
           loadAssets(),
-          preloadHomeScreenAssets()
+          preloadHomeScreenAssets(),
+          MilestoneService.initialize(), // Initialize milestone tracking
         ]);
       } catch (e) {
         console.warn(e);
