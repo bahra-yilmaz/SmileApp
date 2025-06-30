@@ -37,112 +37,71 @@ import {
   BrushingTimeOverlay
 } from '../../components/home';
 
-// Import mascot types for temporary configuration
-import type { MascotConfig } from '../../types/mascot';
+// Import mascot types and V2 service
+import type { MascotConfig, PersonalityType } from '../../types/mascot';
+import { MascotGreetingService, ContextDetector } from '../../services/MascotGreetingService';
 
 // Get dimensions for background
 const { width, height } = Dimensions.get('window');
 
 const FIRST_TIMER_SHOWN_KEY = 'first_timer_shown';
 
-// TEMPORARY: Morning text configs using your exact texts!
-// This will be replaced with the new robust system later
-const TEMP_MORNING_MASCOT_CONFIGS: MascotConfig[] = [
-  // Supportive personality - FIXED to use nubo-supportive variants!
+// V2 MASCOT SYSTEM: Get time-aware mascot configuration
+const getTimeContextMascotConfig = async (t: (key: string, options?: any) => string, personality: PersonalityType = 'supportive'): Promise<MascotConfig> => {
+  const service = new MascotGreetingService();
+  service.setTranslationFunction(t);
+  
+  // Create context with current time for time detection
+  const context = ContextDetector.detectFullContext();
+  
+  // Get greeting from V2 system
+  const greeting = await service.getGreeting(personality, context);
+  
+  // Convert V2 result to V1 MascotConfig format for compatibility
+  return {
+    id: `v2-${personality}-${greeting.category}-${greeting.subcase}`,
+    collapsedVariant: greeting.visualConfig.collapsedVariant,
+    expandedVariant: greeting.visualConfig.expandedVariant,
+    greetingTextKey: greeting.textKey,
+    probability: 1,
+  };
+};
+
+// FALLBACK: Simple configs for when V2 system isn't ready
+const FALLBACK_MASCOT_CONFIGS: MascotConfig[] = [
   {
-    id: 'temp-supportive-1',
+    id: 'fallback-supportive',
     collapsedVariant: 'nubo-supportive-1-pp',
     expandedVariant: 'nubo-supportive-1',
-    greetingTextKey: 'mascotGreetings.v2.supportive.time_context.morning.1',
+    greetingTextKey: 'mascotGreetings.supportive.fallback',
     probability: 1,
   },
   {
-    id: 'temp-supportive-2',
-    collapsedVariant: 'nubo-supportive-2-pp',
-    expandedVariant: 'nubo-supportive-2',
-    greetingTextKey: 'mascotGreetings.v2.supportive.time_context.morning.2',
-    probability: 1,
-  },
-  {
-    id: 'temp-supportive-3',
-    collapsedVariant: 'nubo-supportive-3-pp',
-    expandedVariant: 'nubo-supportive-3',
-    greetingTextKey: 'mascotGreetings.v2.supportive.time_context.morning.3',
-    probability: 1,
-  },
-  // Playful personality - FIXED to use nubo-playful variants!
-  {
-    id: 'temp-playful-1',
+    id: 'fallback-playful',
     collapsedVariant: 'nubo-playful-1-pp',
     expandedVariant: 'nubo-playful-1',
-    greetingTextKey: 'mascotGreetings.v2.playful.time_context.morning.1',
+    greetingTextKey: 'mascotGreetings.playful.fallback',
     probability: 1,
   },
   {
-    id: 'temp-playful-2',
-    collapsedVariant: 'nubo-playful-2-pp',
-    expandedVariant: 'nubo-playful-2',
-    greetingTextKey: 'mascotGreetings.v2.playful.time_context.morning.2',
-    probability: 1,
-  },
-  {
-    id: 'temp-playful-3',
-    collapsedVariant: 'nubo-playful-3-pp',
-    expandedVariant: 'nubo-playful-3',
-    greetingTextKey: 'mascotGreetings.v2.playful.time_context.morning.3',
-    probability: 1,
-  },
-  // Cool personality - Using different cool variants for variety
-  {
-    id: 'temp-cool-1',
+    id: 'fallback-cool',
     collapsedVariant: 'nubo-cool-1-pp',
     expandedVariant: 'nubo-cool-1',
-    greetingTextKey: 'mascotGreetings.v2.cool.time_context.morning.1',
+    greetingTextKey: 'mascotGreetings.cool.fallback',
     probability: 1,
   },
   {
-    id: 'temp-cool-2',
-    collapsedVariant: 'nubo-cool-2-pp',
-    expandedVariant: 'nubo-cool-2',
-    greetingTextKey: 'mascotGreetings.v2.cool.time_context.morning.2',
-    probability: 1,
-  },
-  {
-    id: 'temp-cool-3',
-    collapsedVariant: 'nubo-cool-3-pp',
-    expandedVariant: 'nubo-cool-3',
-    greetingTextKey: 'mascotGreetings.v2.cool.time_context.morning.3',
-    probability: 1,
-  },
-  // Wise personality - Using different wise variants for variety
-  {
-    id: 'temp-wise-1',
+    id: 'fallback-wise',
     collapsedVariant: 'nubo-wise-1-pp',
     expandedVariant: 'nubo-wise-1',
-    greetingTextKey: 'mascotGreetings.v2.wise.time_context.morning.1',
+    greetingTextKey: 'mascotGreetings.wise.fallback',
     probability: 1,
   },
-  {
-    id: 'temp-wise-2',
-    collapsedVariant: 'nubo-wise-2-pp',
-    expandedVariant: 'nubo-wise-2',
-    greetingTextKey: 'mascotGreetings.v2.wise.time_context.morning.2',
-    probability: 1,
-  },
-  {
-    id: 'temp-wise-3',
-    collapsedVariant: 'nubo-wise-3-pp',
-    expandedVariant: 'nubo-wise-3',
-    greetingTextKey: 'mascotGreetings.v2.wise.time_context.morning.3',
-    probability: 1,
-  }
 ];
 
-// TEMPORARY: Simple random selection function for YOUR morning texts
-// This will be replaced with the new robust system later
-const getMorningMascotConfig = (): MascotConfig => {
-  const randomIndex = Math.floor(Math.random() * TEMP_MORNING_MASCOT_CONFIGS.length);
-  return TEMP_MORNING_MASCOT_CONFIGS[randomIndex];
+const getFallbackMascotConfig = (): MascotConfig => {
+  const randomIndex = Math.floor(Math.random() * FALLBACK_MASCOT_CONFIGS.length);
+  return FALLBACK_MASCOT_CONFIGS[randomIndex];
 };
 
 export default function HomeScreen() {
@@ -184,6 +143,11 @@ export default function HomeScreen() {
   // State for home screen mascot card expansion
   const [isHomeMascotExpanded, setIsHomeMascotExpanded] = useState(false);
   
+  // Initialize with V2 system on component mount
+  useEffect(() => {
+    refreshMascotText();
+  }, [t]); // Re-run when translation function changes
+  
   // ---------------------------------------------------------------------------
   // First-visit prompt & FAB highlight
   // ---------------------------------------------------------------------------
@@ -221,7 +185,7 @@ export default function HomeScreen() {
 
   // TEMPORARY: Morning text mascot configuration using YOUR exact texts!
   // This will be replaced with the new robust system later
-  const [selectedMascotConfig, setSelectedMascotConfig] = useState(getMorningMascotConfig);
+  const [selectedMascotConfig, setSelectedMascotConfig] = useState(getFallbackMascotConfig);
   
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -236,18 +200,35 @@ export default function HomeScreen() {
   const toggleChat = () => setIsChatVisible(!isChatVisible);
   
   // Function to refresh morning text (for testing)
-  const refreshMorningText = () => {
-    setSelectedMascotConfig(getMorningMascotConfig());
-    console.log('🌅 Refreshed to new morning text!');
+  // Personality cycling for testing V2 system
+  const [currentPersonalityIndex, setCurrentPersonalityIndex] = useState(0);
+  const personalities: PersonalityType[] = ['supportive', 'playful', 'cool', 'wise'];
+
+  // Function to refresh mascot text using V2 system with time context
+  const refreshMascotText = async () => {
+    try {
+      // Cycle through personalities for testing
+      const currentPersonality = personalities[currentPersonalityIndex];
+      const nextIndex = (currentPersonalityIndex + 1) % personalities.length;
+      setCurrentPersonalityIndex(nextIndex);
+      
+      // Get a time-context-aware greeting from V2 system
+      const v2Config = await getTimeContextMascotConfig(t, currentPersonality);
+      setSelectedMascotConfig(v2Config);
+      console.log(`🆕 V2 System: ${currentPersonality} personality with time context!`, v2Config);
+    } catch (error) {
+      console.warn('⚠️ V2 System failed, using fallback:', error);
+      setSelectedMascotConfig(getFallbackMascotConfig());
+    }
   };
   
   // Make refresh function available globally for console testing
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      (window as any).refreshMorningText = refreshMorningText;
-      console.log('🎮 refreshMorningText() available in console for testing!');
+      (window as any).refreshMascotText = refreshMascotText;
+      console.log('🎮 refreshMascotText() available in console for testing V2 system!');
     }
-  }, []);
+  }, [refreshMascotText]);
   
   // FAB breathing animation
   const fabAnim = React.useRef(new Animated.Value(0)).current; // 0..1 for breathing
@@ -407,11 +388,21 @@ export default function HomeScreen() {
               onPress={toggleHomeMascotExpansion}
               onPressWhenExpanded={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                setSelectedMascotConfig(getMorningMascotConfig());
+                refreshMascotText(); // Use V2 system to get new greeting
                 setIsHomeMascotExpanded(false);
               }}
               enablePulse={!isHomeMascotExpanded}
             />
+            {/* V2 Debug Button - Hidden in top corner for testing */}
+            <TouchableOpacity
+              style={styles.debugButton}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                refreshMascotText();
+              }}
+            >
+              <Text style={styles.debugButtonText}>V2</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.contentWrapper}>
             <LightContainer 
@@ -750,4 +741,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 35,
   },
+  debugButton: {
+    position: 'absolute',
+    top: -10,
+    right: -10,
+    width: 30,
+    height: 30,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    borderRadius: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  debugButtonText: {
+    color: 'white',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
 });
+

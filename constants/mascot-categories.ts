@@ -106,7 +106,7 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
     id: 'brushing_behaviour',
     name: 'Brushing Behaviour',
     description: 'Greetings based on user brushing patterns and consistency',
-    baseWeight: 2.5, // High relevance for behavior reinforcement
+    baseWeight: 0, // DISABLED for now - only Time Context active
     subcases: {
       first_brush_ever: {
         weight: 5.0, // Very high weight for special moment
@@ -140,7 +140,7 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
     id: 'streak_state',
     name: 'Streak State',
     description: 'Greetings based on current streak status and momentum',
-    baseWeight: 2.0, // Important for motivation
+    baseWeight: 0, // DISABLED for now - only Time Context active
     subcases: {
       new_streak_starting: {
         weight: 2.0,

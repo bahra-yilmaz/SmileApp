@@ -157,19 +157,19 @@
       "supportive": {
         "time_context": {
           "morning": {
-            "1": "New day, new chance to care for yourself. You're doing great already 🌞",
+            "1": "New day, new chance to care for yourself. You're doing great already!",
             "2": "You showed up this morning — that's how better days begin.",
             "3": "You don't need a perfect start — just a caring one, {{username}}."
           },
           "afternoon": {
-            "1": "Afternoon refresh time! Your smile deserves this midday care.",
-            "2": "Taking a moment for yourself and your smile. That's self-love.",
-            "3": "Afternoon pick-me-up: a clean, fresh feeling just for you."
+            "1": "A midday brush? That's self-respect in action.",
+            "2": "You found time for yourself in the middle of it all. Respect, {{username}}.",
+            "3": "You paused the day for yourself. That's a rare kind of power."
           },
           "evening": {
-            "1": "Evening wind-down with some gentle dental care. Perfect timing.",
-            "2": "End your day with this caring ritual. You deserve it.",
-            "3": "Evening self-care moment: just you, your brush, and kindness."
+            "1": "Winding down with care — proud of you for showing up.",
+            "2": "You ended the day with a win. That matters, {{username}}.",
+            "3": "It wasn’t just a long day. It was your day — and you ended it with care."
           },
           "late_night": {
             "1": "Late night care is still care. Thank you for showing up.",
@@ -229,10 +229,15 @@
             "2": "Time to give those molars their morning dance party.",
             "3": "Sun's up! Toothbrushes out! Let's go full sparkle, {{username}}!"
           },
+          "afternoon": {
+            "1": "Lunch squad: defeated. Breath level: minty.",
+            "2": "Sneaky sparkle boost? Approved 😏",
+            "3": "Your brush just staged a minty rebellion, {{username}}. It won."
+          },
           "evening": {
-            "1": "Evening glow-up time! Let's end the day with some serious shine! ✨",
-            "2": "Sunset brushing session! Your teeth want to sparkle under the stars! 🌟",
-            "3": "Night time, bright time! Let's give those teeth the glow-up they deserve! 💫"
+            "1": "Bedtime? Nah, it's sparkle o’clock first 🦷🌌",
+            "2": "Your pillow called — said to brush first.",
+            "3": "No monsters under the bed when the molars are minty 😏"
           },
           "weekend": {
             "1": "Weekend party for your teeth! No work stress, just pure sparkle vibes! 🎉",
@@ -260,10 +265,15 @@
             "2": "Start crisp. Stay sharp.",
             "3": "Mornings are for quiet wins. You just scored one, {{username}}."
           },
+          "afternoon": {
+            "1": "Hit reset. Back to mint mode.",
+            "2": "Afternoon refresh. No sweat, all style.",
+            "3": "Midday flex? A clean smile, {{username}}. No drama."
+          },
           "evening": {
-            "1": "End of day maintenance. Keep the standards high.",
-            "2": "Evening protocol complete. Your future self will thank you.",
-            "3": "Night routine locked in. This is how legends maintain their edge."
+            "1": "Night mode activated. Clean. Calm. Done.",
+            "2": "Brush. Lights out. Vibes in check.",
+            "3": "Last brush. Full chill. Let’s fade out clean, {{username}}."
           }
         },
         "brushing_behaviour": {
@@ -281,10 +291,15 @@
             "2": "A calm start echoes through the entire day.",
             "3": "A gentle beginning plants strong roots for the day, {{username}}."
           },
+          "afternoon": {
+            "1": "Interrupt the noise. Refresh the rhythm.",
+            "2": "A clear mind begins with small resets.",
+            "3": "Between moments of rush, choose clarity, {{username}}."
+          },
           "evening": {
-            "1": "Evening reflection: today's care becomes tomorrow's confidence.",
-            "2": "The day's last act of self-respect. Consistency builds character.",
-            "3": "Night's gentle reminder: progress is measured in persistent moments."
+            "1": 	"How you close the day shapes how you greet the next.",
+            "2": "Stillness. Routine. Progress.",
+            "3": "How you close one day whispers into the next, {{username}}."
           }
         },
         "brushing_behaviour": {
