@@ -206,19 +206,29 @@
         },
         "streak_state": {
           "new_streak_starting": {
-            "1": "A new beginning! Every streak starts with day one.",
-            "2": "Fresh start energy! You're planting seeds of good habits.",
-            "3": "New streak, new you! I believe in your journey ahead."
+            "1": "Day 1, {{username}}. That's not small. That's everything.",
+            "2": "Every journey starts here. And this time, you're ready.",
+            "3": "This first step, {{username}}, might look small — but it changes everything."
           },
-          "short_streak_1_7": {
-            "1": "Building momentum! Each day makes the next one easier.",
-            "2": "You're in the rhythm now. Keep this gentle progress going.",
-            "3": "Early days of a beautiful habit. You're doing wonderfully."
+          "almost_week_streak": {
+            "1": "You're almost at a full week, {{username}}. That's how real habits are born.",
+            "2": "You're building something steady, {{username}}. Almost a week strong!",
+            "3": "Look at you go — that's nearly 7 days of showing up 💙"
           },
-          "long_streak_31_plus": {
-            "1": "Over a month strong! You've transformed this into second nature.",
-            "2": "Your dedication is remarkable. This is who you are now.",
-            "3": "Long-term consistency hero! Your future self thanks you daily."
+          "over_10_day_streak": {
+            "1": "Over 10 days, {{username}}. That's no streak — that's commitment.",
+            "2": "Double digits? That's you becoming your best self.",
+            "3": "Ten days. Ten choices. One consistent {{username}}."
+          },
+          "best_streak_reached": {
+            "1": "New personal best, {{username}}. And it's just the beginning.",
+            "2": "You've never come this far. Let that sink in. Then go further.",
+            "3": "You broke your own record, {{username}} — and that's the best kind of win."
+          },
+          "streak_broken": {
+            "1": "You missed a day, {{username}} — not your growth.",
+            "2": "Streak broke, not your worth. Let's bounce back.",
+            "3": "A missed day doesn't undo your progress, {{username}}. You're still moving."
           }
         }
       },
@@ -266,6 +276,33 @@
             "2": "Consistency QUEEN/KING! 👑 Your teeth are living their best life!",
             "3": "Habit hero status: UNLOCKED! 🏆 Your smile game is absolutely ON FIRE!"
           }
+        },
+        "streak_state": {
+          "new_streak_starting": {
+            "1": "One brush in — and the streak beast awakens 🦷💥",
+            "2": "Boom! A wild streak appears 🪥✨",
+            "3": "Fresh streak alert! Someone's feeling minty 💨"
+          },
+          "almost_week_streak": {
+            "1": "5 days in? This streak's got main character energy 💫",
+            "2": "Sparkle streak approaching legendary status ✨🔥",
+            "3": "Nubo sees that 6-day fire. Can you smell that 7th-day glory? 🔥"
+          },
+          "over_10_day_streak": {
+            "1": "10+ days?! You've entered Sparkle Prime Mode 🚀",
+            "2": "10+ days? Somebody stop this sparkle train!! 🛤️💥",
+            "3": "Ten-day legend unlocked! Mint game: elite."
+          },
+          "best_streak_reached": {
+            "1": "You just broke your streak record. We need fireworks. And ice cream 🍦🎉",
+            "2": "Record = smashed 💥 Sparkle = maxed 🌟",
+            "3": "Teeth? Dancing. Nubo? Crying. You? Crushing it."
+          },
+          "streak_broken": {
+            "1": "Oopsie! The streak tripped — but you? Still a sparkle warrior ⚔️",
+            "2": "RIP to that streak 🪦 But hey… resurrection arc starts now!",
+            "3": "Streak KO'd… but you're brushing like a comeback king 👑"
+          }
         }
       },
       "cool": {
@@ -307,6 +344,33 @@
             "2": "Discipline level: expert. You've mastered the daily grind.",
             "3": "Streak mode: unstoppable. This is what commitment looks like."
           }
+        },
+        "streak_state": {
+          "new_streak_starting": {
+            "1": "Fresh run, fresh vibes, {{username}}. Let's see where this goes.",
+            "2": "One down. New vibe unlocked, {{username}}.",
+            "3": "Reset? Activated. Let's get to work."
+          },
+          "almost_week_streak": {
+            "1": "You're nearly in week-long territory, {{username}}. That's different.",
+            "2": "5+ days deep. Nothing casual about that, {{username}}.",
+            "3": "One more and it's a full week. Stay sharp."
+          },
+          "over_10_day_streak": {
+            "1": "Still streaking. Still silent flexing. Keep it up, {{username}}.",
+            "2": "You're in that rare air now, {{username}}. Keep going.",
+            "3": "Still brushing. Still climbing. Love that."
+          },
+          "best_streak_reached": {
+            "1": "That's your best ever, {{username}}. Let's raise that ceiling next.",
+            "2": "New level. Clean unlocked. Nubo's proud of you, {{username}}.",
+            "3": "You just set the bar. And tomorrow you'll beat it."
+          },
+          "streak_broken": {
+            "1": "Dropped the streak? That's life. Still showed up today. That's power, {{username}}.",
+            "2": "Streak's gone. But the legend continues, {{username}}.",
+            "3": "Reset. Reload. Still clean."
+          }
         }
       },
       "wise": {
@@ -347,6 +411,33 @@
             "1": "True mastery lies in the repetition of simple acts done well.",
             "2": "Your consistency reveals your character. This discipline serves you.",
             "3": "Small daily deposits in the bank of health compound tremendously."
+          }
+        },
+        "streak_state": {
+          "new_streak_starting": {
+            "1": "The first brush of a streak is always the most important.",
+            "2": "Beginnings are sacred. Treat this one with care.",
+            "3": "A clean day 1 often leads to a cleaner future."
+          },
+          "almost_week_streak": {
+            "1": "Habits are forged quietly. You're almost there.",
+            "2": "6 days is no accident. That's you becoming consistent.",
+            "3": "6 days deep. You're not just trying — you're becoming."
+          },
+          "over_10_day_streak": {
+            "1": "You've stepped beyond habit. This is identity.",
+            "2": "What you repeat is who you become. Look who's leveling up.",
+            "3": "This isn't luck. This is what showing up daily builds."
+          },
+          "best_streak_reached": {
+            "1": "A record broken is a self surpassed.",
+            "2": "The only thing better than this moment? Your next one.",
+            "3": "Milestones are mirrors. Look at what you've become."
+          },
+          "streak_broken": {
+            "1": "The streak paused. The path didn't.",
+            "2": "Failure is just feedback — and you're listening.",
+            "3": "Imperfection is human. Persistence is wisdom."
           }
         }
       }

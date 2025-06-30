@@ -119,11 +119,10 @@ export type BrushingBehaviourSubcase =
  */
 export type StreakStateSubcase =
   | 'new_streak_starting'
-  | 'short_streak_1_7'
-  | 'medium_streak_8_30'
-  | 'long_streak_31_plus'
-  | 'streak_broken'
-  | 'streak_recovery';
+  | 'almost_week_streak'
+  | 'over_10_day_streak'
+  | 'best_streak_reached'
+  | 'streak_broken';
 
 /**
  * Generic subcase type - can be extended as we add more categories

@@ -47,11 +47,30 @@ const ContextConditions = {
   },
 
   // Streak-based conditions
-  isNewStreak: (context: GreetingContext) => (context.streakDays ?? 0) >= 1 && (context.streakDays ?? 0) <= 3,
-  isShortStreak: (context: GreetingContext) => (context.streakDays ?? 0) >= 1 && (context.streakDays ?? 0) <= 7,
-  isMediumStreak: (context: GreetingContext) => (context.streakDays ?? 0) >= 8 && (context.streakDays ?? 0) <= 30,
-  isLongStreak: (context: GreetingContext) => (context.streakDays ?? 0) >= 31,
-  isStreakBroken: (context: GreetingContext) => (context.streakDays ?? 0) === 0 && (context.lastBrushDate !== undefined),
+  isNewStreak: (context: GreetingContext) => (context.streakDays ?? 0) === 1,
+  isAlmostWeekStreak: (context: GreetingContext) => (context.streakDays ?? 0) >= 5 && (context.streakDays ?? 0) <= 7,
+  isOverTenDayStreak: (context: GreetingContext) => (context.streakDays ?? 0) >= 10,
+  isBestStreakReached: (context: GreetingContext) => {
+    const currentStreak = context.streakDays ?? 0;
+    const previousBest = typeof context.variables?.previousBestStreak === 'number' 
+      ? context.variables.previousBestStreak 
+      : 0;
+    
+    // Personal best reached if current streak is higher than previous record
+    // and current streak is at least 2 days (to avoid noise on day 1)
+    return currentStreak > previousBest && currentStreak >= 2;
+  },
+  isStreakBroken: (context: GreetingContext) => {
+    const streakDays = context.streakDays ?? 0;
+    const lastBrushDate = context.lastBrushDate;
+    const totalBrushCount = context.totalBrushCount ?? 0;
+    
+    // Streak is broken if:
+    // 1. Current streak is 0
+    // 2. They have brushed before (have history)
+    // 3. They have more than 1 total brush (so it's not their first time back)
+    return streakDays === 0 && lastBrushDate !== undefined && totalBrushCount > 1;
+  },
 
   // Behavior-based conditions
   isFirstBrushEver: (context: GreetingContext) => context.isFirstBrushEver === true,
@@ -140,31 +159,27 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
     id: 'streak_state',
     name: 'Streak State',
     description: 'Greetings based on current streak status and momentum',
-    baseWeight: 0, // DISABLED for now - only Time Context active
+    baseWeight: 2.0, // ENABLED - Now implementing new_streak_starting
     subcases: {
       new_streak_starting: {
         weight: 2.0,
         conditions: ContextConditions.isNewStreak,
       },
-      short_streak_1_7: {
-        weight: 1.5,
-        conditions: ContextConditions.isShortStreak,
+      almost_week_streak: {
+        weight: 2.5, // Higher weight for important milestone
+        conditions: ContextConditions.isAlmostWeekStreak,
       },
-      medium_streak_8_30: {
-        weight: 1.5,
-        conditions: ContextConditions.isMediumStreak,
+      over_10_day_streak: {
+        weight: 3.0, // Highest weight for major milestone
+        conditions: ContextConditions.isOverTenDayStreak,
       },
-      long_streak_31_plus: {
-        weight: 2.0, // Celebrate achievements
-        conditions: ContextConditions.isLongStreak,
+      best_streak_reached: {
+        weight: 5.0, // Highest priority for personal achievements
+        conditions: ContextConditions.isBestStreakReached,
       },
       streak_broken: {
-        weight: 2.5, // Higher weight for recovery support
+        weight: 4.0, // Very high weight to ensure it shows when streak is broken
         conditions: ContextConditions.isStreakBroken,
-      },
-      streak_recovery: {
-        weight: 2.0,
-        conditions: (context) => (context.streakDays ?? 0) >= 1 && ContextConditions.isStreakBroken(context),
       },
     },
   },
