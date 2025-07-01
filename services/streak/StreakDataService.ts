@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '../supabaseClient';
 import { subDays } from 'date-fns';
 import { BrushingGoalsService } from '../BrushingGoalsService';
-import { getTodayLocalString } from '../../utils/dateUtils';
+import { getTodayHabitString } from '../../utils/dateUtils';
 import { STREAK_CONFIG } from './StreakConfig';
 import { 
   StreakData, 
@@ -72,12 +72,12 @@ export class StreakDataService {
   }
 
   /**
-   * Fetch today's brushing sessions for daily goal checking
+   * Fetch today's brushing sessions for daily goal checking (using habit day with 3:00 AM reset)
    */
   static async fetchTodaysSessions(userId: string): Promise<StreakSession[]> {
-    const today = getTodayLocalString();
-    const todayStart = new Date(today + 'T00:00:00');
-    const todayEnd = new Date(today + 'T23:59:59');
+    const habitDay = getTodayHabitString();
+    const todayStart = new Date(habitDay + 'T00:00:00');
+    const todayEnd = new Date(habitDay + 'T23:59:59');
     
     return this.fetchBrushingSessions(userId, todayStart, todayEnd);
   }

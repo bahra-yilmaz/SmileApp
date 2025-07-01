@@ -1,5 +1,5 @@
 import { calculateStreak, getStreakStatus, StreakStatus } from '../../utils/streakUtils';
-import { getTodayLocalString } from '../../utils/dateUtils';
+import { getTodayHabitString } from '../../utils/dateUtils';
 import { StreakDataService } from './StreakDataService';
 import { STREAK_CONFIG } from './StreakConfig';
 import { 
@@ -104,7 +104,7 @@ export class StreakCalculationService {
       const periods: StreakPeriod[] = [];
       
       if (currentStreakData.currentStreak > 0) {
-        const today = getTodayLocalString();
+        const today = getTodayHabitString();
         const streakStart = new Date();
         streakStart.setDate(streakStart.getDate() - currentStreakData.currentStreak + 1);
         

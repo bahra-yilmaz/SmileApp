@@ -90,6 +90,16 @@ const ContextConditions = {
     yesterday.setDate(yesterday.getDate() - 1);
     return context.lastBrushDate < yesterday;
   },
+  isBrushed7of10: (context: GreetingContext) => {
+    // Check if user has brushed 7 out of the last 10 days
+    // This would require recent brushing data - for now, use streak as approximation
+    const streakDays = context.streakDays ?? 0;
+    const totalBrushCount = context.totalBrushCount ?? 0;
+    
+    // Heuristic: If they have a decent streak (5-9 days) and decent history,
+    // they likely are in the "7 out of 10" consistency range
+    return streakDays >= 5 && streakDays <= 9 && totalBrushCount >= 15;
+  },
 
   // Milestone Enhancement conditions
   isBrushCountMilestone: (context: GreetingContext) => {
@@ -129,6 +139,24 @@ const ContextConditions = {
       return false;
     }
   },
+  isDay30Install: async (context: GreetingContext) => {
+    try {
+      const milestoneState = await MilestoneService.getMilestoneState(
+        context.userId || 'guest', 
+        context.streakDays ?? 0, 
+        context.totalBrushCount ?? 0, 
+        context.lastBrushDate
+      );
+      // Check if user has been with the app for approximately 30 days
+      // This would require additional logic in MilestoneService or use install date
+      // For now, use a heuristic based on total brush count and time
+      const totalBrushCount = context.totalBrushCount ?? 0;
+      return totalBrushCount >= 25 && totalBrushCount <= 35; // Approximation for 30-day users
+    } catch (error) {
+      console.error('❌ Error checking 30-day install milestone:', error);
+      return false;
+    }
+  },
   isReturningUserMilestone: (context: GreetingContext) => {
     const lastBrushDate = context.lastBrushDate;
     const totalBrushCount = context.totalBrushCount ?? 0;
@@ -142,6 +170,25 @@ const ContextConditions = {
     
     // Returning after 5+ day break, but has brush history
     return daysSinceLastBrush >= 5;
+  },
+  isMilestoneStreakRecovery: (context: GreetingContext) => {
+    const streakDays = context.streakDays ?? 0;
+    const lastBrushDate = context.lastBrushDate;
+    const totalBrushCount = context.totalBrushCount ?? 0;
+    
+    // User is recovering from a broken streak if:
+    // 1. They currently have a small streak (1-3 days)
+    // 2. They have significant brush history (showing they had habits before)
+    // 3. They had a gap (returning user pattern)
+    if (streakDays >= 1 && streakDays <= 3 && totalBrushCount > 15 && lastBrushDate) {
+      const daysSinceLastBrush = Math.floor(
+        (new Date().getTime() - lastBrushDate.getTime()) / (1000 * 60 * 60 * 24)
+      );
+      // Had a break but now rebuilding streak
+      return daysSinceLastBrush >= 2;
+    }
+    
+    return false;
   },
 };
 
@@ -275,14 +322,44 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
       monthly_brush_20: {
         weight: 4.0, // ENABLED - High priority for monthly achievements
         conditions: ContextConditions.isMonthlyBrush20,
+        subConditions: {
+          monthly_brush_20: {
+            weight: 1.0,
+            conditions: ContextConditions.isMonthlyBrush20,
+          },
+          brushed_7_of_10: {
+            weight: 1.0,
+            conditions: ContextConditions.isBrushed7of10,
+          },
+        },
       },
       day_7: {
         weight: 3.0, // ENABLED - Important first week milestone
         conditions: ContextConditions.isDay7Install,
+        subConditions: {
+          day_7: {
+            weight: 1.0,
+            conditions: ContextConditions.isDay7Install,
+          },
+          day_30: {
+            weight: 1.0,
+            conditions: ContextConditions.isDay30Install,
+          },
+        },
       },
       returning_user_milestone: {
         weight: 5.0, // Very high priority - should definitely show up - WORKING
         conditions: ContextConditions.isReturningUserMilestone,
+        subConditions: {
+          returning_user_milestone: {
+            weight: 1.0,
+            conditions: ContextConditions.isReturningUserMilestone,
+          },
+          milestone_streak_recovery: {
+            weight: 1.0,
+            conditions: ContextConditions.isMilestoneStreakRecovery,
+          },
+        },
       },
     },
   },

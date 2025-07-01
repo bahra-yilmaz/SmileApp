@@ -1,4 +1,20 @@
 /**
+ * Date utilities for the Smile app
+ * 
+ * HABIT DAY SYSTEM:
+ * The app uses a custom "habit day" concept where the day resets at 3:00 AM instead of midnight.
+ * This prevents frustrating streak breaks for users who brush late at night.
+ * 
+ * Examples:
+ * - 11:30 PM on Jan 1st → Habit Day: Jan 1st
+ * - 1:00 AM on Jan 2nd → Habit Day: Jan 1st (still counts for Jan 1st)
+ * - 3:00 AM on Jan 2nd → Habit Day: Jan 2nd (new day starts)
+ * 
+ * For UI and calendar displays, use regular calendar functions.
+ * For streaks, brushing logs, and habit tracking, use habit day functions.
+ */
+
+/**
  * Configuration for habit day calculation
  */
 export const HABIT_DAY_CONFIG = {
