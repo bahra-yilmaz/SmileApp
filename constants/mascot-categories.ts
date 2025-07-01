@@ -90,15 +90,36 @@ const ContextConditions = {
     yesterday.setDate(yesterday.getDate() - 1);
     return context.lastBrushDate < yesterday;
   },
-  isBrushed7of10: (context: GreetingContext) => {
-    // Check if user has brushed 7 out of the last 10 days
-    // This would require recent brushing data - for now, use streak as approximation
-    const streakDays = context.streakDays ?? 0;
-    const totalBrushCount = context.totalBrushCount ?? 0;
+  isBrushed7of10: async (context: GreetingContext) => {
+    // PROPER IMPLEMENTATION: Actually check if user brushed 7 out of the last 10 days
+    const userId = context.userId;
+    if (!userId || userId === 'guest') return false;
     
-    // Heuristic: If they have a decent streak (5-9 days) and decent history,
-    // they likely are in the "7 out of 10" consistency range
-    return streakDays >= 5 && streakDays <= 9 && totalBrushCount >= 15;
+    try {
+      // Get last 10 days of brushing data
+      const tenDaysAgo = new Date();
+      tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+      
+      const { supabase } = await import('../services/supabaseClient');
+      const { data: logs, error } = await supabase
+        .from('brushing_logs')
+        .select('date')
+        .eq('user_id', userId)
+        .gte('date', tenDaysAgo.toISOString().split('T')[0])
+        .order('date', { ascending: true });
+
+      if (error || !logs) return false;
+
+      // Count unique days with brushing
+      const uniqueDays = new Set(logs.map(log => log.date));
+      const daysWithBrushing = uniqueDays.size;
+      
+      // Return true if they brushed 7 or more out of 10 days
+      return daysWithBrushing >= 7;
+    } catch (error) {
+      console.error('❌ Error checking 7/10 days condition:', error);
+      return false;
+    }
   },
 
   // Milestone Enhancement conditions
@@ -140,18 +161,28 @@ const ContextConditions = {
     }
   },
   isDay30Install: async (context: GreetingContext) => {
+    // PROPER IMPLEMENTATION: Actually check if user has been with app for ~30 days
+    const userId = context.userId;
+    if (!userId || userId === 'guest') return false;
+    
     try {
-      const milestoneState = await MilestoneService.getMilestoneState(
-        context.userId || 'guest', 
-        context.streakDays ?? 0, 
-        context.totalBrushCount ?? 0, 
-        context.lastBrushDate
-      );
-      // Check if user has been with the app for approximately 30 days
-      // This would require additional logic in MilestoneService or use install date
-      // For now, use a heuristic based on total brush count and time
-      const totalBrushCount = context.totalBrushCount ?? 0;
-      return totalBrushCount >= 25 && totalBrushCount <= 35; // Approximation for 30-day users
+      // Get user creation date from users table
+      const { supabase } = await import('../services/supabaseClient');
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('created_at')
+        .eq('id', userId)
+        .single();
+
+      if (error || !userData) return false;
+
+      // Calculate days since user creation
+      const createdAt = new Date(userData.created_at);
+      const now = new Date();
+      const daysSinceCreation = Math.floor((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24));
+      
+      // Return true if user created account 28-32 days ago (30-day window)
+      return daysSinceCreation >= 28 && daysSinceCreation <= 32;
     } catch (error) {
       console.error('❌ Error checking 30-day install milestone:', error);
       return false;
@@ -171,21 +202,52 @@ const ContextConditions = {
     // Returning after 5+ day break, but has brush history
     return daysSinceLastBrush >= 5;
   },
-  isMilestoneStreakRecovery: (context: GreetingContext) => {
+  isMilestoneStreakRecovery: async (context: GreetingContext) => {
+    // IMPROVED IMPLEMENTATION: Better detect users recovering from broken streaks
+    const userId = context.userId;
     const streakDays = context.streakDays ?? 0;
-    const lastBrushDate = context.lastBrushDate;
     const totalBrushCount = context.totalBrushCount ?? 0;
     
-    // User is recovering from a broken streak if:
-    // 1. They currently have a small streak (1-3 days)
-    // 2. They have significant brush history (showing they had habits before)
-    // 3. They had a gap (returning user pattern)
-    if (streakDays >= 1 && streakDays <= 3 && totalBrushCount > 15 && lastBrushDate) {
-      const daysSinceLastBrush = Math.floor(
-        (new Date().getTime() - lastBrushDate.getTime()) / (1000 * 60 * 60 * 24)
-      );
-      // Had a break but now rebuilding streak
-      return daysSinceLastBrush >= 2;
+    if (!userId || userId === 'guest') return false;
+    
+    // User is recovering if they currently have a new/small streak but have significant history
+    if (streakDays >= 1 && streakDays <= 4 && totalBrushCount >= 20) {
+      try {
+        // Check if user had a better streak in the past (indicating they're recovering)
+        const { supabase } = await import('../services/supabaseClient');
+        const { data: logs, error } = await supabase
+          .from('brushing_logs')
+          .select('date')
+          .eq('user_id', userId)
+          .order('date', { ascending: true });
+
+        if (error || !logs || logs.length < 10) return false;
+
+        // Calculate their historical best streak
+        const uniqueDates = [...new Set(logs.map(log => log.date))].sort();
+        let bestHistoricalStreak = 0;
+        let currentHistoricalStreak = 1;
+
+        for (let i = 1; i < uniqueDates.length; i++) {
+          const prevDate = new Date(uniqueDates[i - 1]);
+          const currDate = new Date(uniqueDates[i]);
+          const daysDiff = Math.floor((currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24));
+
+          if (daysDiff === 1) {
+            currentHistoricalStreak++;
+          } else {
+            bestHistoricalStreak = Math.max(bestHistoricalStreak, currentHistoricalStreak);
+            currentHistoricalStreak = 1;
+          }
+        }
+        bestHistoricalStreak = Math.max(bestHistoricalStreak, currentHistoricalStreak);
+
+        // They're recovering if their best historical streak was significantly better than current
+        return bestHistoricalStreak >= (streakDays + 5);
+      } catch (error) {
+        console.error('❌ Error checking streak recovery condition:', error);
+        return false;
+      }
     }
     
     return false;

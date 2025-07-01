@@ -153,9 +153,8 @@
             "day_30": "30 days with us, {{username}} — and every one of them mattered."
           },
           "returning_user_milestone": {
-            "1": "You came back, {{username}}. That takes courage. And we see you.",
-            "2": "",
-            "3": ""
+            "returning_user_milestone": "You came back, {{username}}. That takes courage. And we see you.",
+            "milestone_streak_recovery": "You didn't give up, {{username}}. That's everything."
           },
           "brush_count_milestones": {
             "exactly_10": "10 brushes in, {{username}}. That's 10 promises you kept to yourself.",
@@ -246,9 +245,8 @@
             "day_30": "30 days later… Nubo and {{username}} still brushing strong 💪"
           },
           "returning_user_milestone": {
-            "1": "They tried to keep you away… but sparkle calls you home 💫",
-            "2": "",
-            "3": ""
+            "returning_user_milestone": "They tried to keep you away… but sparkle calls you home 💫",
+            "milestone_streak_recovery": "Down but never out! Comeback streak: initiated 🦸"
           },
           "brush_count_milestones": {
             "exactly_10": "Ten brushes?! You're basically toothbrush royalty 👑",
@@ -334,9 +332,8 @@
             "day_30": "Month one? Owned it. Cheers, {{username}}."
           },
           "returning_user_milestone": {
-            "1": "Break's over. Streak's reloading. Welcome back, {{username}}.",
-            "2": "",
-            "3": ""
+            "returning_user_milestone": "Break's over. Streak's reloading. Welcome back, {{username}}.",
+            "milestone_streak_recovery": "Recovered. Restarted. Already climbing, {{username}}."
           },
           "brush_count_milestones": {
             "exactly_10": "Double digits. You're leveling up smooth, {{username}}.",
@@ -422,9 +419,8 @@
             "day_30": "A month of momentum. That's a real shift."
           },
           "returning_user_milestone": {
-            "1": "",
-            "2": "",
-            "3": ""
+            "returning_user_milestone": "Every return teaches what matters most: not perfection, but persistence.",
+            "milestone_streak_recovery": "True strength is how you return after the drop."
           },
           "brush_count_milestones": {
             "exactly_10": "Ten repetitions. One pattern begins.",
