@@ -1,4 +1,4 @@
-import { calculateStreak } from '../../utils/streakUtils';
+import { calculateStreak, getStreakStatus, StreakStatus } from '../../utils/streakUtils';
 import { getTodayLocalString } from '../../utils/dateUtils';
 import { StreakDataService } from './StreakDataService';
 import { STREAK_CONFIG } from './StreakConfig';
@@ -249,6 +249,36 @@ export class StreakCalculationService {
       progress,
       progressPercentage
     };
+  }
+
+  /**
+   * Get enhanced streak status with current day progress
+   */
+  static async getStreakStatus(userId: string): Promise<StreakStatus> {
+    try {
+      const dailyTarget = await StreakDataService.getUserDailyTarget();
+      
+      // Get sessions from the last 30 days for calculation
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      
+      const sessions = await StreakDataService.fetchBrushingSessions(userId, thirtyDaysAgo);
+      
+      return getStreakStatus(sessions, dailyTarget);
+    } catch (error) {
+      console.error('Error getting streak status:', error);
+      
+      // Return safe defaults
+      const defaultTarget = STREAK_CONFIG.DEFAULTS.DAILY_BRUSHING_TARGET;
+      return {
+        currentStreak: 0,
+        streakIncludingToday: 0,
+        todaySessionsCount: 0,
+        todaySessionsNeeded: defaultTarget,
+        todayCompleted: false,
+        isStreakContinuing: false
+      };
+    }
   }
 
   // Private helper methods

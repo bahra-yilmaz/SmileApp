@@ -71,4 +71,7 @@ export interface StreakCalculationOptions {
 export interface StreakDataOptions {
   forceRefresh?: boolean;
   includeBrushingCount?: boolean;
-} 
+}
+
+// Re-export from utils for convenience
+export type { StreakStatus } from '../../utils/streakUtils'; 

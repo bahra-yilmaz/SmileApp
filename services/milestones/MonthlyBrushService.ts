@@ -4,7 +4,7 @@ import { startOfMonth, endOfMonth, format } from 'date-fns';
 
 export interface MonthlyBrushStats {
   currentMonthBrushes: number;
-  targetMonth: string; // YYYY-MM format
+  targetMonth: string; // yyyy-MM format
   isCurrentMonth: boolean;
 }
 
@@ -42,7 +42,7 @@ export class MonthlyBrushService {
       }
 
       const count = brushingLogs?.length || 0;
-      console.log(`📅 Monthly brush count for ${format(now, 'YYYY-MM')}: ${count}`);
+      console.log(`📅 Monthly brush count for ${format(now, 'yyyy-MM')}: ${count}`);
       
       return count;
     } catch (error) {
@@ -58,7 +58,7 @@ export class MonthlyBrushService {
     const date = targetDate || new Date();
     const monthStart = startOfMonth(date);
     const monthEnd = endOfMonth(date);
-    const isCurrentMonth = format(date, 'YYYY-MM') === format(new Date(), 'YYYY-MM');
+    const isCurrentMonth = format(date, 'yyyy-MM') === format(new Date(), 'yyyy-MM');
 
     try {
       let brushCount = 0;
@@ -82,14 +82,14 @@ export class MonthlyBrushService {
 
       return {
         currentMonthBrushes: brushCount,
-        targetMonth: format(date, 'YYYY-MM'),
+        targetMonth: format(date, 'yyyy-MM'),
         isCurrentMonth,
       };
     } catch (error) {
       console.error('❌ Error in getMonthlyStats:', error);
       return {
         currentMonthBrushes: 0,
-        targetMonth: format(date, 'YYYY-MM'),
+        targetMonth: format(date, 'yyyy-MM'),
         isCurrentMonth,
       };
     }
@@ -124,7 +124,7 @@ export class MonthlyBrushService {
       }
 
       const count = brushingLogs?.length || 0;
-      console.log(`👻 Guest monthly brush count for ${format(date, 'YYYY-MM')}: ${count}`);
+      console.log(`👻 Guest monthly brush count for ${format(date, 'yyyy-MM')}: ${count}`);
       return count;
     } catch (error) {
       console.error('❌ Error fetching guest monthly count:', error);

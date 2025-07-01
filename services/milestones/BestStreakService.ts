@@ -26,37 +26,21 @@ export interface StreakComparison {
 export class BestStreakService {
 
   /**
-   * Get the user's current best streak
+   * Get the user's best streak
    */
   static async getBestStreak(userId: string): Promise<number> {
     try {
+      // Handle guest users
       if (userId === 'guest') {
         return await this.getGuestBestStreak();
       }
 
-      // For authenticated users, try to get from user profile first
-      const { data: user, error } = await supabase
-        .from('users')
-        .select('best_streak')
-        .eq('id', userId)
-        .maybeSingle();
-
-      if (error) {
-        console.error('❌ Error fetching best streak from database:', error);
-        return 0;
-      }
-
-      // If best_streak column doesn't exist or is null, calculate from brushing logs
-      if (!user?.best_streak) {
-        const calculatedBest = await this.calculateBestStreakFromHistory(userId);
-        // Optionally update the user record with the calculated value
-        if (calculatedBest > 0) {
-          await this.updateBestStreak(userId, calculatedBest);
-        }
-        return calculatedBest;
-      }
-
-      return user.best_streak;
+      // For authenticated users, calculate from brushing logs
+      // Note: We calculate from history since best_streak column doesn't exist in users table
+      const calculatedBest = await this.calculateBestStreakFromHistory(userId);
+      console.log(`📊 Calculated best streak for user ${userId}: ${calculatedBest} days`);
+      
+      return calculatedBest;
     } catch (error) {
       console.error('❌ Error in getBestStreak:', error);
       return 0;
@@ -94,7 +78,7 @@ export class BestStreakService {
   }
 
   /**
-   * Force update the best streak value
+   * Force update the best streak value (only for guest users via local storage)
    */
   private static async updateBestStreak(userId: string, newBestStreak: number): Promise<void> {
     try {
@@ -104,20 +88,9 @@ export class BestStreakService {
         return;
       }
 
-      // For authenticated users, update the database
-      const { error } = await supabase
-        .from('users')
-        .update({ 
-          best_streak: newBestStreak,
-          best_streak_achieved_at: new Date().toISOString() 
-        })
-        .eq('id', userId);
-
-      if (error) {
-        console.error('❌ Error updating best streak in database:', error);
-      } else {
-        console.log(`🏆 Updated best streak in database: ${newBestStreak}`);
-      }
+      // For authenticated users, we don't store best_streak in database since columns don't exist
+      // The best streak is calculated dynamically from brushing_logs when needed
+      console.log(`📊 Best streak for authenticated user ${userId}: ${newBestStreak} (calculated from history)`);
     } catch (error) {
       console.error('❌ Error in updateBestStreak:', error);
     }
@@ -265,19 +238,10 @@ export class BestStreakService {
         return;
       }
 
-      const { error } = await supabase
-        .from('users')
-        .update({ 
-          best_streak: 0,
-          best_streak_achieved_at: null 
-        })
-        .eq('id', userId);
-
-      if (error) {
-        console.error('❌ Error resetting best streak:', error);
-      } else {
-        console.log('🔄 Best streak reset in database');
-      }
+      // For authenticated users, best streak is calculated from brushing_logs
+      // To "reset" it, we would need to delete brushing log entries
+      // For now, just log that reset was requested (this is mainly for testing)
+      console.log('🔄 Best streak reset requested for authenticated user (calculated from history)');
     } catch (error) {
       console.error('❌ Error in resetBestStreak:', error);
     }
