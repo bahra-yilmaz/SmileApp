@@ -1,5 +1,5 @@
 import { subDays } from 'date-fns';
-import { getLocalDateString } from './dateUtils';
+import { getHabitDayString, getTodayHabitString } from './dateUtils';
 
 /**
  * Represents a single brushing session.
@@ -47,7 +47,7 @@ export function calculateStreak(
     logsByDate.get(date)!.push(log);
   });
 
-  const getLocalKey = (d: Date) => getLocalDateString(d);
+  const getLocalKey = (d: Date) => getHabitDayString(d);
 
   // Check consecutive days starting from today
   let streak = 0;
@@ -114,8 +114,8 @@ export function getStreakStatus(
     };
   }
 
-  // Get today's sessions
-  const today = getLocalDateString(new Date());
+  // Get today's sessions (using habit day logic with 3:00 AM reset)
+  const today = getTodayHabitString();
   const todaySessions = sessions.filter(session => {
     const sessionDate = session.date || session.created_at?.slice(0, 10);
     return sessionDate === today;

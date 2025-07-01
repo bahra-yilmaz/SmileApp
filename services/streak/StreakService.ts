@@ -7,7 +7,8 @@ import {
   DailyGoalStatus,
   StreakSession,
   StreakEvent,
-  StreakDataOptions 
+  StreakDataOptions,
+  StreakStatus
 } from './StreakTypes';
 
 /**
@@ -106,6 +107,13 @@ export class StreakService {
    */
   static async checkDailyGoalStatus(userId: string): Promise<DailyGoalStatus> {
     return StreakCalculationService.checkDailyGoalStatus(userId);
+  }
+
+  /**
+   * Get enhanced streak status with current day progress
+   */
+  static async getStreakStatus(userId: string): Promise<StreakStatus> {
+    return StreakCalculationService.getStreakStatus(userId);
   }
 
   /**
