@@ -22,7 +22,7 @@ import { insertBrushingLog, deleteBrushingLog, InsertBrushingLogResult } from '.
 import { GuestUserService } from '../../services/GuestUserService';
 import { useBrushingGoal } from '../../context/BrushingGoalContext';
 import { useAuth } from '../../context/AuthContext';
-import { MascotGreetingService } from '../../services/MascotGreetingService';
+import { MascotGreetingService, ContextDetector } from '../../services/MascotGreetingService';
 import { GreetingContext, MascotGreetingResult, PersonalityType } from '../../types/mascot';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -134,7 +134,13 @@ const BrushingResultsScreen = () => {
           }
         }
 
+        // Detect full context (including current time) and add our specific overrides
+        const baseContext = ContextDetector.detectFullContext({
+          userId: user?.id || 'guest',
+        });
+        
         const context: GreetingContext = {
+          ...baseContext,
           userId: user?.id || 'guest',
           forceCategory: 'informative', // Force informative category
           variables: {

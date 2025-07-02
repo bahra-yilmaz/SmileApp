@@ -252,10 +252,38 @@ const ContextConditions = {
     
     return false;
   },
+
+  // ===== COMMUNITY CONDITIONS =====
+  isFirstWeekUser: async (context: GreetingContext) => {
+    const userId = context.userId;
+    
+    if (!userId || userId === 'guest') return false;
+    
+    try {
+      // Check if user signed up within the last 7 days
+      const { supabase } = await import('../services/supabaseClient');
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('created_at')
+        .eq('id', userId)
+        .single();
+
+      if (error || !userData) return false;
+
+      const createdAt = new Date(userData.created_at);
+      const now = new Date();
+      const daysDiff = Math.floor((now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24));
+
+      return daysDiff <= 7;
+    } catch (error) {
+      console.error('❌ Error checking first week user condition:', error);
+      return false;
+    }
+  },
 };
 
 /**
- * Configuration for all 10 greeting categories
+ * Configuration for all 11 greeting categories
  */
 export const GREETING_CATEGORIES: CategoryConfig[] = [
   // 1. TIME CONTEXT
@@ -515,7 +543,27 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
     },
   },
 
-  // 10. CELEBRATION
+  // 10. COMMUNITY
+  {
+    id: 'community',
+    name: 'Community',
+    description: 'Community engagement, social aspects, and shared experiences',
+    baseWeight: 1.5, // Good weight for community engagement
+    subcases: {
+      community_brushing_now: { weight: 1.0, conditions: () => true }, // Always available
+      nubo_network_energy: { weight: 1.0, conditions: () => true }, // Always available
+      social_momentum: { weight: 1.0, conditions: () => true }, // Always available
+      late_night_others_brushed: { weight: 1.5, conditions: ContextConditions.isLateNight }, // Special late night condition
+      first_week_global_wave: { weight: 2.0, conditions: ContextConditions.isFirstWeekUser }, // Higher weight for new users
+      nubo_day_event: { weight: 1.0, conditions: () => true }, // Always available
+      community_across_timezones: { weight: 1.0, conditions: () => true }, // Always available
+      brush_in_cities: { weight: 1.0, conditions: () => true }, // Always available
+      nubo_watching: { weight: 1.0, conditions: () => true }, // Always available
+      nubo_broadcast: { weight: 1.0, conditions: () => true }, // Always available
+    },
+  },
+
+  // 11. CELEBRATION
   {
     id: 'celebration',
     name: 'Celebration',

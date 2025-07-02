@@ -79,7 +79,7 @@ export interface MascotConfig {
 export type PersonalityType = 'supportive' | 'playful' | 'cool' | 'wise';
 
 /**
- * The 10 main categories that define different contexts for mascot greetings
+ * The 11 main categories that define different contexts for mascot greetings
  */
 export type GreetingCategoryType = 
   | 'time_context'        // Morning, evening, weekend, etc.
@@ -91,6 +91,7 @@ export type GreetingCategoryType =
   | 'mood_boost'          // Positive reinforcement, confidence building
   | 'educational'         // Tips, facts, oral health info
   | 'informative'         // Habit tips, dental facts, science facts, psychology facts
+  | 'community'           // Community engagement, social aspects, shared experiences
   | 'celebration';        // Success moments, completion, victories
 
 /**
@@ -155,6 +156,21 @@ export type InformativeSubcase =
   | 'dry_brush_fact';
 
 /**
+ * Subcases for Community category
+ */
+export type CommunitySubcase =
+  | 'community_brushing_now'
+  | 'nubo_network_energy'
+  | 'social_momentum'
+  | 'late_night_others_brushed'
+  | 'first_week_global_wave'
+  | 'nubo_day_event'
+  | 'community_across_timezones'
+  | 'brush_in_cities'
+  | 'nubo_watching'
+  | 'nubo_broadcast';
+
+/**
  * Generic subcase type - can be extended as we add more categories
  */
 export type GreetingSubcase = 
@@ -163,6 +179,7 @@ export type GreetingSubcase =
   | StreakStateSubcase
   | MilestoneEnhancementsSubcase
   | InformativeSubcase
+  | CommunitySubcase
   | string; // Allow for future expansion
 
 /**
