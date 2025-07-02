@@ -158,6 +158,16 @@ export class MascotGreetingService implements IMascotGreetingService {
     const textKey = this.generateTextKey(personality, selectedCategory.id, subcaseSelection.subcase, subcaseSelection.subCondition);
     const actualText = this.getTranslatedText(textKey, personality, finalContext.variables);
     
+    // Debug logging
+    console.log('🎭 Mascot greeting generated:', {
+      personality,
+      category: selectedCategory.id,
+      subcase: subcaseSelection.subcase,
+      subCondition: subcaseSelection.subCondition,
+      textKey,
+      hasActualText: actualText !== textKey
+    });
+    
     // Get visual configuration
     const visualConfig = this.getVisualConfig(personality);
 
@@ -326,7 +336,23 @@ export class MascotGreetingService implements IMascotGreetingService {
       return `mascotGreetings.v2.${personality}.${category}.${subcase}.${subCondition}`;
     }
     
-    // Detect available text variants for this subcase
+    // Check if this subcase should have subConditions but none were selected
+    // This can happen if conditions aren't met for any subConditions
+    const categoryConfig = getCategoryConfig(category);
+    const subcaseConfig = categoryConfig?.subcases[subcase];
+    
+    if (subcaseConfig?.subConditions) {
+      // This subcase has subConditions but none were selected
+      // Find the first available subCondition as fallback
+      const subConditionKeys = Object.keys(subcaseConfig.subConditions);
+      if (subConditionKeys.length > 0) {
+        const fallbackSubCondition = subConditionKeys[0];
+        console.warn(`⚠️ No subCondition selected for ${category}.${subcase}, using fallback: ${fallbackSubCondition}`);
+        return `mascotGreetings.v2.${personality}.${category}.${subcase}.${fallbackSubCondition}`;
+      }
+    }
+    
+    // Detect available numbered text variants for this subcase
     const baseKey = `mascotGreetings.v2.${personality}.${category}.${subcase}`;
     const availableVariants: number[] = [];
     
@@ -341,7 +367,7 @@ export class MascotGreetingService implements IMascotGreetingService {
       }
     }
     
-    // If no variants found, default to variant 1
+    // If no numbered variants found, default to variant 1
     if (availableVariants.length === 0) {
       return `${baseKey}.1`;
     }
