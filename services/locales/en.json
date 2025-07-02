@@ -161,6 +161,53 @@
             "exactly_50": "50 brushes, {{username}}. That's 50 moments of showing up. Huge.",
             "exactly_100": "100 brushes, {{username}}. That's 100 times you showed care. That's huge."
           }
+        },
+        "informative": {
+          "habit_tip": {
+            "1": "Tiny routines like brushing shape how we care for ourselves, {{username}}. Keep going."
+          },
+          "dental_fact": {
+            "1": "Just 2 minutes twice a day keeps a lot of trouble away, {{username}}."
+          },
+          "science_fact": {
+            "1": "You're not just brushing — you're resetting the microbiome, {{username}}."
+          },
+          "psych_fact": {
+            "1": "Brushing is a small win, {{username}}. But it reminds you: you're in charge."
+          },
+          "dental_fact_2": {
+            "1": "Gentle brushing along the gums keeps your whole smile strong, {{username}}."
+          },
+          "dental_fact_3": {
+            "1": "Your tongue holds onto bacteria too, {{username}}. Give it a quick clean!"
+          },
+          "science_fact_2": {
+            "1": "Brushing today prevents buildup tomorrow, {{username}}. You're protecting your future self."
+          },
+          "psych_fact_2": {
+            "1": "This small ritual often kicks off bigger wins, {{username}}. Keep brushing forward."
+          },
+          "morning_breath_fact": {
+            "1": "That morning breath? Totally normal. Brushing resets it all, {{username}}."
+          },
+          "toothpaste_fact": {
+            "1": "Just a pea-sized squeeze of toothpaste is all you need, {{username}}. Small effort, big impact."
+          },
+          "floss_fact": {
+            "1": "Brushing’s amazing, {{username}} — but flossing covers what your brush can’t."
+          },
+          "brushing_too_hard": {
+            "1": "Gentle brushing protects both your smile and your gums, {{username}}."
+          },
+          "night_brushing_importance": {
+            "1": "Brushing before bed gives your teeth a peaceful night too, {{username}}."
+          },
+          "brushing_angle_fact": {
+            "1": "A little tilt goes a long way — 45° keeps your gums happy, {{username}}."
+          },
+          "dry_brush_fact": {
+            "1": "Even without paste, {{username}}, a quick dry brush is still a win."
+          }
         }
       },
       "playful": {
@@ -253,6 +300,53 @@
             "exactly_50": "50?! That brush must be asking for a raise 😎",
             "exactly_100": "100?! That brush is practically a part of you now 😂"
           }
+        },
+        "informative": {
+          "habit_tip": {
+            "1": "Brush now. Rule the world later 😎"
+          },
+          "dental_fact": {
+            "1": "2 minutes may feel long, but so does explaining cavities 😬"
+          },
+          "science_fact": {
+            "1": "Millions of bacteria? Let's call this a minty massacre 💥🦠"
+          },
+          "psych_fact": {
+            "1": "Even brushing sends your brain a lil 'we got this' signal 🧠✨"
+          },
+          "dental_fact_2": {
+            "1": "Brush your gums too! They want attention, not rejection 😩🪥"
+          },
+          "dental_fact_3": {
+            "1": "Your tongue called. It’s jealous of all the brushing attention 🥲"
+          },
+          "science_fact_2": {
+            "1": "Leave plaque alone? It becomes tartar the terrible 🪨🫠"
+          },
+          "psych_fact_2": {
+            "1": "Brushing = keystone habit. Basically, the boss move 💼"
+          },
+          "morning_breath_fact": {
+            "1": "Morning breath: 100% real. 100% beatable. Nubo’s got your back 😤"
+          },
+          "toothpaste_fact": {
+            "1": "Fun fact: you only need a tiny pea of toothpaste, not a minty tsunami 🌊"
+          },
+          "floss_fact": {
+            "1": "Brushing without flossing? You’re only 65% there 😏"
+          },
+          "brushing_too_hard": {
+            "1": "Scrubbing like it's grout? Nope. This ain't tile cleaning 🧽"
+          },
+          "night_brushing_importance": {
+            "1": "Sleepy teeth? Nah, they need guarding while you dream 💤🦷"
+          },
+          "brushing_angle_fact": {
+            "1": "Brush like a pro: tilt that brush like it’s got drip 💅"
+          },
+          "dry_brush_fact": {
+            "1": "No paste? No problem. Go full dry-ninja mode 🥷🪥"
+          }
         }
       },
       "cool": {
@@ -340,6 +434,53 @@
             "exactly_50": "Half a hundred. Full dedication, {{username}}.",
             "exactly_100": "A hundred? Legend verified, {{username}}."
           }
+        },
+        "informative": {
+          "habit_tip": {
+            "1": "Routine is power, {{username}}. Keep stacking it."
+          },
+          "dental_fact": {
+            "1": "Two minutes of brushing. Infinite cool points, {{username}}."
+          },
+          "science_fact": {
+            "1": "You just wiped out an entire bacteria city, {{username}}. Respect."
+          },
+          "psych_fact": {
+            "1": "Big mindset? Starts with tiny actions. Like this one, {{username}}."
+          },
+          "dental_fact_2": {
+            "1": "Healthy gums = strong flex, {{username}}. Don't skip 'em."
+          },
+          "dental_fact_3": {
+            "1": "Real freshness? Starts with the tongue, {{username}}."
+          },
+          "science_fact_2": {
+            "1": "Plaque now or tartar later. You chose now. Smart move, {{username}}."
+          },
+          "psych_fact_2": {
+            "1": "One solid habit leads to others. Brushing is step one, {{username}}."
+          },
+          "morning_breath_fact": {
+            "1": "Fresh mornings start with fresh action, {{username}}. Hit that brush."
+          },
+          "toothpaste_fact": {
+            "1": "Big foam ≠ better. Just a dot does it, {{username}}."
+          },
+          "floss_fact": {
+            "1": "Floss hits the corners brushing misses. Clean move, {{username}}."
+          },
+          "brushing_too_hard": {
+            "1": "Brush smart, not hard, {{username}}. It’s finesse over force."
+          },
+          "night_brushing_importance": {
+            "1": "Night brush = overnight shield. Sharp move, {{username}}."
+          },
+          "brushing_angle_fact": {
+            "1": "Angle in. Clean deep. That’s pro-tier brushing, {{username}}."
+          },
+          "dry_brush_fact": {
+            "1": "You brushed dry and still came out clean. Respect, {{username}}."
+          }
         }
       },
       "wise": {
@@ -426,6 +567,53 @@
             "exactly_10": "Ten repetitions. One pattern begins.",
             "exactly_50": "Fifty isn't just a number. It's proof of a pattern.",
             "exactly_100": "Triple digits. The discipline is real now."
+          }
+        },
+        "informative": {
+          "habit_tip": {
+            "1": "The smallest rituals often anchor the strongest lives."
+          },
+          "dental_fact": {
+            "1": "Two minutes. That's the sweet spot for protecting what matters."
+          },
+          "science_fact": {
+            "1": "Bacteria double every few hours. But so can your discipline."
+          },
+          "psych_fact": {
+            "1": "Tiny acts build identity. That's how the mind rewires."
+          },
+          "dental_fact_2": {
+            "1": "Neglected gums often whisper before they shout."
+          },
+          "dental_fact_3": {
+            "1": "Neglect the tongue, and freshness becomes temporary."
+          },
+          "science_fact_2": {
+            "1": "Plaque left unchecked becomes stone. Care prevents correction."
+          },
+          "psych_fact_2": {
+            "1": "Anchor habits ripple out into the rest of your life."
+          },
+          "morning_breath_fact": {
+            "1": "Saliva protects the mouth — and sleeps when you do."
+          },
+          "toothpaste_fact": {
+            "1": "A full strip isn’t better. Precision beats excess — pea-sized does the job."
+          },
+          "floss_fact": {
+            "1": "Flossing reaches the silent spaces brushing can’t."
+          },
+          "brushing_too_hard": {
+            "1": "Too much pressure can cause retreat. Even in brushing."
+          },
+          "night_brushing_importance": {
+            "1": "The mouth is vulnerable at night. Evening care is quiet defense."
+          },
+          "brushing_angle_fact": {
+            "1": "Precision matters. A 45° angle reaches the foundation."
+          },
+          "dry_brush_fact": {
+            "1": "When you can’t do it perfectly — do it anyway. Even dry brushing clears harm."
           }
         }
       }

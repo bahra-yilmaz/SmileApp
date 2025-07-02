@@ -326,10 +326,31 @@ export class MascotGreetingService implements IMascotGreetingService {
       return `mascotGreetings.v2.${personality}.${category}.${subcase}.${subCondition}`;
     }
     
-    // Generate random variant (1, 2, or 3) for regular subcases
-    const variant = Math.floor(Math.random() * 3) + 1;
+    // Detect available text variants for this subcase
+    const baseKey = `mascotGreetings.v2.${personality}.${category}.${subcase}`;
+    const availableVariants: number[] = [];
     
-    return `mascotGreetings.v2.${personality}.${category}.${subcase}.${variant}`;
+    // Check which variants (1, 2, 3) exist
+    for (let i = 1; i <= 3; i++) {
+      const testKey = `${baseKey}.${i}`;
+      const testText = this.t(testKey);
+      
+      // If translation returns the key unchanged, it doesn't exist
+      if (testText !== testKey) {
+        availableVariants.push(i);
+      }
+    }
+    
+    // If no variants found, default to variant 1
+    if (availableVariants.length === 0) {
+      return `${baseKey}.1`;
+    }
+    
+    // Select random variant from available ones
+    const randomIndex = Math.floor(Math.random() * availableVariants.length);
+    const selectedVariant = availableVariants[randomIndex];
+    
+    return `${baseKey}.${selectedVariant}`;
   }
 
   /**

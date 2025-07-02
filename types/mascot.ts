@@ -79,7 +79,7 @@ export interface MascotConfig {
 export type PersonalityType = 'supportive' | 'playful' | 'cool' | 'wise';
 
 /**
- * The 9 main categories that define different contexts for mascot greetings
+ * The 10 main categories that define different contexts for mascot greetings
  */
 export type GreetingCategoryType = 
   | 'time_context'        // Morning, evening, weekend, etc.
@@ -90,6 +90,7 @@ export type GreetingCategoryType =
   | 'seasonal'            // Holidays, seasons, special events
   | 'mood_boost'          // Positive reinforcement, confidence building
   | 'educational'         // Tips, facts, oral health info
+  | 'informative'         // Habit tips, dental facts, science facts, psychology facts
   | 'celebration';        // Success moments, completion, victories
 
 /**
@@ -134,6 +135,26 @@ export type MilestoneEnhancementsSubcase =
   | 'returning_user_milestone';
 
 /**
+ * Subcases for Informative category
+ */
+export type InformativeSubcase =
+  | 'habit_tip'
+  | 'dental_fact'
+  | 'science_fact'
+  | 'psych_fact'
+  | 'dental_fact_2'
+  | 'dental_fact_3'
+  | 'science_fact_2'
+  | 'psych_fact_2'
+  | 'morning_breath_fact'
+  | 'toothpaste_fact'
+  | 'floss_fact'
+  | 'brushing_too_hard'
+  | 'night_brushing_importance'
+  | 'brushing_angle_fact'
+  | 'dry_brush_fact';
+
+/**
  * Generic subcase type - can be extended as we add more categories
  */
 export type GreetingSubcase = 
@@ -141,6 +162,7 @@ export type GreetingSubcase =
   | BrushingBehaviourSubcase 
   | StreakStateSubcase
   | MilestoneEnhancementsSubcase
+  | InformativeSubcase
   | string; // Allow for future expansion
 
 /**

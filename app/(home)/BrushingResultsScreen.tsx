@@ -22,6 +22,8 @@ import { insertBrushingLog, deleteBrushingLog, InsertBrushingLogResult } from '.
 import { GuestUserService } from '../../services/GuestUserService';
 import { useBrushingGoal } from '../../context/BrushingGoalContext';
 import { useAuth } from '../../context/AuthContext';
+import { MascotGreetingService } from '../../services/MascotGreetingService';
+import { GreetingContext, MascotGreetingResult, PersonalityType } from '../../types/mascot';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -69,6 +71,10 @@ const BrushingResultsScreen = () => {
   );
   const [isLoading, setIsLoading] = useState(saveInBackground && !preSavedData && !skipSave && !saveError);
   const [logError, setLogError] = useState<string | null>(saveError || null);
+  
+  // State for dynamic mascot greeting
+  const [motivationalText, setMotivationalText] = useState<string>(t('brushingResultsScreen.motivationalText'));
+  const [greetingLoading, setGreetingLoading] = useState(true);
 
   // Add a useEffect to run the fade-in animation on mount
   useEffect(() => {
@@ -103,6 +109,61 @@ const BrushingResultsScreen = () => {
       eventBus.off('brushing-save-error', unsubscribeError);
     };
   }, [saveInBackground]);
+
+  // Load dynamic mascot greeting from informative category
+  useEffect(() => {
+    const loadInformativeGreeting = async () => {
+      try {
+        // Get mascot personality from user data or default to supportive
+        let personality: PersonalityType = 'supportive';
+        
+        if (user?.id) {
+          try {
+            const { supabase } = await import('../../services/supabaseClient');
+            const { data, error } = await supabase
+              .from('users')
+              .select('mascot_tone')
+              .eq('id', user.id)
+              .maybeSingle();
+            
+            if (!error && data?.mascot_tone) {
+              personality = data.mascot_tone as PersonalityType;
+            }
+          } catch (dbError) {
+            console.warn('⚠️ Could not fetch mascot personality, using default:', dbError);
+          }
+        }
+
+        const context: GreetingContext = {
+          userId: user?.id || 'guest',
+          forceCategory: 'informative', // Force informative category
+          variables: {
+            username: user?.user_metadata?.username || user?.email?.split('@')[0] || 'there',
+          },
+        };
+
+        // Create service instance with translation function
+        const greetingService = new MascotGreetingService();
+        greetingService.setTranslationFunction(t);
+        
+        const greeting: MascotGreetingResult = await greetingService.getGreeting(personality, context);
+        console.log('✅ Loaded informative greeting:', {
+          personality,
+          category: greeting.category,
+          subcase: greeting.subcase,
+          actualText: greeting.actualText
+        });
+        setMotivationalText(greeting.actualText);
+      } catch (error) {
+        console.error('❌ Failed to load informative greeting:', error);
+        // Keep the default fallback text
+      } finally {
+        setGreetingLoading(false);
+      }
+    };
+
+    loadInformativeGreeting();
+  }, [user?.id, user?.email, user?.user_metadata?.username, t]);
 
   // Save brushing log when component mounts (fallback for old navigation method)
   useEffect(() => {
@@ -460,7 +521,7 @@ const BrushingResultsScreen = () => {
         <View style={styles.motivationalContainer}>
           <View style={styles.textAndProgressContainer}>
             <ThemedText style={styles.motivationalText}>
-              {t('brushingResultsScreen.motivationalText')}
+              {greetingLoading ? t('brushingResultsScreen.motivationalText') : motivationalText}
             </ThemedText>
             <View style={styles.progressCard}>
               <View style={styles.cardBlur}>

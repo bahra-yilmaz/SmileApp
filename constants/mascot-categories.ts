@@ -255,7 +255,7 @@ const ContextConditions = {
 };
 
 /**
- * Configuration for all 9 greeting categories
+ * Configuration for all 10 greeting categories
  */
 export const GREETING_CATEGORIES: CategoryConfig[] = [
   // 1. TIME CONTEXT
@@ -490,7 +490,32 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
     },
   },
 
-  // 9. CELEBRATION
+  // 9. INFORMATIVE
+  {
+    id: 'informative',
+    name: 'Informative',
+    description: 'Habit tips, dental facts, science facts, and psychology insights',
+    baseWeight: 1.0, // Base weight for informative content
+    subcases: {
+      habit_tip: { weight: 1.0, conditions: () => true }, // Always available
+      dental_fact: { weight: 1.0, conditions: () => true }, // Always available
+      science_fact: { weight: 1.0, conditions: () => true }, // Always available
+      psych_fact: { weight: 1.0, conditions: () => true }, // Always available
+      dental_fact_2: { weight: 1.0, conditions: () => true }, // Always available
+      dental_fact_3: { weight: 1.0, conditions: () => true }, // Always available
+      science_fact_2: { weight: 1.0, conditions: () => true }, // Always available
+      psych_fact_2: { weight: 1.0, conditions: () => true }, // Always available
+      morning_breath_fact: { weight: 1.0, conditions: () => true }, // Always available
+      toothpaste_fact: { weight: 1.0, conditions: () => true }, // Always available
+      floss_fact: { weight: 1.0, conditions: () => true }, // Always available
+      brushing_too_hard: { weight: 1.0, conditions: () => true }, // Always available
+      night_brushing_importance: { weight: 1.0, conditions: () => true }, // Always available
+      brushing_angle_fact: { weight: 1.0, conditions: () => true }, // Always available
+      dry_brush_fact: { weight: 1.0, conditions: () => true }, // Always available
+    },
+  },
+
+  // 10. CELEBRATION
   {
     id: 'celebration',
     name: 'Celebration',
