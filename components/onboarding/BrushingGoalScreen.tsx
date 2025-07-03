@@ -38,13 +38,21 @@ export default function BrushingGoalScreen({
   const lastHapticIndex = useRef<number | null>(null);
   const insets = useSafeAreaInsets();
   
-  const BRUSHING_OPTIONS = useMemo(() => [
-    { value: 1, label: t('onboarding.brushingGoalScreen.optionsLabel_one', { count: 1 }) },
-    { value: 2, label: t('onboarding.brushingGoalScreen.optionsLabel_other', { count: 2 }) },
-    { value: 3, label: t('onboarding.brushingGoalScreen.optionsLabel_other', { count: 3 }) },
-    { value: 4, label: t('onboarding.brushingGoalScreen.optionsLabel_other', { count: 4 }) },
-    { value: 5, label: t('onboarding.brushingGoalScreen.optionsLabel_other', { count: 5 }) }
-  ], [t]);
+  const BRUSHING_OPTIONS = useMemo(() => {
+    const labelOne = t('onboarding.brushingGoalScreen.optionsLabel_one', { count: 1 });
+    const labelTwo = t('onboarding.brushingGoalScreen.optionsLabel_other', { count: 2 });
+    const labelThree = t('onboarding.brushingGoalScreen.optionsLabel_other', { count: 3 });
+    // Generate label "4+ times per day" (or equivalent in other languages) by inserting a '+' after the number 4.
+    const baseFourLabel = t('onboarding.brushingGoalScreen.optionsLabel_other', { count: 4 });
+    const labelFourPlus = baseFourLabel.replace('4', '4+');
+
+    return [
+      { value: 1, label: labelOne },
+      { value: 2, label: labelTwo },
+      { value: 3, label: labelThree },
+      { value: 4, label: labelFourPlus },
+    ];
+  }, [t]);
   
   const [fontsLoaded] = useFonts({
     'Quicksand-Bold': require('../../assets/fonts/Quicksand-Bold.ttf'),
