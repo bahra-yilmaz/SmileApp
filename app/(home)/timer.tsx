@@ -271,9 +271,11 @@ export default function TimerScreen() {
 
   const handleBrushedPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    // Don't reset timer before navigation to avoid visual flash
-    // Timer will be reset when user returns to timer screen
+    // Navigate first so calculations use the current timer state, then
+    // reset the timer (without extra haptics) to stop the countdown and
+    // prevent the success sound from playing in the background.
     handleNavigateToResults();
+    resetTimer(false);
   };
 
   const handleNavigateToResults = () => {
