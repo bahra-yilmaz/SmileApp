@@ -101,29 +101,24 @@
         },
         "brushing_behaviour": {
           "after_brushing_success": {
-            "1": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_SUCCESS_1]",
-            "2": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_SUCCESS_2]",
-            "3": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_SUCCESS_3]"
+            "1": "That was a win, {{username}}. Small? Maybe. But real? Absolutely.",
+            "2": "You did what you came to do. That matters more than you know, {{username}}."
           },
           "after_brushing_fail": {
-            "1": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_FAIL_1]",
-            "2": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_FAIL_2]",
-            "3": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_FAIL_3]"
+            "1": "Not perfect? Still progress. Proud of you for showing up, {{username}}.",
+            "2": "It’s not about perfection — it’s about presence. And you were here."
           },
           "first_brush_of_day": {
-            "1": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_FIRST_BRUSH_OF_DAY_1]",
-            "2": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_FIRST_BRUSH_OF_DAY_2]",
-            "3": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_FIRST_BRUSH_OF_DAY_3]"
+            "1": "And just like that, you’ve already done something good today, {{username}}.",
+            "2": "Starting your day with care? That’s self-respect in motion, {{username}}."
           },
           "second_brush_of_day": {
-            "1": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_SECOND_BRUSH_OF_DAY_1]",
-            "2": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_SECOND_BRUSH_OF_DAY_2]",
-            "3": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_SECOND_BRUSH_OF_DAY_3]"
+            "1": "Twice the care, twice the self-love, {{username}}.",
+            "2": "You’re closing the day with intention. That’s real growth."
           },
           "missed_yesterday": {
-            "1": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_MISSED_YESTERDAY_1]",
-            "2": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_MISSED_YESTERDAY_2]",
-            "3": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_MISSED_YESTERDAY_3]"
+            "1": "Yesterday slipped. You’re still here today. That’s courage, {{username}}.",
+            "2": "Coming back is stronger than never leaving. You did that, {{username}}."
           }
         },
         "streak_state": {
@@ -287,29 +282,24 @@
         },
         "brushing_behaviour": {
           "after_brushing_success": {
-            "1": "[PLAYFUL_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_SUCCESS_1]",
-            "2": "[PLAYFUL_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_SUCCESS_2]",
-            "3": "[PLAYFUL_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_SUCCESS_3]"
+            "1": "Sparkle level: unlocked. Nubo is impressed.",
+            "2": "Teeth status: gleaming. Confidence level: boosted, {{username}}."
           },
           "after_brushing_fail": {
-            "1": "[PLAYFUL_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_FAIL_1]",
-            "2": "[PLAYFUL_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_FAIL_2]",
-            "3": "[PLAYFUL_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_FAIL_3]"
+            "1": "Quick brush today? Nubo will let it slide… just this once 😏",
+            "2": "Speed round? We’ll get 'em next time, sparkle champ {{username}}."
           },
           "first_brush_of_day": {
-            "1": "[PLAYFUL_BRUSHING_BEHAVIOUR_FIRST_BRUSH_OF_DAY_1]",
-            "2": "[PLAYFUL_BRUSHING_BEHAVIOUR_FIRST_BRUSH_OF_DAY_2]",
-            "3": "[PLAYFUL_BRUSHING_BEHAVIOUR_FIRST_BRUSH_OF_DAY_3]"
+            "1": "Day’s first sparkle: deployed. Let’s make it a shiny one!",
+            "2": "Teeth checked in. Let the day begin, {{username}}!"
           },
           "second_brush_of_day": {
-            "1": "[PLAYFUL_BRUSHING_BEHAVIOUR_SECOND_BRUSH_OF_DAY_1]",
-            "2": "[PLAYFUL_BRUSHING_BEHAVIOUR_SECOND_BRUSH_OF_DAY_2]",
-            "3": "[PLAYFUL_BRUSHING_BEHAVIOUR_SECOND_BRUSH_OF_DAY_3]"
+            "1": "Round 2? You’re officially a brushing boss 💪",
+            "2": "Back for round two? Absolute sparkle mastery, {{username}}!"
           },
           "missed_yesterday": {
-            "1": "[PLAYFUL_BRUSHING_BEHAVIOUR_MISSED_YESTERDAY_1]",
-            "2": "[PLAYFUL_BRUSHING_BEHAVIOUR_MISSED_YESTERDAY_2]",
-            "3": "[PLAYFUL_BRUSHING_BEHAVIOUR_MISSED_YESTERDAY_3]"
+            "1": "Plaque was partying yesterday. Today… it’s under arrest.",
+            "2": "Yesterday? Forget it. Today we sparkle with vengeance, {{username}}!"
           }
         },
         "streak_state": {
@@ -472,10 +462,25 @@
           }
         },
         "brushing_behaviour": {
-          "consistent_habit": {
-            "1": "Consistency is your superpower. This routine is bulletproof.",
-            "2": "Discipline level: expert. You've mastered the daily grind.",
-            "3": "Streak mode: unstoppable. This is what commitment looks like."
+          "after_brushing_success": {
+            "1": "Brushed. Nailed it. On to greatness.",
+            "2": "All done. No fuss. Just results, {{username}}."
+          },
+          "after_brushing_fail": {
+            "1": "Didn’t hit the mark — but hey, you pulled up. That counts.",
+            "2": "Could’ve skipped. You didn’t. Enough said, {{username}}."
+          },
+          "first_brush_of_day": {
+            "1": "Started the day with care. That’s smooth.",
+            "2": "Early flex. Clean energy, {{username}}."
+          },
+          "second_brush_of_day": {
+            "1": "Back again. Staying sharp. Always.",
+            "2": "Twice brushed. Always crisp, {{username}}."
+          },
+          "missed_yesterday": {
+            "1": "Missed one? Not your style. Let’s fix that.",
+            "2": "Back on track. No excuses, just action, {{username}}."
           }
         },
         "streak_state": {
@@ -638,10 +643,25 @@
           }
         },
         "brushing_behaviour": {
-          "consistent_habit": {
-            "1": "True mastery lies in the repetition of simple acts done well.",
-            "2": "Your consistency reveals your character. This discipline serves you.",
-            "3": "Small daily deposits in the bank of health compound tremendously."
+          "after_brushing_success": {
+            "1": "Discipline compounds. You just made another deposit.",
+            "2": "Routines are silent builders, {{username}}. Brick by minty brick."
+          },
+          "after_brushing_fail": {
+            "1": "Even a short ritual can anchor a long day.",
+            "2": "The act matters more than the number, {{username}}. You chose the act."
+          },
+          "first_brush_of_day": {
+            "1": "First steps shape the path. Yours was intentional.",
+            "2": "The first act of the day is the seed of your focus, {{username}}."
+          },
+          "second_brush_of_day": {
+            "1": "This effort completes the arc of discipline.",
+            "2": "The circle is complete. You held your rhythm, {{username}}."
+          },
+          "missed_yesterday": {
+            "1": "The chain broke. But not the will. Continue forward.",
+            "2": "Progress isn’t perfect, {{username}}. It’s persistence."
           }
         },
         "streak_state": {

@@ -356,8 +356,8 @@ export class MascotGreetingService implements IMascotGreetingService {
     const baseKey = `mascotGreetings.v2.${personality}.${category}.${subcase}`;
     const availableVariants: number[] = [];
     
-    // Check which variants (1, 2, 3) exist
-    for (let i = 1; i <= 3; i++) {
+    // Check which variants (1, 2) exist
+    for (let i = 1; i <= 2; i++) {
       const testKey = `${baseKey}.${i}`;
       const testText = this.t(testKey);
       

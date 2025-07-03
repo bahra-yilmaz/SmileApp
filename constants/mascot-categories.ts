@@ -325,7 +325,8 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
       },
       first_brush_of_day: {
         weight: 2.0, // Good for setting daily tone
-        conditions: ContextConditions.isFirstBrushOfDay,
+        conditions: (context: GreetingContext) =>
+          ContextConditions.isFirstBrushOfDay(context) && ContextConditions.isMorning(context),
       },
       second_brush_of_day: {
         weight: 2.0, // Encourage consistency
