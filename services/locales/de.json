@@ -507,6 +507,104 @@
           "nubo_broadcast": {
             "1": "[SUPPORTIVE_NUBO_BROADCAST_1]"
           }
+        },
+        "time_context": {
+          "morning": {
+            "1": "[SUPPORTIVE_TIME_CONTEXT_MORNING_1]"
+          },
+          "afternoon": {
+            "1": "[SUPPORTIVE_TIME_CONTEXT_AFTERNOON_1]"
+          },
+          "evening": {
+            "1": "[SUPPORTIVE_TIME_CONTEXT_EVENING_1]"
+          },
+          "late_night": {
+            "1": "[SUPPORTIVE_TIME_CONTEXT_LATE_NIGHT_1]"
+          },
+          "weekday": {
+            "1": "[SUPPORTIVE_TIME_CONTEXT_WEEKDAY_1]"
+          },
+          "weekend": {
+            "1": "[SUPPORTIVE_TIME_CONTEXT_WEEKEND_1]"
+          }
+        },
+        "streak_state": {
+          "new_streak_starting": {
+            "1": "[SUPPORTIVE_STREAK_STATE_NEW_STREAK_STARTING_1]"
+          },
+          "almost_week_streak": {
+            "1": "[SUPPORTIVE_STREAK_STATE_ALMOST_WEEK_STREAK_1]"
+          },
+          "over_10_day_streak": {
+            "1": "[SUPPORTIVE_STREAK_STATE_OVER_10_DAY_STREAK_1]"
+          },
+          "best_streak_reached": {
+            "1": "[SUPPORTIVE_STREAK_STATE_BEST_STREAK_REACHED_1]"
+          },
+          "streak_broken": {
+            "1": "[SUPPORTIVE_STREAK_STATE_STREAK_BROKEN_1]"
+          }
+        },
+        "milestone_enhancements": {
+          "brush_count_milestones": {
+            "1": "[SUPPORTIVE_MILESTONE_ENHANCEMENTS_BRUSH_COUNT_MILESTONES_1]"
+          },
+          "monthly_brush_20": {
+            "1": "[SUPPORTIVE_MILESTONE_ENHANCEMENTS_MONTHLY_BRUSH_20_1]"
+          },
+          "day_7": {
+            "1": "[SUPPORTIVE_MILESTONE_ENHANCEMENTS_DAY_7_1]"
+          },
+          "returning_user_milestone": {
+            "1": "[SUPPORTIVE_MILESTONE_ENHANCEMENTS_RETURNING_USER_MILESTONE_1]"
+          }
+        },
+        "informative": {
+          "habit_tip": {
+            "1": "[SUPPORTIVE_INFORMATIVE_HABIT_TIP_1]"
+          },
+          "dental_fact": {
+            "1": "[SUPPORTIVE_INFORMATIVE_DENTAL_FACT_1]"
+          },
+          "science_fact": {
+            "1": "[SUPPORTIVE_INFORMATIVE_SCIENCE_FACT_1]"
+          },
+          "psych_fact": {
+            "1": "[SUPPORTIVE_INFORMATIVE_PSYCH_FACT_1]"
+          },
+          "dental_fact_2": {
+            "1": "[SUPPORTIVE_INFORMATIVE_DENTAL_FACT_2_1]"
+          },
+          "dental_fact_3": {
+            "1": "[SUPPORTIVE_INFORMATIVE_DENTAL_FACT_3_1]"
+          },
+          "science_fact_2": {
+            "1": "[SUPPORTIVE_INFORMATIVE_SCIENCE_FACT_2_1]"
+          },
+          "psych_fact_2": {
+            "1": "[SUPPORTIVE_INFORMATIVE_PSYCH_FACT_2_1]"
+          },
+          "morning_breath_fact": {
+            "1": "[SUPPORTIVE_INFORMATIVE_MORNING_BREATH_FACT_1]"
+          },
+          "toothpaste_fact": {
+            "1": "[SUPPORTIVE_INFORMATIVE_TOOTHPASTE_FACT_1]"
+          },
+          "floss_fact": {
+            "1": "[SUPPORTIVE_INFORMATIVE_FLOSS_FACT_1]"
+          },
+          "brushing_too_hard": {
+            "1": "[SUPPORTIVE_INFORMATIVE_BRUSHING_TOO_HARD_1]"
+          },
+          "night_brushing_importance": {
+            "1": "[SUPPORTIVE_INFORMATIVE_NIGHT_BRUSHING_IMPORTANCE_1]"
+          },
+          "brushing_angle_fact": {
+            "1": "[SUPPORTIVE_INFORMATIVE_BRUSHING_ANGLE_FACT_1]"
+          },
+          "dry_brush_fact": {
+            "1": "[SUPPORTIVE_INFORMATIVE_DRY_BRUSH_FACT_1]"
+          }
         }
       },
       "playful": {
@@ -540,6 +638,104 @@
           },
           "nubo_broadcast": {
             "1": "[PLAYFUL_NUBO_BROADCAST_1]"
+          }
+        },
+        "time_context": {
+          "morning": {
+            "1": "[PLAYFUL_TIME_CONTEXT_MORNING_1]"
+          },
+          "afternoon": {
+            "1": "[PLAYFUL_TIME_CONTEXT_AFTERNOON_1]"
+          },
+          "evening": {
+            "1": "[PLAYFUL_TIME_CONTEXT_EVENING_1]"
+          },
+          "late_night": {
+            "1": "[PLAYFUL_TIME_CONTEXT_LATE_NIGHT_1]"
+          },
+          "weekday": {
+            "1": "[PLAYFUL_TIME_CONTEXT_WEEKDAY_1]"
+          },
+          "weekend": {
+            "1": "[PLAYFUL_TIME_CONTEXT_WEEKEND_1]"
+          }
+        },
+        "streak_state": {
+          "new_streak_starting": {
+            "1": "[PLAYFUL_STREAK_STATE_NEW_STREAK_STARTING_1]"
+          },
+          "almost_week_streak": {
+            "1": "[PLAYFUL_STREAK_STATE_ALMOST_WEEK_STREAK_1]"
+          },
+          "over_10_day_streak": {
+            "1": "[PLAYFUL_STREAK_STATE_OVER_10_DAY_STREAK_1]"
+          },
+          "best_streak_reached": {
+            "1": "[PLAYFUL_STREAK_STATE_BEST_STREAK_REACHED_1]"
+          },
+          "streak_broken": {
+            "1": "[PLAYFUL_STREAK_STATE_STREAK_BROKEN_1]"
+          }
+        },
+        "milestone_enhancements": {
+          "brush_count_milestones": {
+            "1": "[PLAYFUL_MILESTONE_ENHANCEMENTS_BRUSH_COUNT_MILESTONES_1]"
+          },
+          "monthly_brush_20": {
+            "1": "[PLAYFUL_MILESTONE_ENHANCEMENTS_MONTHLY_BRUSH_20_1]"
+          },
+          "day_7": {
+            "1": "[PLAYFUL_MILESTONE_ENHANCEMENTS_DAY_7_1]"
+          },
+          "returning_user_milestone": {
+            "1": "[PLAYFUL_MILESTONE_ENHANCEMENTS_RETURNING_USER_MILESTONE_1]"
+          }
+        },
+        "informative": {
+          "habit_tip": {
+            "1": "[PLAYFUL_INFORMATIVE_HABIT_TIP_1]"
+          },
+          "dental_fact": {
+            "1": "[PLAYFUL_INFORMATIVE_DENTAL_FACT_1]"
+          },
+          "science_fact": {
+            "1": "[PLAYFUL_INFORMATIVE_SCIENCE_FACT_1]"
+          },
+          "psych_fact": {
+            "1": "[PLAYFUL_INFORMATIVE_PSYCH_FACT_1]"
+          },
+          "dental_fact_2": {
+            "1": "[PLAYFUL_INFORMATIVE_DENTAL_FACT_2_1]"
+          },
+          "dental_fact_3": {
+            "1": "[PLAYFUL_INFORMATIVE_DENTAL_FACT_3_1]"
+          },
+          "science_fact_2": {
+            "1": "[PLAYFUL_INFORMATIVE_SCIENCE_FACT_2_1]"
+          },
+          "psych_fact_2": {
+            "1": "[PLAYFUL_INFORMATIVE_PSYCH_FACT_2_1]"
+          },
+          "morning_breath_fact": {
+            "1": "[PLAYFUL_INFORMATIVE_MORNING_BREATH_FACT_1]"
+          },
+          "toothpaste_fact": {
+            "1": "[PLAYFUL_INFORMATIVE_TOOTHPASTE_FACT_1]"
+          },
+          "floss_fact": {
+            "1": "[PLAYFUL_INFORMATIVE_FLOSS_FACT_1]"
+          },
+          "brushing_too_hard": {
+            "1": "[PLAYFUL_INFORMATIVE_BRUSHING_TOO_HARD_1]"
+          },
+          "night_brushing_importance": {
+            "1": "[PLAYFUL_INFORMATIVE_NIGHT_BRUSHING_IMPORTANCE_1]"
+          },
+          "brushing_angle_fact": {
+            "1": "[PLAYFUL_INFORMATIVE_BRUSHING_ANGLE_FACT_1]"
+          },
+          "dry_brush_fact": {
+            "1": "[PLAYFUL_INFORMATIVE_DRY_BRUSH_FACT_1]"
           }
         }
       },
@@ -575,6 +771,104 @@
           "nubo_broadcast": {
             "1": "[COOL_NUBO_BROADCAST_1]"
           }
+        },
+        "time_context": {
+          "morning": {
+            "1": "[COOL_TIME_CONTEXT_MORNING_1]"
+          },
+          "afternoon": {
+            "1": "[COOL_TIME_CONTEXT_AFTERNOON_1]"
+          },
+          "evening": {
+            "1": "[COOL_TIME_CONTEXT_EVENING_1]"
+          },
+          "late_night": {
+            "1": "[COOL_TIME_CONTEXT_LATE_NIGHT_1]"
+          },
+          "weekday": {
+            "1": "[COOL_TIME_CONTEXT_WEEKDAY_1]"
+          },
+          "weekend": {
+            "1": "[COOL_TIME_CONTEXT_WEEKEND_1]"
+          }
+        },
+        "streak_state": {
+          "new_streak_starting": {
+            "1": "[COOL_STREAK_STATE_NEW_STREAK_STARTING_1]"
+          },
+          "almost_week_streak": {
+            "1": "[COOL_STREAK_STATE_ALMOST_WEEK_STREAK_1]"
+          },
+          "over_10_day_streak": {
+            "1": "[COOL_STREAK_STATE_OVER_10_DAY_STREAK_1]"
+          },
+          "best_streak_reached": {
+            "1": "[COOL_STREAK_STATE_BEST_STREAK_REACHED_1]"
+          },
+          "streak_broken": {
+            "1": "[COOL_STREAK_STATE_STREAK_BROKEN_1]"
+          }
+        },
+        "milestone_enhancements": {
+          "brush_count_milestones": {
+            "1": "[COOL_MILESTONE_ENHANCEMENTS_BRUSH_COUNT_MILESTONES_1]"
+          },
+          "monthly_brush_20": {
+            "1": "[COOL_MILESTONE_ENHANCEMENTS_MONTHLY_BRUSH_20_1]"
+          },
+          "day_7": {
+            "1": "[COOL_MILESTONE_ENHANCEMENTS_DAY_7_1]"
+          },
+          "returning_user_milestone": {
+            "1": "[COOL_MILESTONE_ENHANCEMENTS_RETURNING_USER_MILESTONE_1]"
+          }
+        },
+        "informative": {
+          "habit_tip": {
+            "1": "[COOL_INFORMATIVE_HABIT_TIP_1]"
+          },
+          "dental_fact": {
+            "1": "[COOL_INFORMATIVE_DENTAL_FACT_1]"
+          },
+          "science_fact": {
+            "1": "[COOL_INFORMATIVE_SCIENCE_FACT_1]"
+          },
+          "psych_fact": {
+            "1": "[COOL_INFORMATIVE_PSYCH_FACT_1]"
+          },
+          "dental_fact_2": {
+            "1": "[COOL_INFORMATIVE_DENTAL_FACT_2_1]"
+          },
+          "dental_fact_3": {
+            "1": "[COOL_INFORMATIVE_DENTAL_FACT_3_1]"
+          },
+          "science_fact_2": {
+            "1": "[COOL_INFORMATIVE_SCIENCE_FACT_2_1]"
+          },
+          "psych_fact_2": {
+            "1": "[COOL_INFORMATIVE_PSYCH_FACT_2_1]"
+          },
+          "morning_breath_fact": {
+            "1": "[COOL_INFORMATIVE_MORNING_BREATH_FACT_1]"
+          },
+          "toothpaste_fact": {
+            "1": "[COOL_INFORMATIVE_TOOTHPASTE_FACT_1]"
+          },
+          "floss_fact": {
+            "1": "[COOL_INFORMATIVE_FLOSS_FACT_1]"
+          },
+          "brushing_too_hard": {
+            "1": "[COOL_INFORMATIVE_BRUSHING_TOO_HARD_1]"
+          },
+          "night_brushing_importance": {
+            "1": "[COOL_INFORMATIVE_NIGHT_BRUSHING_IMPORTANCE_1]"
+          },
+          "brushing_angle_fact": {
+            "1": "[COOL_INFORMATIVE_BRUSHING_ANGLE_FACT_1]"
+          },
+          "dry_brush_fact": {
+            "1": "[COOL_INFORMATIVE_DRY_BRUSH_FACT_1]"
+          }
         }
       },
       "wise": {
@@ -608,6 +902,104 @@
           },
           "nubo_broadcast": {
             "1": "[WISE_NUBO_BROADCAST_1]"
+          }
+        },
+        "time_context": {
+          "morning": {
+            "1": "[WISE_TIME_CONTEXT_MORNING_1]"
+          },
+          "afternoon": {
+            "1": "[WISE_TIME_CONTEXT_AFTERNOON_1]"
+          },
+          "evening": {
+            "1": "[WISE_TIME_CONTEXT_EVENING_1]"
+          },
+          "late_night": {
+            "1": "[WISE_TIME_CONTEXT_LATE_NIGHT_1]"
+          },
+          "weekday": {
+            "1": "[WISE_TIME_CONTEXT_WEEKDAY_1]"
+          },
+          "weekend": {
+            "1": "[WISE_TIME_CONTEXT_WEEKEND_1]"
+          }
+        },
+        "streak_state": {
+          "new_streak_starting": {
+            "1": "[WISE_STREAK_STATE_NEW_STREAK_STARTING_1]"
+          },
+          "almost_week_streak": {
+            "1": "[WISE_STREAK_STATE_ALMOST_WEEK_STREAK_1]"
+          },
+          "over_10_day_streak": {
+            "1": "[WISE_STREAK_STATE_OVER_10_DAY_STREAK_1]"
+          },
+          "best_streak_reached": {
+            "1": "[WISE_STREAK_STATE_BEST_STREAK_REACHED_1]"
+          },
+          "streak_broken": {
+            "1": "[WISE_STREAK_STATE_STREAK_BROKEN_1]"
+          }
+        },
+        "milestone_enhancements": {
+          "brush_count_milestones": {
+            "1": "[WISE_MILESTONE_ENHANCEMENTS_BRUSH_COUNT_MILESTONES_1]"
+          },
+          "monthly_brush_20": {
+            "1": "[WISE_MILESTONE_ENHANCEMENTS_MONTHLY_BRUSH_20_1]"
+          },
+          "day_7": {
+            "1": "[WISE_MILESTONE_ENHANCEMENTS_DAY_7_1]"
+          },
+          "returning_user_milestone": {
+            "1": "[WISE_MILESTONE_ENHANCEMENTS_RETURNING_USER_MILESTONE_1]"
+          }
+        },
+        "informative": {
+          "habit_tip": {
+            "1": "[WISE_INFORMATIVE_HABIT_TIP_1]"
+          },
+          "dental_fact": {
+            "1": "[WISE_INFORMATIVE_DENTAL_FACT_1]"
+          },
+          "science_fact": {
+            "1": "[WISE_INFORMATIVE_SCIENCE_FACT_1]"
+          },
+          "psych_fact": {
+            "1": "[WISE_INFORMATIVE_PSYCH_FACT_1]"
+          },
+          "dental_fact_2": {
+            "1": "[WISE_INFORMATIVE_DENTAL_FACT_2_1]"
+          },
+          "dental_fact_3": {
+            "1": "[WISE_INFORMATIVE_DENTAL_FACT_3_1]"
+          },
+          "science_fact_2": {
+            "1": "[WISE_INFORMATIVE_SCIENCE_FACT_2_1]"
+          },
+          "psych_fact_2": {
+            "1": "[WISE_INFORMATIVE_PSYCH_FACT_2_1]"
+          },
+          "morning_breath_fact": {
+            "1": "[WISE_INFORMATIVE_MORNING_BREATH_FACT_1]"
+          },
+          "toothpaste_fact": {
+            "1": "[WISE_INFORMATIVE_TOOTHPASTE_FACT_1]"
+          },
+          "floss_fact": {
+            "1": "[WISE_INFORMATIVE_FLOSS_FACT_1]"
+          },
+          "brushing_too_hard": {
+            "1": "[WISE_INFORMATIVE_BRUSHING_TOO_HARD_1]"
+          },
+          "night_brushing_importance": {
+            "1": "[WISE_INFORMATIVE_NIGHT_BRUSHING_IMPORTANCE_1]"
+          },
+          "brushing_angle_fact": {
+            "1": "[WISE_INFORMATIVE_BRUSHING_ANGLE_FACT_1]"
+          },
+          "dry_brush_fact": {
+            "1": "[WISE_INFORMATIVE_DRY_BRUSH_FACT_1]"
           }
         }
       }

@@ -109,12 +109,11 @@ export type TimeContextSubcase =
  * Subcases for Brushing Behaviour category  
  */
 export type BrushingBehaviourSubcase =
-  | 'first_brush_ever'
-  | 'consistent_habit'
-  | 'missed_yesterday'
-  | 'back_after_break'
-  | 'perfect_week'
-  | 'struggling_consistency';
+  | 'after_brushing_success'
+  | 'after_brushing_fail'
+  | 'first_brush_of_day'
+  | 'second_brush_of_day'
+  | 'missed_yesterday';
 
 /**
  * Subcases for Streak State category
@@ -197,6 +196,11 @@ export interface GreetingContext {
   streakDays?: number;
   lastBrushDate?: Date;
   totalBrushCount?: number;
+  
+  // Brushing session context (for results screen)
+  actualTimeInSec?: number;
+  targetTimeInSec?: number;
+  dailyBrushCount?: number;
   
   // Manual overrides
   forceCategory?: GreetingCategoryType;

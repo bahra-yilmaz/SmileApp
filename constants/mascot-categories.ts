@@ -1,5 +1,5 @@
 // ===== MASCOT V2 CATEGORY CONFIGURATIONS =====
-// This file defines the 9 main categories and their subcases for the new robust mascot system
+// This file defines the 6 main categories and their subcases for the new robust mascot system
 
 import type { 
   CategoryConfig, 
@@ -89,6 +89,28 @@ const ContextConditions = {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     return context.lastBrushDate < yesterday;
+  },
+
+  // ===== BRUSHING BEHAVIOUR CONDITIONS (Results Screen) =====
+  isAfterBrushingSuccess: (context: GreetingContext) => {
+    // Hit target - actualTime >= targetTime
+    const actualTime = context.actualTimeInSec ?? 0;
+    const targetTime = context.targetTimeInSec ?? 120; // Default 2 minutes
+    return actualTime >= targetTime;
+  },
+  isAfterBrushingFail: (context: GreetingContext) => {
+    // Under target - actualTime < targetTime
+    const actualTime = context.actualTimeInSec ?? 0;
+    const targetTime = context.targetTimeInSec ?? 120; // Default 2 minutes
+    return actualTime > 0 && actualTime < targetTime;
+  },
+  isFirstBrushOfDay: (context: GreetingContext) => {
+    // Will need to be determined from brushing logs - first brush today
+    return context.dailyBrushCount === 1;
+  },
+  isSecondBrushOfDay: (context: GreetingContext) => {
+    // Will need to be determined from brushing logs - second brush today
+    return context.dailyBrushCount === 2;
   },
   isBrushed7of10: async (context: GreetingContext) => {
     // PROPER IMPLEMENTATION: Actually check if user brushed 7 out of the last 10 days
@@ -283,10 +305,40 @@ const ContextConditions = {
 };
 
 /**
- * Configuration for all 11 greeting categories
+ * Configuration for all 6 greeting categories
  */
 export const GREETING_CATEGORIES: CategoryConfig[] = [
-  // 1. TIME CONTEXT
+  // 1. BRUSHING BEHAVIOUR (Results Screen)
+  {
+    id: 'brushing_behaviour',
+    name: 'Brushing Behaviour',
+    description: 'Post-brushing feedback based on performance and patterns',
+    baseWeight: 5.0, // Highest weight for results screen
+    subcases: {
+      after_brushing_success: {
+        weight: 3.0, // High priority for positive reinforcement
+        conditions: ContextConditions.isAfterBrushingSuccess,
+      },
+      after_brushing_fail: {
+        weight: 3.0, // High priority for encouragement
+        conditions: ContextConditions.isAfterBrushingFail,
+      },
+      first_brush_of_day: {
+        weight: 2.0, // Good for setting daily tone
+        conditions: ContextConditions.isFirstBrushOfDay,
+      },
+      second_brush_of_day: {
+        weight: 2.0, // Encourage consistency
+        conditions: ContextConditions.isSecondBrushOfDay,
+      },
+      missed_yesterday: {
+        weight: 4.0, // High priority for gentle encouragement
+        conditions: ContextConditions.missedYesterday,
+      },
+    },
+  },
+
+  // 2. TIME CONTEXT
   {
     id: 'time_context',
     name: 'Time Context',
@@ -316,40 +368,6 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
       weekend: {
         weight: 1.2, // Slightly higher for weekend vibes
         conditions: ContextConditions.isWeekend,
-      },
-    },
-  },
-
-  // 2. BRUSHING BEHAVIOUR
-  {
-    id: 'brushing_behaviour',
-    name: 'Brushing Behaviour',
-    description: 'Greetings based on user brushing patterns and consistency',
-    baseWeight: 0, // DISABLED for now - only Time Context active
-    subcases: {
-      first_brush_ever: {
-        weight: 5.0, // Very high weight for special moment
-        conditions: ContextConditions.isFirstBrushEver,
-      },
-      consistent_habit: {
-        weight: 1.5,
-        conditions: (context) => (context.streakDays ?? 0) >= 7,
-      },
-      missed_yesterday: {
-        weight: 2.0, // Higher weight for gentle encouragement
-        conditions: ContextConditions.missedYesterday,
-      },
-      back_after_break: {
-        weight: 2.0,
-        conditions: (context) => ContextConditions.missedYesterday(context) && (context.totalBrushCount ?? 0) > 5,
-      },
-      perfect_week: {
-        weight: 2.0,
-        conditions: (context) => (context.streakDays ?? 0) >= 7 && (context.streakDays ?? 0) % 7 === 0,
-      },
-      struggling_consistency: {
-        weight: 1.5,
-        conditions: (context) => (context.streakDays ?? 0) < 3 && (context.totalBrushCount ?? 0) > 10,
       },
     },
   },
@@ -454,71 +472,7 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
     },
   },
 
-  // 5. REMINDER
-  {
-    id: 'reminder',
-    name: 'Reminder',
-    description: 'Gentle nudges and motivational messages',
-    baseWeight: 1.0, // Base level for general motivation
-    subcases: {
-      gentle_nudge: { weight: 0, conditions: () => false }, // TODO: Implement
-      motivation_boost: { weight: 0, conditions: () => false },
-      habit_reinforcement: { weight: 0, conditions: () => false },
-      positive_reminder: { weight: 0, conditions: () => false },
-      encouragement: { weight: 0, conditions: () => false },
-      persistence_message: { weight: 0, conditions: () => false },
-    },
-  },
-
-  // 6. SEASONAL
-  {
-    id: 'seasonal',
-    name: 'Seasonal',
-    description: 'Holiday and seasonal themed greetings',
-    baseWeight: 0.5, // Lower weight, special occasions only
-    subcases: {
-      new_year: { weight: 0, conditions: () => false }, // TODO: Implement seasonal detection
-      valentine_day: { weight: 0, conditions: () => false },
-      spring_cleaning: { weight: 0, conditions: () => false },
-      summer_fresh: { weight: 0, conditions: () => false },
-      back_to_school: { weight: 0, conditions: () => false },
-      holiday_spirit: { weight: 0, conditions: () => false },
-    },
-  },
-
-  // 7. MOOD BOOST
-  {
-    id: 'mood_boost',
-    name: 'Mood Boost',
-    description: 'Positive reinforcement and confidence building messages',
-    baseWeight: 1.2, // Slightly higher for positive vibes
-    subcases: {
-      confidence_builder: { weight: 0, conditions: () => false }, // TODO: Implement
-      positive_affirmation: { weight: 0, conditions: () => false },
-      smile_compliment: { weight: 0, conditions: () => false },
-      energy_booster: { weight: 0, conditions: () => false },
-      self_care_praise: { weight: 0, conditions: () => false },
-      progress_celebration: { weight: 0, conditions: () => false },
-    },
-  },
-
-  // 8. EDUCATIONAL
-  {
-    id: 'educational',
-    name: 'Educational',
-    description: 'Oral health tips, facts, and educational content',
-    baseWeight: 0.8, // Lower weight, more informational
-    subcases: {
-      brushing_tip: { weight: 0, conditions: () => false }, // TODO: Implement
-      oral_health_fact: { weight: 0, conditions: () => false },
-      technique_advice: { weight: 0, conditions: () => false },
-      product_suggestion: { weight: 0, conditions: () => false },
-      health_benefit: { weight: 0, conditions: () => false },
-      prevention_tip: { weight: 0, conditions: () => false },
-    },
-  },
-
-  // 9. INFORMATIVE
+  // 5. INFORMATIVE
   {
     id: 'informative',
     name: 'Informative',
@@ -537,13 +491,16 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
       toothpaste_fact: { weight: 1.0, conditions: () => true }, // Always available
       floss_fact: { weight: 1.0, conditions: () => true }, // Always available
       brushing_too_hard: { weight: 1.0, conditions: () => true }, // Always available
-      night_brushing_importance: { weight: 1.0, conditions: () => true }, // Always available
+      night_brushing_importance: { 
+        weight: 1.5, // Higher weight when contextually relevant
+        conditions: (context: GreetingContext) => ContextConditions.isEvening(context) || ContextConditions.isLateNight(context) 
+      }, // Evening and late night only
       brushing_angle_fact: { weight: 1.0, conditions: () => true }, // Always available
       dry_brush_fact: { weight: 1.0, conditions: () => true }, // Always available
     },
   },
 
-  // 10. COMMUNITY
+  // 6. COMMUNITY
   {
     id: 'community',
     name: 'Community',
@@ -553,29 +510,16 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
       community_brushing_now: { weight: 1.0, conditions: () => true }, // Always available
       nubo_network_energy: { weight: 1.0, conditions: () => true }, // Always available
       social_momentum: { weight: 1.0, conditions: () => true }, // Always available
-      late_night_others_brushed: { weight: 1.5, conditions: ContextConditions.isLateNight }, // Special late night condition
+      late_night_others_brushed: { 
+        weight: 1.5, // Higher weight when contextually relevant
+        conditions: (context: GreetingContext) => ContextConditions.isEvening(context) || ContextConditions.isLateNight(context) 
+      }, // Evening and late night only
       first_week_global_wave: { weight: 2.0, conditions: ContextConditions.isFirstWeekUser }, // Higher weight for new users
       nubo_day_event: { weight: 1.0, conditions: () => true }, // Always available
       community_across_timezones: { weight: 1.0, conditions: () => true }, // Always available
       brush_in_cities: { weight: 1.0, conditions: () => true }, // Always available
       nubo_watching: { weight: 1.0, conditions: () => true }, // Always available
       nubo_broadcast: { weight: 1.0, conditions: () => true }, // Always available
-    },
-  },
-
-  // 11. CELEBRATION
-  {
-    id: 'celebration',
-    name: 'Celebration',
-    description: 'Success moments, completions, and victory messages',
-    baseWeight: 1.8, // Higher weight for positive reinforcement
-    subcases: {
-      session_complete: { weight: 0, conditions: () => false }, // TODO: Implement
-      perfect_timing: { weight: 0, conditions: () => false },
-      consistency_win: { weight: 0, conditions: () => false },
-      improvement_noted: { weight: 0, conditions: () => false },
-      milestone_party: { weight: 0, conditions: () => false },
-      success_moment: { weight: 0, conditions: () => false },
     },
   },
 ];

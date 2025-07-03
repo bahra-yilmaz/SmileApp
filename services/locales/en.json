@@ -100,20 +100,30 @@
           }
         },
         "brushing_behaviour": {
-          "first_brush_ever": {
-            "1": "Welcome to your smile journey! Every expert started with their first brush.",
-            "2": "What a beautiful beginning! Your teeth are so lucky to have you.",
-            "3": "First step on a wonderful path. I'm here to support you every day."
+          "after_brushing_success": {
+            "1": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_SUCCESS_1]",
+            "2": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_SUCCESS_2]",
+            "3": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_SUCCESS_3]"
           },
-          "consistent_habit": {
-            "1": "Your consistency is inspiring! You're building something beautiful.",
-            "2": "Week after week, you keep showing up. That's real strength.",
-            "3": "Look at you, making dental care look effortless. Well done!"
+          "after_brushing_fail": {
+            "1": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_FAIL_1]",
+            "2": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_FAIL_2]",
+            "3": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_FAIL_3]"
+          },
+          "first_brush_of_day": {
+            "1": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_FIRST_BRUSH_OF_DAY_1]",
+            "2": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_FIRST_BRUSH_OF_DAY_2]",
+            "3": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_FIRST_BRUSH_OF_DAY_3]"
+          },
+          "second_brush_of_day": {
+            "1": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_SECOND_BRUSH_OF_DAY_1]",
+            "2": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_SECOND_BRUSH_OF_DAY_2]",
+            "3": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_SECOND_BRUSH_OF_DAY_3]"
           },
           "missed_yesterday": {
-            "1": "Welcome back! Yesterday is gone, today is a fresh start.",
-            "2": "No judgment here. You're back, and that's what matters most.",
-            "3": "Every return is a victory. Thank you for not giving up."
+            "1": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_MISSED_YESTERDAY_1]",
+            "2": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_MISSED_YESTERDAY_2]",
+            "3": "[SUPPORTIVE_BRUSHING_BEHAVIOUR_MISSED_YESTERDAY_3]"
           }
         },
         "streak_state": {
@@ -276,15 +286,30 @@
           }
         },
         "brushing_behaviour": {
-          "first_brush_ever": {
-            "1": "FIRST BRUSH PARTY! 🎉 Welcome to the sparkle squad, newbie!",
-            "2": "OMG your FIRST time?! This is so exciting! Let's make it AMAZING! ✨",
-            "3": "New member alert! 🚨 Welcome to the daily shine crew! We're gonna have SO much fun!"
+          "after_brushing_success": {
+            "1": "[PLAYFUL_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_SUCCESS_1]",
+            "2": "[PLAYFUL_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_SUCCESS_2]",
+            "3": "[PLAYFUL_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_SUCCESS_3]"
           },
-          "consistent_habit": {
-            "1": "Streak LEGEND! 💪 You're basically the superhero of dental care!",
-            "2": "Consistency QUEEN/KING! 👑 Your teeth are living their best life!",
-            "3": "Habit hero status: UNLOCKED! 🏆 Your smile game is absolutely ON FIRE!"
+          "after_brushing_fail": {
+            "1": "[PLAYFUL_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_FAIL_1]",
+            "2": "[PLAYFUL_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_FAIL_2]",
+            "3": "[PLAYFUL_BRUSHING_BEHAVIOUR_AFTER_BRUSHING_FAIL_3]"
+          },
+          "first_brush_of_day": {
+            "1": "[PLAYFUL_BRUSHING_BEHAVIOUR_FIRST_BRUSH_OF_DAY_1]",
+            "2": "[PLAYFUL_BRUSHING_BEHAVIOUR_FIRST_BRUSH_OF_DAY_2]",
+            "3": "[PLAYFUL_BRUSHING_BEHAVIOUR_FIRST_BRUSH_OF_DAY_3]"
+          },
+          "second_brush_of_day": {
+            "1": "[PLAYFUL_BRUSHING_BEHAVIOUR_SECOND_BRUSH_OF_DAY_1]",
+            "2": "[PLAYFUL_BRUSHING_BEHAVIOUR_SECOND_BRUSH_OF_DAY_2]",
+            "3": "[PLAYFUL_BRUSHING_BEHAVIOUR_SECOND_BRUSH_OF_DAY_3]"
+          },
+          "missed_yesterday": {
+            "1": "[PLAYFUL_BRUSHING_BEHAVIOUR_MISSED_YESTERDAY_1]",
+            "2": "[PLAYFUL_BRUSHING_BEHAVIOUR_MISSED_YESTERDAY_2]",
+            "3": "[PLAYFUL_BRUSHING_BEHAVIOUR_MISSED_YESTERDAY_3]"
           }
         },
         "streak_state": {
@@ -1317,4 +1342,4 @@
     "item": "Toothbrush",
     "firstBrush": "First Brush"
   }
-}
+} 
