@@ -552,16 +552,28 @@ export default function SettingsScreen() {
   };
   
   const saveUsername = async (newUsername: string) => {
+    if (!user) return;
+
     try {
-      const { data, error } = await supabase.auth.updateUser({
+      // Step 1: Update the public.users table
+      const { error: profileError } = await supabase
+        .from('users')
+        .update({ username: newUsername })
+        .eq('id', user.id);
+
+      if (profileError) throw profileError;
+
+      // Step 2: Update the auth.users metadata (for consistency)
+      const { data, error: authError } = await supabase.auth.updateUser({
         data: { username: newUsername },
       });
 
-      if (error || !data?.user) {
-        throw error || new Error('Failed to update username');
+      if (authError || !data?.user) {
+        throw authError || new Error('Failed to update username in auth');
       }
 
       setUser(data.user);
+      // Success alert was removed as requested
     } catch (err: any) {
       Alert.alert(t('common.error', 'Error'), err?.message || 'Failed to update username');
     }
