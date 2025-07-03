@@ -42,7 +42,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             const deriveUsername = (email: string | undefined | null) => {
               if (!email) return '';
               const localPart = email.split('@')[0];
-              return localPart.replace(/\d+/g, '').toLowerCase();
+              const cleaned = localPart.replace(/\d+/g, '').toLowerCase();
+              return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
             };
 
             // Prepare tasks to run in parallel on new sign in

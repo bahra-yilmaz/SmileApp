@@ -144,7 +144,7 @@ const BrushingResultsScreen = () => {
           userId: user?.id || 'guest',
           forceCategory: 'community', // Force community category
           variables: {
-            username: user?.user_metadata?.username || user?.email?.split('@')[0] || 'there',
+            username: ((u => u ? u.charAt(0).toUpperCase() + u.slice(1) : u)(user?.user_metadata?.username || user?.email?.split('@')[0] || 'there')),
           },
         };
 

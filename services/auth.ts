@@ -6,8 +6,8 @@ import supabase from './supabaseClient';
 function deriveUsername(email: string): string {
   if (!email) return '';
   const localPart = email.split('@')[0];
-  // Remove all numeric characters and return lower-cased string
-  return localPart.replace(/\d+/g, '').toLowerCase();
+  const cleaned = localPart.replace(/\d+/g, '').toLowerCase();
+  return cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
 }
 
 /**

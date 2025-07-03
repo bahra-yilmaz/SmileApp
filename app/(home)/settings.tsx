@@ -42,6 +42,8 @@ import {
   FREQUENCY_OPTIONS 
 } from '../../services/BrushingGoalsService';
 import { useToothbrushStats } from '../../hooks/useToothbrushStats';
+import InlineEditableText from '../../components/ui/InlineEditableText';
+import { Colors } from '../../constants/Colors';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 const NUBO_TONE_KEY = 'nubo_tone';
@@ -530,7 +532,9 @@ export default function SettingsScreen() {
     }
   };
   
-  const accountName = user?.user_metadata?.full_name || user?.email || t('settings.account.guest', 'Guest User');
+  const capitalize = (str: string) => str ? str.charAt(0).toUpperCase() + str.slice(1) : str;
+  const rawUsername = user?.user_metadata?.username || (user?.email ? user.email.split('@')[0] : null);
+  const accountName = user?.user_metadata?.full_name || (rawUsername ? capitalize(rawUsername) : null) || t('settings.account.guest', 'Guest User');
   const accountEmail = user?.email || t('settings.account.signInPrompt', 'Tap to sign in');
   
   const handleAccountChevronPress = (e: any) => {
@@ -558,6 +562,23 @@ export default function SettingsScreen() {
   const handleGetPremiumPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Alert.alert(t('settings.account.premiumSoon', 'Premium Smile coming soon!'));
+  };
+  
+  const handleSaveUsername = async (newUsername: string) => {
+    try {
+      const { data, error } = await supabase.auth.updateUser({
+        data: { username: newUsername },
+      });
+
+      if (error || !data?.user) {
+        throw error || new Error('Failed to update username');
+      }
+
+      setUser(data.user);
+      Alert.alert(t('settings.account.usernameUpdated', 'Username updated successfully'));
+    } catch (err: any) {
+      Alert.alert(t('common.error', 'Error'), err?.message || 'Failed to update username');
+    }
   };
   
   const renderLanguageItem = ({ item: lang }: { item: LanguageItem }) => (
@@ -664,9 +685,18 @@ export default function SettingsScreen() {
               <Pressable style={styles.accountItem} onPress={handleAccountPress}>
                 <Ionicons name="person-circle-outline" size={48} color={activeColors.tint} />
                 <View style={styles.accountInfo}>
-                  <ThemedText style={styles.accountName}>{accountName}</ThemedText>
-                  {!user && (
-                    <ThemedText style={styles.accountEmail}>{accountEmail}</ThemedText>
+                  {user ? (
+                    <InlineEditableText
+                      value={accountName}
+                      onSave={handleSaveUsername}
+                      pencilColor={Colors.primary[200]}
+                      checkmarkColor={Colors.primary[500]}
+                      textStyle={styles.accountName}
+                      inputStyle={styles.accountName}
+                      iconOpacity={1}
+                    />
+                  ) : (
+                    <ThemedText style={styles.accountName}>{accountName}</ThemedText>
                   )}
                 </View>
                 <Pressable onPress={(e) => handleAccountChevronPress(e)} hitSlop={10}>
@@ -1046,8 +1076,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   accountName: {
-    fontSize: 18,
-    fontFamily: 'Quicksand-Bold',
+    fontSize: 22,
+    fontFamily: 'Merienda-Bold',
   },
   accountEmail: {
     fontSize: 14,
@@ -1063,5 +1093,52 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
   },
-
+  usernameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '80%',
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    borderRadius: 12,
+    padding: 20,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: 'Quicksand-Bold',
+    marginBottom: 15,
+    textAlign: 'center',
+    color: 'black',
+  },
+  usernameInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    backgroundColor: 'white',
+    fontSize: 16,
+    fontFamily: 'Quicksand-Medium',
+    marginBottom: 20,
+    color: 'black',
+  },
+  modalButtonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  modalButton: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    fontSize: 16,
+    color: '#007AFF',
+    fontFamily: 'Quicksand-Bold',
+  },
 }); 
