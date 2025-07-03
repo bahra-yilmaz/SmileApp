@@ -105,7 +105,7 @@ export const ExpandableMascotCard: React.FC<ExpandableMascotCardProps> = ({
   }, [widthAnim, cornerRadiusAnim, circleSize, expandedWidth, pillRadius, cardRadius]);
   
   // Get typed text using the custom hook with variable interpolation
-  const username = user?.email?.split('@')[0] || user?.user_metadata?.first_name || user?.user_metadata?.name || 'there';
+  const username = user?.user_metadata?.username || user?.email?.split('@')[0] || user?.user_metadata?.first_name || user?.user_metadata?.name || 'there';
   const translatedText = t(greetingTextKey, { 
     username,
     firstName: user?.user_metadata?.first_name || username

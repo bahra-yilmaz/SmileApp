@@ -1,5 +1,15 @@
 import supabase from './supabaseClient';
 
+// Helper to derive a clean username from an email address.
+// Takes the local-part (before "@") and strips all digits.
+// Example: "bahra14yilmaz@gmail.com" -> "bahrayilmaz".
+function deriveUsername(email: string): string {
+  if (!email) return '';
+  const localPart = email.split('@')[0];
+  // Remove all numeric characters and return lower-cased string
+  return localPart.replace(/\d+/g, '').toLowerCase();
+}
+
 /**
  * Signs a brand-new user up using email & password.
  *
@@ -8,7 +18,8 @@ import supabase from './supabaseClient';
  *
  * On success returns the newly created user id.
  *
- * NOTE: Username will be set later via settings; therefore it is omitted here.
+ * NOTE: A username is now automatically generated from the email's local-part (digits removed)
+ *       and stored in the user's metadata during sign-up.
  */
 export async function signUpWithEmail(rawEmail: string, password: string): Promise<string> {
   if (!rawEmail || !password) {
@@ -16,6 +27,7 @@ export async function signUpWithEmail(rawEmail: string, password: string): Promi
   }
 
   const email = rawEmail.trim().toLowerCase();
+  const username = deriveUsername(email);
 
   // ---------------------------------------------------------------------------
   // 1) Register the user with Supabase Auth
@@ -23,6 +35,11 @@ export async function signUpWithEmail(rawEmail: string, password: string): Promi
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      data: {
+        username,
+      },
+    },
   });
 
   if (signUpError || !signUpData?.user) {

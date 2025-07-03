@@ -38,13 +38,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           if (isNewSignIn && currentUser) {
             console.log('✨ New user signed in! Initializing user data.');
             
-            // Initialize user data in parallel
-            Promise.all([
+            // Helper to derive username from email when not present in metadata
+            const deriveUsername = (email: string | undefined | null) => {
+              if (!email) return '';
+              const localPart = email.split('@')[0];
+              return localPart.replace(/\d+/g, '').toLowerCase();
+            };
+
+            // Prepare tasks to run in parallel on new sign in
+            const tasks: Promise<any>[] = [
               GuestUserService.clearGuestData(),
               LanguageService.loadAndApplyUserLanguage(currentUser.id),
               // ToothbrushService is now initialized on-demand by useToothbrushStats
-            ]).catch(error => {
-              console.error('❌ Error initializing user data:', error);
+            ];
+
+            // Ensure the user has a username metadata field
+            if (!currentUser.user_metadata?.username && currentUser.email) {
+              const derived = deriveUsername(currentUser.email);
+              if (derived) {
+                tasks.push(
+                  supabase.auth.updateUser({
+                    data: { username: derived },
+                  })
+                );
+              }
+            }
+
+            Promise.all(tasks).catch(error => {
+              console.error('❌ Error initializing user data / setting username:', error);
             });
           }
           return currentUser;
