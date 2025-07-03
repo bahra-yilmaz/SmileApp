@@ -1,517 +1,374 @@
 {
-    "mascotGreetings": {
-      "defaultHello": "Merhaba!",
-      "smileJourney": "Hey! 👋 Hadi gülümseme yolculuğuna başlayalım!",
-      "welcomeBack": "Tekrar hoş geldin! Günü aydınlatmaya hazır mısın?",
-      "pearlyWhites": "Kontrol zamanı! Dişlerin nasıl parlıyor?",
-      "nuboHelp": "Nubo burada, daha çok gülümsemen için!",
-      "wavingWithGlassesPP": {
-        "greeting1": "Hey! Nubo burada, havalı gözlüklerimle el sallıyorum!",
-        "greeting2": "Sadece bir selam vermek istedim!",
-        "tip1": "Unutma, küçük bir selam bile birinin gününü güzelleştirebilir!"
-      },
-      "brushingTime": {
-        "reminder1": "Diş fırçalama zamanı! Hadi dişlerini parlat!",
-        "fact1": "Biliyor muydun? 2 dakika fırçalamak tam ideal süredir.",
-        "encouragement1": "Harika fırçalama alışkanlıklarına devam!"
-      },
-      "generalGreetings": {
-        "niceDay": "Umarım harika bir gün geçiriyorsundur!",
-        "keepSmiling": "Gülümsemeye devam et, sana çok yakışıyor!"
-      },
-      "playfulReminders": {
-        "hollywoodSmile": "Bir dakikanı ayır ve Hollywood gülüşüne yaklaş 🎬😁",
-        "toothFairyResigning": "Bugün fırçalamazsan… diş perisi istifa ediyor. Cidden. 🧚‍♀️❌",
-        "breakAlgorithm": "Bugün atlarsan algoritmayı bozarım. Sonsuza kadar 19:37'de bildirim alırsın 😈",
-        "notTherapist": "Ben maskotum, terapist değilim. Sabır sınırım var 😶‍🌫️",
-        "boringMascot": "Parlama yok mu? Tamam. Giderim ve sıkıcı bir maskot gönderirim 💅",
-        "brushDanceTrade": "Sen fırçala, ben dans edeyim. Adil anlaşma.",
-        "cleanedSneakers": "Bunun için spor ayakkabılarımı bile temizledim. Lavabonun yanında bekletme beni.",
-        "brushWantsAction": "Bu fırça aksiyon ister. Sohbet değil.",
-        "shineBragPartnership": "Sen parlıyorsun, ben övünüyorum. Ortaklığımız sağlıklı kalsın.",
-        "mirrorLosesRespect": "Bir gün atlarsan ayna sana saygısını kaybeder. Bana güven."
-      },
-      "cool": {
-        "routineLocked": "Rutin kilitlendi. Dikkatini koru.",
-        "sharpenTheSmile": "Gülüşünü keskinleştir. Güne hükmet.",
-        "smileInsurance": "Gülüş sigortası aktif. Hadi başlayalım.",
-        "mirrorsWaiting": "Ayna o ışıltıyı bekliyor. Var mısın?",
-        "brushingBigFlex": "Fırçalamak: Küçük emek, büyük hava.",
-        "shadesForShine": "Sen parladıkça ben güneş gözlüğü takarım.",
-        "lessCavitiesMoreConfidence": "Daha az çürük, daha çok özgüven.",
-        "brushGameStrong": "Fırça oyununu güçlü tut.",
-        "dentistJealous": "Bugün dişçini kıskandıralım.",
-        "dullTeethCouldnBeUs": "Mat dişler? Bizlik değil.",
-        "goodHabitsShinyStats": "İyi alışkanlık = parlak istatistikler. Hadi yükseltelim.",
-        "toothbrushReady": "Fırça hazır. Hamleni yap.",
-        "morningFlex": "Sabah fırçası. Gün boyu hava.",
-        "noPlaqueZone": "Burası plak yasaklı bölge.",
-        "futureSmile": "Bugün fırçala. Yarın parılda.",
-        "confidenceLoaded": "Özgüven yüklendi. Başlıyoruz.",
-        "shineProtocol": "Parlama protokolü: aktif.",
-        "nextLevelSmile": "Üst seviye gülüş açıldı.",
-        "tinyMoveBigWin": "Küçük fırça, büyük hava.",
-        "sparkleUpgrade": "Işıltı yükseltmesi: başlatıldı."
-      },
-      "wise": {
-        "smallSteps": "Küçük adımlar güçlü alışkanlıklar oluşturur.",
-        "dailyDiscipline": "Disiplin her gülüşü şekillendirir.",
-        "foundationOfConfidence": "Tutarlılık, özgüvenin temelidir.",
-        "eachBrushMatters": "Her fırçalama önemlidir. İstisnasız.",
-        "investInFuture": "Her fırçalama geleceğine yapılan bir yatırımdır.",
-        "quietProgress": "İlerleme çoğu zaman parlamadan önce fısıldar.",
-        "healthIsWealth": "Sağlığın en büyük zenginliğindir.",
-        "showUpDaily": "Her gün devam et. Rutin mükemmeliyeti getirir.",
-        "patternsCreateDestiny": "Alışkanlıkların kaderini şekillendirir.",
-        "strongRoots": "Güçlü gülüşler güçlü temellerden doğar.",
-        "smallActOfMastery": "Her fırçalama küçük bir ustalık eylemidir.",
-        "disciplineToday": "Bugünün disiplini, yarının özgürlüğü.",
-        "lastingResults": "İstikrarlı eller kalıcı sonuçlar getirir.",
-        "precisionCreatesStrength": "Küçük detaylardaki özen bütünün gücünü oluşturur.",
-        "habitsShapeYou": "Alışkanlıkların seni sessizce şekillendirir.",
-        "disciplineSharpens": "Disiplin keskinleştirir. Sabır inşa eder.",
-        "neverWasteBrush": "Hiçbir fırçalamayı boşa harcama. Hepsi önemlidir.",
-        "controlWhatYouCan": "Kontrol edebildiğini kontrol et. Tutarlılık yol göstersin.",
-        "precisionMatters": "Ustalık detaylarda yaşar.",
-        "riseEveryDay": "Her gün kalk, zanaatını tekrar et."
-      },
-      "playful": {
-        "letThePartyBegin": "Fırça hazır. Parti başlasın! 🎉",
-        "dontLeaveMeHanging": "Beni yalnız bırakma dostum! 🪥",
-        "missionSparkle": "Işıltı görevi: kabul edildi 🚀",
-        "teethMissMe": "Dişlerin şimdiden beni özledi 🦷",
-        "noPlaqueParty": "Bu partide plaka yer yok 🎊",
-        "squadGoals": "Takım hedefi: fırçalama modu.",
-        "toothFairtyProud": "Diş perisi aradı. Gurur duyuyor. 🧚‍♀️",
-        "shinyAttack": "Parlak saldırı geliyor! ⚔️✨",
-        "plaqueWho": "Plak mı? Hiç duymadım.",
-        "timeToShine": "Parlama zamanı, yıldızım ✨",
-        "dailySmileQuest": "Günlük gülüş görevi: açıldı 🎯",
-        "brushingRemix": "Haydi fırçalama remix'ini patlatalım 🎧",
-        "smileRecipe": "Gülüş tarifi: fırçala, durula, parılda!",
-        "sparkleGame": "Işıltı oyunun çok güçlü 💎",
-        "streakDance": "Streak dansı çağırıyor 🕺",
-        "zeroBrushDrama": "Bugün sıfır fırçalama draması 😎",
-        "partyStarter": "Ben senin fırçalama partisi başlatıcınım 🎤",
-        "shineChampion": "Işıltı şampiyonu göreve hazır 👑",
-        "toothbrushHype": "Fırçan coştu 🔥",
-        "tinyMovesBigSmile": "Minik hareketler, dev gülüş 🌟"
-      },
-      "supportive": {
-        "youShowedUp": "Buradasın. En zor kısmı geçtin.",
-        "smallWinsBigSmiles": "Küçük zaferler büyük gülüşlere dönüşür.",
-        "littleByLittle": "Azar azar — hedefe yaklaşıyorsun.",
-        "freshStart": "Her gün yeni bir başlangıç. Bugün de.",
-        "rightHereWithYou": "Her zaman yanındayım.",
-        "progressNotPerfection": "İlerleme önemli, mükemmeliyet değil.",
-        "tinyHabitsMatter": "Minik alışkanlıklar güçlü rutinler yaratır.",
-        "yourSmileDeservesThis": "Gülüşün bu ilgiyi hak ediyor.",
-        "brighterStep": "Her fırçalama ileriye parlak bir adım.",
-        "gentleReminder": "Nazik bir hatırlatma: düşündüğünden daha iyisin.",
-        "strongerEachDay": "Güçlü alışkanlıklar, güçlü sen.",
-        "kindToYourself": "Kendine nazik ol. Büyümek zaman alır.",
-        "thisMatters": "Bu an düşündüğünden daha önemli.",
-        "quietProgress": "Sessiz ilerleme de ilerlemedir.",
-        "consistentCare": "Tutarlı bakım özgüven getirir.",
-        "keepShowingUp": "Devam etmek önemli olan.",
-        "showingUpStrong": "Devam etmek seni güçlendirir.",
-        "streakOrNoStreak": "Streak olsun olmasın — buradasın.",
-        "gentleVictory": "Bu an küçük bir zaferdir.",
-        "todayCounts": "Bugün önemli. Her zaman."
-      },
-      "neutral": {
-  "brushTime": "Yine fırçalama zamanı! 🕰️",
-  "sparkleLoading": "Parıltı yükleniyor… ⏳✨",
-  "plaqueReminder": "Spoiler: Plak tatil yapmaz.",
-  "freshFeeling": "O ferahlık hissi bambaşka.",
-  "brushingCrew": "Fırçalama ekibine tekrar hoş geldin! 🪥",
-  "mintyMission": "Nane görevimiz başladı.",
-  "shineReady": "Gülüş parıltısı: hazır.",
-  "dailyBrushThing": "Günlük fırçalama rutini. Normal işler.",
-  "tinyBrushingRitual": "Minik ritüel. Büyük ferahlık.",
-  "mirrorApproved": "Ayna bunu kesinlikle onaylar.",
-  "happyTeethDance": "Dişler mutlu danslarını yapıyor 💃",
-  "routineFeelsGood": "Rutin güzel hissettiriyor, değil mi?",
-  "brushingRoutineBack": "Fırçalama rutini yeniden sahnede!",
-  "smileMaintenance": "Gülüş bakımı devam ediyor 🛠️",
-  "clearedForShine": "Maksimum parıltıya hazır ✨",
-  "dailyDefense": "Günlük koruma: aktif 🛡️",
-  "fresherAlready": "Şimdiden daha ferahsın.",
-  "mintMode": "Nane modu: AÇIK 🌿",
-  "quickWin": "Gülüş için hızlı bir kazanım.",
-  "smallMoveBigFresh": "Küçük hareket. Büyük ferahlık."
-}
-    },
-    "common": {
-      "ok": "Tamam",
-      "cancel": "İptal",
-      "Continue": "Devam",
-      "save": "Kaydet",
-      "edit": "Düzenle",
-      "delete": "Sil",
-      "add": "Ekle",
-      "loading": "Yükleniyor...",
-      "saving": "Kaydediliyor...",
-      "tryAgain": "Tekrar Dene"
-    },
-    "languages": {
-      "en": "English",
-      "es": "Español",
-      "de": "Deutsch",
-      "fr": "Français",
-      "tr": "Türkçe",
-      "pt": "Português",
-      "ja": "日本語",
-      "hi": "हिन्दी"
-    },
-    "onboarding": {
-      "mascotGreetingStage1": "Bu uygulama, gülüşünü ışıldatman için bilimsel temellere dayanıyor ✨",
-      "mascotGreetingStage2": "Günde sadece birkaç dakika ayırmak, gülüşün için büyük fark yaratır. ⏱️",
-      "mascotGreetingStage3": "Bu yolculukta Nubo yanında olacak, hadi önce seni tanıyalım! 🤝✨",
-      "actions": {
-        "skip": "Geç",
-        "next": "İleri",
-        "getStarted": "Başla"
-      },
-      "welcomeScreen": {
-        "mainTitle": "Smile App'e Hoş Geldin!",
-        "mainTitleApp": "Uygulamana\nhoş geldin",
-        "journeyTitle": "Gülümseme Yolculuğunu Kişiselleştir",
-        "checkpoint1": "Dilini Seç",
-        "checkpoint2": "Maskotunla Tanış",
-        "checkpoint3": "Hedeflerini Belirle",
-        "letsGoButton": "Hadi Başlayalım"
-      },
-      "languageSelectScreen": {
-        "title": "Dilini Seç"
-      },
-      "ageSelectionScreen": {
-        "title": "Kaç yaşındasın?",
-        "description": "Senin için egzersizleri buna göre filtreleyeceğiz",
-        "ageRange0_5": "0–5",
-        "ageRange6_12": "6–12",
-        "ageRange13_18": "13–18",
-        "ageRange19_29": "19–29",
-        "ageRange30_45": "30–45",
-        "ageRange46_60": "46–60",
-        "ageRange60_plus": "60+",
-        "question": "Yaşın kaç?",
-        "useForChildButton": "Çocuk Kullanımı",
-        "continueButton": "Devam"
-      },
-      "brushingGoalScreen": {
-        "title": "Fırçalama Hedefini Belirle",
-        "description": "Günde kaç kez dişlerini fırçalamak istersin? Diş hekimleri günde en az iki kez önerir.",
-        "optionsLabel_one": "Günde {{count}} kez",
-        "optionsLabel_other": "Günde {{count}} kez",
-        "question": "Günlük fırçalama hedefin:",
-        "startButton": "Hemen Başla"
-      },
-      "toothbrushDurationScreen": {
-        "title": "Fırça Süresi",
-        "description": "Diş fırçanı en son ne zaman değiştirdin?",
-        "options": {
-          "lessThan1Week": "1 haftadan az",
-          "oneToTwoWeeks": "1–2 hafta önce",
-          "threeToFourWeeks": "3–4 hafta önce",
-          "about2Months": "Yaklaşık 2 ay önce",
-          "about3Months": "Yaklaşık 3 ay önce",
-          "dontRemember": "Hatırlamıyorum"
-        },
-        "question": "Mevcut fırça yaşı:",
-        "startButton": "Hemen Başla"
-      },
-      "nuboToneScreen": {
-        "title": "Nubo'nun Tarzı",
-        "description": "Nubo'nun seninle nasıl iletişim kurmasını istersin?",
-        "options": {
-          "supportive_label": "Destekleyici",
-          "supportive_description": "Nazik ve yardımcı",
-          "playful_label": "Neşeli",
-          "playful_description": "Eğlenceli ve teşvik edici",
-          "cool_label": "Havalı",
-          "cool_description": "Kendinden emin ve net",
-          "wise_label": "Bilge",
-          "wise_description": "Anlayışlı ve sakin"
-        },
-        "question": "Nubo'nun tarzını seç",
-        "startButton": "Hemen Başla"
-      },
-      "signinScreen": {
-        "title": "Hesabına\nHoş Geldin",
-        "emailPlaceholder": "E-posta",
-        "passwordPlaceholder": "Şifre",
-        "submitButton": "Giriş Yap",
-        "orDivider": "veya",
-        "googleButton": "Google ile Giriş Yap",
-        "noAccountText": "Hesabın yok mu? ",
-        "signUpLink": "Kayıt Ol"
-      },
-      "signupScreen": {
-        "title": "Yeni Hesap\nOluştur",
-        "usernamePlaceholder": "Kullanıcı Adı",
-        "emailPlaceholder": "E-posta",
-        "submitButton": "Yolculuğa Başla",
-        "googleButton": "Google ile Kayıt Ol",
-        "hasAccountText": "Hesabın var mı? ",
-        "signInLink": "Giriş Yap"
-      }
-    },
-    "toothbrush": {
-      "title": "Diş Fırçası Menüsü",
-      "error": {
-        "title": "Hata",
-        "message": "Diş fırçası verileri kaydedilemedi. Lütfen tekrar deneyin."
-      },
-      "days": "Kullanım günü: {{count}}",
-      "current": {
-        "title": "Mevcut Fırça",
-        "none": "Yok",
-        "age": "{{days}}g günlük"
-      },
-      "type": {
-        "manual": "Manuel",
-        "electric": "Elektrikli"
-      },
-      "category": {
-        "regular": "Normal",
-        "braces": "Diş Teli",
-        "sensitive": "Hassas",
-        "whitening": "Beyazlatma"
-      },
-      "age": {
-        "oneMonth": "1 ay",
-        "months": "{{count}} ay",
-        "oneWeek": "1 hafta",
-        "weeks": "{{count}} hafta",
-        "oneDay": "1 gün",
-        "days": "{{count}} gün"
-      },
-      "status": {
-        "brandNew": "Yeni",
-        "fresh": "Taze",
-        "good": "İyi",
-        "due": "Yakında değiştir",
-        "overdue": "Gecikmiş"
-      },
-      "newBrush": {
-        "addNew": "Yeni Fırça Ekle"
-      },
-      "history": {
-        "title": "Fırça Geçmişi",
-        "ageDays": "{{count}} gün",
-        "brushings_one": "{{count}} fırçalama",
-        "brushings_other": "{{count}} fırçalama"
-      },
-      "infoCards": {
-        "title": "Fırça İpuçları",
-        "plaqueRemoval": {
-          "title": "Plak Giderme 101",
-          "description": "Klinik çalışmalar, salınımlı–dönen başlığa sahip elektrikli fırçaların 3 aylık kullanım sonunda manuel fırçalara göre %21'e kadar daha fazla plak uzaklaştırdığını gösteriyor (Cochrane Derlemesi 2020)."
-        },
-        "replaceInterval": {
-          "title": "Başlığı 90 günde bir değiştir",
-          "description": "Yaklaşık 3 ay sonra kıllar açılır ve plak giderme %40'a kadar düşer. ADA ve FDI bu nedenle fırçayı (veya başlığı) 90 günde bir ya da kıllar erken yıpranırsa daha önce değiştirmeyi önerir."
-        },
-        "fluorideTiming": {
-          "title": "Florürü durulama",
-          "description": "Fırçalama sonrası yalnızca tükür; suyla çalkalama. Mine üzerinde 1 450 ppm florürden ince bir film bırakmak çürük riskini ~%25 azaltabilir (Public Health England 2017)."
-        },
-        "pressure": {
-          "title": "Baskıyı hafif tut",
-          "description": "Daha sert bastırmak = daha temiz değil. 150 g'den fazla kuvvet diş eti çekilmesine yol açabilir; plak giderme ~100 g civarında plato yapar. İşin çoğunu kıllara bırak."
-        },
-        "tongueClean": {
-          "title": "Dili unutma",
-          "description": "Ağız kokusuna neden olan bileşiklerin %60–90'ı dilin arka yüzeyinden gelir. 10 saniyelik hızlı bir dil temizliği bu uçucu kükürt bileşiklerini yarı yarıya azaltabilir."
-        }
-      },
-      "item": "Diş Fırçası",
-      "defaultNames": {
-        "firstBrush": "İlk Fırçam",
-        "manualToothbrush": "Manuel Fırça",
-        "electricToothbrush": "Elektrikli Fırça"
-      },
-      "picker": {
-        "nameLabel": "İsim",
-        "namePlaceholder": "ör. Günlük Fırça",
-        "age": "Fırça yaşı",
-        "type": "Tip",
-        "head": "Fırça başlığı",
-        "save": "Fırça ekle"
-      },
-      "agePreset": {
-        "brandNew_short": "Yeni ✨",
-        "lessThan1Week_short": "<1 hafta",
-        "oneTwoWeeks_short": "1-2 hafta",
-        "threeFourWeeks_short": "3-4 hafta",
-        "twoMonths_short": "2 ay",
-        "threeMonths_short": "3 ay"
-      }
-    },
-    "homeScreen": {
-      "streakCard": {
-        "daysStreak": "günlük seri"
-      },
-      "brushingTimeCard": {
-        "minutes": "dakika"
-      },
-      "toothbrushCard": {
-        "replaceSoon": "Yakında değiştirmelisin",
-        "daysUnit": "gün"
-      }
-    },
-    "chatOverlay": {
-      "smileTeamName": "Smile Ekibi",
-      "welcomeMessage": "Kişisel gülümseme yolculuğuna hoş geldin! Bugün nasıl yardımcı olabiliriz?",
-      "justNow": "Az önce",
-      "typeMessagePlaceholder": "Mesajını yaz...",
-      "sendButton": "Gönder"
-    },
-    "menuOverlay": {
-      "title": "Menü",
-      "profile": {
-        "name": "Profil",
-        "description": "Profil ve ayarları yönet"
-      },
-      "statistics": {
-        "name": "İstatistikler",
-        "description": "Fırçalama istatistiklerini görüntüle"
-      },
-      "reminders": {
-        "name": "Hatırlatıcılar",
-        "description": "Fırçalama hatırlatıcılarını ayarla"
-      },
-      "achievements": {
-        "name": "Başarılar",
-        "description": "Fırçalama başarılarını kontrol et"
-      },
-      "settings": {
-        "name": "ayarlar",
-        "description": "Uygulama ayarları ve tercihler",
-        "appSettings": {
-          "title": "Uygulama Ayarları"
-        },
-        "resetOnboarding": {
-          "name": "Onboardingi Sıfırla",
-          "title": "Onboardingi Sıfırla",
-          "message": "Onboarding akışını sıfırlamak istediğinize emin misiniz? Karşılama ekranına yönlendirileceksiniz.",
-          "confirm": "Sıfırla"
-        },
-        "theme": {
-          "name": "Uygulama Teması"
-        },
-        "mascotTone": {
-          "name": "Maskot Tonu",
-          "selectTitle": "Nubo'nun Tonunu Seç",
-          "error": {
-            "title": "Ton Hatası",
-            "message": "Maskot tonu değiştirilemedi. Lütfen tekrar deneyin."
-          }
-        },
-        "language": {
-          "name": "Dil",
-          "selectTitle": "Dil Seç",
-          "error": {
-            "title": "Dil Hatası",
-            "message": "Dil değiştirilemedi. Lütfen tekrar deneyin."
-          }
-        },
-        "about": {
-          "title": "Hakkında"
-        },
-        "appVersion": {
-          "name": "Uygulama Sürümü"
-        },
-        "brushingSettings": {
-          "title": "Fırçalama Ayarları",
-          "reminderTime": "Hatırlatma Saati",
-          "frequency": "Fırçalama Sıklığı",
-          "targetTime": "Hedef Süre",
-          "toothbrush": "Fırça Menüsü"
-        },
-        "reminderTimes": {
-          "none": "Yok",
-          "one": "1 hatırlatma",
-          "multiple": "{{count}} hatırlatma",
-          "selectTitle": "Hatırlatma Saatleri",
-          "morning": "Sabah",
-          "afternoon": "Öğleden Sonra",
-          "evening": "Akşam",
-          "night": "Yatmadan Önce",
-          "custom": "Özel",
-          "customBadge": "Özel",
-          "editTime": "Saati Düzenle",
-          "addTime": "Yeni Saat Ekle",
-          "addNew": "Yeni Hatırlatma Ekle",
-          "nameLabel": "Hatırlatma Adı",
-          "hour": "Saat",
-          "minute": "Dakika",
-          "addReminder": "Ekle",
-          "error": {
-            "title": "Hatırlatma Hatası",
-            "message": "Hatırlatma zamanı güncellenemedi. Lütfen tekrar deneyin."
-          }
-        },
-        "dailyFrequency": {
-          "selectTitle": "Günlük Sıklık",
-          "options": {
-            "minimal_label": "Günde 1 kez",
-            "minimal_description": "Temel bakım",
-            "standard_label": "Günde 2 kez",
-            "standard_description": "Sabah ve akşam",
-            "standard_short": "2 kez",
-            "recommended_label": "Günde 3 kez",
-            "recommended_description": "Her öğünden sonra",
-            "comprehensive_label": "Günde 4+ kez",
-            "comprehensive_description": "Maksimum bakım"
-          },
-          "countFormat": "{{count}} kez",
-          "error": {
-            "title": "Sıklık Hatası",
-            "message": "Günlük fırçalama sıklığı değiştirilemedi. Lütfen tekrar deneyin."
-          }
-        },
-        "brushingTarget": {
-          "selectTitle": "Hedef Süre",
-          "options": {
-            "quick_label": "1.5 dakika",
-            "quick_description": "Hızlı ama etkili",
-            "standard_label": "2 dakika",
-            "standard_description": "Diş hekimi önerisi",
-            "thorough_label": "3 dakika",
-            "thorough_description": "Ekstra detaylı temizlik",
-            "comprehensive_label": "4 dakika",
-            "comprehensive_description": "Kapsamlı bakım"
-          },
-          "error": {
-            "title": "Hedef Hatası",
-            "message": "Fırçalama hedefi değiştirilemedi. Lütfen tekrar deneyin."
-          }
-        }
-      }
-    },
-    "timerOverlay": {
-      "start": "Başla",
-      "pause": "Duraklat",
-      "resume": "Devam Et",
-      "stop": "Durdur",
-      "done": "Bitti",
-      "skip": "Atla",
+  "common": {
+    "ok": "Tamam",
+    "cancel": "İptal",
+    "Continue": "Devam",
+    "save": "Kaydet",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "add": "Ekle",
+    "loading": "Yükleniyor...",
+    "saving": "Kaydediliyor...",
+    "tryAgain": "Tekrar Dene"
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español",
+    "de": "Deutsch",
+    "fr": "Français",
+    "tr": "Türkçe",
+    "pt": "Português",
+    "ja": "日本語",
+    "hi": "हिन्दी"
+  },
+  "onboarding": {
+    "mascotGreetingStage1": "Bu uygulama, gülüşünü ışıldatman için bilimsel temellere dayanıyor ✨",
+    "mascotGreetingStage2": "Günde sadece birkaç dakika ayırmak, gülüşün için büyük fark yaratır. ⏱️",
+    "mascotGreetingStage3": "Bu yolculukta Nubo yanında olacak, hadi önce seni tanıyalım! 🤝✨",
+    "actions": {
+      "skip": "Geç",
       "next": "İleri",
-      "finishBrushing": "Fırçalamayı Bitir",
-      "songMenuTitle": "Bir şarkı seç",
-      "selectSong": "Şarkı Seç",
-      "restart": "Yeniden",
-      "brushed": "Fırçalandı",
-      "songMenu": {
-        "rainyMood": "Yağmurlu Hava",
-        "forestAmbience": "Orman Sesi",
-        "cafeSounds": "Kafe Sesleri",
-        "selectASound": "Bir ses seç",
-        "noSound": "Ses Yok"
+      "getStarted": "Başla"
+    },
+    "welcomeScreen": {
+      "mainTitle": "Smile App'e Hoş Geldin!",
+      "mainTitleApp": "Uygulamana\nhoş geldin",
+      "journeyTitle": "Gülümseme Yolculuğunu Kişiselleştir",
+      "checkpoint1": "Dilini Seç",
+      "checkpoint2": "Maskotunla Tanış",
+      "checkpoint3": "Hedeflerini Belirle",
+      "letsGoButton": "Hadi Başlayalım"
+    },
+    "languageSelectScreen": {
+      "title": "Dilini Seç"
+    },
+    "ageSelectionScreen": {
+      "title": "Kaç yaşındasın?",
+      "description": "Senin için egzersizleri buna göre filtreleyeceğiz",
+      "ageRange0_5": "0–5",
+      "ageRange6_12": "6–12",
+      "ageRange13_18": "13–18",
+      "ageRange19_29": "19–29",
+      "ageRange30_45": "30–45",
+      "ageRange46_60": "46–60",
+      "ageRange60_plus": "60+",
+      "question": "Yaşın kaç?",
+      "useForChildButton": "Çocuk Kullanımı",
+      "continueButton": "Devam"
+    },
+    "brushingGoalScreen": {
+      "title": "Fırçalama Hedefini Belirle",
+      "description": "Günde kaç kez dişlerini fırçalamak istersin? Diş hekimleri günde en az iki kez önerir.",
+      "optionsLabel_one": "Günde {{count}} kez",
+      "optionsLabel_other": "Günde {{count}} kez",
+      "question": "Günlük fırçalama hedefin:",
+      "startButton": "Hemen Başla"
+    },
+    "toothbrushDurationScreen": {
+      "title": "Fırça Süresi",
+      "description": "Diş fırçanı en son ne zaman değiştirdin?",
+      "options": {
+        "lessThan1Week": "1 haftadan az",
+        "oneToTwoWeeks": "1–2 hafta önce",
+        "threeToFourWeeks": "3–4 hafta önce",
+        "about2Months": "Yaklaşık 2 ay önce",
+        "about3Months": "Yaklaşık 3 ay önce",
+        "dontRemember": "Hatırlamıyorum"
+      },
+      "question": "Mevcut fırça yaşı:",
+      "startButton": "Hemen Başla"
+    },
+    "nuboToneScreen": {
+      "title": "Nubo'nun Tarzı",
+      "description": "Nubo'nun seninle nasıl iletişim kurmasını istersin?",
+      "options": {
+        "supportive_label": "Destekleyici",
+        "supportive_description": "Nazik ve yardımcı",
+        "playful_label": "Neşeli",
+        "playful_description": "Eğlenceli ve teşvik edici",
+        "cool_label": "Havalı",
+        "cool_description": "Kendinden emin ve net",
+        "wise_label": "Bilge",
+        "wise_description": "Anlayışlı ve sakin"
+      },
+      "question": "Nubo'nun tarzını seç",
+      "startButton": "Hemen Başla"
+    },
+    "signinScreen": {
+      "title": "Hesabına\nHoş Geldin",
+      "emailPlaceholder": "E-posta",
+      "passwordPlaceholder": "Şifre",
+      "submitButton": "Giriş Yap",
+      "orDivider": "veya",
+      "googleButton": "Google ile Giriş Yap",
+      "noAccountText": "Hesabın yok mu? ",
+      "signUpLink": "Kayıt Ol"
+    },
+    "signupScreen": {
+      "title": "Yeni Hesap\nOluştur",
+      "usernamePlaceholder": "Kullanıcı Adı",
+      "emailPlaceholder": "E-posta",
+      "submitButton": "Yolculuğa Başla",
+      "googleButton": "Google ile Kayıt Ol",
+      "hasAccountText": "Hesabın var mı? ",
+      "signInLink": "Giriş Yap"
+    }
+  },
+  "toothbrush": {
+    "title": "Diş Fırçası Menüsü",
+    "error": {
+      "title": "Hata",
+      "message": "Diş fırçası verileri kaydedilemedi. Lütfen tekrar deneyin."
+    },
+    "days": "Kullanım günü: {{count}}",
+    "current": {
+      "title": "Mevcut Fırça",
+      "none": "Yok",
+      "age": "{{days}}g günlük"
+    },
+    "type": {
+      "manual": "Manuel",
+      "electric": "Elektrikli"
+    },
+    "category": {
+      "regular": "Normal",
+      "braces": "Diş Teli",
+      "sensitive": "Hassas",
+      "whitening": "Beyazlatma"
+    },
+    "age": {
+      "oneMonth": "1 ay",
+      "months": "{{count}} ay",
+      "oneWeek": "1 hafta",
+      "weeks": "{{count}} hafta",
+      "oneDay": "1 gün",
+      "days": "{{count}} gün"
+    },
+    "status": {
+      "brandNew": "Yeni",
+      "fresh": "Taze",
+      "good": "İyi",
+      "due": "Yakında değiştir",
+      "overdue": "Gecikmiş"
+    },
+    "newBrush": {
+      "addNew": "Yeni Fırça Ekle"
+    },
+    "history": {
+      "title": "Fırça Geçmişi",
+      "ageDays": "{{count}} gün",
+      "brushings_one": "{{count}} fırçalama",
+      "brushings_other": "{{count}} fırçalama"
+    },
+    "infoCards": {
+      "title": "Fırça İpuçları",
+      "plaqueRemoval": {
+        "title": "Plak Giderme 101",
+        "description": "Klinik çalışmalar, salınımlı–dönen başlığa sahip elektrikli fırçaların 3 aylık kullanım sonunda manuel fırçalara göre %21'e kadar daha fazla plak uzaklaştırdığını gösteriyor (Cochrane Derlemesi 2020)."
+      },
+      "replaceInterval": {
+        "title": "Başlığı 90 günde bir değiştir",
+        "description": "Yaklaşık 3 ay sonra kıllar açılır ve plak giderme %40'a kadar düşer. ADA ve FDI bu nedenle fırçayı (veya başlığı) 90 günde bir ya da kıllar erken yıpranırsa daha önce değiştirmeyi önerir."
+      },
+      "fluorideTiming": {
+        "title": "Florürü durulama",
+        "description": "Fırçalama sonrası yalnızca tükür; suyla çalkalama. Mine üzerinde 1 450 ppm florürden ince bir film bırakmak çürük riskini ~%25 azaltabilir (Public Health England 2017)."
+      },
+      "pressure": {
+        "title": "Baskıyı hafif tut",
+        "description": "Daha sert bastırmak = daha temiz değil. 150 g'den fazla kuvvet diş eti çekilmesine yol açabilir; plak giderme ~100 g civarında plato yapar. İşin çoğunu kıllara bırak."
+      },
+      "tongueClean": {
+        "title": "Dili unutma",
+        "description": "Ağız kokusuna neden olan bileşiklerin %60–90'ı dilin arka yüzeyinden gelir. 10 saniyelik hızlı bir dil temizliği bu uçucu kükürt bileşiklerini yarı yarıya azaltabilir."
       }
     },
+    "item": "Diş Fırçası",
+    "defaultNames": {
+      "firstBrush": "İlk Fırçam",
+      "manualToothbrush": "Manuel Fırça",
+      "electricToothbrush": "Elektrikli Fırça"
+    },
+    "picker": {
+      "nameLabel": "İsim",
+      "namePlaceholder": "ör. Günlük Fırça",
+      "age": "Fırça yaşı",
+      "type": "Tip",
+      "head": "Fırça başlığı",
+      "save": "Fırça ekle"
+    },
+    "agePreset": {
+      "brandNew_short": "Yeni ✨",
+      "lessThan1Week_short": "<1 hafta",
+      "oneTwoWeeks_short": "1-2 hafta",
+      "threeFourWeeks_short": "3-4 hafta",
+      "twoMonths_short": "2 ay",
+      "threeMonths_short": "3 ay"
+    }
+  },
+  "homeScreen": {
+    "streakCard": {
+      "daysStreak": "günlük seri"
+    },
+    "brushingTimeCard": {
+      "minutes": "dakika"
+    },
+    "toothbrushCard": {
+      "replaceSoon": "Yakında değiştirmelisin",
+      "daysUnit": "gün"
+    }
+  },
+  "chatOverlay": {
+    "smileTeamName": "Smile Ekibi",
+    "welcomeMessage": "Kişisel gülümseme yolculuğuna hoş geldin! Bugün nasıl yardımcı olabiliriz?",
+    "justNow": "Az önce",
+    "typeMessagePlaceholder": "Mesajını yaz...",
+    "sendButton": "Gönder"
+  },
+  "menuOverlay": {
+    "title": "Menü",
+    "profile": {
+      "name": "Profil",
+      "description": "Profil ve ayarları yönet"
+    },
+    "statistics": {
+      "name": "İstatistikler",
+      "description": "Fırçalama istatistiklerini görüntüle"
+    },
+    "reminders": {
+      "name": "Hatırlatıcılar",
+      "description": "Fırçalama hatırlatıcılarını ayarla"
+    },
+    "achievements": {
+      "name": "Başarılar",
+      "description": "Fırçalama başarılarını kontrol et"
+    },
+    "settings": {
+      "name": "ayarlar",
+      "description": "Uygulama ayarları ve tercihler",
+      "appSettings": {
+        "title": "Uygulama Ayarları"
+      },
+      "resetOnboarding": {
+        "name": "Onboardingi Sıfırla",
+        "title": "Onboardingi Sıfırla",
+        "message": "Onboarding akışını sıfırlamak istediğinize emin misiniz? Karşılama ekranına yönlendirileceksiniz.",
+        "confirm": "Sıfırla"
+      },
+      "theme": {
+        "name": "Uygulama Teması"
+      },
+      "mascotTone": {
+        "name": "Maskot Tonu",
+        "selectTitle": "Nubo'nun Tonunu Seç",
+        "error": {
+          "title": "Ton Hatası",
+          "message": "Maskot tonu değiştirilemedi. Lütfen tekrar deneyin."
+        }
+      },
+      "language": {
+        "name": "Dil",
+        "selectTitle": "Dil Seç",
+        "error": {
+          "title": "Dil Hatası",
+          "message": "Dil değiştirilemedi. Lütfen tekrar deneyin."
+        }
+      },
+      "about": {
+        "title": "Hakkında"
+      },
+      "appVersion": {
+        "name": "Uygulama Sürümü"
+      },
+      "brushingSettings": {
+        "title": "Fırçalama Ayarları",
+        "reminderTime": "Hatırlatma Saati",
+        "frequency": "Fırçalama Sıklığı",
+        "targetTime": "Hedef Süre",
+        "toothbrush": "Fırça Menüsü"
+      },
+      "reminderTimes": {
+        "none": "Yok",
+        "one": "1 hatırlatma",
+        "multiple": "{{count}} hatırlatma",
+        "selectTitle": "Hatırlatma Saatleri",
+        "morning": "Sabah",
+        "afternoon": "Öğleden Sonra",
+        "evening": "Akşam",
+        "night": "Yatmadan Önce",
+        "custom": "Özel",
+        "customBadge": "Özel",
+        "editTime": "Saati Düzenle",
+        "addTime": "Yeni Saat Ekle",
+        "addNew": "Yeni Hatırlatma Ekle",
+        "nameLabel": "Hatırlatma Adı",
+        "hour": "Saat",
+        "minute": "Dakika",
+        "addReminder": "Ekle",
+        "error": {
+          "title": "Hatırlatma Hatası",
+          "message": "Hatırlatma zamanı güncellenemedi. Lütfen tekrar deneyin."
+        }
+      },
+      "dailyFrequency": {
+        "selectTitle": "Günlük Sıklık",
+        "options": {
+          "minimal_label": "Günde 1 kez",
+          "minimal_description": "Temel bakım",
+          "standard_label": "Günde 2 kez",
+          "standard_description": "Sabah ve akşam",
+          "standard_short": "2 kez",
+          "recommended_label": "Günde 3 kez",
+          "recommended_description": "Her öğünden sonra",
+          "comprehensive_label": "Günde 4+ kez",
+          "comprehensive_description": "Maksimum bakım"
+        },
+        "countFormat": "{{count}} kez",
+        "error": {
+          "title": "Sıklık Hatası",
+          "message": "Günlük fırçalama sıklığı değiştirilemedi. Lütfen tekrar deneyin."
+        }
+      },
+      "brushingTarget": {
+        "selectTitle": "Hedef Süre",
+        "options": {
+          "quick_label": "1.5 dakika",
+          "quick_description": "Hızlı ama etkili",
+          "standard_label": "2 dakika",
+          "standard_description": "Diş hekimi önerisi",
+          "thorough_label": "3 dakika",
+          "thorough_description": "Ekstra detaylı temizlik",
+          "comprehensive_label": "4 dakika",
+          "comprehensive_description": "Kapsamlı bakım"
+        },
+        "error": {
+          "title": "Hedef Hatası",
+          "message": "Fırçalama hedefi değiştirilemedi. Lütfen tekrar deneyin."
+        }
+      }
+    }
+  },
+  "timerOverlay": {
+    "start": "Başla",
+    "pause": "Duraklat",
+    "resume": "Devam Et",
+    "stop": "Durdur",
+    "done": "Bitti",
+    "skip": "Atla",
+    "next": "İleri",
+    "finishBrushing": "Fırçalamayı Bitir",
+    "songMenuTitle": "Bir şarkı seç",
+    "selectSong": "Şarkı Seç",
+    "restart": "Yeniden",
+    "brushed": "Fırçalandı",
+    "songMenu": {
+      "rainyMood": "Yağmurlu Hava",
+      "forestAmbience": "Orman Sesi",
+      "cafeSounds": "Kafe Sesleri",
+      "selectASound": "Bir ses seç",
+      "noSound": "Ses Yok"
+    }
+  },
   "toothbrushOverlay": {
     "title": "Diş Fırçan",
     "daysInUseText": "kullanım günü",
@@ -560,7 +417,6 @@
     "streakHistorySubtitle": "Tüm zamanların en iyi serilerin",
     "streakPeriodText": "{{startDate}} - {{endDate}} (1 Gün)",
     "streakPeriodText_plural": "{{startDate}} - {{endDate}} ({{count}} Gün})",
-
     "nuboMotivationTitle": "Nubo'nun Tırmanışı!",
     "nuboMotivationText": "Her seri günüyle birlikte Nubo dağda daha yükseğe tırmanıyor!",
     "nextSummitTitle": "Sonraki Zirve",
@@ -706,19 +562,18 @@
         "message": "Fırçalama hedefi değiştirilemedi. Lütfen tekrar deneyin."
       }
     },
-          "brushingTrend": {
-        "loading": "Son seansların analiz ediliyor…",
-    "improvingConsistently": "Harika bir istikrar! Fırçalama süren düzenli olarak artıyor.",
-  "improvingSlightly": "Güzel ilerleme! Önceye göre daha uzun fırçalıyorsun.",
-  "declining": "Fırçalama sürelerin biraz kısalmış gibi. Hadi tekrar ritme girelim!",
-  "consistentHigh": "Mükemmel! Hedef süreyi düzenli olarak yakalıyorsun.",
-  "consistentLow": "İstikrarlısın ama biraz daha uzun fırçalayarak hedefi yakalayabilirsin.",
-  "erratic": "Fırçalama sürelerin biraz dalgalı. Daha düzenli bir rutin oluşturalım mı?",
-  "stable": "Düzenli bir fırçalama rutinin var. Böyle devam!",
-  "notEnoughData": "Trend analizi için biraz daha fırçalamaya ihtiyacımız var!",
-  "newUser": "Hoş geldin! İlerlemeni görebilmek için birkaç seans daha tamamla."
-},
-
+    "brushingTrend": {
+      "loading": "Son seansların analiz ediliyor…",
+      "improvingConsistently": "Harika bir istikrar! Fırçalama süren düzenli olarak artıyor.",
+      "improvingSlightly": "Güzel ilerleme! Önceye göre daha uzun fırçalıyorsun.",
+      "declining": "Fırçalama sürelerin biraz kısalmış gibi. Hadi tekrar ritme girelim!",
+      "consistentHigh": "Mükemmel! Hedef süreyi düzenli olarak yakalıyorsun.",
+      "consistentLow": "İstikrarlısın ama biraz daha uzun fırçalayarak hedefi yakalayabilirsin.",
+      "erratic": "Fırçalama sürelerin biraz dalgalı. Daha düzenli bir rutin oluşturalım mı?",
+      "stable": "Düzenli bir fırçalama rutinin var. Böyle devam!",
+      "notEnoughData": "Trend analizi için biraz daha fırçalamaya ihtiyacımız var!",
+      "newUser": "Hoş geldin! İlerlemeni görebilmek için birkaç seans daha tamamla."
+    },
     "about": {
       "title": "Hakkında"
     },
@@ -727,5 +582,145 @@
     },
     "updateGoalError": "Hedef güncellenemedi. Lütfen tekrar deneyin.",
     "targetAchieved": "Hedefe ulaşıldı!"
+  },
+  "mascotGreetings": {
+    "v2": {
+      "supportive": {
+        "community": {
+          "community_brushing_now": {
+            "1": "[SUPPORTIVE_COMMUNITY_BRUSHING_NOW_1]"
+          },
+          "nubo_network_energy": {
+            "1": "[SUPPORTIVE_NUBO_NETWORK_ENERGY_1]"
+          },
+          "social_momentum": {
+            "1": "[SUPPORTIVE_SOCIAL_MOMENTUM_1]"
+          },
+          "late_night_others_brushed": {
+            "1": "[SUPPORTIVE_LATE_NIGHT_OTHERS_BRUSHED_1]"
+          },
+          "first_week_global_wave": {
+            "1": "[SUPPORTIVE_FIRST_WEEK_GLOBAL_WAVE_1]"
+          },
+          "nubo_day_event": {
+            "1": "[SUPPORTIVE_NUBO_DAY_EVENT_1]"
+          },
+          "community_across_timezones": {
+            "1": "[SUPPORTIVE_COMMUNITY_ACROSS_TIMEZONES_1]"
+          },
+          "brush_in_cities": {
+            "1": "[SUPPORTIVE_BRUSH_IN_CITIES_1]"
+          },
+          "nubo_watching": {
+            "1": "[SUPPORTIVE_NUBO_WATCHING_1]"
+          },
+          "nubo_broadcast": {
+            "1": "[SUPPORTIVE_NUBO_BROADCAST_1]"
+          }
+        }
+      },
+      "playful": {
+        "community": {
+          "community_brushing_now": {
+            "1": "[PLAYFUL_COMMUNITY_BRUSHING_NOW_1]"
+          },
+          "nubo_network_energy": {
+            "1": "[PLAYFUL_NUBO_NETWORK_ENERGY_1]"
+          },
+          "social_momentum": {
+            "1": "[PLAYFUL_SOCIAL_MOMENTUM_1]"
+          },
+          "late_night_others_brushed": {
+            "1": "[PLAYFUL_LATE_NIGHT_OTHERS_BRUSHED_1]"
+          },
+          "first_week_global_wave": {
+            "1": "[PLAYFUL_FIRST_WEEK_GLOBAL_WAVE_1]"
+          },
+          "nubo_day_event": {
+            "1": "[PLAYFUL_NUBO_DAY_EVENT_1]"
+          },
+          "community_across_timezones": {
+            "1": "[PLAYFUL_COMMUNITY_ACROSS_TIMEZONES_1]"
+          },
+          "brush_in_cities": {
+            "1": "[PLAYFUL_BRUSH_IN_CITIES_1]"
+          },
+          "nubo_watching": {
+            "1": "[PLAYFUL_NUBO_WATCHING_1]"
+          },
+          "nubo_broadcast": {
+            "1": "[PLAYFUL_NUBO_BROADCAST_1]"
+          }
+        }
+      },
+      "cool": {
+        "community": {
+          "community_brushing_now": {
+            "1": "[COOL_COMMUNITY_BRUSHING_NOW_1]"
+          },
+          "nubo_network_energy": {
+            "1": "[COOL_NUBO_NETWORK_ENERGY_1]"
+          },
+          "social_momentum": {
+            "1": "[COOL_SOCIAL_MOMENTUM_1]"
+          },
+          "late_night_others_brushed": {
+            "1": "[COOL_LATE_NIGHT_OTHERS_BRUSHED_1]"
+          },
+          "first_week_global_wave": {
+            "1": "[COOL_FIRST_WEEK_GLOBAL_WAVE_1]"
+          },
+          "nubo_day_event": {
+            "1": "[COOL_NUBO_DAY_EVENT_1]"
+          },
+          "community_across_timezones": {
+            "1": "[COOL_COMMUNITY_ACROSS_TIMEZONES_1]"
+          },
+          "brush_in_cities": {
+            "1": "[COOL_BRUSH_IN_CITIES_1]"
+          },
+          "nubo_watching": {
+            "1": "[COOL_NUBO_WATCHING_1]"
+          },
+          "nubo_broadcast": {
+            "1": "[COOL_NUBO_BROADCAST_1]"
+          }
+        }
+      },
+      "wise": {
+        "community": {
+          "community_brushing_now": {
+            "1": "[WISE_COMMUNITY_BRUSHING_NOW_1]"
+          },
+          "nubo_network_energy": {
+            "1": "[WISE_NUBO_NETWORK_ENERGY_1]"
+          },
+          "social_momentum": {
+            "1": "[WISE_SOCIAL_MOMENTUM_1]"
+          },
+          "late_night_others_brushed": {
+            "1": "[WISE_LATE_NIGHT_OTHERS_BRUSHED_1]"
+          },
+          "first_week_global_wave": {
+            "1": "[WISE_FIRST_WEEK_GLOBAL_WAVE_1]"
+          },
+          "nubo_day_event": {
+            "1": "[WISE_NUBO_DAY_EVENT_1]"
+          },
+          "community_across_timezones": {
+            "1": "[WISE_COMMUNITY_ACROSS_TIMEZONES_1]"
+          },
+          "brush_in_cities": {
+            "1": "[WISE_BRUSH_IN_CITIES_1]"
+          },
+          "nubo_watching": {
+            "1": "[WISE_NUBO_WATCHING_1]"
+          },
+          "nubo_broadcast": {
+            "1": "[WISE_NUBO_BROADCAST_1]"
+          }
+        }
+      }
+    }
   }
 }

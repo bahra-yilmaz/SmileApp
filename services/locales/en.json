@@ -208,6 +208,38 @@
           "dry_brush_fact": {
             "1": "Even without paste, {{username}}, a quick dry brush is still a win."
           }
+        },
+        "community": {
+          "community_brushing_now": {
+            "1": "You're not alone in this, {{username}}. Thousands are brushing with you right now 💙"
+          },
+          "nubo_network_energy": {
+            "1": "You're part of Nubo's circle now, {{username}}. A little tribe of tiny rituals."
+          },
+          "social_momentum": {
+            "1": "So many others have shown up this week. And {{username}}, you're one of them."
+          },
+          "late_night_others_brushed": {
+            "1": "You're not the only one brushing late tonight, {{username}} — we see you all."
+          },
+          "first_week_global_wave": {
+            "1": "Lots of new faces joined Nubo this week, {{username}}. You're in good company."
+          },
+          "nubo_day_event": {
+            "1": "It's Nubo Day! You brushed on the perfect day, {{username}} 🥹🪥"
+          },
+          "community_across_timezones": {
+            "1": "Somewhere in the world, someone else is brushing right now too, {{username}}."
+          },
+          "brush_in_cities": {
+            "1": "From cities to villages, brushing links us all. You're part of that, {{username}}."
+          },
+          "nubo_watching": {
+            "1": "Nubo saw that brush, {{username}} — and got all emotional 🥹"
+          },
+          "nubo_broadcast": {
+            "1": "Nubo's broadcasting: '{{username}} joined today's clean wave!' 📡"
+          }
         }
       },
       "playful": {
@@ -347,6 +379,38 @@
           "dry_brush_fact": {
             "1": "No paste? No problem. Go full dry-ninja mode 🥷🪥"
           }
+        },
+        "community": {
+          "community_brushing_now": {
+            "1": "Right now? Brushing squad is live worldwide 🪥🌐"
+          },
+          "nubo_network_energy": {
+            "1": "Nubo Network active: {{username}} online ✅ Sparkle Signal strong 💫"
+          },
+          "social_momentum": {
+            "1": "Brushing leaderboard? Poppin'. You're officially trending 😎"
+          },
+          "late_night_others_brushed": {
+            "1": "It's late. But Nubo's night squad never sleeps 🌙🪥"
+          },
+          "first_week_global_wave": {
+            "1": "New Nubo crew just dropped. Sparkle party incoming 🎉"
+          },
+          "nubo_day_event": {
+            "1": "🎈 Happy Nubo Day! Everyone gets extra mint today 🍃✨"
+          },
+          "community_across_timezones": {
+            "1": "Time zones? More like grind zones 🗺️ Everyone's brushing."
+          },
+          "brush_in_cities": {
+            "1": "From Tokyo to Toronto, the brush revolution is on 🌆🪥"
+          },
+          "nubo_watching": {
+            "1": "Nubo peeked in and screamed: 'LOOK AT {{username}} GO!' 😭🪥"
+          },
+          "nubo_broadcast": {
+            "1": "Nubo just added {{username}} to the Clean Legend Feed™ 💾🪥"
+          }
         }
       },
       "cool": {
@@ -481,6 +545,38 @@
           "dry_brush_fact": {
             "1": "No paste? Still a chance to stay sharp, {{username}}. Dry brushing saves the day."
           }
+        },
+        "community": {
+          "community_brushing_now": {
+            "1": "Brushing ain't solo. You're synced with the global clean crew, {{username}}."
+          },
+          "nubo_network_energy": {
+            "1": "You're logged into NuboNet™ — where clean vibes flow 24/7, {{username}}."
+          },
+          "social_momentum": {
+            "1": "This week's been clean for many. You? You've been elite, {{username}}."
+          },
+          "late_night_others_brushed": {
+            "1": "Past midnight? You're brushing with the real ones, {{username}}."
+          },
+          "first_week_global_wave": {
+            "1": "Fresh wave. Fresh faces. Welcome to the movement, {{username}}."
+          },
+          "nubo_day_event": {
+            "1": "Clean vibes only. It's Nubo Day, {{username}}. Let's glow."
+          },
+          "community_across_timezones": {
+            "1": "Different clocks. Same clean energy. Worldwide brush gang, {{username}}."
+          },
+          "brush_in_cities": {
+            "1": "Big cities. Bright smiles. Brushing is universal, {{username}}."
+          },
+          "nubo_watching": {
+            "1": "Nubo saw it. Said nothing. Just nodded in respect, {{username}}."
+          },
+          "nubo_broadcast": {
+            "1": "Confirmed: {{username}} brushed. Message transmitted. Status: 🔥"
+          }
         }
       },
       "wise": {
@@ -614,6 +710,38 @@
           },
           "dry_brush_fact": {
             "1": "When you can’t do it perfectly — do it anyway. Even dry brushing clears harm."
+          }
+        },
+        "community": {
+          "community_brushing_now": {
+            "1": "At this moment, across time zones, quiet care is happening — just like yours."
+          },
+          "nubo_network_energy": {
+            "1": "Somewhere in the cloud, others like you are brushing with intent. That matters."
+          },
+          "social_momentum": {
+            "1": "This week, quiet actions added up. Yours included."
+          },
+          "late_night_others_brushed": {
+            "1": "Across bedrooms and cities, someone else chose care at this hour too."
+          },
+          "first_week_global_wave": {
+            "1": "Every wave starts with a few bold steps. Welcome to the ripple."
+          },
+          "nubo_day_event": {
+            "1": "Today is Nubo Day — a small reminder that every ritual counts."
+          },
+          "community_across_timezones": {
+            "1": "Across continents, care continues — one brush at a time."
+          },
+          "brush_in_cities": {
+            "1": "In the heart of busy streets, care still finds time."
+          },
+          "nubo_watching": {
+            "1": "Even when you don't notice, Nubo notices the effort."
+          },
+          "nubo_broadcast": {
+            "1": "Nubo's data board lit up with your action. It matters."
           }
         }
       }
@@ -1188,137 +1316,5 @@
     },
     "item": "Toothbrush",
     "firstBrush": "First Brush"
-  },
-  "mascot": {
-    "community": {
-      "supportive": {
-        "community_brushing_now": {
-          "1": "You’re not alone in this, {{username}}. Thousands are brushing with you right now 💙"
-        },
-        "nubo_network_energy": {
-          "1": "You're part of Nubo’s circle now, {{username}}. A little tribe of tiny rituals."
-        },
-        "social_momentum": {
-          "1": "So many others have shown up this week. And {{username}}, you’re one of them."
-        },
-        "late_night_others_brushed": {
-          "1": "You're not the only one brushing late tonight, {{username}} — we see you all."
-        },
-        "first_week_global_wave": {
-          "1": "Lots of new faces joined Nubo this week, {{username}}. You’re in good company."
-        },
-        "nubo_day_event": {
-          "1": "It’s Nubo Day! You brushed on the perfect day, {{username}} 🥹🪥"
-        },
-        "community_across_timezones": {
-          "1": "Somewhere in the world, someone else is brushing right now too, {{username}}."
-        },
-        "brush_in_cities": {
-          "1": "From cities to villages, brushing links us all. You’re part of that, {{username}}."
-        },
-        "nubo_watching": {
-          "1": "Nubo saw that brush, {{username}} — and got all emotional 🥹"
-        },
-        "nubo_broadcast": {
-          "1": "Nubo’s broadcasting: ‘{{username}} joined today’s clean wave!’ 📡"
-        }
-      },
-      "playful": {
-        "community_brushing_now": {
-          "1": "Right now? Brushing squad is live worldwide 🪥🌐"
-        },
-        "nubo_network_energy": {
-          "1": "Nubo Network active: {{username}} online ✅ Sparkle Signal strong 💫"
-        },
-        "social_momentum": {
-          "1": "Brushing leaderboard? Poppin’. You’re officially trending 😎"
-        },
-        "late_night_others_brushed": {
-          "1": "It’s late. But Nubo’s night squad never sleeps 🌙🪥"
-        },
-        "first_week_global_wave": {
-          "1": "New Nubo crew just dropped. Sparkle party incoming 🎉"
-        },
-        "nubo_day_event": {
-          "1": "🎈 Happy Nubo Day! Everyone gets extra mint today 🍃✨"
-        },
-        "community_across_timezones": {
-          "1": "Time zones? More like grind zones 🗺️ Everyone’s brushing."
-        },
-        "brush_in_cities": {
-          "1": "From Tokyo to Toronto, the brush revolution is on 🌆🪥"
-        },
-        "nubo_watching": {
-          "1": "Nubo peeked in and screamed: ‘LOOK AT {{username}} GO!’ 😭🪥"
-        },
-        "nubo_broadcast": {
-          "1": "Nubo just added {{username}} to the Clean Legend Feed™ 💾🪥"
-        }
-      },
-      "cool": {
-        "community_brushing_now": {
-          "1": "[COOL_COMMUNITY_BRUSHING_NOW_1]"
-        },
-        "nubo_network_energy": {
-          "1": "[COOL_NUBO_NETWORK_ENERGY_1]"
-        },
-        "social_momentum": {
-          "1": "[COOL_SOCIAL_MOMENTUM_1]"
-        },
-        "late_night_others_brushed": {
-          "1": "[COOL_LATE_NIGHT_OTHERS_BRUSHED_1]"
-        },
-        "first_week_global_wave": {
-          "1": "[COOL_FIRST_WEEK_GLOBAL_WAVE_1]"
-        },
-        "nubo_day_event": {
-          "1": "[COOL_NUBO_DAY_EVENT_1]"
-        },
-        "community_across_timezones": {
-          "1": "[COOL_COMMUNITY_ACROSS_TIMEZONES_1]"
-        },
-        "brush_in_cities": {
-          "1": "[COOL_BRUSH_IN_CITIES_1]"
-        },
-        "nubo_watching": {
-          "1": "[COOL_NUBO_WATCHING_1]"
-        },
-        "nubo_broadcast": {
-          "1": "[COOL_NUBO_BROADCAST_1]"
-        }
-      },
-      "wise": {
-        "community_brushing_now": {
-          "1": "[WISE_COMMUNITY_BRUSHING_NOW_1]"
-        },
-        "nubo_network_energy": {
-          "1": "[WISE_NUBO_NETWORK_ENERGY_1]"
-        },
-        "social_momentum": {
-          "1": "[WISE_SOCIAL_MOMENTUM_1]"
-        },
-        "late_night_others_brushed": {
-          "1": "[WISE_LATE_NIGHT_OTHERS_BRUSHED_1]"
-        },
-        "first_week_global_wave": {
-          "1": "[WISE_FIRST_WEEK_GLOBAL_WAVE_1]"
-        },
-        "nubo_day_event": {
-          "1": "[WISE_NUBO_DAY_EVENT_1]"
-        },
-        "community_across_timezones": {
-          "1": "[WISE_COMMUNITY_ACROSS_TIMEZONES_1]"
-        },
-        "brush_in_cities": {
-          "1": "[WISE_BRUSH_IN_CITIES_1]"
-        },
-        "nubo_watching": {
-          "1": "[WISE_NUBO_WATCHING_1]"
-        },
-        "nubo_broadcast": {
-          "1": "[WISE_NUBO_BROADCAST_1]"
-        }
-      }
-    }
   }
 }

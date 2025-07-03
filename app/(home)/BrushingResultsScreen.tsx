@@ -142,7 +142,7 @@ const BrushingResultsScreen = () => {
         const context: GreetingContext = {
           ...baseContext,
           userId: user?.id || 'guest',
-          forceCategory: 'informative', // Force informative category
+          forceCategory: 'community', // Force community category
           variables: {
             username: user?.user_metadata?.username || user?.email?.split('@')[0] || 'there',
           },

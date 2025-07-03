@@ -1,446 +1,303 @@
 {
-    "mascotGreetings": {
-      "defaultHello": "Bonjour !",
-      "smileJourney": "Salut ! 👋 Commençons ton voyage vers un beau sourire !",
-      "welcomeBack": "Bon retour ! Prêt à illuminer ta journée ?",
-      "pearlyWhites": "Petit check-up ! Comment vont tes jolies dents blanches ?",
-      "nuboHelp": "Nubo est là pour t'aider à sourire davantage !",
-      "wavingWithGlassesPP": {
-        "greeting1": "Salut ! Nubo ici, je te salue avec mes super lunettes !",
-        "greeting2": "Juste un petit coucou !",
-        "tip1": "Rappelle-toi : un petit geste amical peut illuminer la journée de quelqu'un !"
-      },
-      "brushingTime": {
-        "reminder1": "C'est l'heure du brossage ! Fais briller tes dents.",
-        "fact1": "Savais-tu que 2 minutes de brossage, c'est l'idéal ?",
-        "encouragement1": "Continue tes bonnes habitudes de brossage !"
-      },
-      "generalGreetings": {
-        "niceDay": "Passe une journée fantastique !",
-        "keepSmiling": "Continue de sourire, ça te va à merveille !"
-      },
-      "playfulReminders": {
-        "hollywoodSmile": "Donne-moi une minute et rapproche-toi de ce sourire Hollywood 🎬😁",
-        "toothFairyResigning": "Si tu sautes le brossage aujourd'hui… la petite souris démissionne. Sérieusement. 🧚‍♀️❌",
-        "breakAlgorithm": "Si tu oublies aujourd'hui, je casse l'algorithme. Alertes aléatoires à 19h37 pour toujours 😈",
-        "notTherapist": "Je suis ta mascotte, pas ton psy. Ma patience a des limites 😶‍🌫️",
-        "boringMascot": "Pas de brillance aujourd'hui ? Très bien. Je pars et j'envoie une mascotte ennuyeuse 💅",
-        "brushDanceTrade": "Tu brosses, je danse. Marché équitable.",
-        "cleanedSneakers": "J'ai nettoyé mes baskets pour ça. Ne me fais pas attendre près du lavabo.",
-        "brushWantsAction": "Cette brosse veut de l'action. Pas du blabla.",
-        "shineBragPartnership": "Tu brilles, je me vante. Gardons ce partenariat en forme.",
-        "mirrorLosesRespect": "Un jour sans brossage et ton miroir te perdra le respect. Crois-moi."
-    },
-      "cool": {
-        "routineLocked": "Routine verrouillée. Reste concentré.",
-        "sharpenTheSmile": "Aiguise ton sourire. Domine la journée.",
-        "smileInsurance": "Assurance sourire activée. À la brosse !",
-        "mirrorsWaiting": "Le miroir attend ton éclat. Prêt ?",
-        "brushingBigFlex": "Brossage : petit effort, gros style.",
-        "shadesForShine": "Je mets mes lunettes pour ton éclat.",
-        "lessCavitiesMoreConfidence": "Moins de caries. Plus de confiance.",
-        "brushGameStrong": "Garde ton niveau de brossage au top.",
-        "dentistJealous": "Faisons jalouser ton dentiste aujourd'hui.",
-        "dullTeethCouldnBeUs": "Dents ternes ? Pas chez nous.",
-        "goodHabitsShinyStats": "Bonnes habitudes = stats brillantes. On upgrade ?",
-        "toothbrushReady": "Brosse prête. À toi de jouer.",
-        "morningFlex": "Brossage du matin, confiance toute la journée.",
-        "noPlaqueZone": "Zone sans plaque ici.",
-        "futureSmile": "Brosse aujourd'hui. Brille demain.",
-        "confidenceLoaded": "Confiance chargée. C'est parti.",
-        "shineProtocol": "Protocole de brillance activé.",
-        "nextLevelSmile": "Sourire niveau supérieur débloqué.",
-        "tinyMoveBigWin": "Petit geste, grande victoire.",
-        "sparkleUpgrade": "Mise à niveau scintillante en cours."
-      },
-      "wise": {
-        "smallSteps": "Les petits pas font les grandes habitudes.",
-        "dailyDiscipline": "La discipline façonne chaque sourire.",
-        "foundationOfConfidence": "La constance est la base de la confiance.",
-        "eachBrushMatters": "Chaque brossage compte. Sans exception.",
-        "investInFuture": "Chaque brossage est un investissement pour ton futur.",
-        "quietProgress": "Le progrès chuchote avant de briller.",
-        "healthIsWealth": "La santé est la vraie richesse.",
-        "showUpDaily": "Présent chaque jour. La routine crée l'excellence.",
-        "patternsCreateDestiny": "Tes habitudes créent ton destin.",
-        "strongRoots": "Les sourires solides ont des racines solides.",
-        "smallActOfMastery": "Chaque brossage est un petit acte de maîtrise.",
-        "disciplineToday": "Discipline aujourd'hui. Liberté demain.",
-        "lastingResults": "Des gestes constants produisent des résultats durables.",
-        "precisionCreatesStrength": "La force réside dans les détails.",
-        "habitsShapeYou": "Tes habitudes te forment en silence.",
-        "disciplineSharpens": "La discipline aiguise. La patience construit.",
-        "neverWasteBrush": "Aucun brossage n'est perdu. Tous comptent.",
-        "controlWhatYouCan": "Maîtrise ce que tu peux. Laisse la constance guider.",
-        "precisionMatters": "La maîtrise vit dans les détails.",
-        "riseEveryDay": "Lève-toi chaque jour. Répète l'effort."
-      },
-      "playful": {
-        "letThePartyBegin": "Brosse prête. Que la fête commence ! 🎉",
-        "dontLeaveMeHanging": "Me laisse pas tomber, pote ! 🪥",
-        "missionSparkle": "Mission éclat : acceptée 🚀",
-        "teethMissMe": "Tes dents me manquent déjà 🦷",
-        "noPlaqueParty": "Pas de plaque à cette fête 🎊",
-        "squadGoals": "Objectif d'équipe : mode brossage.",
-        "toothFairtyProud": "La petite souris est fière 🧚‍♀️",
-        "shinyAttack": "Attaque brillante en approche ⚔️✨",
-        "plaqueWho": "La plaque ? Jamais entendu parler.",
-        "timeToShine": "À toi de briller ✨",
-        "dailySmileQuest": "Quête du sourire quotidienne : activée 🎯",
-        "brushingRemix": "Lançons le remix du brossage 🎧",
-        "smileRecipe": "Recette du sourire : brosse, rince, brille !",
-        "sparkleGame": "Ton niveau de brillance est fort 💎",
-        "streakDance": "C'est l'heure de la danse des séries 🕺",
-        "zeroBrushDrama": "Zéro drame de brossage aujourd'hui 😎",
-        "partyStarter": "Je suis ton DJ du brossage 🎤",
-        "shineChampion": "Champion du shine en place 👑",
-        "toothbrushHype": "Ta brosse est au taquet 🔥",
-        "tinyMovesBigSmile": "Petits gestes, grand sourire 🌟"
-      },
-      "supportive": {
-        "youShowedUp": "Tu es là. C'est le plus important.",
-        "smallWinsBigSmiles": "Petites victoires, grands sourires.",
-        "littleByLittle": "Petit à petit — tu y arrives.",
-        "freshStart": "Chaque jour est un nouveau départ. Aujourd'hui aussi.",
-        "rightHereWithYou": "Je suis là avec toi. Toujours.",
-        "progressNotPerfection": "Le progrès avant la perfection.",
-        "tinyHabitsMatter": "Les petites habitudes font de grandes routines.",
-        "yourSmileDeservesThis": "Ton sourire mérite ce soin.",
-        "brighterStep": "Chaque brossage est un pas lumineux.",
-        "gentleReminder": "Petit rappel : tu fais mieux que tu ne le crois.",
-        "strongerEachDay": "Des habitudes plus fortes, un toi plus fort.",
-        "kindToYourself": "Sois doux avec toi-même. Le progrès prend du temps.",
-        "thisMatters": "Ce moment compte plus que tu ne le penses.",
-        "quietProgress": "Le progrès discret est quand même du progrès.",
-        "consistentCare": "Le soin régulier crée la confiance.",
-        "keepShowingUp": "Continue de venir. C'est ça qui compte.",
-        "showingUpStrong": "La présence construit la force.",
-        "streakOrNoStreak": "Série ou pas — tu es là.",
-        "gentleVictory": "Ce moment est une petite victoire.",
-        "todayCounts": "Aujourd'hui compte. Toujours."
-      },
-      "neutral": {
-  "brushTime": "C'est l'heure du brossage ! 🕰️",
-  "sparkleLoading": "Chargement du scintillement… ⏳✨",
-  "plaqueReminder": "Spoiler : la plaque ne prend jamais de congé.",
-  "freshFeeling": "Cette sensation de fraîcheur est unique.",
-  "brushingCrew": "De retour dans l'équipe de brossage ! 🪥",
-  "mintyMission": "Mission mentholée activée.",
-  "shineReady": "Prêt pour faire briller ton sourire.",
-  "dailyBrushThing": "Juste ton brossage quotidien. Rien d'extra.",
-  "tinyBrushingRitual": "Petit rituel. Grand coup de frais.",
-  "mirrorApproved": "Le miroir va adorer.",
-  "happyTeethDance": "Tes dents dansent de joie 💃",
-  "routineFeelsGood": "Cette routine fait du bien, non ?",
-  "brushingRoutineBack": "La routine de brossage est de retour !",
-  "smileMaintenance": "Maintenance du sourire en cours 🛠️",
-  "clearedForShine": "Autorisé pour un maximum d'éclat ✨",
-  "dailyDefense": "Défense quotidienne activée 🛡️",
-  "fresherAlready": "Tu es déjà plus frais.",
-  "mintMode": "Mode menthe : ACTIVÉ 🌿",
-  "quickWin": "Petite victoire pour ton sourire.",
-  "smallMoveBigFresh": "Petit geste, grande fraîcheur."
-}
-    },
-    "common": {
-      "ok": "OK",
-      "cancel": "Annuler",
-      "Continue": "Continuer",
-      "save": "Enregistrer",
-      "edit": "Éditer",
-      "delete": "Supprimer",
-      "add": "Ajouter"
-    },
-    "languages": {
-      "en": "English",
-      "es": "Español",
-      "de": "Deutsch",
-      "fr": "Français"
-    },
-    "onboarding": {
-      "mascotGreetingStage1": "Ceci est une application scientifique pour vous aider à illuminer votre sourire ✨",
-      "mascotGreetingStage2": "Quelques minutes par jour peuvent faire une grande différence pour votre sourire. ⏱️",
-      "mascotGreetingStage3": "Nubo sera avec vous dans ce voyage, faisons connaissance ! 🤝✨",
-      "actions": {
-        "skip": "Passer",
-        "next": "Suivant",
-        "getStarted": "Commencer"
-      },
-      "welcomeScreen": {
-        "mainTitle": "Bienvenue sur Smile App !",
-        "mainTitleApp": "Bienvenue sur\nvotre application",
-        "journeyTitle": "Personnalisez votre parcours sourire",
-        "checkpoint1": "Choisissez votre langue",
-        "checkpoint2": "Rencontrez votre mascotte",
-        "checkpoint3": "Fixez vos objectifs",
-        "letsGoButton": "C'est parti"
-      },
-      "languageSelectScreen": {
-        "title": "Choisissez votre\nlangue"
-      },
-      "ageSelectionScreen": {
-        "title": "Quel âge as-tu ?",
-        "description": "Cela nous aide à filtrer les exercices pour toi",
-        "ageRange0_5": "0–5",
-        "ageRange6_12": "6–12",
-        "ageRange13_18": "13–18",
-        "ageRange19_29": "19–29",
-        "ageRange30_45": "30–45",
-        "ageRange46_60": "46–60",
-        "ageRange60_plus": "60+",
-        "question": "Quel est ton âge ?",
-        "useForChildButton": "Utilisation Enfant",
-        "continueButton": "Continuer"
-      },
-      "brushingGoalScreen": {
-        "title": "Fixe ton objectif de brossage",
-        "description": "Combien de fois veux-tu te brosser les dents par jour ? Les dentistes recommandent au moins deux fois.",
-        "optionsLabel_one": "{{count}} fois par jour",
-        "optionsLabel_other": "{{count}} fois par jour",
-        "question": "Ton objectif quotidien de brossage :",
-        "startButton": "Commencer maintenant"
-      },
-      "toothbrushDurationScreen": {
-        "title": "Durée de la brosse à dents",
-        "description": "Quand as-tu changé ta brosse pour la dernière fois ?",
-        "options": {
-          "lessThan1Week": "Moins d'une semaine",
-          "oneToTwoWeeks": "Il y a 1–2 semaines",
-          "threeToFourWeeks": "Il y a 3–4 semaines",
-          "about2Months": "Il y a environ 2 mois",
-          "about3Months": "Il y a environ 3 mois",
-          "dontRemember": "Je ne sais plus"
-        },
-        "question": "Âge actuel de la brosse :",
-        "startButton": "Commencer maintenant"
-      },
-      "nuboToneScreen": {
-        "title": "Le ton de Nubo",
-        "description": "Comment Nubo interagit avec toi",
-        "options": {
-          "supportive_label": "Soutenant",
-          "supportive_description": "Gentil et utile",
-          "playful_label": "Ludique",
-          "playful_description": "Amusant et encourageant",
-          "cool_label": "Cool",
-          "cool_description": "Confiant et direct",
-          "wise_label": "Sage",
-          "wise_description": "Perspicace et calme"
-        },
-        "question": "Choisis le ton de Nubo",
-        "startButton": "Commencer maintenant"
-      },
-      "signinScreen": {
-        "title": "Bienvenue dans\nton compte",
-        "emailPlaceholder": "Email",
-        "passwordPlaceholder": "Mot de passe",
-        "submitButton": "Entrer",
-        "orDivider": "ou",
-        "googleButton": "Se connecter avec Google",
-        "noAccountText": "Pas encore de compte ? ",
-        "signUpLink": "S'inscrire"
-      },
-      "signupScreen": {
-        "title": "Créer un\nnouveau compte",
-        "usernamePlaceholder": "Nom d'utilisateur",
-        "emailPlaceholder": "Email",
-        "submitButton": "Lancer le voyage",
-        "googleButton": "S'inscrire avec Google",
-        "hasAccountText": "Déjà un compte ? ",
-        "signInLink": "Se connecter"
-      }
-    },
-    "toothbrush": {
-      "title": "Menu Brosse",
-      "error": {
-        "title": "Erreur",
-        "message": "Impossible d'enregistrer la brosse. Réessaie."
-      },
-      "days": "Jours d'utilisation : {{count}}",
-      "current": {
-        "title": "Brosse Actuelle",
-        "none": "Aucune",
-        "age": "{{days}}j d'ancienneté"
-      },
-      "type": {
-        "manual": "Manuelle",
-        "electric": "Électrique"
-      },
-      "category": {
-        "regular": "Classique",
-        "braces": "Appareil",
-        "sensitive": "Sensible",
-        "whitening": "Blanchiment"
-      },
-      "age": {
-        "oneMonth": "1 mois",
-        "months": "{{count}} mois",
-        "oneWeek": "1 semaine",
-        "weeks": "{{count}} semaines",
-        "oneDay": "1 jour",
-        "days": "{{count}} jours"
-      },
-      "status": {
-        "brand_new": "Nouveau",
-        "fresh": "Frais",
-        "good": "Bon",
-        "replace_soon": "Remplacer Bientôt",
-        "overdue": "En Retard",
-        "addToothbrush": "Ajouter une brosse"
-      },
-      "newBrush": {
-        "addNew": "Ajouter une brosse"
-      },
-      "history": {
-        "title": "Historique des brosses",
-        "ageDays_one": "{{count}} jour",
-        "ageDays_other": "{{count}} jours",
-        "brushings_one": "{{count}} brossage",
-        "brushings_other": "{{count}} brossages"
-      },
-      "infoCards": {
-        "title": "Conseils sur les brosses",
-        "plaqueRemoval": {
-          "title": "Élimination de la plaque 101",
-          "description": "Des essais cliniques montrent que les brosses électriques à mouvement oscillant-rotatif éliminent jusqu'à 21 % de plaque en plus après 3 mois par rapport aux brosses manuelles (Revue Cochrane 2020)."
-        },
-        "replaceInterval": {
-          "title": "Change la tête tous les 90 jours",
-          "description": "Au bout d'environ 3 mois les brins s'écartent et retirent jusqu'à 40 % de plaque en moins. L'ADA et la FDI recommandent donc de remplacer la brosse (ou la tête) tous les 90 jours ou plus tôt si les brins s'usent."
-        },
-        "fluorideTiming": {
-          "title": "Ne rince pas le fluor",
-          "description": "Crache—sans rincer—après le brossage. Laisser une fine pellicule de 1 450 ppm de fluor sur l'émail peut réduire le risque de carie d'environ 25 % (guide Public Health England 2017)."
-        },
-        "pressure": {
-          "title": "Doucement sur la pression",
-          "description": "Appuyer plus fort ≠ nettoyer mieux. Une force >150 g peut provoquer une récession gingivale ; l'élimination de la plaque plafonne autour de 100 g. Laisse les brins faire le travail."
-        },
-        "tongueClean": {
-          "title": "Pense à ta langue",
-          "description": "60 à 90 % des composés responsables de la mauvaise haleine proviennent du dos de la langue. Un passage rapide de 10 secondes peut réduire de moitié ces composés volatils soufrés."
-        }
-      },
-      "item": "Brosse à dents",
-      "defaultNames": {
-        "firstBrush": "Première Brosse",
-        "manualToothbrush": "Brosse Manuelle",
-        "electricToothbrush": "Brosse Électrique"
-      },
-      "picker": {
-        "nameLabel": "Nom",
-        "namePlaceholder": "ex. Brosse quotidienne",
-        "age": "Âge de la brosse",
-        "type": "Type",
-        "head": "Tête de brosse",
-        "save": "Ajouter la brosse"
-      },
-      "agePreset": {
-        "brandNew_short": "Neuve ✨",
-        "lessThan1Week_short": "<1 semaine",
-        "oneTwoWeeks_short": "1-2 semaines",
-        "threeFourWeeks_short": "3-4 semaines",
-        "twoMonths_short": "2 mois",
-        "threeMonths_short": "3 mois"
-      }
-    },
-    "homeScreen": {
-      "streakCard": {
-        "daysStreak": "jours de suite"
-      },
-      "brushingTimeCard": {
-        "minutes": "minutes"
-      },
-      "toothbrushCard": {
-        "replaceSoon": "Pense à remplacer bientôt",
-        "daysUnit": "jours"
-      }
-    },
-    "chatOverlay": {
-      "smileTeamName": "Équipe Smile",
-      "welcomeMessage": "Bienvenue dans ton parcours personnel de sourire ! Comment pouvons-nous t'aider aujourd'hui ?",
-      "justNow": "À l'instant",
-      "typeMessagePlaceholder": "Tape ton message...",
-      "sendButton": "Envoyer"
-    },
-    "menuOverlay": {
-      "title": "Menu",
-      "profile": {
-        "name": "Profil",
-        "description": "Gère ton profil et tes paramètres"
-      },
-      "statistics": {
-        "name": "Statistiques",
-        "description": "Voir tes statistiques de brossage"
-      },
-      "reminders": {
-        "name": "Rappels",
-        "description": "Configurer tes rappels de brossage"
-      },
-      "achievements": {
-        "name": "Réalisations",
-        "description": "Consulter tes badges et objectifs"
-      },
-      "settings": {
-        "name": "Paramètres",
-        "description": "Paramètres et préférences"
-      }
-    },
-    "timerOverlay": {
-      "start": "Démarrer",
-      "pause": "Pause",
-      "resume": "Reprendre",
-      "stop": "Arrêter",
-      "done": "Terminé",
+  "common": {
+    "ok": "OK",
+    "cancel": "Annuler",
+    "Continue": "Continuer",
+    "save": "Enregistrer",
+    "edit": "Éditer",
+    "delete": "Supprimer",
+    "add": "Ajouter"
+  },
+  "languages": {
+    "en": "English",
+    "es": "Español",
+    "de": "Deutsch",
+    "fr": "Français"
+  },
+  "onboarding": {
+    "mascotGreetingStage1": "Ceci est une application scientifique pour vous aider à illuminer votre sourire ✨",
+    "mascotGreetingStage2": "Quelques minutes par jour peuvent faire une grande différence pour votre sourire. ⏱️",
+    "mascotGreetingStage3": "Nubo sera avec vous dans ce voyage, faisons connaissance ! 🤝✨",
+    "actions": {
       "skip": "Passer",
       "next": "Suivant",
-      "finishBrushing": "Finir le brossage",
-      "songMenuTitle": "Choisis une musique",
-      "selectSong": "Sélectionner une musique",
-      "restart": "Redémarrer",
-      "brushed": "Brossé",
-      "songMenu": {
-        "rainyMood": "Ambiance pluvieuse",
-        "forestAmbience": "Ambiance forêt",
-        "cafeSounds": "Ambiance café",
-        "selectASound": "Sélectionner un son",
-        "noSound": "Aucun son"
+      "getStarted": "Commencer"
+    },
+    "welcomeScreen": {
+      "mainTitle": "Bienvenue sur Smile App !",
+      "mainTitleApp": "Bienvenue sur\nvotre application",
+      "journeyTitle": "Personnalisez votre parcours sourire",
+      "checkpoint1": "Choisissez votre langue",
+      "checkpoint2": "Rencontrez votre mascotte",
+      "checkpoint3": "Fixez vos objectifs",
+      "letsGoButton": "C'est parti"
+    },
+    "languageSelectScreen": {
+      "title": "Choisissez votre\nlangue"
+    },
+    "ageSelectionScreen": {
+      "title": "Quel âge as-tu ?",
+      "description": "Cela nous aide à filtrer les exercices pour toi",
+      "ageRange0_5": "0–5",
+      "ageRange6_12": "6–12",
+      "ageRange13_18": "13–18",
+      "ageRange19_29": "19–29",
+      "ageRange30_45": "30–45",
+      "ageRange46_60": "46–60",
+      "ageRange60_plus": "60+",
+      "question": "Quel est ton âge ?",
+      "useForChildButton": "Utilisation Enfant",
+      "continueButton": "Continuer"
+    },
+    "brushingGoalScreen": {
+      "title": "Fixe ton objectif de brossage",
+      "description": "Combien de fois veux-tu te brosser les dents par jour ? Les dentistes recommandent au moins deux fois.",
+      "optionsLabel_one": "{{count}} fois par jour",
+      "optionsLabel_other": "{{count}} fois par jour",
+      "question": "Ton objectif quotidien de brossage :",
+      "startButton": "Commencer maintenant"
+    },
+    "toothbrushDurationScreen": {
+      "title": "Durée de la brosse à dents",
+      "description": "Quand as-tu changé ta brosse pour la dernière fois ?",
+      "options": {
+        "lessThan1Week": "Moins d'une semaine",
+        "oneToTwoWeeks": "Il y a 1–2 semaines",
+        "threeToFourWeeks": "Il y a 3–4 semaines",
+        "about2Months": "Il y a environ 2 mois",
+        "about3Months": "Il y a environ 3 mois",
+        "dontRemember": "Je ne sais plus"
+      },
+      "question": "Âge actuel de la brosse :",
+      "startButton": "Commencer maintenant"
+    },
+    "nuboToneScreen": {
+      "title": "Le ton de Nubo",
+      "description": "Comment Nubo interagit avec toi",
+      "options": {
+        "supportive_label": "Soutenant",
+        "supportive_description": "Gentil et utile",
+        "playful_label": "Ludique",
+        "playful_description": "Amusant et encourageant",
+        "cool_label": "Cool",
+        "cool_description": "Confiant et direct",
+        "wise_label": "Sage",
+        "wise_description": "Perspicace et calme"
+      },
+      "question": "Choisis le ton de Nubo",
+      "startButton": "Commencer maintenant"
+    },
+    "signinScreen": {
+      "title": "Bienvenue dans\nton compte",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Mot de passe",
+      "submitButton": "Entrer",
+      "orDivider": "ou",
+      "googleButton": "Se connecter avec Google",
+      "noAccountText": "Pas encore de compte ? ",
+      "signUpLink": "S'inscrire"
+    },
+    "signupScreen": {
+      "title": "Créer un\nnouveau compte",
+      "usernamePlaceholder": "Nom d'utilisateur",
+      "emailPlaceholder": "Email",
+      "submitButton": "Lancer le voyage",
+      "googleButton": "S'inscrire avec Google",
+      "hasAccountText": "Déjà un compte ? ",
+      "signInLink": "Se connecter"
+    }
+  },
+  "toothbrush": {
+    "title": "Menu Brosse",
+    "error": {
+      "title": "Erreur",
+      "message": "Impossible d'enregistrer la brosse. Réessaie."
+    },
+    "days": "Jours d'utilisation : {{count}}",
+    "current": {
+      "title": "Brosse Actuelle",
+      "none": "Aucune",
+      "age": "{{days}}j d'ancienneté"
+    },
+    "type": {
+      "manual": "Manuelle",
+      "electric": "Électrique"
+    },
+    "category": {
+      "regular": "Classique",
+      "braces": "Appareil",
+      "sensitive": "Sensible",
+      "whitening": "Blanchiment"
+    },
+    "age": {
+      "oneMonth": "1 mois",
+      "months": "{{count}} mois",
+      "oneWeek": "1 semaine",
+      "weeks": "{{count}} semaines",
+      "oneDay": "1 jour",
+      "days": "{{count}} jours"
+    },
+    "status": {
+      "brand_new": "Nouveau",
+      "fresh": "Frais",
+      "good": "Bon",
+      "replace_soon": "Remplacer Bientôt",
+      "overdue": "En Retard",
+      "addToothbrush": "Ajouter une brosse"
+    },
+    "newBrush": {
+      "addNew": "Ajouter une brosse"
+    },
+    "history": {
+      "title": "Historique des brosses",
+      "ageDays_one": "{{count}} jour",
+      "ageDays_other": "{{count}} jours",
+      "brushings_one": "{{count}} brossage",
+      "brushings_other": "{{count}} brossages"
+    },
+    "infoCards": {
+      "title": "Conseils sur les brosses",
+      "plaqueRemoval": {
+        "title": "Élimination de la plaque 101",
+        "description": "Des essais cliniques montrent que les brosses électriques à mouvement oscillant-rotatif éliminent jusqu'à 21 % de plaque en plus après 3 mois par rapport aux brosses manuelles (Revue Cochrane 2020)."
+      },
+      "replaceInterval": {
+        "title": "Change la tête tous les 90 jours",
+        "description": "Au bout d'environ 3 mois les brins s'écartent et retirent jusqu'à 40 % de plaque en moins. L'ADA et la FDI recommandent donc de remplacer la brosse (ou la tête) tous les 90 jours ou plus tôt si les brins s'usent."
+      },
+      "fluorideTiming": {
+        "title": "Ne rince pas le fluor",
+        "description": "Crache—sans rincer—après le brossage. Laisser une fine pellicule de 1 450 ppm de fluor sur l'émail peut réduire le risque de carie d'environ 25 % (guide Public Health England 2017)."
+      },
+      "pressure": {
+        "title": "Doucement sur la pression",
+        "description": "Appuyer plus fort ≠ nettoyer mieux. Une force >150 g peut provoquer une récession gingivale ; l'élimination de la plaque plafonne autour de 100 g. Laisse les brins faire le travail."
+      },
+      "tongueClean": {
+        "title": "Pense à ta langue",
+        "description": "60 à 90 % des composés responsables de la mauvaise haleine proviennent du dos de la langue. Un passage rapide de 10 secondes peut réduire de moitié ces composés volatils soufrés."
       }
     },
-    "toothbrushOverlay": {
-      "title": "Ta brosse à dents",
-      "daysInUseText": "jours d'utilisation",
-      "healthStatusGood": "Bon",
-      "healthStatusReplaceSoon": "À remplacer bientôt",
-      "healthStatusFair": "Moyen",
-      "brushingTrackerTitle": "Suivi de brossage",
-      "brushesOnThisToothbrushText": "{{count}} brossages effectués avec cette brosse",
-      "replaceHistoryTitle": "Historique de remplacement",
-      "replaceHistorySubtitle": "Suis tes changements de brosse",
-      "replacedOnDate": "Remplacée le : {{date}}",
-      "whyReplaceTitle": "Pourquoi remplacer ?",
-      "whyReplaceText": "Les poils s'usent et retiennent les bactéries. Remplace-la tous les 3 mois.",
-      "toothbrushHealthTitle": "Santé de la brosse",
-      "gotNewBrushButton": "J'ai une nouvelle brosse",
-      "lastReplaced": "Dernier remplacement : {{date}}",
-      "replaceButton": "Remplacer maintenant",
-      "confirmReplaceTitle": "Confirmer le remplacement",
-      "confirmReplaceMessage": "Veux-tu vraiment marquer la brosse comme remplacée ? Cela réinitialisera les jours d'utilisation.",
-      "showHistory": "Afficher l'historique",
-      "hideHistory": "Masquer l'historique"
+    "item": "Brosse à dents",
+    "defaultNames": {
+      "firstBrush": "Première Brosse",
+      "manualToothbrush": "Brosse Manuelle",
+      "electricToothbrush": "Brosse Électrique"
     },
-    "streakOverlay": {
-      "title": "{{count}} jours d'affilée",
-      "subtitle": "Tu es en feu !",
-      "headerTitle": "Progrès Actuel",
-      "headerSubtitle": "{{count}} jours d'affilée",
-      "achievementsTitle": "Réalisations",
-      "achievementsDescription": "Voir tes badges et jalons obtenus",
-      "shareStreakTitle": "Partager ta série",
-      "shareStreakDescription": "Partage ta série de brossages avec tes amis",
-      "streakGoalsTitle": "Objectifs de série",
-      "streakGoalsDescription": "Fixe des objectifs personnels",
-          "keepGoingTitleStart": "Commence ton Voyage !",
+    "picker": {
+      "nameLabel": "Nom",
+      "namePlaceholder": "ex. Brosse quotidienne",
+      "age": "Âge de la brosse",
+      "type": "Type",
+      "head": "Tête de brosse",
+      "save": "Ajouter la brosse"
+    },
+    "agePreset": {
+      "brandNew_short": "Neuve ✨",
+      "lessThan1Week_short": "<1 semaine",
+      "oneTwoWeeks_short": "1-2 semaines",
+      "threeFourWeeks_short": "3-4 semaines",
+      "twoMonths_short": "2 mois",
+      "threeMonths_short": "3 mois"
+    }
+  },
+  "homeScreen": {
+    "streakCard": {
+      "daysStreak": "jours de suite"
+    },
+    "brushingTimeCard": {
+      "minutes": "minutes"
+    },
+    "toothbrushCard": {
+      "replaceSoon": "Pense à remplacer bientôt",
+      "daysUnit": "jours"
+    }
+  },
+  "chatOverlay": {
+    "smileTeamName": "Équipe Smile",
+    "welcomeMessage": "Bienvenue dans ton parcours personnel de sourire ! Comment pouvons-nous t'aider aujourd'hui ?",
+    "justNow": "À l'instant",
+    "typeMessagePlaceholder": "Tape ton message...",
+    "sendButton": "Envoyer"
+  },
+  "menuOverlay": {
+    "title": "Menu",
+    "profile": {
+      "name": "Profil",
+      "description": "Gère ton profil et tes paramètres"
+    },
+    "statistics": {
+      "name": "Statistiques",
+      "description": "Voir tes statistiques de brossage"
+    },
+    "reminders": {
+      "name": "Rappels",
+      "description": "Configurer tes rappels de brossage"
+    },
+    "achievements": {
+      "name": "Réalisations",
+      "description": "Consulter tes badges et objectifs"
+    },
+    "settings": {
+      "name": "Paramètres",
+      "description": "Paramètres et préférences"
+    }
+  },
+  "timerOverlay": {
+    "start": "Démarrer",
+    "pause": "Pause",
+    "resume": "Reprendre",
+    "stop": "Arrêter",
+    "done": "Terminé",
+    "skip": "Passer",
+    "next": "Suivant",
+    "finishBrushing": "Finir le brossage",
+    "songMenuTitle": "Choisis une musique",
+    "selectSong": "Sélectionner une musique",
+    "restart": "Redémarrer",
+    "brushed": "Brossé",
+    "songMenu": {
+      "rainyMood": "Ambiance pluvieuse",
+      "forestAmbience": "Ambiance forêt",
+      "cafeSounds": "Ambiance café",
+      "selectASound": "Sélectionner un son",
+      "noSound": "Aucun son"
+    }
+  },
+  "toothbrushOverlay": {
+    "title": "Ta brosse à dents",
+    "daysInUseText": "jours d'utilisation",
+    "healthStatusGood": "Bon",
+    "healthStatusReplaceSoon": "À remplacer bientôt",
+    "healthStatusFair": "Moyen",
+    "brushingTrackerTitle": "Suivi de brossage",
+    "brushesOnThisToothbrushText": "{{count}} brossages effectués avec cette brosse",
+    "replaceHistoryTitle": "Historique de remplacement",
+    "replaceHistorySubtitle": "Suis tes changements de brosse",
+    "replacedOnDate": "Remplacée le : {{date}}",
+    "whyReplaceTitle": "Pourquoi remplacer ?",
+    "whyReplaceText": "Les poils s'usent et retiennent les bactéries. Remplace-la tous les 3 mois.",
+    "toothbrushHealthTitle": "Santé de la brosse",
+    "gotNewBrushButton": "J'ai une nouvelle brosse",
+    "lastReplaced": "Dernier remplacement : {{date}}",
+    "replaceButton": "Remplacer maintenant",
+    "confirmReplaceTitle": "Confirmer le remplacement",
+    "confirmReplaceMessage": "Veux-tu vraiment marquer la brosse comme remplacée ? Cela réinitialisera les jours d'utilisation.",
+    "showHistory": "Afficher l'historique",
+    "hideHistory": "Masquer l'historique"
+  },
+  "streakOverlay": {
+    "title": "{{count}} jours d'affilée",
+    "subtitle": "Tu es en feu !",
+    "headerTitle": "Progrès Actuel",
+    "headerSubtitle": "{{count}} jours d'affilée",
+    "achievementsTitle": "Réalisations",
+    "achievementsDescription": "Voir tes badges et jalons obtenus",
+    "shareStreakTitle": "Partager ta série",
+    "shareStreakDescription": "Partage ta série de brossages avec tes amis",
+    "streakGoalsTitle": "Objectifs de série",
+    "streakGoalsDescription": "Fixe des objectifs personnels",
+    "keepGoingTitleStart": "Commence ton Voyage !",
     "keepGoingTitleFirst": "Super Début !",
     "keepGoingTitleEarly": "Momentum en Construction !",
     "keepGoingTitleWeek": "Une Semaine Forte !",
@@ -450,174 +307,311 @@
     "keepGoingTitleHundred": "Conquérant du Siècle !",
     "keepGoingTitleLegendary": "Gardien Légendaire !",
     "currentStreakBrushingsText": "{{count}} sessions de brossage dans ta série de {{days}} jours",
-      "streakHistoryTitle": "Meilleures séries",
-      "streakHistorySubtitle": "Tes meilleures séries de tous les temps",
-      "streakPeriodText": "{{startDate}} - {{endDate}} (1 jour)",
-      "streakPeriodText_plural": "{{startDate}} - {{endDate}} ({{count}} jours})",
-
-      "nuboMotivationTitle": "L'ascension de Nubo !",
-      "nuboMotivationText": "Chaque jour de série maintenue, Nubo grimpe plus haut dans la montagne !",
-      "nextSummitTitle": "Prochain sommet",
-      "daysToGoText": "{{count}} jours restants !",
-      "showHistory": "Afficher l'historique",
-      "hideHistory": "Masquer l'historique",
-      "noHistory": "Aucune série encore. Continue !"
-    },
-    "brushingTimeOverlay": {
-      "title": "Durée du brossage",
-      "timeProgressFormat": "{{currentTime}} / {{targetTime}} min",
-      "averageTimeImproving": "Ton temps de brossage s'améliore 🌟",
-      "averageTimeDeclining": "Allons-y pour augmenter ton temps de brossage 💪",
-      "brushingTrendTitle": "Tendance de brossage",
-      "targetTitle": "Fixer un objectif",
-      "targetDescriptionFormat": "Objectif actuel : {{targetMinutes}} min",
-      "targetOptionFormat": "{{option}} min",
-      "whyTimeMattersTitle": "Pourquoi le temps est important",
-      "whyTimeMattersText": "Moins de 2 minutes laisse de la plaque. Vise 2–3 minutes pour un nettoyage optimal.",
-      "targetProgressTitle": "Progression de l'objectif",
-      "timeToGoFormat": "{{time}} restants !",
-      "shareStatsButton": "Partager les stats",
-      "setTargetButton": "Fixer un nouvel objectif",
-      "editTargetButton": "Modifier l'objectif",
-      "customTargetPrompt": "Saisis l'objectif en minutes (ex : 2.5 pour 2m30s)",
-      "saveTargetButton": "Sauvegarder",
-      "cancelButton": "Annuler",
-      "targetUpdatedAlert": "Objectif mis à jour à {{newTarget}} minutes !",
-      "invalidInputAlert": "Merci d'entrer un nombre valide de minutes.",
-      "chooseTargetPrompt": "Ou choisis parmi les objectifs fréquents :",
-      "selectTitle": "Heures rappel"
-    },
-    "brushingResultsScreen": {
-      "title": "Brossage terminé !",
-      "message": "Bravo pour le brossage !",
-      "timeSpentCardTitle": "Temps de brossage",
-      "pointsCardLabel": "Points",
-      "bonusCardLabel": "Bonus",
-          "pointsCardDetailsValue": "Brossages\nréussis",
+    "streakHistoryTitle": "Meilleures séries",
+    "streakHistorySubtitle": "Tes meilleures séries de tous les temps",
+    "streakPeriodText": "{{startDate}} - {{endDate}} (1 jour)",
+    "streakPeriodText_plural": "{{startDate}} - {{endDate}} ({{count}} jours})",
+    "nuboMotivationTitle": "L'ascension de Nubo !",
+    "nuboMotivationText": "Chaque jour de série maintenue, Nubo grimpe plus haut dans la montagne !",
+    "nextSummitTitle": "Prochain sommet",
+    "daysToGoText": "{{count}} jours restants !",
+    "showHistory": "Afficher l'historique",
+    "hideHistory": "Masquer l'historique",
+    "noHistory": "Aucune série encore. Continue !"
+  },
+  "brushingTimeOverlay": {
+    "title": "Durée du brossage",
+    "timeProgressFormat": "{{currentTime}} / {{targetTime}} min",
+    "averageTimeImproving": "Ton temps de brossage s'améliore 🌟",
+    "averageTimeDeclining": "Allons-y pour augmenter ton temps de brossage 💪",
+    "brushingTrendTitle": "Tendance de brossage",
+    "targetTitle": "Fixer un objectif",
+    "targetDescriptionFormat": "Objectif actuel : {{targetMinutes}} min",
+    "targetOptionFormat": "{{option}} min",
+    "whyTimeMattersTitle": "Pourquoi le temps est important",
+    "whyTimeMattersText": "Moins de 2 minutes laisse de la plaque. Vise 2–3 minutes pour un nettoyage optimal.",
+    "targetProgressTitle": "Progression de l'objectif",
+    "timeToGoFormat": "{{time}} restants !",
+    "shareStatsButton": "Partager les stats",
+    "setTargetButton": "Fixer un nouvel objectif",
+    "editTargetButton": "Modifier l'objectif",
+    "customTargetPrompt": "Saisis l'objectif en minutes (ex : 2.5 pour 2m30s)",
+    "saveTargetButton": "Sauvegarder",
+    "cancelButton": "Annuler",
+    "targetUpdatedAlert": "Objectif mis à jour à {{newTarget}} minutes !",
+    "invalidInputAlert": "Merci d'entrer un nombre valide de minutes.",
+    "chooseTargetPrompt": "Ou choisis parmi les objectifs fréquents :",
+    "selectTitle": "Heures rappel"
+  },
+  "brushingResultsScreen": {
+    "title": "Brossage terminé !",
+    "message": "Bravo pour le brossage !",
+    "timeSpentCardTitle": "Temps de brossage",
+    "pointsCardLabel": "Points",
+    "bonusCardLabel": "Bonus",
+    "pointsCardDetailsValue": "Brossages\nréussis",
     "pointsCardDetailsLabel": "+10 points par objectif atteint",
     "bonusCardDetailsValue": "jours",
     "bonusCardDetailsLabel": "+50 points par jour",
     "motivationalText": "Continue de briller ! Chaque brossage compte.",
-      "goHomeButton": "Accueil",
-      "revertModalTitle": "Annuler le brossage ?",
-      "revertModalMessage": "Veux-tu annuler ce brossage ? \nCe sera comme s'il n'avait jamais eu lieu.",
-      "revertModalConfirmButton": "Annuler",
-      "revertModalCancelButton": "Annuler"
+    "goHomeButton": "Accueil",
+    "revertModalTitle": "Annuler le brossage ?",
+    "revertModalMessage": "Veux-tu annuler ce brossage ? \nCe sera comme s'il n'avait jamais eu lieu.",
+    "revertModalConfirmButton": "Annuler",
+    "revertModalCancelButton": "Annuler"
+  },
+  "toothScheme": {
+    "left": "Gauche",
+    "right": "Droite"
+  },
+  "settings": {
+    "name": "paramètres",
+    "appSettings": {
+      "title": "Param. app"
     },
-    "toothScheme": {
-      "left": "Gauche",
-      "right": "Droite"
+    "resetOnboarding": {
+      "name": "Réinitialiser l'accueil",
+      "title": "Réinitialiser l'accueil",
+      "message": "Êtes-vous sûr de vouloir réinitialiser le parcours d'accueil ? Vous serez redirigé vers l'écran de bienvenue.",
+      "confirm": "Réinitialiser"
     },
-    "settings": {
-      "name": "paramètres",
-      "appSettings": {
-        "title": "Param. app"
+    "mascotTone": {
+      "name": "Ton de la mascotte",
+      "selectTitle": "Ton de Nubo",
+      "error": {
+        "title": "Erreur de ton",
+        "message": "Impossible de changer le ton de la mascotte. Veuillez réessayer."
+      }
+    },
+    "language": {
+      "name": "Langue",
+      "selectTitle": "Choisir la langue",
+      "error": {
+        "title": "Erreur de langue",
+        "message": "Impossible de changer la langue. Veuillez réessayer."
+      }
+    },
+    "brushingSettings": {
+      "title": "Param. brossage",
+      "reminderTime": "Heure rappel",
+      "frequency": "Fréq. brossage",
+      "targetTime": "Durée cible",
+      "toothbrush": "Menu Brosse"
+    },
+    "reminderTimes": {
+      "none": "Aucun",
+      "one": "1 rappel",
+      "multiple": "{{count}} rappels",
+      "nameLabel": "Nom du rappel",
+      "hour": "Heure",
+      "minute": "Minute",
+      "addNew": "Ajouter un nouveau rappel",
+      "morning": "Matin",
+      "afternoon": "Après-midi",
+      "evening": "Soir",
+      "night": "Avant le coucher",
+      "custom": "Personnalisé",
+      "customBadge": "Perso",
+      "addReminder": "Ajouter",
+      "selectTitle": "Heures rappel"
+    },
+    "dailyFrequency": {
+      "selectTitle": "Fréq. jour.",
+      "options": {
+        "minimal_label": "1×/jour",
+        "minimal_description": "Entretien basique",
+        "standard_label": "2×/jour",
+        "standard_description": "Matin & soir",
+        "standard_short": "2 fois",
+        "recommended_label": "3×/jour",
+        "recommended_description": "Après chaque repas",
+        "comprehensive_label": "4+×/jour",
+        "comprehensive_description": "Soin maximal"
       },
-      "resetOnboarding": {
-        "name": "Réinitialiser l'accueil",
-        "title": "Réinitialiser l'accueil",
-        "message": "Êtes-vous sûr de vouloir réinitialiser le parcours d'accueil ? Vous serez redirigé vers l'écran de bienvenue.",
-        "confirm": "Réinitialiser"
+      "countFormat": "{{count}} fois",
+      "error": {
+        "title": "Erreur fréquence",
+        "message": "Impossible de changer la fréquence quotidienne. Veuillez réessayer."
+      }
+    },
+    "brushingTarget": {
+      "selectTitle": "Durée cible",
+      "options": {
+        "quick_label": "1,5 min",
+        "quick_description": "Rapide et efficace",
+        "standard_label": "2 min",
+        "standard_description": "Recommandé",
+        "thorough_label": "3 min",
+        "thorough_description": "Nettoyage extra",
+        "comprehensive_label": "4 min",
+        "comprehensive_description": "Soin complet"
       },
-      "mascotTone": {
-        "name": "Ton de la mascotte",
-        "selectTitle": "Ton de Nubo",
-        "error": {
-          "title": "Erreur de ton",
-          "message": "Impossible de changer le ton de la mascotte. Veuillez réessayer."
-        }
-      },
-      "language": {
-        "name": "Langue",
-        "selectTitle": "Choisir la langue",
-        "error": {
-          "title": "Erreur de langue",
-          "message": "Impossible de changer la langue. Veuillez réessayer."
-        }
-      },
-      "brushingSettings": {
-        "title": "Param. brossage",
-        "reminderTime": "Heure rappel",
-        "frequency": "Fréq. brossage",
-        "targetTime": "Durée cible",
-        "toothbrush": "Menu Brosse"
-      },
-      "reminderTimes": {
-        "none": "Aucun",
-        "one": "1 rappel",
-        "multiple": "{{count}} rappels",
-        "nameLabel": "Nom du rappel",
-        "hour": "Heure",
-        "minute": "Minute",
-        "addNew": "Ajouter un nouveau rappel",
-        "morning": "Matin",
-        "afternoon": "Après-midi",
-        "evening": "Soir",
-        "night": "Avant le coucher",
-        "custom": "Personnalisé",
-        "customBadge": "Perso",
-        "addReminder": "Ajouter",
-        "selectTitle": "Heures rappel"
-      },
-      "dailyFrequency": {
-        "selectTitle": "Fréq. jour.",
-        "options": {
-          "minimal_label": "1×/jour",
-          "minimal_description": "Entretien basique",
-          "standard_label": "2×/jour",
-          "standard_description": "Matin & soir",
-          "standard_short": "2 fois",
-          "recommended_label": "3×/jour",
-          "recommended_description": "Après chaque repas",
-          "comprehensive_label": "4+×/jour",
-          "comprehensive_description": "Soin maximal"
-        },
-        "countFormat": "{{count}} fois",
-        "error": {
-          "title": "Erreur fréquence",
-          "message": "Impossible de changer la fréquence quotidienne. Veuillez réessayer."
-        }
-      },
-      "brushingTarget": {
-        "selectTitle": "Durée cible",
-        "options": {
-          "quick_label": "1,5 min",
-          "quick_description": "Rapide et efficace",
-          "standard_label": "2 min",
-          "standard_description": "Recommandé",
-          "thorough_label": "3 min",
-          "thorough_description": "Nettoyage extra",
-          "comprehensive_label": "4 min",
-          "comprehensive_description": "Soin complet"
-        },
-        "error": {
-          "title": "Erreur objectif",
-          "message": "Impossible de changer la durée cible. Veuillez réessayer."
-        }
-      },
-      "brushingTrend": {
-  "loading": "Analyse de tes séances récentes en cours…",
-  "improvingConsistently": "Super régularité ! Ton temps de brossage augmente de façon constante.",
-  "improvingSlightly": "Beaux progrès ! Tu brosses plus longtemps qu'avant.",
-  "declining": "Tes temps de brossage raccourcissent un peu. On se remet sur les rails ?",
-  "consistentHigh": "Excellent ! Tu atteins ton objectif de brossage régulièrement.",
-  "consistentLow": "Tu es régulier, mais essaie de brosser un peu plus longtemps pour atteindre ton objectif.",
-  "erratic": "Tes temps de brossage varient beaucoup. Vise un peu plus de régularité.",
-  "stable": "Tu as une routine de brossage bien stable. Continue comme ça !",
-  "notEnoughData": "Continue de te brosser les dents pour débloquer ton analyse de tendance !",
-  "newUser": "Bienvenue ! Fais encore quelques séances pour suivre tes progrès."
-},
-
-      "about": {
-        "title": "À propos"
-      },
-      "appVersion": {
-        "name": "Version de l'app"
-      },
-      "updateGoalError": "Échec de la mise à jour de l'objectif. Veuillez réessayer.",
-          "targetAchieved": "Objectif atteint !",
+      "error": {
+        "title": "Erreur objectif",
+        "message": "Impossible de changer la durée cible. Veuillez réessayer."
+      }
+    },
+    "brushingTrend": {
+      "loading": "Analyse de tes séances récentes en cours…",
+      "improvingConsistently": "Super régularité ! Ton temps de brossage augmente de façon constante.",
+      "improvingSlightly": "Beaux progrès ! Tu brosses plus longtemps qu'avant.",
+      "declining": "Tes temps de brossage raccourcissent un peu. On se remet sur les rails ?",
+      "consistentHigh": "Excellent ! Tu atteins ton objectif de brossage régulièrement.",
+      "consistentLow": "Tu es régulier, mais essaie de brosser un peu plus longtemps pour atteindre ton objectif.",
+      "erratic": "Tes temps de brossage varient beaucoup. Vise un peu plus de régularité.",
+      "stable": "Tu as une routine de brossage bien stable. Continue comme ça !",
+      "notEnoughData": "Continue de te brosser les dents pour débloquer ton analyse de tendance !",
+      "newUser": "Bienvenue ! Fais encore quelques séances pour suivre tes progrès."
+    },
+    "about": {
+      "title": "À propos"
+    },
+    "appVersion": {
+      "name": "Version de l'app"
+    },
+    "updateGoalError": "Échec de la mise à jour de l'objectif. Veuillez réessayer.",
+    "targetAchieved": "Objectif atteint !",
     "item": "Brosse",
     "firstBrush": "Première Brosse"
+  },
+  "mascotGreetings": {
+    "v2": {
+      "supportive": {
+        "community": {
+          "community_brushing_now": {
+            "1": "[SUPPORTIVE_COMMUNITY_BRUSHING_NOW_1]"
+          },
+          "nubo_network_energy": {
+            "1": "[SUPPORTIVE_NUBO_NETWORK_ENERGY_1]"
+          },
+          "social_momentum": {
+            "1": "[SUPPORTIVE_SOCIAL_MOMENTUM_1]"
+          },
+          "late_night_others_brushed": {
+            "1": "[SUPPORTIVE_LATE_NIGHT_OTHERS_BRUSHED_1]"
+          },
+          "first_week_global_wave": {
+            "1": "[SUPPORTIVE_FIRST_WEEK_GLOBAL_WAVE_1]"
+          },
+          "nubo_day_event": {
+            "1": "[SUPPORTIVE_NUBO_DAY_EVENT_1]"
+          },
+          "community_across_timezones": {
+            "1": "[SUPPORTIVE_COMMUNITY_ACROSS_TIMEZONES_1]"
+          },
+          "brush_in_cities": {
+            "1": "[SUPPORTIVE_BRUSH_IN_CITIES_1]"
+          },
+          "nubo_watching": {
+            "1": "[SUPPORTIVE_NUBO_WATCHING_1]"
+          },
+          "nubo_broadcast": {
+            "1": "[SUPPORTIVE_NUBO_BROADCAST_1]"
+          }
+        }
+      },
+      "playful": {
+        "community": {
+          "community_brushing_now": {
+            "1": "[PLAYFUL_COMMUNITY_BRUSHING_NOW_1]"
+          },
+          "nubo_network_energy": {
+            "1": "[PLAYFUL_NUBO_NETWORK_ENERGY_1]"
+          },
+          "social_momentum": {
+            "1": "[PLAYFUL_SOCIAL_MOMENTUM_1]"
+          },
+          "late_night_others_brushed": {
+            "1": "[PLAYFUL_LATE_NIGHT_OTHERS_BRUSHED_1]"
+          },
+          "first_week_global_wave": {
+            "1": "[PLAYFUL_FIRST_WEEK_GLOBAL_WAVE_1]"
+          },
+          "nubo_day_event": {
+            "1": "[PLAYFUL_NUBO_DAY_EVENT_1]"
+          },
+          "community_across_timezones": {
+            "1": "[PLAYFUL_COMMUNITY_ACROSS_TIMEZONES_1]"
+          },
+          "brush_in_cities": {
+            "1": "[PLAYFUL_BRUSH_IN_CITIES_1]"
+          },
+          "nubo_watching": {
+            "1": "[PLAYFUL_NUBO_WATCHING_1]"
+          },
+          "nubo_broadcast": {
+            "1": "[PLAYFUL_NUBO_BROADCAST_1]"
+          }
+        }
+      },
+      "cool": {
+        "community": {
+          "community_brushing_now": {
+            "1": "[COOL_COMMUNITY_BRUSHING_NOW_1]"
+          },
+          "nubo_network_energy": {
+            "1": "[COOL_NUBO_NETWORK_ENERGY_1]"
+          },
+          "social_momentum": {
+            "1": "[COOL_SOCIAL_MOMENTUM_1]"
+          },
+          "late_night_others_brushed": {
+            "1": "[COOL_LATE_NIGHT_OTHERS_BRUSHED_1]"
+          },
+          "first_week_global_wave": {
+            "1": "[COOL_FIRST_WEEK_GLOBAL_WAVE_1]"
+          },
+          "nubo_day_event": {
+            "1": "[COOL_NUBO_DAY_EVENT_1]"
+          },
+          "community_across_timezones": {
+            "1": "[COOL_COMMUNITY_ACROSS_TIMEZONES_1]"
+          },
+          "brush_in_cities": {
+            "1": "[COOL_BRUSH_IN_CITIES_1]"
+          },
+          "nubo_watching": {
+            "1": "[COOL_NUBO_WATCHING_1]"
+          },
+          "nubo_broadcast": {
+            "1": "[COOL_NUBO_BROADCAST_1]"
+          }
+        }
+      },
+      "wise": {
+        "community": {
+          "community_brushing_now": {
+            "1": "[WISE_COMMUNITY_BRUSHING_NOW_1]"
+          },
+          "nubo_network_energy": {
+            "1": "[WISE_NUBO_NETWORK_ENERGY_1]"
+          },
+          "social_momentum": {
+            "1": "[WISE_SOCIAL_MOMENTUM_1]"
+          },
+          "late_night_others_brushed": {
+            "1": "[WISE_LATE_NIGHT_OTHERS_BRUSHED_1]"
+          },
+          "first_week_global_wave": {
+            "1": "[WISE_FIRST_WEEK_GLOBAL_WAVE_1]"
+          },
+          "nubo_day_event": {
+            "1": "[WISE_NUBO_DAY_EVENT_1]"
+          },
+          "community_across_timezones": {
+            "1": "[WISE_COMMUNITY_ACROSS_TIMEZONES_1]"
+          },
+          "brush_in_cities": {
+            "1": "[WISE_BRUSH_IN_CITIES_1]"
+          },
+          "nubo_watching": {
+            "1": "[WISE_NUBO_WATCHING_1]"
+          },
+          "nubo_broadcast": {
+            "1": "[WISE_NUBO_BROADCAST_1]"
+          }
+        }
+      }
+    }
   }
 }
-  
