@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
 import { useOnboarding } from '../../context/OnboardingContext';
 import dayjs from 'dayjs';
+import SecondaryButton from '../ui/SecondaryButton';
 
 interface ToothbrushDurationScreenProps {
   nextScreenPath: string;
@@ -103,7 +104,8 @@ export default function ToothbrushDurationScreen({
         startDate = now.subtract(3, 'month').toISOString();
         break;
       case 5: // I don't remember
-        startDate = null;
+        const oneMonthAgo = dayjs().subtract(1, 'month').toISOString();
+        startDate = oneMonthAgo;
         break;
       default:
         startDate = null;
@@ -240,6 +242,22 @@ export default function ToothbrushDurationScreen({
             paddingVertical: (VISIBLE_ITEMS - 1) * ITEM_HEIGHT / 2,
           }}
         />
+
+        <View style={styles.dontRememberButtonContainer}>
+          <SecondaryButton
+            label={t('onboarding.toothbrushDurationScreen.options.dontRemember')}
+            onPress={() => {
+              const oneMonthAgo = dayjs().subtract(1, 'month').toISOString();
+              updateOnboardingData({ toothbrush_start_date: oneMonthAgo });
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              router.push(nextScreenPath as any);
+            }}
+            textStyle={{
+              fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined,
+              fontSize: 16,
+            }}
+          />
+        </View>
       </View>
       
       <View style={styles.buttonsContainer}>
@@ -315,6 +333,14 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.6)',
     fontWeight: '700',
     textAlign: 'center'
+  },
+  dontRememberButtonContainer: {
+    position: 'absolute',
+    top: '100%',
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   buttonsContainer: {
     position: 'absolute',
