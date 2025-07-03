@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, Pressable, Alert, Text, Dimensions } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, StyleSheet, ScrollView, Pressable, Alert, Text, Dimensions, TextInput } from 'react-native';
 import { useTheme } from '../../components/ThemeProvider';
 import ThemedText from '../../components/ThemedText';
 import GlassmorphicCard from '../../components/ui/GlassmorphicCard';
@@ -42,7 +42,6 @@ import {
   FREQUENCY_OPTIONS 
 } from '../../services/BrushingGoalsService';
 import { useToothbrushStats } from '../../hooks/useToothbrushStats';
-import InlineEditableText from '../../components/ui/InlineEditableText';
 import { Colors } from '../../constants/Colors';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -142,8 +141,10 @@ export default function SettingsScreen() {
     }
   ];
 
-  // After other account-related hooks
-  const [isAccountExpanded, setIsAccountExpanded] = useState(false);
+  // Account edit state
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [usernameDraft, setUsernameDraft] = useState('');
+  const inputRef = useRef<TextInput>(null);
 
   const { user: authUser } = useAuth();
   const { 
@@ -237,6 +238,13 @@ export default function SettingsScreen() {
       return () => clearTimeout(timer);
     }
   }, [params.openToothbrushModal]);
+  
+  useEffect(() => {
+    if (isEditingUsername) {
+      const timer = setTimeout(() => inputRef.current?.focus(), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isEditingUsername]);
   
   const loadCurrentTone = async () => {
     try {
@@ -522,14 +530,12 @@ export default function SettingsScreen() {
   };
   
   const handleAccountPress = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // If user is signed in, open a future account screen, otherwise redirect to sign-in
-    if (user) {
-      // Placeholder: navigate to future account details screen
-      Alert.alert(t('settings.account.comingSoon', 'Account screen coming soon!'));
-    } else {
+    // If user is not signed in, redirect to sign-in screen
+    if (!user) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       router.push('/onboarding/signin');
     }
+    // If user is signed in, do nothing.
   };
   
   const capitalize = (str: string) => str ? str.charAt(0).toUpperCase() + str.slice(1) : str;
@@ -537,34 +543,15 @@ export default function SettingsScreen() {
   const accountName = user?.user_metadata?.full_name || (rawUsername ? capitalize(rawUsername) : null) || t('settings.account.guest', 'Guest User');
   const accountEmail = user?.email || t('settings.account.signInPrompt', 'Tap to sign in');
   
-  const handleAccountChevronPress = (e: any) => {
-    e.stopPropagation();
-    setIsAccountExpanded((prev) => !prev);
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut();
-      setUser(null);
-      setIsAccountExpanded(false);
-      Alert.alert(t('settings.account.signedOut', 'Signed out successfully'));
-    } catch (error) {
-      Alert.alert(t('settings.account.error', 'Unable to sign out'));
+  const handleSave = () => {
+    const trimmed = usernameDraft.trim();
+    if (trimmed && trimmed !== accountName) {
+      saveUsername(trimmed);
     }
+    setIsEditingUsername(false);
   };
   
-  const handleSignInPress = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    router.push('/onboarding/signin');
-    setIsAccountExpanded(false);
-  };
-
-  const handleGetPremiumPress = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    Alert.alert(t('settings.account.premiumSoon', 'Premium Smile coming soon!'));
-  };
-  
-  const handleSaveUsername = async (newUsername: string) => {
+  const saveUsername = async (newUsername: string) => {
     try {
       const { data, error } = await supabase.auth.updateUser({
         data: { username: newUsername },
@@ -575,9 +562,19 @@ export default function SettingsScreen() {
       }
 
       setUser(data.user);
-      Alert.alert(t('settings.account.usernameUpdated', 'Username updated successfully'));
     } catch (err: any) {
       Alert.alert(t('common.error', 'Error'), err?.message || 'Failed to update username');
+    }
+  };
+  
+  // Sign out handler displayed at bottom of settings
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      setUser(null);
+      Alert.alert(t('settings.account.signedOut', 'Signed out successfully'));
+    } catch (error) {
+      Alert.alert(t('settings.account.error', 'Unable to sign out'));
     }
   };
   
@@ -685,50 +682,44 @@ export default function SettingsScreen() {
               <Pressable style={styles.accountItem} onPress={handleAccountPress}>
                 <Ionicons name="person-circle-outline" size={48} color={activeColors.tint} />
                 <View style={styles.accountInfo}>
-                  {user ? (
-                    <InlineEditableText
-                      value={accountName}
-                      onSave={handleSaveUsername}
-                      pencilColor={Colors.primary[200]}
-                      checkmarkColor={Colors.primary[500]}
-                      textStyle={styles.accountName}
-                      inputStyle={styles.accountName}
-                      iconOpacity={1}
+                  {user ? 
+                    <TextInput
+                      ref={inputRef}
+                      value={isEditingUsername ? usernameDraft : accountName}
+                      editable={isEditingUsername}
+                      onChangeText={setUsernameDraft}
+                      onBlur={() => setIsEditingUsername(false)}
+                      onSubmitEditing={handleSave}
+                      style={[styles.accountName, { color: activeColors.text, padding: 0 }]}
+                      underlineColorAndroid="transparent"
+                      selectionColor={activeColors.tint}
+                      autoCapitalize="none"
                     />
-                  ) : (
-                    <ThemedText style={styles.accountName}>{accountName}</ThemedText>
-                  )}
+                    :
+                    <Text style={[styles.accountName, { color: activeColors.text }]}>{accountName}</Text>
+                  }
                 </View>
-                <Pressable onPress={(e) => handleAccountChevronPress(e)} hitSlop={10}>
-                  <Ionicons 
-                    name={isAccountExpanded ? "chevron-down" : "chevron-forward"}
-                    size={24} 
-                    color={activeColors.textSecondary} 
-                  />
-                </Pressable>
-              </Pressable>
-              {isAccountExpanded && (
-                <View style={styles.accountExpandedContent}>
-                  {user ? (
-                    <Pressable style={styles.expandedItem} onPress={handleSignOut}>
-                      <Ionicons name="log-out-outline" size={22} color={activeColors.tint} />
-                      <ThemedText style={styles.settingText}>{t('settings.account.signOut', 'Sign Out')}</ThemedText>
+                {user && (
+                  isEditingUsername ? (
+                    <Pressable
+                      onPress={handleSave}
+                      hitSlop={10}
+                    >
+                      <Ionicons name="checkmark" size={24} color={Colors.primary[500]} />
                     </Pressable>
                   ) : (
-                    <>
-                      <Pressable style={styles.expandedItem} onPress={handleSignInPress}>
-                        <Ionicons name="log-in-outline" size={22} color={activeColors.tint} />
-                        <ThemedText style={styles.settingText}>{t('settings.account.signIn', 'Sign in for personalized experience')}</ThemedText>
-                      </Pressable>
-                      <View style={styles.divider} />
-                      <Pressable style={styles.expandedItem} onPress={handleGetPremiumPress}>
-                        <Ionicons name="star-outline" size={22} color={activeColors.tint} />
-                        <ThemedText style={styles.settingText}>{t('settings.account.getPremium', 'Get Premium Smile')}</ThemedText>
-                      </Pressable>
-                    </>
-                  )}
-                </View>
-              )}
+                    <Pressable
+                      onPress={() => {
+                        setUsernameDraft(accountName);
+                        setIsEditingUsername(true);
+                      }}
+                      hitSlop={10}
+                    >
+                      <Ionicons name="create-outline" size={24} color={Colors.primary[200]} />
+                    </Pressable>
+                  )
+                )}
+              </Pressable>
             </View>
           </GlassmorphicCard>
           <View style={{ height: spacing.sm }} />
@@ -737,21 +728,6 @@ export default function SettingsScreen() {
             <ThemedText variant="subtitle" style={styles.sectionTitle}>
               {t('settings.appSettings.title', 'App Settings')}
             </ThemedText>
-            
-            <Pressable 
-              style={styles.settingItem}
-              onPress={handleResetOnboarding}
-            >
-              <View style={styles.settingContent}>
-                <Ionicons name="refresh-circle-outline" size={24} color={activeColors.tint} />
-                <ThemedText style={styles.settingText}>
-                  {t('settings.resetOnboarding.name', 'Reset Onboarding')}
-                </ThemedText>
-              </View>
-              <Ionicons name="chevron-forward" size={20} color={activeColors.textSecondary} />
-            </Pressable>
-            
-            <View style={styles.divider} />
             
             <Pressable style={styles.settingItem} onPress={handleTonePress}>
               <View style={styles.settingContent}>
@@ -862,23 +838,19 @@ export default function SettingsScreen() {
             </Pressable>
           </GlassmorphicCard>
           
-          <View style={{ height: spacing.sm }} />
-          
-          <GlassmorphicCard style={styles.settingsCard} width={screenWidth * 0.9}>
-            <ThemedText variant="subtitle" style={styles.sectionTitle}>
-              {t('settings.about.title', 'About')}
-            </ThemedText>
-            
-            <Pressable style={styles.settingItem}>
-              <View style={styles.settingContent}>
-                <Ionicons name="information-circle-outline" size={24} color={activeColors.tint} />
-                <ThemedText style={styles.settingText}>
-                  {t('settings.appVersion.name', 'App Version')}
-                </ThemedText>
-              </View>
-              <ThemedText style={styles.versionText}>1.0.0</ThemedText>
-            </Pressable>
-          </GlassmorphicCard>
+          {user && (
+            <>
+              <View style={{ height: spacing.sm }} />
+              <GlassmorphicCard style={styles.settingsCard} width={screenWidth * 0.9}>
+                <Pressable style={styles.settingItem} onPress={handleSignOut}>
+                  <View style={styles.settingContent}>
+                    <Ionicons name="log-out-outline" size={24} color={activeColors.tint} />
+                    <ThemedText style={styles.settingText}>{t('settings.account.signOut', 'Sign Out')}</ThemedText>
+                  </View>
+                </Pressable>
+              </GlassmorphicCard>
+            </>
+          )}
         </ScrollView>
         
         {/* Glassmorphic Header */}
