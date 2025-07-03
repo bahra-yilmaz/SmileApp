@@ -192,7 +192,11 @@ export default function AgeSelectionScreen({
         <View style={styles.childButtonContainer}>
           <SecondaryButton
             label={t('onboarding.ageSelectionScreen.useForChildButton')}
-            onPress={() => {}}
+            onPress={() => {
+              const specialIndex = AGES.length; // Treat button as its own option (index 7)
+              updateOnboardingData({ age_group: specialIndex });
+              router.push(nextScreenPath as any);
+            }}
             textStyle={{
               fontFamily: fontsLoaded ? 'Quicksand-Bold' : undefined,
               fontSize: 16
