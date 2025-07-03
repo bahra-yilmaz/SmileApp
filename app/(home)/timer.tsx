@@ -409,8 +409,15 @@ export default function TimerScreen() {
   };
 
   const calculateTotalSeconds = () => {
+    // If we are in overtime, minutes/seconds no longer reflect elapsed time;
+    // they are frozen at 0:59.  Total brushed time is the full target time
+    // plus the overtimeCounter seconds we have accumulated so far.
+    if (isOvertime) {
+      return Math.round(brushingGoalMinutes * 60) + overtimeCounter;
+    }
+
     const elapsedSeconds = initialTimeInSeconds.current - (minutes * 60 + seconds);
-    return elapsedSeconds + overtimeCounter;
+    return elapsedSeconds;
   };
 
   return (
