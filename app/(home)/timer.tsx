@@ -17,7 +17,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import TimerCircleMode from '../../components/home/TimerCircleMode';
 import ToothScheme from '../../components/home/ToothScheme';
-import SongMenu from '../../components/home/SongMenu';
+// import SongMenu from '../../components/home/SongMenu';
 import * as Haptics from 'expo-haptics';
 import { useAudioPlayer } from 'expo-audio';
 import { useRouter } from 'expo-router';
@@ -456,7 +456,7 @@ export default function TimerScreen() {
         </Animated.View>
         
         {/* Song Menu */}
-        <SongMenu />
+        {/* <SongMenu /> */}
         
         {/* Close Button */}
         <View 
