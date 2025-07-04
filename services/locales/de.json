@@ -316,7 +316,8 @@
     "daysToGoText": "Noch {{count}} Tage!",
     "showHistory": "Historie anzeigen",
     "hideHistory": "Historie verbergen",
-    "noHistory": "Noch keine Serie. Los geht's!"
+    "noHistory": "Keine vergangenen Streaks. Weiter so!",
+    "changeTargetButton": "Ziel ändern"
   },
   "brushingTimeOverlay": {
     "title": "Putzzeit",

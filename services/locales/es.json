@@ -368,7 +368,8 @@
     "daysToGoText": "¡Faltan {{count}} días!",
     "showHistory": "Mostrar historial",
     "hideHistory": "Ocultar historial",
-    "noHistory": "Aún no tienes rachas anteriores. ¡Sigue así!"
+    "noHistory": "Sin rachas anteriores. ¡Sigue así!",
+    "changeTargetButton": "Cambiar objetivo"
   },
   "brushingTimeOverlay": {
     "title": "Tiempo de cepillado",

@@ -423,7 +423,8 @@
     "daysToGoText": "{{count}} gün kaldı!",
     "showHistory": "Geçmişi Göster",
     "hideHistory": "Geçmişi Gizle",
-    "noHistory": "Henüz seri yok. Devam et!"
+    "noHistory": "Henüz seri yok. Devam et!",
+    "changeTargetButton": "Hedefi değiştir"
   },
   "brushingTimeOverlay": {
     "title": "Fırçalama Süresi",
@@ -831,7 +832,7 @@
         "1": "Milyonlarca bakteri mi? Buna naneli kıyım diyelim 💥🦠"
       },
       "psych_fact": {
-        "1": "Fırçalamak bile beynine ‘hallederiz’ sinyali gönderir 🧠✨"
+        "1": "Fırçalamak bile beynine 'hallederiz' sinyali gönderir 🧠✨"
       },
       "dental_fact_2": {
         "1": "Diş etlerini de fırçala! Onlar da ilgi ister, dışlanmak değil 😩🪥"
@@ -840,7 +841,7 @@
         "1": "Dilin aradı. Tüm ilginin dişlerde olmasından kıskanmış 🥲"
       },
       "science_fact_2": {
-        "1": "Plağı yalnız bırak? Tartar Canavarı’na dönüşür 🪨🫠"
+        "1": "Plağı yalnız bırak? Tartar Canavarı'na dönüşür 🪨🫠"
       },
       "psych_fact_2": {
         "1": "Fırçalamak = alışkanlıkların lideri. Patron hamlesi resmen 💼"

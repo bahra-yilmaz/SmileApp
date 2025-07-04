@@ -314,7 +314,8 @@
     "daysToGoText": "あと{{count, number}}日！",
     "showHistory": "履歴を表示",
     "hideHistory": "履歴を非表示",
-    "noHistory": "まだ記録がありません。続けましょう！"
+    "noHistory": "これまでのストリークはありません。頑張って続けましょう！",
+    "changeTargetButton": "目標を変更"
   },
   "brushingTimeOverlay": {
     "title": "ブラッシング時間",

@@ -314,7 +314,8 @@
     "daysToGoText": "Faltam {{count}} dias!",
     "showHistory": "Mostrar histórico",
     "hideHistory": "Ocultar histórico",
-    "noHistory": "Ainda sem sequências. Continue assim!"
+    "noHistory": "Nenhum histórico de sequência ainda. Continue assim!",
+    "changeTargetButton": "Alterar meta"
   },
   "brushingTimeOverlay": {
     "title": "Tempo de Escovação",

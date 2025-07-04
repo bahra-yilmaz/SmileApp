@@ -106,18 +106,18 @@
           },
           "after_brushing_fail": {
             "1": "Not perfect? Still progress. Proud of you for showing up, {{username}}.",
-            "2": "It’s not about perfection — it’s about presence. And you were here."
+            "2": "It's not about perfection — it's about presence. And you were here."
           },
           "first_brush_of_day": {
-            "1": "And just like that, you’ve already done something good today, {{username}}.",
-            "2": "Starting your day with care? That’s self-respect in motion, {{username}}."
+            "1": "And just like that, you've already done something good today, {{username}}.",
+            "2": "Starting your day with care? That's self-respect in motion, {{username}}."
           },
           "second_brush_of_day": {
             "1": "Twice the care, twice the self-love, {{username}}.",
-            "2": "You’re closing the day with intention. That’s real growth."
+            "2": "You're closing the day with intention. That's real growth."
           },
           "missed_yesterday": {
-            "1": "Yesterday slipped. You’re still here today. That’s courage, {{username}}.",
+            "1": "Yesterday slipped. You're still here today. That's courage, {{username}}.",
             "2": "Coming back is stronger than never leaving. You did that, {{username}}."
           }
         },
@@ -199,7 +199,7 @@
             "1": "Just a pea-sized squeeze of toothpaste is all you need, {{username}}. Small effort, big impact."
           },
           "floss_fact": {
-            "1": "Brushing’s amazing, {{username}} — but flossing covers what your brush can’t."
+            "1": "Brushing's amazing, {{username}} — but flossing covers what your brush can't."
           },
           "brushing_too_hard": {
             "1": "Gentle brushing protects both your smile and your gums, {{username}}."
@@ -287,18 +287,18 @@
           },
           "after_brushing_fail": {
             "1": "Quick brush today? Nubo will let it slide… just this once 😏",
-            "2": "Speed round? We’ll get 'em next time, sparkle champ {{username}}."
+            "2": "Speed round? We'll get 'em next time, sparkle champ {{username}}."
           },
           "first_brush_of_day": {
-            "1": "Day’s first sparkle: deployed. Let’s make it a shiny one!",
+            "1": "Day's first sparkle: deployed. Let's make it a shiny one!",
             "2": "Teeth checked in. Let the day begin, {{username}}!"
           },
           "second_brush_of_day": {
-            "1": "Round 2? You’re officially a brushing boss 💪",
+            "1": "Round 2? You're officially a brushing boss 💪",
             "2": "Back for round two? Absolute sparkle mastery, {{username}}!"
           },
           "missed_yesterday": {
-            "1": "Plaque was partying yesterday. Today… it’s under arrest.",
+            "1": "Plaque was partying yesterday. Today… it's under arrest.",
             "2": "Yesterday? Forget it. Today we sparkle with vengeance, {{username}}!"
           }
         },
@@ -365,7 +365,7 @@
             "1": "Brush your gums too! They want attention, not rejection 😩🪥"
           },
           "dental_fact_3": {
-            "1": "Your tongue called. It’s jealous of all the brushing attention 🥲"
+            "1": "Your tongue called. It's jealous of all the brushing attention 🥲"
           },
           "science_fact_2": {
             "1": "Leave plaque alone? It becomes tartar the terrible 🪨🫠"
@@ -374,13 +374,13 @@
             "1": "Brushing = keystone habit. Basically, the boss move 💼"
           },
           "morning_breath_fact": {
-            "1": "Morning breath: 100% real. 100% beatable. Nubo’s got your back 😤"
+            "1": "Morning breath: 100% real. 100% beatable. Nubo's got your back 😤"
           },
           "toothpaste_fact": {
             "1": "Fun fact: you only need a tiny pea of toothpaste, not a minty tsunami 🌊"
           },
           "floss_fact": {
-            "1": "Brushing without flossing? You’re only 65% there 😏"
+            "1": "Brushing without flossing? You're only 65% there 😏"
           },
           "brushing_too_hard": {
             "1": "Scrubbing like it's grout? Nope. This ain't tile cleaning 🧽"
@@ -389,7 +389,7 @@
             "1": "Sleepy teeth? Nah, they need guarding while you dream 💤🦷"
           },
           "brushing_angle_fact": {
-            "1": "Brush like a pro: tilt that brush like it’s got drip 💅"
+            "1": "Brush like a pro: tilt that brush like it's got drip 💅"
           },
           "dry_brush_fact": {
             "1": "No paste? No problem. Go full dry-ninja mode 🥷🪥"
@@ -467,11 +467,11 @@
             "2": "All done. No fuss. Just results, {{username}}."
           },
           "after_brushing_fail": {
-            "1": "Didn’t hit the mark — but hey, you pulled up. That counts.",
-            "2": "Could’ve skipped. You didn’t. Enough said, {{username}}."
+            "1": "Didn't hit the mark — but hey, you pulled up. That counts.",
+            "2": "Could've skipped. You didn't. Enough said, {{username}}."
           },
           "first_brush_of_day": {
-            "1": "Started the day with care. That’s smooth.",
+            "1": "Started the day with care. That's smooth.",
             "2": "Early flex. Clean energy, {{username}}."
           },
           "second_brush_of_day": {
@@ -479,7 +479,7 @@
             "2": "Twice brushed. Always crisp, {{username}}."
           },
           "missed_yesterday": {
-            "1": "Missed one? Not your style. Let’s fix that.",
+            "1": "Missed one? Not your style. Let's fix that.",
             "2": "Back on track. No excuses, just action, {{username}}."
           }
         },
@@ -564,13 +564,13 @@
             "1": "Floss hits the corners brushing misses. Clean move, {{username}}."
           },
           "brushing_too_hard": {
-            "1": "Brush smart, not hard, {{username}}. It’s finesse over force."
+            "1": "Brush smart, not hard, {{username}}. It's finesse over force."
           },
           "night_brushing_importance": {
             "1": "Night brush = overnight shield. Sharp move, {{username}}."
           },
           "brushing_angle_fact": {
-            "1": "Angle in. Clean deep. That’s pro-tier brushing, {{username}}."
+            "1": "Angle in. Clean deep. That's pro-tier brushing, {{username}}."
           },
           "dry_brush_fact": {
             "1": "No paste? Still a chance to stay sharp, {{username}}. Dry brushing saves the day."
@@ -661,7 +661,7 @@
           },
           "missed_yesterday": {
             "1": "The chain broke. But not the will. Continue forward.",
-            "2": "Progress isn’t perfect, {{username}}. It’s persistence."
+            "2": "Progress isn't perfect, {{username}}. It's persistence."
           }
         },
         "streak_state": {
@@ -739,10 +739,10 @@
             "1": "Saliva protects the mouth — and sleeps when you do."
           },
           "toothpaste_fact": {
-            "1": "A full strip isn’t better. Precision beats excess — pea-sized does the job."
+            "1": "A full strip isn't better. Precision beats excess — pea-sized does the job."
           },
           "floss_fact": {
-            "1": "Flossing reaches the silent spaces brushing can’t."
+            "1": "Flossing reaches the silent spaces brushing can't."
           },
           "brushing_too_hard": {
             "1": "Too much pressure can cause retreat. Even in brushing."
@@ -754,7 +754,7 @@
             "1": "Precision matters. A 45° angle reaches the foundation."
           },
           "dry_brush_fact": {
-            "1": "When you can’t do it perfectly — do it anyway. Even dry brushing clears harm."
+            "1": "When you can't do it perfectly — do it anyway. Even dry brushing clears harm."
           }
         },
         "community": {
@@ -1200,7 +1200,8 @@
     "daysToGoText": "{{count}} days to go!",
     "showHistory": "Show History",
     "hideHistory": "Hide History",
-    "noHistory": "No past streaks yet. Keep it up!"
+    "noHistory": "No past streaks yet. Keep it up!",
+    "changeTargetButton": "Change Target"
   },
   "brushingTimeOverlay": {
     "title": "Brushing Time",

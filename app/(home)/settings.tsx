@@ -239,6 +239,17 @@ export default function SettingsScreen() {
     }
   }, [params.openToothbrushModal]);
   
+  // Auto-open frequency modal if requested via URL parameter
+  useEffect(() => {
+    if (params.openFrequencyModal === 'true') {
+      const timer = setTimeout(() => {
+        setIsFrequencyModalVisible(true);
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+  }, [params.openFrequencyModal]);
+  
   useEffect(() => {
     if (isEditingUsername) {
       const timer = setTimeout(() => inputRef.current?.focus(), 100);

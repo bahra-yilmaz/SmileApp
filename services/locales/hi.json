@@ -314,7 +314,8 @@
     "daysToGoText": "अब केवल {{count, number}} दिन शेष!",
     "showHistory": "इतिहास दिखाएं",
     "hideHistory": "इतिहास छिपाएं",
-    "noHistory": "अभी तक कोई स्ट्रिक नहीं है। बनाए रखो!"
+    "noHistory": "कोई पिछला स्ट्रिक इतिहास नहीं। चलते रहो!",
+    "changeTargetButton": "लक्ष्य बदलें"
   },
   "brushingTimeOverlay": {
     "title": "ब्रशिंग समय",

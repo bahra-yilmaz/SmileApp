@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   View, 
   StyleSheet, 
@@ -9,9 +9,6 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  Image,
-  Share,
-  InteractionManager,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { useTheme } from '../ThemeProvider';
@@ -21,13 +18,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ThemedText from '../ThemedText';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
-import * as Sharing from 'expo-sharing';
-import ViewShot from 'react-native-view-shot';
-import ShareCard from '../ui/ShareCard';
-import { getProgressColor } from '../../utils/colorUtils';
+import { useRouter } from 'expo-router';
 import { StreakService, StreakDisplayService, ComprehensiveStreakData } from '../../services/StreakService';
 import { useAuth } from '../../context/AuthContext';
 import { eventBus } from '../../utils/EventBus';
+import { getProgressColor } from '../../utils/colorUtils';
 
 interface StreakOverlayProps {
   isVisible: boolean;
@@ -58,7 +53,7 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
   const [showHistory, setShowHistory] = useState(false);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
-
+  const router = useRouter();
 
   // Load comprehensive streak data when overlay becomes visible
   useEffect(() => {
@@ -246,10 +241,6 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
     console.log(`Pressed: ${item.name}`);
     // Optionally close overlay or navigate
   };
-  
-  // Add ref and state for ShareCard
-  const viewShotRef = useRef<ViewShot>(null);
-  const [showShareCard, setShowShareCard] = useState(false);
   
   // If not visible and animation is complete, don't render anything
   if (!isVisible && !animationComplete) return null;
@@ -521,72 +512,25 @@ export const StreakOverlay: React.FC<StreakOverlayProps> = ({ isVisible, onClose
                       : Colors.primary[600],
                 }
               ]}
-              onPress={async () => {
+              onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                // Show the hidden card for capture
-                setShowShareCard(true);
-                // Wait until ViewShot is mounted
-                await new Promise<void>((resolve) => {
-                  const check = () => {
-                    if (viewShotRef.current) {
-                      resolve();
-                    } else {
-                      setTimeout(check, 20);
-                    }
-                  };
-                  check();
-                });
-
-                // Extra small delay for fonts / images
-                await new Promise(r => setTimeout(r, 150));
-                try {
-                  const uri = await viewShotRef.current?.capture?.();
-                  if (!uri) throw new Error('Capture failed');
-                  if (await Sharing.isAvailableAsync()) {
-                    await Sharing.shareAsync(uri, {
-                      mimeType: 'image/png',
-                      dialogTitle: t('streakOverlay.shareStreakTitle'),
-                    });
-                  } else {
-                    // Built-in fallback
-                    await Share.share({
-                      url: uri,
-                      message: `${t('streakOverlay.title', { count: streakDays })}`,
-                    });
-                  }
-                } catch (err) {
-                  console.warn('Sharing failed, falling back to text', err);
-                  await Share.share({
-                    message: `${t('streakOverlay.title', { count: streakDays })} – I just hit a ${streakDays}-day brushing streak with #SmileApp 🦷✨`,
-                  });
-                } finally {
-                  setShowShareCard(false);
-                }
+                router.push('/settings?openFrequencyModal=true');
+                handleClose();
               }}
             >
               <MaterialCommunityIcons
-                  name="share-variant" 
+                  name="target" 
                   size={20} 
                   color="#FFF"
                   style={{ marginRight: 8 }} 
               />
               <ThemedText style={styles.buttonText}>
-                {t('streakOverlay.shareStreakTitle')}
+                {t('streakOverlay.changeTargetButton', 'Change Target')}
               </ThemedText>
             </Pressable>
           </View>
         </Animated.View>
       </KeyboardAvoidingView>
-      {/* Hidden ShareCard for view-shot */}
-      {showShareCard && (
-        <ViewShot
-          ref={viewShotRef}
-          options={{ format: 'png', quality: 0.9, result: 'tmpfile' }}
-          style={{ position: 'absolute', top: -10000, left: 0 }}
-        >
-          <ShareCard type="streak" streakDays={streakDays} />
-        </ViewShot>
-      )}
     </View>
   );
 };

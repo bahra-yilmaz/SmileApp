@@ -317,7 +317,8 @@
     "daysToGoText": "{{count}} jours restants !",
     "showHistory": "Afficher l'historique",
     "hideHistory": "Masquer l'historique",
-    "noHistory": "Aucune série encore. Continue !"
+    "noHistory": "Aucun historique de série pour l'instant. Continuez !",
+    "changeTargetButton": "Changer l'objectif"
   },
   "brushingTimeOverlay": {
     "title": "Durée du brossage",
