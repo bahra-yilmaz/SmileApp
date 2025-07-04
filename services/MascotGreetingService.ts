@@ -189,6 +189,40 @@ export class MascotGreetingService implements IMascotGreetingService {
    * Get visual configuration for a personality
    */
   getVisualConfig(personality: PersonalityType): PersonalityVisualConfig {
+    // Special handling for the "cool" personality – rotate through multiple poses
+    if (personality === 'cool') {
+      const collapsedVariants: PpMascotVariant[] = [
+        'nubo-cool-1-pp',
+        'nubo-cool-2-pp',
+        'nubo-cool-3-pp',
+      ];
+      const expandedVariants: NonPpMascotVariant[] = [
+        'nubo-cool-1',
+        'nubo-cool-2',
+        'nubo-cool-3',
+        'nubo-cool-4',
+      ];
+
+      // Pick a random index for the expanded variant first
+      const expandedIndex = Math.floor(Math.random() * expandedVariants.length);
+      const expandedVariant = expandedVariants[expandedIndex];
+
+      // If we have a matching collapsed variant (1-3), use the same index.
+      // For the 4th pose (index 3), fall back to a random collapsed variant.
+      const collapsedVariant =
+        expandedIndex < collapsedVariants.length
+          ? collapsedVariants[expandedIndex]
+          : collapsedVariants[Math.floor(Math.random() * collapsedVariants.length)];
+
+      return {
+        personality: 'cool',
+        collapsedVariant,
+        expandedVariant,
+        description: PERSONALITY_VISUAL_CONFIGS.cool.description,
+      };
+    }
+
+    // Default behaviour for other personalities
     return PERSONALITY_VISUAL_CONFIGS[personality];
   }
 

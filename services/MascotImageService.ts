@@ -11,7 +11,6 @@ const mascotImages: MascotImageMap = {
     require('../assets/mascot/nubo-cool-2.png'),
     require('../assets/mascot/nubo-cool-3.png'),
     require('../assets/mascot/nubo-cool-4.png'),
-    require('../assets/mascot/nubo-cool-5.png'),
   ],
   playful: [
     require('../assets/mascot/nubo-playful-1.png'),
