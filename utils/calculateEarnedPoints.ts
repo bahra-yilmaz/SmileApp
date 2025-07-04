@@ -64,7 +64,7 @@ export function calculateEarnedPoints(
   let basePoints: number;
   if (actualTimeInSec >= targetTimeInSec) {
     // If the current session meets the target, it extends the time-based streak
-    basePoints = 100 + 10 * (timeStreak + 1);
+    basePoints = 100 + 10 * timeStreak;
   } else {
     basePoints = Math.round(ratio * 100);
     // Ensure cannot exceed 100 when brushing < target

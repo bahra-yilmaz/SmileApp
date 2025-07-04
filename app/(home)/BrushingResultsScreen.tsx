@@ -24,6 +24,7 @@ import { useBrushingGoal } from '../../context/BrushingGoalContext';
 import { useAuth } from '../../context/AuthContext';
 import { MascotGreetingService, ContextDetector } from '../../services/MascotGreetingService';
 import { GreetingContext, MascotGreetingResult, PersonalityType } from '../../types/mascot';
+import { MascotImageService } from '../../services/MascotImageService';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -75,6 +76,9 @@ const BrushingResultsScreen = () => {
   // State for dynamic mascot greeting
   const [motivationalText, setMotivationalText] = useState<string>(t('brushingResultsScreen.motivationalText'));
   const [greetingLoading, setGreetingLoading] = useState(true);
+  const [mascotImage, setMascotImage] = useState(() =>
+    MascotImageService.getRandomImageForPersonality('supportive')
+  );
 
   // Add a useEffect to run the fade-in animation on mount
   useEffect(() => {
@@ -160,6 +164,7 @@ const BrushingResultsScreen = () => {
           actualText: greeting.actualText
         });
         setMotivationalText(greeting.actualText);
+        setMascotImage(MascotImageService.getRandomImageForPersonality(greeting.personality));
       } catch (error) {
         console.error('❌ Failed to load informative greeting:', error);
         // Keep the default fallback text
@@ -537,7 +542,7 @@ const BrushingResultsScreen = () => {
           </View>
           <View style={styles.mascotImageContainer}>
             <Image
-              source={require('../../assets/mascot/nubo-welcoming-1.png')}
+              source={mascotImage}
               style={styles.motivationalMascotImage}
             />
           </View>

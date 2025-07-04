@@ -488,7 +488,10 @@ export const GREETING_CATEGORIES: CategoryConfig[] = [
       dental_fact_3: { weight: 1.0, conditions: () => true }, // Always available
       science_fact_2: { weight: 1.0, conditions: () => true }, // Always available
       psych_fact_2: { weight: 1.0, conditions: () => true }, // Always available
-      morning_breath_fact: { weight: 1.0, conditions: () => true }, // Always available
+      morning_breath_fact: { 
+        weight: 1.5, // Higher weight in the morning
+        conditions: ContextConditions.isMorning 
+      }, // Morning only
       toothpaste_fact: { weight: 1.0, conditions: () => true }, // Always available
       floss_fact: { weight: 1.0, conditions: () => true }, // Always available
       brushing_too_hard: { weight: 1.0, conditions: () => true }, // Always available
