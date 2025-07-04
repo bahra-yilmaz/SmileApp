@@ -728,6 +728,38 @@
       "dry_brush_fact": {
         "1": "Macun olmasa bile, {{username}}, kısa bir kuru fırçalama hâlâ bir başarıdır."
       }
+    },
+    "community": {
+      "community_brushing_now": {
+        "1": "You're not alone in this, {{username}}. Thousands are brushing with you right now 💙"
+      },
+      "nubo_network_energy": {
+        "1": "You're part of Nubo's circle now, {{username}}. A little tribe of tiny rituals."
+      },
+      "social_momentum": {
+  "1": "Bu hafta pek çok kişi fırçaladı. Ve {{username}}, sen de onlardan birisin."
+},
+"late_night_others_brushed": {
+  "1": "Bu gece geç saatte fırçalayan tek sen değilsin, {{username}} — hepiniz gözümüzdesiniz."
+},
+"first_week_global_wave": {
+  "1": "Bu hafta Nubo’ya birçok yeni yüz katıldı, {{username}}. Harika bir topluluğun parçasısın."
+},
+"nubo_day_event": {
+  "1": "Bugün Nubo Günü! En doğru günde fırçaladın, {{username}} 🥹🪥"
+},
+"community_across_timezones": {
+  "1": "Dünyanın bir yerinde şu anda biri daha fırçalıyor, {{username}}."
+},
+"brush_in_cities": {
+  "1": "Şehirlerden köylere, fırçalama hepimizi birbirine bağlıyor. Sen de bu bağın bir parçasısın, {{username}}."
+},
+"nubo_watching": {
+  "1": "Nubo o fırçalamayı gördü, {{username}} — ve duygulandı bile 🥹"
+},
+"nubo_broadcast": {
+  "1": "Nubo yayında: '{{username}}, bugünün temizlik dalgasına katıldı!' 📡"
+}
     }
   },
         "playful": {
@@ -867,7 +899,39 @@
       "dry_brush_fact": {
         "1": "Macun yok mu? Sorun değil. Kuru-ninja moduna geç 🥷🪥"
       }
-    }
+    },
+    "community": {
+  "community_brushing_now": {
+    "1": "Şu anda mı? Fırçalama ekibi dünya çapında canlı 🪥🌐"
+  },
+  "nubo_network_energy": {
+    "1": "Nubo Ağı aktif: {{username}} çevrimiçi ✅ Parıltı Sinyali güçlü 💫"
+  },
+  "social_momentum": {
+    "1": "Fırçalama liderlik tablosu? Coşmuş durumda. Şu an sen trendesin 😎"
+  },
+  "late_night_others_brushed": {
+    "1": "Gece geç oldu. Ama Nubo’nun gece ekibi hiç uyumaz 🌙🪥"
+  },
+  "first_week_global_wave": {
+    "1": "Yeni Nubo tayfası geldi. Parıltı partisi başlıyor 🎉"
+  },
+  "nubo_day_event": {
+    "1": "🎈 Mutlu Nubo Günü! Herkese ekstra nane ferahlığı bugün 🍃✨"
+  },
+  "community_across_timezones": {
+    "1": "Zaman dilimleri mi? Artık onlar sadece çalışma zonları 🗺️ Herkes fırçalıyor."
+  },
+  "brush_in_cities": {
+    "1": "Tokyo’dan Toronto’ya, fırça devrimi başladı 🌆🪥"
+  },
+  "nubo_watching": {
+    "1": "Nubo gizlice baktı ve bağırdı: 'ŞU {{username}}’A BAK!' 😭🪥"
+  },
+  "nubo_broadcast": {
+    "1": "Nubo {{username}}’ı Temizlik Efsaneleri Yayınına™ ekledi 💾🪥"
+  }
+}
   },
        "cool": {
     "time_context": {
@@ -1001,7 +1065,40 @@
       "dry_brush_fact": {
         "1": "Kuru fırçaladın ama temiz çıktın. Saygı, {{username}}."
       }
-    }
+    },
+    "community": {
+  "community_brushing_now": {
+    "1": "Fırçalama yalnız yapılmaz. Tüm dünyadaki temizlik ekibiyle senkron oldun, {{username}}."
+  },
+  "nubo_network_energy": {
+    "1": "NuboNet™’e giriş yaptın — temiz enerjinin 7/24 aktığı yerdesin, {{username}}."
+  },
+  "social_momentum": {
+    "1": "Bu hafta birçok kişi için temiz geçti. Ama sen? Elitlerdesin, {{username}}."
+  },
+  "late_night_others_brushed": {
+    "1": "Gece yarısını geçtin mi? Gerçeklerle birlikte fırçalıyorsun, {{username}}."
+  },
+  "first_week_global_wave": {
+    "1": "Taze dalga. Taze yüzler. Hareketin içindesin artık, hoş geldin {{username}}."
+  },
+  "nubo_day_event": {
+    "1": "Bugün sadece temiz enerji var. Nubo Günü geldi, {{username}}. Parlamaya hazır mısın?"
+  },
+  "community_across_timezones": {
+    "1": "Saatler farklı. Enerji aynı. Tüm dünyada fırçalama ruhu, {{username}}."
+  },
+  "brush_in_cities": {
+    "1": "Büyük şehirler. Parlak gülüşler. Fırçalama evrensel, {{username}}."
+  },
+  "nubo_watching": {
+    "1": "Nubo gördü. Hiçbir şey demedi. Sadece saygıyla kafasını salladı, {{username}}."
+  },
+  "nubo_broadcast": {
+    "1": "Onaylandı: {{username}} fırçaladı. Mesaj iletildi. Durum: 🔥"
+  }
+}
+
   },
        "wise": {
     "time_context": {
@@ -1135,7 +1232,40 @@
       "dry_brush_fact": {
         "1": "Mükemmel yapamıyorsan da yap. Kuru fırçalama bile zararı azaltır."
       }
-    }
+    },
+    "community": {
+  "community_brushing_now": {
+    "1": "Şu anda, farklı zaman dilimlerinde sessiz bir özen gösteriliyor — seninki gibi."
+  },
+  "nubo_network_energy": {
+    "1": "Bulutun bir yerinde, senin gibi düşünen başkaları da bilinçlice fırçalıyor. Bu önemli."
+  },
+  "social_momentum": {
+    "1": "Bu hafta sessiz eylemler birikti. Seninki de onlardan biri."
+  },
+  "late_night_others_brushed": {
+    "1": "Yatak odalarında, şehir sokaklarında bu saatte başkaları da özeni seçti."
+  },
+  "first_week_global_wave": {
+    "1": "Her dalga birkaç cesur adımla başlar. Hoş geldin bu harekete."
+  },
+  "nubo_day_event": {
+    "1": "Bugün Nubo Günü — her ritüelin anlamlı olduğunu hatırlatan küçük bir işaret."
+  },
+  "community_across_timezones": {
+    "1": "Kıtalar boyunca özen devam ediyor — her seferinde bir fırçalama ile."
+  },
+  "brush_in_cities": {
+    "1": "Kalabalık sokakların tam ortasında bile, özene yer var."
+  },
+  "nubo_watching": {
+    "1": "Sen fark etmesen bile, Nubo çabayı fark ediyor."
+  },
+  "nubo_broadcast": {
+    "1": "Nubo’nun pano ışıkları seninle yandı. Bu önemli."
+  }
+}
+
   }
 }
   }
