@@ -692,7 +692,14 @@ export default function SettingsScreen() {
           <GlassmorphicCard style={styles.accountCard} width={screenWidth * 0.9}>
             <View>
               <Pressable style={styles.accountItem} onPress={handleAccountPress}>
-                <Ionicons name="person-circle-outline" size={48} color={activeColors.tint} />
+                <View style={styles.iconContainer}>
+                  <Ionicons name="person-circle-outline" size={48} color={activeColors.tint} />
+                  {user &&
+                    <ThemedText useDisplayFont weight="bold" style={styles.premiumLabel}>
+                      premium
+                    </ThemedText>
+                  }
+                </View>
                 <View style={styles.accountInfo}>
                   {user ? 
                     <TextInput
@@ -1056,16 +1063,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   accountInfo: {
-    marginLeft: 16,
+    marginLeft: 28,
     flex: 1,
   },
   accountName: {
     fontSize: 22,
-    fontFamily: 'Merienda-Bold',
+    fontFamily: 'Quicksand-Bold',
   },
   accountEmail: {
     fontSize: 14,
     opacity: 0.7,
+  },
+  iconContainer: {
+    width: 80,
+    alignItems: 'center',
+    overflow: 'visible',
+    marginRight: -32,
+    marginLeft: -8,
   },
   accountExpandedContent: {
     marginTop: 12,
@@ -1124,5 +1138,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#007AFF',
     fontFamily: 'Quicksand-Bold',
+  },
+  premiumLabel: {
+    position: 'absolute',
+    bottom: -4,
+    width: '100%',
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 14,
+    fontFamily: 'Merienda-Bold',
+    textShadowColor: Colors.primary[200],
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 1,
   },
 }); 
