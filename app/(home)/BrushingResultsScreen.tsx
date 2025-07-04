@@ -723,7 +723,7 @@ const styles = StyleSheet.create({
     height: 65,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginRight: 4,
     marginLeft: -15,
   },
   metricTextContainer: {
@@ -745,19 +745,20 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   motivationalContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    position: 'relative',
     width: '90%',
     alignSelf: 'center',
     marginVertical: 10,
-    marginBottom: 5,
+    marginBottom: 25,
   },
   textAndProgressContainer: {
-    flex: 1,
-    marginRight: 15,
+    width: '70%',
   },
   mascotImageContainer: {
+    position: 'absolute',
+    right: -30,
+    bottom: -15,
+    zIndex: 1,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
@@ -771,8 +772,8 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   motivationalMascotImage: {
-    width: 100,
-    height: 100,
+    width: 140,
+    height: 140,
     resizeMode: 'contain',
   },
   progressCard: {
