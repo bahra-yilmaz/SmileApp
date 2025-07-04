@@ -766,7 +766,7 @@
       "1": "Nubo yayında: ‘{{username}} bugün temiz dalgaya katıldı!’ 📡"
     }
   }
-  },
+},
        "playful": {
   "time_context": {
     "morning": {
@@ -929,7 +929,7 @@
       "1": "Gece geç mi? Ama Nubo’nun gece ekibi hep ayakta 🌙🪥"
     },
     "first_week_global_wave": {
-      "1": "Yeni Nubo mürettebatı geldi. Parıltı partisi başlasın 🎉"
+      "1": "Yeni Nubo ekibi geldi. Parıltı partisi başlasın 🎉"
     },
     "nubo_day_event": {
       "1": "🎈 Mutlu Nubo Günü! Bugün herkese ekstra nane 🍃✨"
@@ -1152,7 +1152,7 @@
       "3": "Uykudan önce düzeni seçmekte sessiz bir güç yatar."
     },
     "weekday": {
-      "1": "Yapı özgürlük getirir. Sen ikisini birden inşa ediyorsun.",
+      "1": "Rutin özgürlük getirir. Sen ikisini birden inşa ediyorsun.",
       "2": "Rutin bir pusuladır. Ve sen yönü iyi buluyorsun.",
       "3": "Haftanın ritmi küçük eylemlerle oluşur, {{username}}."
     },
@@ -1310,6 +1310,6 @@
     }
   }
 }
-}
+    }
   }
 }
