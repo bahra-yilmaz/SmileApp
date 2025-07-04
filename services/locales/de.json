@@ -476,534 +476,731 @@
   },
   "mascotGreetings": {
     "v2": {
-      "supportive": {
-        "community": {
-          "community_brushing_now": {
-            "1": "[SUPPORTIVE_COMMUNITY_BRUSHING_NOW_1]"
-          },
-          "nubo_network_energy": {
-            "1": "[SUPPORTIVE_NUBO_NETWORK_ENERGY_1]"
-          },
-          "social_momentum": {
-            "1": "[SUPPORTIVE_SOCIAL_MOMENTUM_1]"
-          },
-          "late_night_others_brushed": {
-            "1": "[SUPPORTIVE_LATE_NIGHT_OTHERS_BRUSHED_1]"
-          },
-          "first_week_global_wave": {
-            "1": "[SUPPORTIVE_FIRST_WEEK_GLOBAL_WAVE_1]"
-          },
-          "nubo_day_event": {
-            "1": "[SUPPORTIVE_NUBO_DAY_EVENT_1]"
-          },
-          "community_across_timezones": {
-            "1": "[SUPPORTIVE_COMMUNITY_ACROSS_TIMEZONES_1]"
-          },
-          "brush_in_cities": {
-            "1": "[SUPPORTIVE_BRUSH_IN_CITIES_1]"
-          },
-          "nubo_watching": {
-            "1": "[SUPPORTIVE_NUBO_WATCHING_1]"
-          },
-          "nubo_broadcast": {
-            "1": "[SUPPORTIVE_NUBO_BROADCAST_1]"
-          }
-        },
-        "time_context": {
-          "morning": {
-            "1": "[SUPPORTIVE_TIME_CONTEXT_MORNING_1]"
-          },
-          "afternoon": {
-            "1": "[SUPPORTIVE_TIME_CONTEXT_AFTERNOON_1]"
-          },
-          "evening": {
-            "1": "[SUPPORTIVE_TIME_CONTEXT_EVENING_1]"
-          },
-          "late_night": {
-            "1": "[SUPPORTIVE_TIME_CONTEXT_LATE_NIGHT_1]"
-          },
-          "weekday": {
-            "1": "[SUPPORTIVE_TIME_CONTEXT_WEEKDAY_1]"
-          },
-          "weekend": {
-            "1": "[SUPPORTIVE_TIME_CONTEXT_WEEKEND_1]"
-          }
-        },
-        "streak_state": {
-          "new_streak_starting": {
-            "1": "[SUPPORTIVE_STREAK_STATE_NEW_STREAK_STARTING_1]"
-          },
-          "almost_week_streak": {
-            "1": "[SUPPORTIVE_STREAK_STATE_ALMOST_WEEK_STREAK_1]"
-          },
-          "over_10_day_streak": {
-            "1": "[SUPPORTIVE_STREAK_STATE_OVER_10_DAY_STREAK_1]"
-          },
-          "best_streak_reached": {
-            "1": "[SUPPORTIVE_STREAK_STATE_BEST_STREAK_REACHED_1]"
-          },
-          "streak_broken": {
-            "1": "[SUPPORTIVE_STREAK_STATE_STREAK_BROKEN_1]"
-          }
-        },
-        "milestone_enhancements": {
-          "brush_count_milestones": {
-            "1": "[SUPPORTIVE_MILESTONE_ENHANCEMENTS_BRUSH_COUNT_MILESTONES_1]"
-          },
-          "monthly_brush_20": {
-            "1": "[SUPPORTIVE_MILESTONE_ENHANCEMENTS_MONTHLY_BRUSH_20_1]"
-          },
-          "day_7": {
-            "1": "[SUPPORTIVE_MILESTONE_ENHANCEMENTS_DAY_7_1]"
-          },
-          "returning_user_milestone": {
-            "1": "[SUPPORTIVE_MILESTONE_ENHANCEMENTS_RETURNING_USER_MILESTONE_1]"
-          }
-        },
-        "informative": {
-          "habit_tip": {
-            "1": "[SUPPORTIVE_INFORMATIVE_HABIT_TIP_1]"
-          },
-          "dental_fact": {
-            "1": "[SUPPORTIVE_INFORMATIVE_DENTAL_FACT_1]"
-          },
-          "science_fact": {
-            "1": "[SUPPORTIVE_INFORMATIVE_SCIENCE_FACT_1]"
-          },
-          "psych_fact": {
-            "1": "[SUPPORTIVE_INFORMATIVE_PSYCH_FACT_1]"
-          },
-          "dental_fact_2": {
-            "1": "[SUPPORTIVE_INFORMATIVE_DENTAL_FACT_2_1]"
-          },
-          "dental_fact_3": {
-            "1": "[SUPPORTIVE_INFORMATIVE_DENTAL_FACT_3_1]"
-          },
-          "science_fact_2": {
-            "1": "[SUPPORTIVE_INFORMATIVE_SCIENCE_FACT_2_1]"
-          },
-          "psych_fact_2": {
-            "1": "[SUPPORTIVE_INFORMATIVE_PSYCH_FACT_2_1]"
-          },
-          "morning_breath_fact": {
-            "1": "[SUPPORTIVE_INFORMATIVE_MORNING_BREATH_FACT_1]"
-          },
-          "toothpaste_fact": {
-            "1": "[SUPPORTIVE_INFORMATIVE_TOOTHPASTE_FACT_1]"
-          },
-          "floss_fact": {
-            "1": "[SUPPORTIVE_INFORMATIVE_FLOSS_FACT_1]"
-          },
-          "brushing_too_hard": {
-            "1": "[SUPPORTIVE_INFORMATIVE_BRUSHING_TOO_HARD_1]"
-          },
-          "night_brushing_importance": {
-            "1": "[SUPPORTIVE_INFORMATIVE_NIGHT_BRUSHING_IMPORTANCE_1]"
-          },
-          "brushing_angle_fact": {
-            "1": "[SUPPORTIVE_INFORMATIVE_BRUSHING_ANGLE_FACT_1]"
-          },
-          "dry_brush_fact": {
-            "1": "[SUPPORTIVE_INFORMATIVE_DRY_BRUSH_FACT_1]"
-          }
-        }
+  "supportive": {
+    "time_context": {
+      "morning": {
+        "1": "Neuer Tag, neue Chance, dich um dich selbst zu kümmern. Du machst das großartig!",
+        "2": "Du bist heute Morgen aufgetaucht – so beginnen bessere Tage.",
+        "3": "Du brauchst keinen perfekten Start – nur einen fürsorglichen, {{username}}."
+      },
+      "afternoon": {
+        "1": "Ein Mittagsputz? Selbstachtung in Aktion.",
+        "2": "Mitten im Trubel hast du dir Zeit für dich genommen. Respekt, {{username}}.",
+        "3": "Du hast den Tag für dich unterbrochen. Das ist eine starke Sache."
+      },
+      "evening": {
+        "1": "Der Tag klingt liebevoll aus – ich bin stolz, dass du da warst.",
+        "2": "Du hast den Tag mit einem Erfolg beendet. Das zählt, {{username}}.",
+        "3": "Es war nicht nur ein langer Tag. Es war dein Tag – und du hast ihn mit Fürsorge abgeschlossen."
+      },
+      "late_night": {
+        "1": "Selbst späte Fürsorge ist Fürsorge. Du hast dir Zeit genommen, {{username}}.",
+        "2": "So spät da sein? Das ist stille Stärke.",
+        "3": "Auch wenn heute chaotisch war, gehört dieser Moment dir, {{username}}."
+      },
+      "weekday": {
+        "1": "Zwischen dem Chaos hast du Zeit für dich geschaffen. Das ist Stärke.",
+        "2": "Stressige Tage – und trotzdem hast du dich für dich entschieden, {{username}}. Ein großer Gewinn.",
+        "3": "Mitten im Alltag geputzt? Du bist wirklich präsent."
+      },
+      "weekend": {
+        "1": "Pause ist wichtig. Genauso wie dein Strahlen ✨",
+        "2": "Wochenendpflege = Selbstliebe auf Extra‑Level, {{username}}.",
+        "3": "Freie Tage zählen auch. Vor allem, wenn du so sorgst."
+      }
+    },
+    "brushing_behaviour": {
+      "after_brushing_success": {
+        "1": "Das war ein Erfolg, {{username}}. Klein? Vielleicht. Aber echt? Absolut.",
+        "2": "Du hast getan, wofür du gekommen bist. Das zählt mehr, als du denkst, {{username}}."
+      },
+      "after_brushing_fail": {
+        "1": "Nicht perfekt? Trotzdem Fortschritt. Stolz auf dich, dass du da warst, {{username}}.",
+        "2": "Es geht nicht um Perfektion — es geht um Anwesenheit. Und du warst da."
+      },
+      "first_brush_of_day": {
+        "1": "Und just in dem Moment hast du heute schon etwas Gutes getan, {{username}}.",
+        "2": "Den Tag mit Fürsorge zu starten? Das ist Selbstrespekt in Bewegung, {{username}}."
+      },
+      "second_brush_of_day": {
+        "1": "Doppelte Fürsorge, doppelte Selbstliebe, {{username}}.",
+        "2": "Du beendest den Tag mit Absicht. Das ist echtes Wachstum."
+      },
+      "missed_yesterday": {
+        "1": "Gestern ist ausgefallen. Du bist heute hier. Das ist Mut, {{username}}.",
+        "2": "Wieder zurückzukommen ist stärker, als nie gegangen zu sein. Du hast es getan, {{username}}."
+      }
+    },
+    "streak_state": {
+      "new_streak_starting": {
+        "1": "Tag 1, {{username}}. Das ist nicht klein. Das ist alles.",
+        "2": "Jede Reise beginnt hier. Und dieses Mal bist du bereit.",
+        "3": "Dieser erste Schritt, {{username}}, scheint klein – aber er verändert alles."
+      },
+      "almost_week_streak": {
+        "1": "Du bist fast bei einer ganzen Woche, {{username}}. So entstehen echte Gewohnheiten.",
+        "2": "Du baust etwas Beständiges auf, {{username}}. Fast eine Woche stark!",
+        "3": "Sieh dich an – das sind fast 7 Tage, an denen du da warst 💙"
+      },
+      "over_10_day_streak": {
+        "1": "Über 10 Tage, {{username}}. Das ist kein Durchhänger – das ist Engagement.",
+        "2": "Zweistellige Zahlen? Das bist du, wie du dein bestes Ich wirst.",
+        "3": "Zehn Tage. Zehn Entscheidungen. Ein beständiger {{username}}."
+      },
+      "best_streak_reached": {
+        "1": "Neuer persönlicher Rekord, {{username}}. Und es fängt gerade erst an.",
+        "2": "Du warst noch nie so weit. Lass das wirken. Dann geh weiter.",
+        "3": "Du hast deinen eigenen Rekord gebrochen, {{username}} – und das ist der beste Gewinn."
+      },
+      "streak_broken": {
+        "1": "Du hast einen Tag verpasst, {{username}} – nicht dein Wachstum.",
+        "2": "Die Serie ist gerissen, nicht dein Wert. Lass uns wiederkommen.",
+        "3": "Ein verpasster Tag hebt deinen Fortschritt nicht auf, {{username}}. Du gehst weiter."
+      }
+    },
+    "milestone_enhancements": {
+      "monthly_brush_20": {
+        "monthly_brush_20": "20 Mal diesen Monat, {{username}}. Das ist echte Hingabe.",
+        "brushed_7_of_10": "7 von 10 Tagen? Das reicht, um einen echten Rhythmus zu etablieren, {{username}}."
+      },
+      "day_7": {
+        "day_7": "Eine Woche mit uns, {{username}} – und schau, wie weit du gekommen bist.",
+        "day_30": "30 Tage mit uns, {{username}} – und jeder einzelne hat gezählt."
+      },
+      "returning_user_milestone": {
+        "returning_user_milestone": "Du bist zurückgekommen, {{username}}. Das erfordert Mut. Und wir sehen dich.",
+        "milestone_streak_recovery": "Du hast nicht aufgegeben, {{username}}. Das ist wirklich alles."
+      },
+      "brush_count_milestones": {
+        "exactly_10": "10 Bürsten schon, {{username}}. Das sind 10 Versprechen an dich selbst.",
+        "exactly_50": "50 Bürsten, {{username}}. Das sind 50 Momente, in denen du da warst. Riesig.",
+        "exactly_100": "100 Bürsten, {{username}}. 100‑mal Fürsorge gezeigt. Einfach großartig."
+      }
+    },
+    "informative": {
+      "habit_tip": {
+        "1": "Winzige Routinen wie Zähneputzen formen, wie wir uns selbst pflegen, {{username}}. Mach weiter."
+      },
+      "dental_fact": {
+        "1": "Nur 2 Minuten, zweimal täglich, halten viele Probleme fern, {{username}}."
+      },
+      "science_fact": {
+        "1": "Du putzt nicht nur — du bringst das Mikrobiom ins Gleichgewicht, {{username}}."
+      },
+      "psych_fact": {
+        "1": "Zähneputzen ist ein kleiner Sieg, {{username}}. Aber es erinnert dich: du hast die Kontrolle."
+      },
+      "dental_fact_2": {
+        "1": "Sanftes Putzen am Zahnfleisch hält dein Lächeln stark, {{username}}."
+      },
+      "dental_fact_3": {
+        "1": "Auch deine Zunge sammelt Bakterien, {{username}}. Schenk ihr eine schnelle Reinigung!"
+      },
+      "science_fact_2": {
+        "1": "Wenn du heute putzt, verhinderst du morgen Ablagerungen, {{username}}. Du schützt dein zukünftiges Ich."
+      },
+      "psych_fact_2": {
+        "1": "Dieses kleine Ritual führt oft zu größeren Siegen, {{username}}. Weiter so."
+      },
+      "morning_breath_fact": {
+        "1": "Der Morgenatem? Total normal. Putzen bringt alles zurück, {{username}}."
+      },
+      "toothpaste_fact": {
+        "1": "Nur erbsengroß Zahnpasta reicht, {{username}}. Geringer Aufwand, große Wirkung."
+      },
+      "floss_fact": {
+        "1": "Zähneputzen ist fantastisch, {{username}}— aber Zahnseide erreicht, was die Bürste nicht schafft."
+      },
+      "brushing_too_hard": {
+        "1": "Sanftes Putzen schützt dein Lächeln und dein Zahnfleisch, {{username}}."
+      },
+      "night_brushing_importance": {
+        "1": "Wenn du vor dem Schlafen putzt, gönnst du deinen Zähnen ebenfalls eine friedliche Nacht, {{username}}."
+      },
+      "brushing_angle_fact": {
+        "1": "Ein kleiner Winkel macht viel – 45° hält dein Zahnfleisch glücklich, {{username}}."
+      },
+      "dry_brush_fact": {
+        "1": "Auch ohne Paste ist ein kurzes Trockenputzen noch ein Gewinn, {{username}}."
+      }
+    },
+    "community": {
+      "community_brushing_now": {
+        "1": "Du bist damit nicht allein, {{username}}. Tausende putzen gerade mit dir 💙"
+      },
+      "nubo_network_energy": {
+        "1": "Du gehörst jetzt zu Nubos Kreis, {{username}}. Ein kleines Ritual‑Trüppchen."
+      },
+      "social_momentum": {
+        "1": "So viele sind diese Woche aufgetaucht. Und du, {{username}}, bist eine von ihnen."
+      },
+      "late_night_others_brushed": {
+        "1": "Du bist nicht die Einzige, die jetzt spät putzt, {{username}} – wir sehen euch alle."
+      },
+      "first_week_global_wave": {
+        "1": "Diese Woche sind viele neue Gesichter zu Nubo gekommen, {{username}}. Du bist in guter Gesellschaft."
+      },
+      "nubo_day_event": {
+        "1": "Es ist Nubo‐Tag! Du hast am perfekten Tag geputzt, {{username}} 🥹🪥"
+      },
+      "community_across_timezones": {
+        "1": "Jemand anders auf der Welt putzt gerade auch, {{username}}."
+      },
+      "brush_in_cities": {
+        "1": "Von Städten bis Dörfern verbindet das Putzen uns alle. Du bist ein Teil davon, {{username}}."
+      },
+      "nubo_watching": {
+        "1": "Nubo hat das Putzen gesehen, {{username}} – und ist ganz gerührt 🥹"
+      },
+      "nubo_broadcast": {
+        "1": "Nubo sendet: „{{username}} hat sich der heutigen Sauberkeits‑Welle angeschlossen!“ 📡"
+      }
+    }
       },
       "playful": {
-        "community": {
-          "community_brushing_now": {
-            "1": "[PLAYFUL_COMMUNITY_BRUSHING_NOW_1]"
-          },
-          "nubo_network_energy": {
-            "1": "[PLAYFUL_NUBO_NETWORK_ENERGY_1]"
-          },
-          "social_momentum": {
-            "1": "[PLAYFUL_SOCIAL_MOMENTUM_1]"
-          },
-          "late_night_others_brushed": {
-            "1": "[PLAYFUL_LATE_NIGHT_OTHERS_BRUSHED_1]"
-          },
-          "first_week_global_wave": {
-            "1": "[PLAYFUL_FIRST_WEEK_GLOBAL_WAVE_1]"
-          },
-          "nubo_day_event": {
-            "1": "[PLAYFUL_NUBO_DAY_EVENT_1]"
-          },
-          "community_across_timezones": {
-            "1": "[PLAYFUL_COMMUNITY_ACROSS_TIMEZONES_1]"
-          },
-          "brush_in_cities": {
-            "1": "[PLAYFUL_BRUSH_IN_CITIES_1]"
-          },
-          "nubo_watching": {
-            "1": "[PLAYFUL_NUBO_WATCHING_1]"
-          },
-          "nubo_broadcast": {
-            "1": "[PLAYFUL_NUBO_BROADCAST_1]"
-          }
-        },
-        "time_context": {
-          "morning": {
-            "1": "[PLAYFUL_TIME_CONTEXT_MORNING_1]"
-          },
-          "afternoon": {
-            "1": "[PLAYFUL_TIME_CONTEXT_AFTERNOON_1]"
-          },
-          "evening": {
-            "1": "[PLAYFUL_TIME_CONTEXT_EVENING_1]"
-          },
-          "late_night": {
-            "1": "[PLAYFUL_TIME_CONTEXT_LATE_NIGHT_1]"
-          },
-          "weekday": {
-            "1": "[PLAYFUL_TIME_CONTEXT_WEEKDAY_1]"
-          },
-          "weekend": {
-            "1": "[PLAYFUL_TIME_CONTEXT_WEEKEND_1]"
-          }
-        },
-        "streak_state": {
-          "new_streak_starting": {
-            "1": "[PLAYFUL_STREAK_STATE_NEW_STREAK_STARTING_1]"
-          },
-          "almost_week_streak": {
-            "1": "[PLAYFUL_STREAK_STATE_ALMOST_WEEK_STREAK_1]"
-          },
-          "over_10_day_streak": {
-            "1": "[PLAYFUL_STREAK_STATE_OVER_10_DAY_STREAK_1]"
-          },
-          "best_streak_reached": {
-            "1": "[PLAYFUL_STREAK_STATE_BEST_STREAK_REACHED_1]"
-          },
-          "streak_broken": {
-            "1": "[PLAYFUL_STREAK_STATE_STREAK_BROKEN_1]"
-          }
-        },
-        "milestone_enhancements": {
-          "brush_count_milestones": {
-            "1": "[PLAYFUL_MILESTONE_ENHANCEMENTS_BRUSH_COUNT_MILESTONES_1]"
-          },
-          "monthly_brush_20": {
-            "1": "[PLAYFUL_MILESTONE_ENHANCEMENTS_MONTHLY_BRUSH_20_1]"
-          },
-          "day_7": {
-            "1": "[PLAYFUL_MILESTONE_ENHANCEMENTS_DAY_7_1]"
-          },
-          "returning_user_milestone": {
-            "1": "[PLAYFUL_MILESTONE_ENHANCEMENTS_RETURNING_USER_MILESTONE_1]"
-          }
-        },
-        "informative": {
-          "habit_tip": {
-            "1": "[PLAYFUL_INFORMATIVE_HABIT_TIP_1]"
-          },
-          "dental_fact": {
-            "1": "[PLAYFUL_INFORMATIVE_DENTAL_FACT_1]"
-          },
-          "science_fact": {
-            "1": "[PLAYFUL_INFORMATIVE_SCIENCE_FACT_1]"
-          },
-          "psych_fact": {
-            "1": "[PLAYFUL_INFORMATIVE_PSYCH_FACT_1]"
-          },
-          "dental_fact_2": {
-            "1": "[PLAYFUL_INFORMATIVE_DENTAL_FACT_2_1]"
-          },
-          "dental_fact_3": {
-            "1": "[PLAYFUL_INFORMATIVE_DENTAL_FACT_3_1]"
-          },
-          "science_fact_2": {
-            "1": "[PLAYFUL_INFORMATIVE_SCIENCE_FACT_2_1]"
-          },
-          "psych_fact_2": {
-            "1": "[PLAYFUL_INFORMATIVE_PSYCH_FACT_2_1]"
-          },
-          "morning_breath_fact": {
-            "1": "[PLAYFUL_INFORMATIVE_MORNING_BREATH_FACT_1]"
-          },
-          "toothpaste_fact": {
-            "1": "[PLAYFUL_INFORMATIVE_TOOTHPASTE_FACT_1]"
-          },
-          "floss_fact": {
-            "1": "[PLAYFUL_INFORMATIVE_FLOSS_FACT_1]"
-          },
-          "brushing_too_hard": {
-            "1": "[PLAYFUL_INFORMATIVE_BRUSHING_TOO_HARD_1]"
-          },
-          "night_brushing_importance": {
-            "1": "[PLAYFUL_INFORMATIVE_NIGHT_BRUSHING_IMPORTANCE_1]"
-          },
-          "brushing_angle_fact": {
-            "1": "[PLAYFUL_INFORMATIVE_BRUSHING_ANGLE_FACT_1]"
-          },
-          "dry_brush_fact": {
-            "1": "[PLAYFUL_INFORMATIVE_DRY_BRUSH_FACT_1]"
-          }
-        }
+  "time_context": {
+    "morning": {
+      "1": "Aufstehen und putzen, Funkel-Kommandant 🪥✨",
+      "2": "Zeit für die Molaren-Morgendisco.",
+      "3": "Die Sonne ist wach! Zahnbürsten raus! Lass’s funkeln, {{username}}!"
+    },
+    "afternoon": {
+      "1": "Lunch-Crew besiegt. Atem-Level: minzig.",
+      "2": "Geheimer Funkel-Boost? Abgefeuert 😏",
+      "3": "Deine Bürste hat gerade eine minzige Rebellion angezettelt, {{username}}. Und gewonnen."
+    },
+    "evening": {
+      "1": "Schlafenszeit? Nein – erst Funkel-Stunde 🦷🌌",
+      "2": "Deines Kissens Ruf: Erst putzen, dann kuscheln.",
+      "3": "Keine Monster unterm Bett, wenn die Molaren minzig sind 😏"
+    },
+    "late_night": {
+      "1": "Der Mond wacht. Deine Bürste auch. Love it.",
+      "2": "Spät nachts? Eher Schicksals-Nacht – Zeit zu leuchten.",
+      "3": "Zähne eingetütet. Du auch bereit, {{username}}?"
+    },
+    "weekday": {
+      "1": "Arbeit. Hustle. Putz wie’n Boss.",
+      "2": "Wochentags-Krieger bleiben mintig.",
+      "3": "Wochentags-Krieger putzen mit Flair 💃"
+    },
+    "weekend": {
+      "1": "Wochenend-Funkeltrupp meldet sich!",
+      "2": "Am Wochenende putzen? Elite-Moves, {{username}}!",
+      "3": "Wochenend-Funkeln ist wie Brunch für deine Zähne 🍳✨"
+    }
+  },
+  "brushing_behaviour": {
+    "after_brushing_success": {
+      "1": "Funkel-Level: freigeschaltet. Nubo ist beeindruckt.",
+      "2": "Zahnstatus: strahlend. Selbstbewusstsein: boosted, {{username}}."
+    },
+    "after_brushing_fail": {
+      "1": "Schnell geputzt heute? Nubo lässt’s durchgehen… diesmal 😏",
+      "2": "Speed-Runde? Beim nächsten Mal holen wir’s nach, Funkel-Champ {{username}}."
+    },
+    "first_brush_of_day": {
+      "1": "Erstes Funkeln des Tages: abgesendet. Auf ein strahlendes!",
+      "2": "Zähne eingecheckt. Lass den Tag beginnen, {{username}}!"
+    },
+    "second_brush_of_day": {
+      "1": "Runde 2? Jetzt bist du offiziell ein Putz-Boss 💪",
+      "2": "Zurück für Runde zwei? Absolute Funkel-Meisterleistung, {{username}}!"
+    },
+    "missed_yesterday": {
+      "1": "Plaque hat gestern gefeiert. Heute… ist Festnahme angesagt.",
+      "2": "Gestern? Vergiss es. Heute funkeln wir mit Rache, {{username}}!"
+    }
+  },
+  "streak_state": {
+    "new_streak_starting": {
+      "1": "Eine Bürste im Einsatz – und der Streak-Beast erwacht 🦷💥",
+      "2": "Boom! Ein wilder Streak erscheint 🪥✨",
+      "3": "Frischer Streak-Alarm! Jemand ist mintig drauf 💨"
+    },
+    "almost_week_streak": {
+      "1": "5 Tage am Stück? Streak hat Main-Character-Vibes 💫",
+      "2": "Funkel-Streak kurz vor Legendenstatus ✨🔥",
+      "3": "Nubo sieht dieses 6‑Tage-Feuer. Riechst du die 7‑Tage-Glorie? 🔥"
+    },
+    "over_10_day_streak": {
+      "1": "10+ Tage?! Du bist im Sparkle-Prime-Modus 🚀",
+      "2": "10+ Tage? Jemand stoppt diesen Funkel-Zug!! 🛤️💥",
+      "3": "Zehn-Tage-Legende freigeschaltet! Mint-Game: Elite."
+    },
+    "best_streak_reached": {
+      "1": "Du hast deinen Streak-Rekord gebrochen. Jetzt brauchen wir Feuerwerk. Und Eis 🍦🎉",
+      "2": "Rekord = pulverisiert 💥 Funkeln = maximiert 🌟",
+      "3": "Zähne? Tanzen. Nubo? Weint. Du? Rockst das."
+    },
+    "streak_broken": {
+      "1": "Upsie! Der Streak ist gestolpert – aber du? Immer noch Funkel-Krieger ⚔️",
+      "2": "Ruhe in Frieden an diesen Streak 🪦 Aber hey… Wiederauferstehung beginnt jetzt!",
+      "3": "Streak KO’d… aber du putzt wie ein Comeback-König 👑"
+    }
+  },
+  "milestone_enhancements": {
+    "monthly_brush_20": {
+      "monthly_brush_20": "20 Putzungen im Monat? Wir brauchen Konfetti und ’ne Parade 🎉",
+      "brushed_7_of_10": "70 % Funkelrate? Premium-Abo-Vibes 😎"
+    },
+    "day_7": {
+      "day_7": "7 Tage zusammen? Fühlt sich schon wie eine mintige Freundschaft an 🫶",
+      "day_30": "30 Tage später… Nubo und {{username}} bürsten noch stark 💪"
+    },
+    "returning_user_milestone": {
+      "returning_user_milestone": "Sie wollten dich weghalten… aber Funkeln ruft dich heim 💫",
+      "milestone_streak_recovery": "Down, aber nie out! Comeback-Streak: gestartet 🦸"
+    },
+    "brush_count_milestones": {
+      "exactly_10": "Zehn Bürsten?! Du bist praktisch Zahnbürsten-Royalty 👑",
+      "exactly_50": "50?! Diese Bürste will Gehaltserhöhung 😎",
+      "exactly_100": "100?! Diese Bürste ist praktisch schon ein Teil von dir 😂"
+    }
+  },
+  "informative": {
+    "habit_tip": {
+      "1": "Putze jetzt. Erobere später die Welt 😎"
+    },
+    "dental_fact": {
+      "1": "2 Minuten mögen lang wirken, aber so fühlt sich auch ’ne Karies-Erklärung an 😬"
+    },
+    "science_fact": {
+      "1": "Millionen Bakterien? Lass uns das eine mintige Massaker nennen 💥🦠"
+    },
+    "psych_fact": {
+      "1": "Schon Zähneputzen sendet deinem Gehirn ’n kleines »du packst das«-Signal 🧠✨"
+    },
+    "dental_fact_2": {
+      "1": "Putze auch dein Zahnfleisch! Es will Aufmerksamkeit, nicht Ablehnung 😩🪥"
+    },
+    "dental_fact_3": {
+      "1": "Deine Zunge hat angerufen. Sie ist eifersüchtig auf all die Putz-Attention 🥲"
+    },
+    "science_fact_2": {
+      "1": "Plaque ignorieren? Wird zu fiesem Zahnstein 🪨🫠"
+    },
+    "psych_fact_2": {
+      "1": "Putzen = Schlüsselhabit. Basically, der Boss-Move 💼"
+    },
+    "morning_breath_fact": {
+      "1": "Morgenatem: 100 % real. 100 % besiegbar. Nubo deckt dich 😤"
+    },
+    "toothpaste_fact": {
+      "1": "Fun Fact: Du brauchst nur erbsengroße Zahnpasta, keinen mintigen Tsunami 🌊"
+    },
+    "floss_fact": {
+      "1": "Putzen ohne Zahnseide? Du bist nur 65 % da 😏"
+    },
+    "brushing_too_hard": {
+      "1": "Schrubben, als wär’s Fugen? Nope. Das ist keine Fliesen-Reinigung 🧽"
+    },
+    "night_brushing_importance": {
+      "1": "Schlafende Zähne? Nee, die wollen verteidigt werden, während du träumst 💤🦷"
+    },
+    "brushing_angle_fact": {
+      "1": "Putze wie ein Pro: Neig die Bürste, als hätte sie Drip 💅"
+    },
+    "dry_brush_fact": {
+      "1": "Keine Paste? Kein Problem. Go full Dry-Ninja-Mode 🥷🪥"
+    }
+  },
+  "community": {
+    "community_brushing_now": {
+      "1": "Jetzt gerade? Brushing Squad ist weltweit live 🪥🌐"
+    },
+    "nubo_network_energy": {
+      "1": "Nubo Network aktiv: {{username}} online ✅ Funkel-Signal stark 💫"
+    },
+    "social_momentum": {
+      "1": "Brushing-Leaderboard? Poppin'. Du? Offiziell im Trend 😎"
+    },
+    "late_night_others_brushed": {
+      "1": "Es ist spät. Aber Nubos Nachtschicht schläft nie 🌙🪥"
+    },
+    "first_week_global_wave": {
+      "1": "Neue Nubo-Crew ist am Start. Funkel-Party incoming 🎉"
+    },
+    "nubo_day_event": {
+      "1": "🎈 Happy Nubo Day! Heute gibt’s extra Mint für alle 🍃✨"
+    },
+    "community_across_timezones": {
+      "1": "Zeitzonen? Eher Grind-Zonen 🗺️ Jeder putzt."
+    },
+    "brush_in_cities": {
+      "1": "Von Tokyo bis Toronto: Die Bürsten-Revolution läuft 🌆🪥"
+    },
+    "nubo_watching": {
+      "1": "Nubo hat reingeschaut und geschrien: ‚SCHAU {{username}} WIE DU GEHST!‘ 😭🪥"
+    },
+    "nubo_broadcast": {
+      "1": "Nubo hat {{username}} zum Clean Legend Feed™ hinzugefügt 💾🪥"
+    }
+  }
       },
       "cool": {
-        "community": {
-          "community_brushing_now": {
-            "1": "[COOL_COMMUNITY_BRUSHING_NOW_1]"
-          },
-          "nubo_network_energy": {
-            "1": "[COOL_NUBO_NETWORK_ENERGY_1]"
-          },
-          "social_momentum": {
-            "1": "[COOL_SOCIAL_MOMENTUM_1]"
-          },
-          "late_night_others_brushed": {
-            "1": "[COOL_LATE_NIGHT_OTHERS_BRUSHED_1]"
-          },
-          "first_week_global_wave": {
-            "1": "[COOL_FIRST_WEEK_GLOBAL_WAVE_1]"
-          },
-          "nubo_day_event": {
-            "1": "[COOL_NUBO_DAY_EVENT_1]"
-          },
-          "community_across_timezones": {
-            "1": "[COOL_COMMUNITY_ACROSS_TIMEZONES_1]"
-          },
-          "brush_in_cities": {
-            "1": "[COOL_BRUSH_IN_CITIES_1]"
-          },
-          "nubo_watching": {
-            "1": "[COOL_NUBO_WATCHING_1]"
-          },
-          "nubo_broadcast": {
-            "1": "[COOL_NUBO_BROADCAST_1]"
-          }
-        },
-        "time_context": {
-          "morning": {
-            "1": "[COOL_TIME_CONTEXT_MORNING_1]"
-          },
-          "afternoon": {
-            "1": "[COOL_TIME_CONTEXT_AFTERNOON_1]"
-          },
-          "evening": {
-            "1": "[COOL_TIME_CONTEXT_EVENING_1]"
-          },
-          "late_night": {
-            "1": "[COOL_TIME_CONTEXT_LATE_NIGHT_1]"
-          },
-          "weekday": {
-            "1": "[COOL_TIME_CONTEXT_WEEKDAY_1]"
-          },
-          "weekend": {
-            "1": "[COOL_TIME_CONTEXT_WEEKEND_1]"
-          }
-        },
-        "streak_state": {
-          "new_streak_starting": {
-            "1": "[COOL_STREAK_STATE_NEW_STREAK_STARTING_1]"
-          },
-          "almost_week_streak": {
-            "1": "[COOL_STREAK_STATE_ALMOST_WEEK_STREAK_1]"
-          },
-          "over_10_day_streak": {
-            "1": "[COOL_STREAK_STATE_OVER_10_DAY_STREAK_1]"
-          },
-          "best_streak_reached": {
-            "1": "[COOL_STREAK_STATE_BEST_STREAK_REACHED_1]"
-          },
-          "streak_broken": {
-            "1": "[COOL_STREAK_STATE_STREAK_BROKEN_1]"
-          }
-        },
-        "milestone_enhancements": {
-          "brush_count_milestones": {
-            "1": "[COOL_MILESTONE_ENHANCEMENTS_BRUSH_COUNT_MILESTONES_1]"
-          },
-          "monthly_brush_20": {
-            "1": "[COOL_MILESTONE_ENHANCEMENTS_MONTHLY_BRUSH_20_1]"
-          },
-          "day_7": {
-            "1": "[COOL_MILESTONE_ENHANCEMENTS_DAY_7_1]"
-          },
-          "returning_user_milestone": {
-            "1": "[COOL_MILESTONE_ENHANCEMENTS_RETURNING_USER_MILESTONE_1]"
-          }
-        },
-        "informative": {
-          "habit_tip": {
-            "1": "[COOL_INFORMATIVE_HABIT_TIP_1]"
-          },
-          "dental_fact": {
-            "1": "[COOL_INFORMATIVE_DENTAL_FACT_1]"
-          },
-          "science_fact": {
-            "1": "[COOL_INFORMATIVE_SCIENCE_FACT_1]"
-          },
-          "psych_fact": {
-            "1": "[COOL_INFORMATIVE_PSYCH_FACT_1]"
-          },
-          "dental_fact_2": {
-            "1": "[COOL_INFORMATIVE_DENTAL_FACT_2_1]"
-          },
-          "dental_fact_3": {
-            "1": "[COOL_INFORMATIVE_DENTAL_FACT_3_1]"
-          },
-          "science_fact_2": {
-            "1": "[COOL_INFORMATIVE_SCIENCE_FACT_2_1]"
-          },
-          "psych_fact_2": {
-            "1": "[COOL_INFORMATIVE_PSYCH_FACT_2_1]"
-          },
-          "morning_breath_fact": {
-            "1": "[COOL_INFORMATIVE_MORNING_BREATH_FACT_1]"
-          },
-          "toothpaste_fact": {
-            "1": "[COOL_INFORMATIVE_TOOTHPASTE_FACT_1]"
-          },
-          "floss_fact": {
-            "1": "[COOL_INFORMATIVE_FLOSS_FACT_1]"
-          },
-          "brushing_too_hard": {
-            "1": "[COOL_INFORMATIVE_BRUSHING_TOO_HARD_1]"
-          },
-          "night_brushing_importance": {
-            "1": "[COOL_INFORMATIVE_NIGHT_BRUSHING_IMPORTANCE_1]"
-          },
-          "brushing_angle_fact": {
-            "1": "[COOL_INFORMATIVE_BRUSHING_ANGLE_FACT_1]"
-          },
-          "dry_brush_fact": {
-            "1": "[COOL_INFORMATIVE_DRY_BRUSH_FACT_1]"
-          }
-        }
+  "time_context": {
+    "morning": {
+      "1": "Aufwachen. Putzen. Den Tag dominieren.",
+      "2": "Klar starten. Scharf bleiben.",
+      "3": "Morgens sind für stille Siege. Du hast gerade einen gelandet, {{username}}."
+    },
+    "afternoon": {
+      "1": "Reset drücken. Zurück in den Mint-Modus.",
+      "2": "Mittags-Refresh. Kein Stress, nur Style.",
+      "3": "Midday-Flex? Ein sauberes Lächeln, {{username}}. Kein Drama."
+    },
+    "evening": {
+      "1": "Night-Mode aktiviert. Clean. Calm. Fertig.",
+      "2": "Putzen. Licht aus. Vibes in Check.",
+      "3": "Letzter Putz. Full Chill. Lass sauber ausklingen, {{username}}."
+    },
+    "late_night": {
+      "1": "Niemand sieht zu. Du bist trotzdem da. Power-Move.",
+      "2": "Mitternachts-Mint fühlt sich anders an.",
+      "3": "Nach Mitternacht? Treue zum Glow, {{username}}."
+    },
+    "weekday": {
+      "1": "Diese Woche scharf bleiben.",
+      "2": "Arbeitstag frisch. So, wie du es sein solltest.",
+      "3": "Sauberes Lächeln, saubere Weste, {{username}}. Go."
+    },
+    "weekend": {
+      "1": "Feierabend? Trotzdem on point. Respekt.",
+      "2": "Lazy-Day. Clean-Vibe.",
+      "3": "Freie Zeit. Frische Vibes, {{username}}."
+    }
+  },
+  "brushing_behaviour": {
+    "after_brushing_success": {
+      "1": "Geputzt. Genausso. Ab jetzt Großes.",
+      "2": "Alles erledigt. Kein Tamtam. Nur Resultate, {{username}}."
+    },
+    "after_brushing_fail": {
+      "1": "Nicht der Hit – aber hey, du warst da. Das zählt.",
+      "2": "Hättest aussetzen können. Hast du nicht. Genug gesagt, {{username}}."
+    },
+    "first_brush_of_day": {
+      "1": "Tag mit Pflege gestartet. Ziemlich smooth.",
+      "2": "Früher Flex. Saubere Energie, {{username}}."
+    },
+    "second_brush_of_day": {
+      "1": "Wieder da. Scharf bleiben. Immer.",
+      "2": "Zweimal geputzt. Immer crisp, {{username}}."
+    },
+    "missed_yesterday": {
+      "1": "Einen verpasst? Nicht dein Stil. Lass uns das richten.",
+      "2": "Zurück auf Kurs. Keine Ausreden, nur Action, {{username}}."
+    }
+  },
+  "streak_state": {
+    "new_streak_starting": {
+      "1": "Neuer Lauf, neue Vibes, {{username}}. Mal sehen, wohin das führt.",
+      "2": "Eins geschafft. Neuer Vibe freigeschaltet, {{username}}.",
+      "3": "Reset? Aktiviert. Los geht’s."
+    },
+    "almost_week_streak": {
+      "1": "Fast ne Woche drin, {{username}}. Das ist anders.",
+      "2": "5+ Tage tief. Nichts Zufälliges, {{username}}.",
+      "3": "Nur noch einer bis zur Woche. Bleib scharf."
+    },
+    "over_10_day_streak": {
+      "1": "Weißt du noch immer. Immernoch lautlos flexen. Weiter so, {{username}}.",
+      "2": "Du bist jetzt in dieser rare Air, {{username}}. Mach weiter.",
+      "3": "Weiter putzen. Weiter steigen. Liebe das."
+    },
+    "best_streak_reached": {
+      "1": "Das ist dein bisher Bestes, {{username}}. Lass die Latte höher legen.",
+      "2": "Neues Level. Clean freigeschaltet. Nubo ist stolz auf dich, {{username}}.",
+      "3": "Du hast gerade den Maßstab gesetzt. Und morgen wirst du ihn übertreffen."
+    },
+    "streak_broken": {
+      "1": "Streak verpasst? So ist Leben. Aber heute warst du da. Das ist Power, {{username}}.",
+      "2": "Streak ist weg. Aber die Legende geht weiter, {{username}}.",
+      "3": "Reset. Reload. Trotzdem clean."
+    }
+  },
+  "milestone_enhancements": {
+    "monthly_brush_20": {
+      "monthly_brush_20": "Das sind 20 saubere Einsätze diesen Monat. Respekt, {{username}}.",
+      "brushed_7_of_10": "Nicht fehlerfrei, aber dominant. Du hast’s unter Kontrolle, {{username}}."
+    },
+    "day_7": {
+      "day_7": "Woche eins? Zerlegt. Weiter geht’s, {{username}}.",
+      "day_30": "Monat eins? Erobert. Cheers, {{username}}."
+    },
+    "returning_user_milestone": {
+      "returning_user_milestone": "Pause vorbei. Streak lädt neu. Willkommen zurück, {{username}}.",
+      "milestone_streak_recovery": "Erholt. Neustart. Schon wieder auf dem Weg nach oben, {{username}}."
+    },
+    "brush_count_milestones": {
+      "exactly_10": "Doppelte Ziffern. Du levelst smooth auf, {{username}}.",
+      "exactly_50": "Ein halbes Jahrhundert. Volle Hingabe, {{username}}.",
+      "exactly_100": "Hundert? Legende bestätigt, {{username}}."
+    }
+  },
+  "informative": {
+    "habit_tip": {
+      "1": "Routine ist Macht, {{username}}. Immer weiter stapeln."
+    },
+    "dental_fact": {
+      "1": "Zwei Minuten Putzen. Unendliche Coolness-Punkte, {{username}}."
+    },
+    "science_fact": {
+      "1": "Du hast gerade eine ganze Bakterienstadt ausgelöscht, {{username}}. Respekt."
+    },
+    "psych_fact": {
+      "1": "Großes Mindset? Beginnt mit winzigen Aktionen. Wie dieser, {{username}}."
+    },
+    "dental_fact_2": {
+      "1": "Gesundes Zahnfleisch = starker Flex, {{username}}. Überspring’s nicht."
+    },
+    "dental_fact_3": {
+      "1": "Echte Frische? Beginnt auf der Zunge, {{username}}."
+    },
+    "science_fact_2": {
+      "1": "Plaque jetzt oder Zahnstein später. Du hast dich für jetzt entschieden. Smarter Move, {{username}}."
+    },
+    "psych_fact_2": {
+      "1": "Eine solide Gewohnheit führt zu anderen. Putzen ist Schritt eins, {{username}}."
+    },
+    "morning_breath_fact": {
+      "1": "Frische Morgen beginnt mit frischer Aktion, {{username}}. Leg los."
+    },
+    "toothpaste_fact": {
+      "1": "Großer Schaum ≠ besser. Ein Klecks reicht, {{username}}."
+    },
+    "floss_fact": {
+      "1": "Zahnseide erreicht die Ecken, die Bürste verpasst. Clean Move, {{username}}."
+    },
+    "brushing_too_hard": {
+      "1": "Putze klug, nicht hart, {{username}}. Es geht um Finesse."
+    },
+    "night_brushing_importance": {
+      "1": "Nachtputz = Übernacht-Schild. Scharfer Move, {{username}}."
+    },
+    "brushing_angle_fact": {
+      "1": "Winkel rein. Sauber tief. Pro-Putz-Level, {{username}}."
+    },
+    "dry_brush_fact": {
+      "1": "Keine Paste? Trotzdem scharf bleiben, {{username}}. Trockenputzen rettet den Tag."
+    }
+  },
+  "community": {
+    "community_brushing_now": {
+      "1": "Putzen ist kein Solo-Job. Du bist synchron mit der globalen Clean Crew, {{username}}."
+    },
+    "nubo_network_energy": {
+      "1": "Du bist in NuboNet™ eingeloggt – wo Clean-Vibes 24/7 fließen, {{username}}."
+    },
+    "social_momentum": {
+      "1": "Diese Woche war bei vielen clean. Du? Elite, {{username}}."
+    },
+    "late_night_others_brushed": {
+      "1": "Nach Mitternacht? Du putzt mit den echten, {{username}}."
+    },
+    "first_week_global_wave": {
+      "1": "Frische Welle. Frische Gesichter. Willkommen in der Bewegung, {{username}}."
+    },
+    "nubo_day_event": {
+      "1": "Clean-Vibes only. Es ist Nubo Day, {{username}}. Lass uns leuchten."
+    },
+    "community_across_timezones": {
+      "1": "Andere Uhren. Gleiche Clean-Energie. Weltweite Putz-Gang, {{username}}."
+    },
+    "brush_in_cities": {
+      "1": "Große Städte. Helle Lächeln. Putzen ist universell, {{username}}."
+    },
+    "nubo_watching": {
+      "1": "Nubo hat’s gesehen. Sagte nichts. Nickte in Respekt, {{username}}."
+    },
+    "nubo_broadcast": {
+      "1": "Bestätigt: {{username}} hat geputzt. Nachricht gesendet. Status: 🔥"
+    }
+  }
       },
-      "wise": {
-        "community": {
-          "community_brushing_now": {
-            "1": "[WISE_COMMUNITY_BRUSHING_NOW_1]"
-          },
-          "nubo_network_energy": {
-            "1": "[WISE_NUBO_NETWORK_ENERGY_1]"
-          },
-          "social_momentum": {
-            "1": "[WISE_SOCIAL_MOMENTUM_1]"
-          },
-          "late_night_others_brushed": {
-            "1": "[WISE_LATE_NIGHT_OTHERS_BRUSHED_1]"
-          },
-          "first_week_global_wave": {
-            "1": "[WISE_FIRST_WEEK_GLOBAL_WAVE_1]"
-          },
-          "nubo_day_event": {
-            "1": "[WISE_NUBO_DAY_EVENT_1]"
-          },
-          "community_across_timezones": {
-            "1": "[WISE_COMMUNITY_ACROSS_TIMEZONES_1]"
-          },
-          "brush_in_cities": {
-            "1": "[WISE_BRUSH_IN_CITIES_1]"
-          },
-          "nubo_watching": {
-            "1": "[WISE_NUBO_WATCHING_1]"
-          },
-          "nubo_broadcast": {
-            "1": "[WISE_NUBO_BROADCAST_1]"
-          }
-        },
-        "time_context": {
-          "morning": {
-            "1": "[WISE_TIME_CONTEXT_MORNING_1]"
-          },
-          "afternoon": {
-            "1": "[WISE_TIME_CONTEXT_AFTERNOON_1]"
-          },
-          "evening": {
-            "1": "[WISE_TIME_CONTEXT_EVENING_1]"
-          },
-          "late_night": {
-            "1": "[WISE_TIME_CONTEXT_LATE_NIGHT_1]"
-          },
-          "weekday": {
-            "1": "[WISE_TIME_CONTEXT_WEEKDAY_1]"
-          },
-          "weekend": {
-            "1": "[WISE_TIME_CONTEXT_WEEKEND_1]"
-          }
-        },
-        "streak_state": {
-          "new_streak_starting": {
-            "1": "[WISE_STREAK_STATE_NEW_STREAK_STARTING_1]"
-          },
-          "almost_week_streak": {
-            "1": "[WISE_STREAK_STATE_ALMOST_WEEK_STREAK_1]"
-          },
-          "over_10_day_streak": {
-            "1": "[WISE_STREAK_STATE_OVER_10_DAY_STREAK_1]"
-          },
-          "best_streak_reached": {
-            "1": "[WISE_STREAK_STATE_BEST_STREAK_REACHED_1]"
-          },
-          "streak_broken": {
-            "1": "[WISE_STREAK_STATE_STREAK_BROKEN_1]"
-          }
-        },
-        "milestone_enhancements": {
-          "brush_count_milestones": {
-            "1": "[WISE_MILESTONE_ENHANCEMENTS_BRUSH_COUNT_MILESTONES_1]"
-          },
-          "monthly_brush_20": {
-            "1": "[WISE_MILESTONE_ENHANCEMENTS_MONTHLY_BRUSH_20_1]"
-          },
-          "day_7": {
-            "1": "[WISE_MILESTONE_ENHANCEMENTS_DAY_7_1]"
-          },
-          "returning_user_milestone": {
-            "1": "[WISE_MILESTONE_ENHANCEMENTS_RETURNING_USER_MILESTONE_1]"
-          }
-        },
-        "informative": {
-          "habit_tip": {
-            "1": "[WISE_INFORMATIVE_HABIT_TIP_1]"
-          },
-          "dental_fact": {
-            "1": "[WISE_INFORMATIVE_DENTAL_FACT_1]"
-          },
-          "science_fact": {
-            "1": "[WISE_INFORMATIVE_SCIENCE_FACT_1]"
-          },
-          "psych_fact": {
-            "1": "[WISE_INFORMATIVE_PSYCH_FACT_1]"
-          },
-          "dental_fact_2": {
-            "1": "[WISE_INFORMATIVE_DENTAL_FACT_2_1]"
-          },
-          "dental_fact_3": {
-            "1": "[WISE_INFORMATIVE_DENTAL_FACT_3_1]"
-          },
-          "science_fact_2": {
-            "1": "[WISE_INFORMATIVE_SCIENCE_FACT_2_1]"
-          },
-          "psych_fact_2": {
-            "1": "[WISE_INFORMATIVE_PSYCH_FACT_2_1]"
-          },
-          "morning_breath_fact": {
-            "1": "[WISE_INFORMATIVE_MORNING_BREATH_FACT_1]"
-          },
-          "toothpaste_fact": {
-            "1": "[WISE_INFORMATIVE_TOOTHPASTE_FACT_1]"
-          },
-          "floss_fact": {
-            "1": "[WISE_INFORMATIVE_FLOSS_FACT_1]"
-          },
-          "brushing_too_hard": {
-            "1": "[WISE_INFORMATIVE_BRUSHING_TOO_HARD_1]"
-          },
-          "night_brushing_importance": {
-            "1": "[WISE_INFORMATIVE_NIGHT_BRUSHING_IMPORTANCE_1]"
-          },
-          "brushing_angle_fact": {
-            "1": "[WISE_INFORMATIVE_BRUSHING_ANGLE_FACT_1]"
-          },
-          "dry_brush_fact": {
-            "1": "[WISE_INFORMATIVE_DRY_BRUSH_FACT_1]"
-          }
-        }
-      }
+     "wise": {
+  "time_context": {
+    "morning": {
+      "1": "Der Ton deines Tages beginnt damit, wie du deinen Morgen beginnst.",
+      "2": "Ein ruhiger Start hallt durch den ganzen Tag.",
+      "3": "Ein sanfter Anfang pflanzt starke Wurzeln für den Tag, {{username}}."
+    },
+    "afternoon": {
+      "1": "Unterbreche das Rauschen. Erneuere den Rhythmus.",
+      "2": "Ein klarer Geist beginnt mit kleinen Neustarts.",
+      "3": "Zwischen Momenten der Eile wähle Klarheit, {{username}}."
+    },
+    "evening": {
+      "1": "Wie du den Tag abschließt, formt, wie du den nächsten begrüßt.",
+      "2": "Stille. Routine. Fortschritt.",
+      "3": "Wie du einen Tag schließt, flüstert in den nächsten hinein, {{username}}."
+    },
+    "late_night": {
+      "1": "Disziplin fragt nicht nach der perfekten Stunde – nur nach dem Willen zu handeln.",
+      "2": "Sogar die Sterne ehren Routinen, die in Stille gehalten werden, {{username}}.",
+      "3": "Es gibt stille Kraft darin, vor dem Schlafen Ordnung zu wählen."
+    },
+    "weekday": {
+      "1": "Struktur schafft Freiheit. Du baust beides.",
+      "2": "Routine ist der Kompass. Du steuerst gut.",
+      "3": "Der Rhythmus der Woche entsteht durch winzige Handlungen, {{username}}."
+    },
+    "weekend": {
+      "1": "Die besten Gewohnheiten leben jenseits des Zeitplans.",
+      "2": "Freiheit zeigt, was zählt – und du hast dich entschieden, {{username}}.",
+      "3": "Wenn du alle Zeit hast, wie nutzt du sie? Du hast richtig gewählt."
+    }
+  },
+  "brushing_behaviour": {
+    "after_brushing_success": {
+      "1": "Disziplin wächst. Du hast gerade eine weitere Einzahlung gemacht.",
+      "2": "Routinen bauen still. Ziegel für zahnminzige Ziegel, {{username}}."
+    },
+    "after_brushing_fail": {
+      "1": "Sogar ein kurzes Ritual kann einen langen Tag verankern.",
+      "2": "Die Handlung zählt mehr als die Zahl, {{username}}. Du hast die Handlung gewählt."
+    },
+    "first_brush_of_day": {
+      "1": "Erste Schritte formen den Weg. Deiner war bewusst.",
+      "2": "Die erste Handlung des Tages ist der Samen deiner Konzentration, {{username}}."
+    },
+    "second_brush_of_day": {
+      "1": "Diese Anstrengung vollendet den Bogen der Disziplin.",
+      "2": "Der Kreis ist geschlossen. Du hast deinen Rhythmus gehalten, {{username}}."
+    },
+    "missed_yesterday": {
+      "1": "Die Kette riss. Aber nicht der Wille. Geh weiter.",
+      "2": "Fortschritt ist nicht perfekt, {{username}}. Es ist Beharrlichkeit."
+    }
+  },
+  "streak_state": {
+    "new_streak_starting": {
+      "1": "Die erste Bürste einer Serie ist immer die wichtigste.",
+      "2": "Anfänge sind heilig. Behandle diesen mit Sorgfalt.",
+      "3": "Ein sauberer Tag 1 führt oft zu einer saubereren Zukunft."
+    },
+    "almost_week_streak": {
+      "1": "Gewohnheiten entstehen leise. Du bist fast da.",
+      "2": "6 Tage sind kein Zufall. Das bist du, wie du beständig wirst.",
+      "3": "6 Tage tief. Du versuchst nicht nur – du wirst."
+    },
+    "over_10_day_streak": {
+      "1": "Du bist über eine Gewohnheit hinausgetreten. Das ist Identität.",
+      "2": "Was du wiederholst, wirst du. Sieh, wer du jetzt wirst.",
+      "3": "Das ist kein Glück. Das ist, was tägliches Erscheinen aufbaut."
+    },
+    "best_streak_reached": {
+      "1": "Ein gebrochener Rekord ist ein selbst übertroffener.",
+      "2": "Das Einzige, was besser ist als dieser Moment? Dein nächster.",
+      "3": "Meilensteine sind Spiegel. Schau, wer du geworden bist."
+    },
+    "streak_broken": {
+      "1": "Die Serie pausierte. Der Pfad nicht.",
+      "2": "Versagen ist nur Feedback – und du hörst zu.",
+      "3": "Unperfektion ist menschlich. Beharrlichkeit ist Weisheit."
+    }
+  },
+  "milestone_enhancements": {
+    "monthly_brush_20": {
+      "monthly_brush_20": "Zwanzig Entscheidungen für die Gesundheit. Jede ein Same für Dauerhaftes.",
+      "brushed_7_of_10": "Es geht nicht um Perfektion. Es geht um Beständigkeit."
+    },
+    "day_7": {
+      "day_7": "Sieben Tage sind, wenn Gewohnheiten beginnen, ihre Beständigkeit zu flüstern.",
+      "day_30": "Ein Monat Momentum. Das ist echte Veränderung."
+    },
+    "returning_user_milestone": {
+      "returning_user_milestone": "Jeder Rückkehr lehrt, was am wichtigsten ist: nicht Perfektion, sondern Beharrlichkeit.",
+      "milestone_streak_recovery": "Wahre Stärke zeigt sich, wie du zurückkommst nach dem Fall."
+    },
+    "brush_count_milestones": {
+      "exactly_10": "Zehn Wiederholungen. Ein Muster beginnt.",
+      "exactly_50": "Fünfzig ist nicht nur eine Zahl. Es ist der Beweis für ein Muster.",
+      "exactly_100": "Dreistellige Zahl. Disziplin ist jetzt real."
+    }
+  },
+  "informative": {
+    "habit_tip": {
+      "1": "Die kleinsten Rituale verankern oft die stärksten Leben."
+    },
+    "dental_fact": {
+      "1": "Zwei Minuten. Das ist die perfekte Balance, um zu schützen, was zählt."
+    },
+    "science_fact": {
+      "1": "Bakterien vermehren sich stündlich. Aber das kann auch deine Disziplin."
+    },
+    "psych_fact": {
+      "1": "Winzige Handlungen formen Identität. So verkabelt sich Geist neu."
+    },
+    "dental_fact_2": {
+      "1": "Vernachlässigtes Zahnfleisch flüstert oft, bevor es schreit."
+    },
+    "dental_fact_3": {
+      "1": "Vernachlässige die Zunge, und Frische wird vergänglich."
+    },
+    "science_fact_2": {
+      "1": "Ungeprüfter Plaque wird Stein. Fürsorge verhindert Korrektur."
+    },
+    "psych_fact_2": {
+      "1": "Verankerte Gewohnheiten wirken sich auf den Rest deines Lebens aus."
+    },
+    "morning_breath_fact": {
+      "1": "Speichel schützt den Mund – und „schläft“, wenn du es tust."
+    },
+    "toothpaste_fact": {
+      "1": "Ein voller Streifen ist nicht besser. Präzision schlägt Masse – erbsengroß reicht."
+    },
+    "floss_fact": {
+      "1": "Zahnseide erreicht die stillen Räume, die Putzen nicht schafft."
+    },
+    "brushing_too_hard": {
+      "1": "Zu viel Druck kann zum Rückzug führen. Auch beim Putzen."
+    },
+    "night_brushing_importance": {
+      "1": "Der Mund ist nachts verwundbar. Abendpflege ist stille Verteidigung."
+    },
+    "brushing_angle_fact": {
+      "1": "Präzision zählt. Ein Winkel von 45° erreicht die Basis."
+    },
+    "dry_brush_fact": {
+      "1": "Wenn du es nicht perfekt kannst – tu es trotzdem. Auch Trockenputzen beseitigt Schaden."
+    }
+  },
+  "community": {
+    "community_brushing_now": {
+      "1": "In diesem Moment, über Zeitzonen hinweg, geschieht stille Fürsorge – so wie deine."
+    },
+    "nubo_network_energy": {
+      "1": "Irgendwo in der Cloud putzen andere mit Absicht. Das zählt."
+    },
+    "social_momentum": {
+      "1": "Diese Woche summierten sich stille Taten. Deine eingeschlossen."
+    },
+    "late_night_others_brushed": {
+      "1": "In Schlafzimmern und Städten entschied sich jemand anders in dieser Stunde auch für Fürsorge."
+    },
+    "first_week_global_wave": {
+      "1": "Jede Welle beginnt mit ein paar mutigen Schritten. Willkommen bei der Welle."
+    },
+    "nubo_day_event": {
+      "1": "Heute ist Nubo Day – eine kleine Erinnerung, dass jedes Ritual zählt."
+    },
+    "community_across_timezones": {
+      "1": "Auf allen Kontinenten setzt sich Fürsorge fort – eine Bürste nach der anderen."
+    },
+    "brush_in_cities": {
+      "1": "Mitten im geschäftigen Straßen finden wir Zeit zur Fürsorge."
+    },
+    "nubo_watching": {
+      "1": "Auch wenn du es nicht bemerkst, Nubo bemerkt den Einsatz."
+    },
+    "nubo_broadcast": {
+      "1": "Nubos Datenboard leuchtete auf wegen deiner Handlung. Es zählt."
+    }
+  }
+}
+
     }
   }
 }

@@ -587,686 +587,729 @@
   "mascotGreetings": {
     "v2": {
       "supportive": {
-    "time_context": {
-      "morning": {
-        "1": "Yeni bir gün, kendinle ilgilenmek için yeni bir şans. Şimdiden iyi gidiyorsun!",
-        "2": "Bu sabah buradasın — işte güzel günler böyle başlar.",
-        "3": "Kusursuz bir başlangıç gerekmiyor, şefkatli bir adım yeter, {{username}}."
-      },
-      "afternoon": {
-        "1": "Günün ortasında diş fırçalamak? Bu, kendine duyduğun saygının bir işareti.",
-        "2": "Günün koşturmacasında kendine vakit ayırdın. Bu çok değerli, {{username}}.",
-        "3": "Bir anlığına bile olsa durup kendine yöneldin. Bu, nadir bulunan bir güç."
-      },
-      "evening": {
-        "1": "Günü bakım ile kapatıyorsun — buraya gelmen bile takdire değer.",
-        "2": "Bugünü güzel bir dokunuşla tamamladın. Bu gerçekten önemliydi, {{username}}.",
-        "3": "Bu sadece uzun bir gün değildi. Senin günündü — ve sen ona özenle nokta koydun."
-      },
-      "late_night": {
-        "1": "Gece geç de olsa bakım yapıyorsun. Zaman ayırdığın için teşekkürler, {{username}}.",
-        "2": "Bu saatte bile kendin için buradasın? Sessiz ama güçlü bir duruş bu.",
-        "3": "Gün nasıl geçtiyse geçti, ama bu an tamamen senin, {{username}}."
-      },
-      "weekday": {
-        "1": "Günün yoğunluğuna rağmen kendin için durdun. Bu, gerçek bir güç göstergesi.",
-        "2": "Yoğun bir iş gününde bile kendine bakım göstermeyi seçtin, {{username}}. Bu büyük bir başarı.",
-        "3": "Zorlu tempoda bile fırçalamak? İşte bu, gerçekten kendine sahip çıkmak demek."
-      },
-      "weekend": {
-        "1": "Dinlenmek önemli ama bakımını sürdürmek de öyle ✨",
-        "2": "Hafta sonu ilgisi = ileri seviye öz-sevgi, {{username}}.",
-        "3": "Boş günler bile değerli — hele böyle özenli geçtiğinde."
-      }
+  "time_context": {
+    "morning": {
+      "1": "Yeni gün, kendine bakmak için yeni bir şans. Şimdiden harikasın!",
+      "2": "Bu sabah buradaydın — güzel günler tam da böyle başlar.",
+      "3": "Mükemmel bir başlangıç gerekmez — şefkatli bir tanesi yeter, {{username}}."
     },
-    "brushing_behaviour": {
-      "first_brush_ever": {
-        "1": "Gülümseme yolculuğuna hoş geldin! Her uzman, bir zamanlar ilk kez fırçalamıştı.",
-        "2": "Ne harika bir başlangıç! Dişlerin seninle çok şanslı.",
-        "3": "Güzel bir yolun ilk adımı bu. Her gün yanında olmaktan mutluluk duyacağım."
-      },
-      "consistent_habit": {
-        "1": "Bu tutarlılık gerçekten ilham verici! Harika bir alışkanlık inşa ediyorsun.",
-        "2": "Hafta hafta, yeniden ve yeniden buradasın. İşte gerçek güç budur.",
-        "3": "Sen fırçalamayı kolaylaştıran kişisin. Gerçekten iyi gidiyorsun!"
-      },
-      "missed_yesterday": {
-        "1": "Tekrar hoş geldin! Dün geride kaldı, bugün ise yepyeni bir sayfa.",
-        "2": "Burada kimse yargılanmaz. Geri döndün, önemli olan da bu, {{username}}.",
-        "3": "Her geri dönüş bir zaferdir. Vazgeçmediğin için teşekkür ederiz."
-      }
+    "afternoon": {
+      "1": "Günün ortasında fırçalamak mı? Bu, kendine saygının bir göstergesi.",
+      "2": "Bütün koşturmacanın arasında kendine vakit ayırdın. Saygılar, {{username}}.",
+      "3": "Günü kendin için durdurdun. Bu nadir bulunan bir güç türü."
     },
-    "streak_state": {
-      "new_streak_starting": {
-        "1": "Bugün 1. gün, {{username}}. Küçük gibi görünse de her şey buradan başlıyor.",
-        "2": "Her alışkanlık böyle başlar. Ve bu kez sen hazırsın.",
-        "3": "İlk adım küçük olabilir, {{username}} — ama büyük değişimlerin habercisidir."
-      },
-      "almost_week_streak": {
-        "1": "Neredeyse bir haftayı geride bırakıyorsun, {{username}}. Gerçek alışkanlık böyle oluşur.",
-        "2": "İstikrarlı bir şekilde ilerliyorsun, {{username}}. Yakında bir haftayı dolduruyorsun!",
-        "3": "Harikasın — neredeyse 7 gündür buradasın 💙"
-      },
-      "over_10_day_streak": {
-        "1": "10 günü geçtin, {{username}}. Bu artık bir alışkanlık değil, bir bağlılık.",
-        "2": "Çift haneye ulaştın mı? İşte bu, en iyi haline dönüşün başlangıcı.",
-        "3": "On gün, on seçim, bir {{username}}. Hep aynı kararlılıkla ilerliyorsun."
-      },
-      "best_streak_reached": {
-        "1": "Yeni bir kişisel rekor, {{username}}. Ve bu sadece başlangıç.",
-        "2": "Hiç bu kadar ileri gitmemiştin. Bunun tadını çıkar. Sonra daha da ilerle.",
-        "3": "Kendi rekorunu kırdın, {{username}} — en güzel başarı budur."
-      },
-      "streak_broken": {
-        "1": "Bir gün kaçtı, {{username}} — ama gelişimin hâlâ devam ediyor.",
-        "2": "Seri bozuldu, ama değerin bozulmadı. Hadi yeniden başlayalım.",
-        "3": "Kaçırılan bir gün, seni geriye götürmez {{username}}. Sen hâlâ ilerliyorsun."
-      }
+    "evening": {
+      "1": "Günü şefkatle sonlandırıyorsun — buraya geldiğin için seninle gurur duyuyoruz.",
+      "2": "Günü güzel bir şekilde kapattın. Bu çok değerli, {{username}}.",
+      "3": "Bugün sadece uzun bir gün değildi. Senindi — ve sen ona değer kattın."
     },
-    "milestone_enhancements": {
-      "monthly_brush_20": {
-        "monthly_brush_20": "Bu ay 20 kez fırçaladın, {{username}}. Bu gerçek bir bağlılık.",
-        "brushed_7_of_10": "10 günden 7'sinde fırçaladın. Bu, güçlü bir ritmin temeli, {{username}}."
-      },
-      "day_7": {
-        "day_7": "Bizimle bir haftayı tamamladın, {{username}} — ve bu kısa sürede çok yol aldın.",
-        "day_30": "30 gündür buradasın, {{username}} — ve her günün ayrı bir anlamı vardı."
-      },
-      "returning_user_milestone": {
-        "returning_user_milestone": "Geri döndün, {{username}}. Bu cesaret ister. Ve biz bunu görüyoruz.",
-        "milestone_streak_recovery": "Vazgeçmedin, {{username}}. İşte en çok bu önemli."
-      },
-      "brush_count_milestones": {
-        "exactly_10": "10 kez fırçaladın, {{username}}. Kendine verdiğin 10 sözü tuttun.",
-        "exactly_50": "50 fırçalama, {{username}}. 50 kez kendinle ilgilendin. Bu büyük bir şey.",
-        "exactly_100": "Tam 100 kez fırçaladın, {{username}}. Bu, 100 defa kendine özen göstermek demek."
-      }
+    "late_night": {
+      "1": "Geç saatte yapılan bakım da hâlâ bakımdır. Vakit ayırdın, {{username}}.",
+      "2": "Bu saatte bile burada olmak mı? Sessiz bir güç bu.",
+      "3": "Gün dağınık geçmiş olabilir, ama bu an hâlâ senin, {{username}}."
     },
-    "informative": {
-      "habit_tip": {
-        "1": "Fırçalamak gibi küçük rutinler, kendimize nasıl davrandığımızı şekillendirir, {{username}}. Devam et."
-      },
-      "dental_fact": {
-        "1": "Günde iki kez, ikişer dakika fırçalamak çoğu sorunu önler, {{username}}."
-      },
-      "science_fact": {
-        "1": "Sadece fırçalamıyorsun — ağzının mikrobiyotasını dengeye getiriyorsun, {{username}}."
-      },
-      "psych_fact": {
-        "1": "Fırçalamak küçük bir kazanç gibi görünse de sana şu mesajı verir: kontrol sende, {{username}}."
-      },
-      "dental_fact_2": {
-        "1": "Diş etlerinin çizgisine nazikçe fırçalamak, gülüşünün tamamını güçlü tutar, {{username}}."
-      },
-      "dental_fact_3": {
-        "1": "Dilinde de bakteri birikir, {{username}}. Kısa bir temizlik büyük fark yaratır!"
-      },
-      "science_fact_2": {
-        "1": "Bugün fırçalamak, yarının birikimini önler, {{username}}. Gelecekteki halini koruyorsun."
-      },
-      "psych_fact_2": {
-        "1": "Bu küçük ritüel, çoğu zaman daha büyük zaferlerin kapısını açar, {{username}}. Devam et."
-      },
-      "morning_breath_fact": {
-        "1": "Sabah nefesi tamamen normaldir. Fırçalamak her şeyi tazeler, {{username}}."
-      },
-      "toothpaste_fact": {
-        "1": "Bezelye tanesi kadar diş macunu yeterlidir, {{username}}. Küçük çaba, büyük etki."
-      },
-      "floss_fact": {
-        "1": "Fırçalamak harikadır, {{username}} — ama diş ipi, fırçanın ulaşamadığı yerleri de temizler."
-      },
-      "brushing_too_hard": {
-        "1": "Nazik fırçalama hem dişlerini hem diş etlerini korur, {{username}}."
-      },
-      "night_brushing_importance": {
-        "1": "Yatmadan önce fırçalamak, dişlerine de huzurlu bir gece sunar, {{username}}."
-      },
-      "brushing_angle_fact": {
-        "1": "Fırçanı 45° açıyla tutmak, diş etlerini koruman için çok önemlidir, {{username}}."
-      },
-      "dry_brush_fact": {
-        "1": "Macun olmasa bile, {{username}}, kısa bir kuru fırçalama hâlâ bir başarıdır."
-      }
+    "weekday": {
+      "1": "Tüm karmaşanın arasında kendine zaman ayırdın. İşte bu güç demek.",
+      "2": "Yoğun bir gün ama yine de kendine değer verdin, {{username}}. Büyük bir kazanım.",
+      "3": "Günlük koşuşturma içinde fırçalamak mı? Bu gerçekten burada olduğunun göstergesi."
     },
-    "community": {
-      "community_brushing_now": {
-        "1": "You're not alone in this, {{username}}. Thousands are brushing with you right now 💙"
-      },
-      "nubo_network_energy": {
-        "1": "You're part of Nubo's circle now, {{username}}. A little tribe of tiny rituals."
-      },
-      "social_momentum": {
-  "1": "Bu hafta pek çok kişi fırçaladı. Ve {{username}}, sen de onlardan birisin."
-},
-"late_night_others_brushed": {
-  "1": "Bu gece geç saatte fırçalayan tek sen değilsin, {{username}} — hepiniz gözümüzdesiniz."
-},
-"first_week_global_wave": {
-  "1": "Bu hafta Nubo’ya birçok yeni yüz katıldı, {{username}}. Harika bir topluluğun parçasısın."
-},
-"nubo_day_event": {
-  "1": "Bugün Nubo Günü! En doğru günde fırçaladın, {{username}} 🥹🪥"
-},
-"community_across_timezones": {
-  "1": "Dünyanın bir yerinde şu anda biri daha fırçalıyor, {{username}}."
-},
-"brush_in_cities": {
-  "1": "Şehirlerden köylere, fırçalama hepimizi birbirine bağlıyor. Sen de bu bağın bir parçasısın, {{username}}."
-},
-"nubo_watching": {
-  "1": "Nubo o fırçalamayı gördü, {{username}} — ve duygulandı bile 🥹"
-},
-"nubo_broadcast": {
-  "1": "Nubo yayında: '{{username}}, bugünün temizlik dalgasına katıldı!' 📡"
-}
+    "weekend": {
+      "1": "Dinlenmek önemli. Parlamanı korumak da öyle ✨",
+      "2": "Hafta sonu bakımı = ileri seviye özsevgi, {{username}}.",
+      "3": "Tatil günleri de önemlidir. Hele ki böyle özenliysen."
     }
   },
-        "playful": {
-    "time_context": {
-      "morning": {
-        "1": "Kalk ve fırçala, parıltı komutanı 🪥✨",
-        "2": "Azı dişleri sabah dansını bekliyor!",
-        "3": "Güneş doğdu! Fırçalar dışarı! Tam parıltıya geçiyoruz, {{username}}!"
-      },
-      "afternoon": {
-        "1": "Öğle ekibi dağıldı. Nefes seviyesi: nane ferahlığı.",
-        "2": "Sinsi bir parıltı dopingi mi? Onaylandı 😏",
-        "3": "Fırçan biraz önce naneli bir isyan başlattı, {{username}}. Ve kazandı."
-      },
-      "evening": {
-        "1": "Yatma vakti mi? Daha değil. Önce parıltı saati 🦷🌌",
-        "2": "Yastığın aradı — önce fırçala dedi.",
-        "3": "Nane kokulu azılar varsa yatağın altında canavar da barınamaz 😏"
-      },
-      "late_night": {
-        "1": "Ay doğduysa, fırçan da görevde. Bunu görmek harika.",
-        "2": "Gece geç mi oldu? Daha çok kader gecesi — parıltı zamanı.",
-        "3": "Dişler yatağa hazır. Sen de hazır mısın, {{username}}?"
-      },
-      "weekday": {
-        "1": "İş, koşuşturma, parıltı patronu gibi fırçala.",
-        "2": "Hafta içi savaşçıları naneyi bırakmaz.",
-        "3": "Hafta içi savaşçıları fırçayı da stil ile sallar 💃"
-      },
-      "weekend": {
-        "1": "Hafta sonu parıltı ekibi göreve hazır!",
-        "2": "Hafta sonunda fırçalamak mı? Bu tam anlamıyla elit enerji, {{username}}!",
-        "3": "Hafta sonu parıltısı, dişlerin için adeta brunch 🍳✨"
-      }
+  "brushing_behaviour": {
+    "after_brushing_success": {
+      "1": "Bu bir başarıydı, {{username}}. Küçük mü? Belki. Ama gerçek mi? Kesinlikle.",
+      "2": "Yapman gerekeni yaptın. Tahmininden daha büyük bir anlamı var, {{username}}."
     },
-    "brushing_behaviour": {
-      "first_brush_ever": {
-        "1": "İLK FIRÇA PARTİSİ! 🎉 Hoş geldin parıltı ekibine, tazecik!",
-        "2": "Aman Tanrım, İLK kez mi?! Çok heyecanlıyız! Bu anı harika yapalım! ✨",
-        "3": "Yeni üye uyarısı! 🚨 Günlük parıltı tayfasına hoş geldin! Çok eğleneceğiz!"
-      },
-      "consistent_habit": {
-        "1": "SERİ EFSANESİ! 💪 Diş bakımının süper kahramanısın resmen!",
-        "2": "Tutarlılık KRALI/KRALIÇESİ! 👑 Dişlerin hayatının tadını çıkarıyor!",
-        "3": "Alışkanlık kahramanı seviyesi: AÇILDI! 🏆 Gülüş gücün alev alev!"
-      }
+    "after_brushing_fail": {
+      "1": "Mükemmel değil miydi? Yine de ilerleme var. Buraya geldiğin için gururluyuz, {{username}}.",
+      "2": "Mesele kusursuzluk değil — mesele orada olmak. Ve sen vardın."
     },
-    "streak_state": {
-      "new_streak_starting": {
-        "1": "İlk fırçalama tamam — ve seri canavarı uyanıyor 🦷💥",
-        "2": "Boom! Yeni bir seri ortaya çıktı 🪥✨",
-        "3": "Taze seri uyarısı! Naneli bir enerji hissediliyor 💨"
-      },
-      "almost_week_streak": {
-        "1": "5 gün mü oldu? Bu seri başrol enerjisi taşıyor 💫",
-        "2": "Parıltı serisi efsane seviyeye yaklaşıyor ✨🔥",
-        "3": "Nubo bu 6 günlük ateşi gördü. 7. gün zaferini de kokluyor musun? 🔥"
-      },
-      "over_10_day_streak": {
-        "1": "10+ gün mü? Parıltı Üst Moduna geçtin 🚀",
-        "2": "10+ gün mü? Biri şu parıltı trenini durdursun! 🛤️💥",
-        "3": "On günlük efsane açıldı! Nane seviyesi: elit."
-      },
-      "best_streak_reached": {
-        "1": "Seri rekorunu kırdın. Havai fişek ve dondurma şart 🍦🎉",
-        "2": "Rekor? Paramparça 💥 Parıltı? Tavan yaptı 🌟",
-        "3": "Dişler dans ediyor. Nubo ağlıyor. Sen? Paralıyorsun."
-      },
-      "streak_broken": {
-        "1": "Ayyy! Seri düştü — ama sen hâlâ bir parıltı savaşçısısın ⚔️",
-        "2": "O seriye elveda 🪦 Ama geri dönüş hikâyen başlıyor!",
-        "3": "Seri nakavt… ama sen geri dönüş kralı gibi fırçalıyorsun 👑"
-      }
+    "first_brush_of_day": {
+      "1": "Ve işte böylece bugünün ilk iyi şeyini yaptın bile, {{username}}.",
+      "2": "Güne şefkatle başlamak mı? Bu, özsaygının vücut bulmuş hali, {{username}}."
     },
-    "milestone_enhancements": {
-      "monthly_brush_20": {
-        "monthly_brush_20": "Bir ayda 20 fırçalama mı? Konfeti ve kortej lazım 🎉",
-        "brushed_7_of_10": "Yüzde 70 parıltı oranı mı? Bu resmen premium üyelik enerjisi 😎"
-      },
-      "day_7": {
-        "day_7": "7 gün birlikte mi? Naneli dostluk kurulmuş gibi 🫶",
-        "day_30": "30 gün sonra… Nubo ve {{username}} hâlâ birlikte fırçalıyor 💪"
-      },
-      "returning_user_milestone": {
-        "returning_user_milestone": "Seni durdurmaya çalıştılar… ama parıltı seni çağırdı 💫",
-        "milestone_streak_recovery": "Düştün ama asla pes etmedin! Geri dönüş serisi başlasın 🦸"
-      },
-      "brush_count_milestones": {
-        "exactly_10": "10 fırçalama mı?! Diş fırçalama soylusu ilan edildin 👑",
-        "exactly_50": "50 mi? Fırçan zam isteyecek neredeyse 😎",
-        "exactly_100": "100 mü?! O fırça artık bedenine dahil oldu resmen 😂"
-      }
+    "second_brush_of_day": {
+      "1": "İki kez bakım, iki kat özsevgi, {{username}}.",
+      "2": "Günü bilinçli bir şekilde kapatıyorsun. Bu gerçek bir gelişim."
     },
-    "informative": {
-      "habit_tip": {
-        "1": "Şimdi fırçala. Sonra dünyayı fethet 😎"
-      },
-      "dental_fact": {
-        "1": "2 dakika uzun gelebilir, ama çürükleri anlatmak daha uzun sürer 😬"
-      },
-      "science_fact": {
-        "1": "Milyonlarca bakteri mi? Buna naneli kıyım diyelim 💥🦠"
-      },
-      "psych_fact": {
-        "1": "Fırçalamak bile beynine 'hallederiz' sinyali gönderir 🧠✨"
-      },
-      "dental_fact_2": {
-        "1": "Diş etlerini de fırçala! Onlar da ilgi ister, dışlanmak değil 😩🪥"
-      },
-      "dental_fact_3": {
-        "1": "Dilin aradı. Tüm ilginin dişlerde olmasından kıskanmış 🥲"
-      },
-      "science_fact_2": {
-        "1": "Plağı yalnız bırak? Tartar Canavarı'na dönüşür 🪨🫠"
-      },
-      "psych_fact_2": {
-        "1": "Fırçalamak = alışkanlıkların lideri. Patron hamlesi resmen 💼"
-      },
-      "morning_breath_fact": {
-        "1": "Sabah nefesi %100 gerçek. %100 yenilebilir. Nubo arkanda 😤"
-      },
-      "toothpaste_fact": {
-        "1": "Gerçek şu: Bezelye tanesi kadar macun yeter. Naneli tsunamiye gerek yok 🌊"
-      },
-      "floss_fact": {
-        "1": "Diş ipi olmadan fırçalamak? %65 başarı demek 😏"
-      },
-      "brushing_too_hard": {
-        "1": "Fayans mı temizliyorsun? O kadar bastırma 🧽"
-      },
-      "night_brushing_importance": {
-        "1": "Uykulu dişler mi? Yok artık. Onların da korumaya ihtiyacı var 💤🦷"
-      },
-      "brushing_angle_fact": {
-        "1": "Pro gibi fırçala: fırçanı havalı bir açıyla salla 💅"
-      },
-      "dry_brush_fact": {
-        "1": "Macun yok mu? Sorun değil. Kuru-ninja moduna geç 🥷🪥"
-      }
+    "missed_yesterday": {
+      "1": "Dün kaçtı gitti. Ama bugün buradasın. Bu cesarettir, {{username}}.",
+      "2": "Geri dönmek, hiç ayrılmamaktan daha güçlüdür. Ve sen bunu yaptın, {{username}}."
+    }
+  },
+  "streak_state": {
+    "new_streak_starting": {
+      "1": "1. gün, {{username}}. Küçük değil bu. Her şey bu.",
+      "2": "Her yolculuk burada başlar. Bu sefer, hazırsın.",
+      "3": "Bu ilk adım küçük görünebilir, {{username}} — ama her şeyi değiştirir."
     },
-    "community": {
-  "community_brushing_now": {
-    "1": "Şu anda mı? Fırçalama ekibi dünya çapında canlı 🪥🌐"
+    "almost_week_streak": {
+      "1": "Neredeyse tam bir haftayı doldurdun, {{username}}. İşte böyle oluşur alışkanlıklar.",
+      "2": "İstikrarlı bir şey inşa ediyorsun, {{username}}. Az kaldı!",
+      "3": "Bak sana! 7 güne yaklaşan koca bir bağlılık 💙"
+    },
+    "over_10_day_streak": {
+      "1": "10+ gün mü? Bu artık sadece bir seri değil — bu adanmışlık.",
+      "2": "Çift haneli sayılar? Bu, senin en iyi haline dönüşme sürecin.",
+      "3": "On gün. On seçim. Ve hep istikrarlı bir {{username}}."
+    },
+    "best_streak_reached": {
+      "1": "Yeni kişisel rekor, {{username}}. Üstelik bu sadece başlangıç.",
+      "2": "Hiç bu kadar ileri gitmemiştin. Hisset bunu. Sonra daha da ileri git.",
+      "3": "Kendi rekorunu kırdın, {{username}} — ve bu en güzel zaferdir."
+    },
+    "streak_broken": {
+      "1": "Bir günü kaçırdın, {{username}} — ama gelişimini değil.",
+      "2": "Seri bozuldu, ama değerin asla. Hadi tekrar başlayalım.",
+      "3": "Bir gün eksik, tüm süreci bozmaz, {{username}}. Hâlâ ilerliyorsun."
+    }
   },
-  "nubo_network_energy": {
-    "1": "Nubo Ağı aktif: {{username}} çevrimiçi ✅ Parıltı Sinyali güçlü 💫"
+  "milestone_enhancements": {
+    "monthly_brush_20": {
+      "monthly_brush_20": "Bu ay 20 kez fırçaladın, {{username}}. Bu, gerçek bir bağlılık.",
+      "brushed_7_of_10": "10 günde 7 kez mi? Gerçek bir ritim kurmak için fazlasıyla yeterli, {{username}}."
+    },
+    "day_7": {
+      "day_7": "Bizimle 1 hafta oldu, {{username}} — ve ne kadar yol katettin bir baksana.",
+      "day_30": "30 gündür buradasın, {{username}} — her biri ayrı ayrı önemliydi."
+    },
+    "returning_user_milestone": {
+      "returning_user_milestone": "Geri döndün, {{username}}. Cesaret ister bu. Ve biz seni görüyoruz.",
+      "milestone_streak_recovery": "Pes etmedin, {{username}}. İşte asıl mesele bu."
+    },
+    "brush_count_milestones": {
+      "exactly_10": "10 kez fırçalamışsın, {{username}}. Bu, kendine verdiğin 10 söz demek.",
+      "exactly_50": "50 kez fırçalamışsın, {{username}}. 50 defa kendine sahip çıktın. Harika.",
+      "exactly_100": "100 kez fırçalamışsın, {{username}}. 100 kez kendine özen göstermişsin. Bu çok büyük."
+    }
   },
-  "social_momentum": {
-    "1": "Fırçalama liderlik tablosu? Coşmuş durumda. Şu an sen trendesin 😎"
+  "informative": {
+    "habit_tip": {
+      "1": "Fırçalamak gibi minik rutinler, kendimize nasıl davrandığımızı şekillendirir, {{username}}. Devam et."
+    },
+    "dental_fact": {
+      "1": "Sadece günde iki kez 2 dakika, birçok sorunun önüne geçer, {{username}}."
+    },
+    "science_fact": {
+      "1": "Sadece fırçalamıyorsun — ağız mikrobiyotasını dengeliyorsun, {{username}}."
+    },
+    "psych_fact": {
+      "1": "Fırçalamak küçük bir zaferdir, {{username}}. Ama seni hatırlatır: kontrol sende."
+    },
+    "dental_fact_2": {
+      "1": "Diş etlerini nazikçe fırçalamak, tüm gülüşünü güçlü tutar, {{username}}."
+    },
+    "dental_fact_3": {
+      "1": "Dilin de bakteri tutar, {{username}}. Ona da küçük bir temizlik yapmayı unutma!"
+    },
+    "science_fact_2": {
+      "1": "Bugün fırçalarsan, yarın birikmeyi önlersin, {{username}}. Gelecekteki kendini koruyorsun."
+    },
+    "psych_fact_2": {
+      "1": "Bu küçük ritüel, daha büyük zaferlerin başlangıcıdır, {{username}}. Devam et."
+    },
+    "morning_breath_fact": {
+      "1": "Sabah nefesi mi? Tamamen normal. Fırçalamak her şeyi tazeler, {{username}}."
+    },
+    "toothpaste_fact": {
+      "1": "Sadece nohut büyüklüğünde bir diş macunu yeterli, {{username}}. Küçük çaba, büyük etki."
+    },
+    "floss_fact": {
+      "1": "Fırçalamak harika, {{username}} — ama diş ipi, fırçanın erişemediklerini tamamlar."
+    },
+    "brushing_too_hard": {
+      "1": "Nazik fırçalama, hem gülüşünü hem diş etlerini korur, {{username}}."
+    },
+    "night_brushing_importance": {
+      "1": "Yatmadan önce fırçalamak, dişlerine de huzurlu bir gece sunar, {{username}}."
+    },
+    "brushing_angle_fact": {
+      "1": "Ufak bir eğim büyük fark yaratır — 45° diş etlerini mutlu eder, {{username}}."
+    },
+    "dry_brush_fact": {
+      "1": "Macunsuz bile olsa, kısa bir kuru fırçalama hâlâ faydalı, {{username}}."
+    }
   },
-  "late_night_others_brushed": {
-    "1": "Gece geç oldu. Ama Nubo’nun gece ekibi hiç uyumaz 🌙🪥"
-  },
-  "first_week_global_wave": {
-    "1": "Yeni Nubo tayfası geldi. Parıltı partisi başlıyor 🎉"
-  },
-  "nubo_day_event": {
-    "1": "🎈 Mutlu Nubo Günü! Herkese ekstra nane ferahlığı bugün 🍃✨"
-  },
-  "community_across_timezones": {
-    "1": "Zaman dilimleri mi? Artık onlar sadece çalışma zonları 🗺️ Herkes fırçalıyor."
-  },
-  "brush_in_cities": {
-    "1": "Tokyo’dan Toronto’ya, fırça devrimi başladı 🌆🪥"
-  },
-  "nubo_watching": {
-    "1": "Nubo gizlice baktı ve bağırdı: 'ŞU {{username}}’A BAK!' 😭🪥"
-  },
-  "nubo_broadcast": {
-    "1": "Nubo {{username}}’ı Temizlik Efsaneleri Yayınına™ ekledi 💾🪥"
+  "community": {
+    "community_brushing_now": {
+      "1": "Yalnız değilsin, {{username}}. Şu anda binlerce kişi seninle birlikte fırçalıyor 💙"
+    },
+    "nubo_network_energy": {
+      "1": "Artık Nubo’nun halkasındasın, {{username}}. Küçük ritüellerden oluşan minik bir topluluk."
+    },
+    "social_momentum": {
+      "1": "Bu hafta birçok kişi bakım yaptı. Ve sen de onlardan birisin, {{username}}."
+    },
+    "late_night_others_brushed": {
+      "1": "Bu saatte yalnız değilsin, {{username}} — hepiniz görünüyorsunuz."
+    },
+    "first_week_global_wave": {
+      "1": "Bu hafta Nubo’ya yeni birçok yüz katıldı, {{username}}. Güzel bir topluluğa dahil oldun."
+    },
+    "nubo_day_event": {
+      "1": "Bugün Nubo Günü! Tam isabet bir günde fırçaladın, {{username}} 🥹🪥"
+    },
+    "community_across_timezones": {
+      "1": "Dünyanın bir yerinde, şu anda başka biri de fırçalıyor, {{username}}."
+    },
+    "brush_in_cities": {
+      "1": "Şehirlerden köylere, fırçalama hepimizi bağlıyor. Sen de bunun bir parçasısın, {{username}}."
+    },
+    "nubo_watching": {
+      "1": "Nubo seni gördü, {{username}} — ve duygulandı 🥹"
+    },
+    "nubo_broadcast": {
+      "1": "Nubo yayında: ‘{{username}} bugün temiz dalgaya katıldı!’ 📡"
+    }
   }
-}
   },
+       "playful": {
+  "time_context": {
+    "morning": {
+      "1": "Uyan ve fırçala, parıltı komutanı 🪥✨",
+      "2": "Azı dişlerine sabah dans partisi zamanı!",
+      "3": "Güneş doğdu! Fırçalar dışarı! Hadi parlamaya başlayalım, {{username}}!"
+    },
+    "afternoon": {
+      "1": "Öğle ekibi yenildi. Nefes seviyesi: nane ferahlığında.",
+      "2": "Gizli bir parıltı desteği mi? Onaylandı 😏",
+      "3": "Fırçan minik bir isyan çıkardı, {{username}}. Ve kazandı."
+    },
+    "evening": {
+      "1": "Yatma vakti mi? Yoo, önce parıltı saati 🦷🌌",
+      "2": "Yastığın aradı — önce fırçala dedi.",
+      "3": "Azı dişlerin naneli ise, yatağın altında canavar kalmaz 😏"
+    },
+    "late_night": {
+      "1": "Ay yukarıda. Fırçan da öyle. Harika bir görüntü.",
+      "2": "Gece geç saat mi? Kader saati gibi düşün — parlamaya başla.",
+      "3": "Dişler yatakta. Sıra sende, hazır mısın {{username}}?"
+    },
+    "weekday": {
+      "1": "İş. Koşturmaca. Patron gibi fırçala.",
+      "2": "Hafta içi savaşçıları hep ferah kalır.",
+      "3": "Hafta içi savaşçıları stil sahibi fırçalar 💃"
+    },
+    "weekend": {
+      "1": "Hafta sonu parıltı ekibi göreve hazır!",
+      "2": "Hafta sonunda fırçalamak mı? Elit enerji, {{username}}!",
+      "3": "Hafta sonu parıltısı, dişlerin için brunch gibidir 🍳✨"
+    }
+  },
+  "brushing_behaviour": {
+    "after_brushing_success": {
+      "1": "Parıltı seviyesi: açıldı. Nubo etkilendi.",
+      "2": "Diş durumu: ışıl ışıl. Özgüven seviyesi: yükseldi, {{username}}."
+    },
+    "after_brushing_fail": {
+      "1": "Bugünlük hızlı bir fırçalama mı? Nubo bu seferlik affeder 😏",
+      "2": "Hızlı tur muydu? Bir dahakine kazanırız, parıltı şampiyonu {{username}}."
+    },
+    "first_brush_of_day": {
+      "1": "Günün ilk parıltısı: aktif. Hadi ışıldayalım!",
+      "2": "Dişler hazır. Gün başlayabilir, {{username}}!"
+    },
+    "second_brush_of_day": {
+      "1": "2. tur mu? Sen artık tam bir fırçalama ustasısın 💪",
+      "2": "İkinci tura geri mi döndün? Parıltı ustalığına ulaştın, {{username}}!"
+    },
+    "missed_yesterday": {
+      "1": "Dün plaklar parti yaptı. Bugün... tutuklandılar.",
+      "2": "Dünü unut gitsin. Bugün intikamla parlıyoruz, {{username}}!"
+    }
+  },
+  "streak_state": {
+    "new_streak_starting": {
+      "1": "İlk fırçalama tamam — parıltı canavarı uyandı 🦷💥",
+      "2": "Boom! Yeni bir seri ortaya çıktı 🪥✨",
+      "3": "Taze seri uyarısı! Birisi fazlasıyla naneli 💨"
+    },
+    "almost_week_streak": {
+      "1": "5 gün mü? Bu seride ana karakter enerjisi var 💫",
+      "2": "Parıltı serisi efsane seviyesine yaklaşıyor ✨🔥",
+      "3": "Nubo o 6 günlük alevi gördü. 7. günün şanını koklayabiliyor musun? 🔥"
+    },
+    "over_10_day_streak": {
+      "1": "10+ gün mü? Sparkle Prime moduna geçtin 🚀",
+      "2": "10+ gün? Biri bu parıltı trenini durdursun! 🛤️💥",
+      "3": "On gün efsanesi açıldı! Nane oyunu: elit seviye."
+    },
+    "best_streak_reached": {
+      "1": "Kendi serini kırdın. Havai fişek gerek. Bir de dondurma 🍦🎉",
+      "2": "Rekor = kırıldı 💥 Parıltı = maksimum 🌟",
+      "3": "Dişler? Dans ediyor. Nubo? Ağlıyor. Sen? Efsane oluyorsun."
+    },
+    "streak_broken": {
+      "1": "Ayy! Seri takıldı — ama sen? Hâlâ parıltı savaşçısısın ⚔️",
+      "2": "Seri gitti 🪦 Ama... diriliş başladı!",
+      "3": "Seri KO oldu... ama sen geri dönüş kralısın 👑"
+    }
+  },
+  "milestone_enhancements": {
+    "monthly_brush_20": {
+      "monthly_brush_20": "Ayda 20 fırçalama mı? Konfeti ve geçit töreni lazım 🎉",
+      "brushed_7_of_10": "Yüzde 70 parıltı oranı mı? Bu premium üyelik enerjisi 😎"
+    },
+    "day_7": {
+      "day_7": "7 gündür birlikteyiz mi? Bu mintli bir dostluk gibi 🫶",
+      "day_30": "30 gün sonra... Nubo ve {{username}} hâlâ fırçalıyor 💪"
+    },
+    "returning_user_milestone": {
+      "returning_user_milestone": "Seni uzak tutmaya çalıştılar… ama parıltı seni geri çağırdı 💫",
+      "milestone_streak_recovery": "Yere düşmüş olabilirsin ama hiç kaybolmadın! Geri dönüş başlasın 🦸"
+    },
+    "brush_count_milestones": {
+      "exactly_10": "10 kez fırçalamışsın?! Neredeyse diş fırçası kraliyeti oldun 👑",
+      "exactly_50": "50 mi?! Fırçan zam isteyecek neredeyse 😎",
+      "exactly_100": "100 mü?! O fırça artık senin bir parçan olmuş 😂"
+    }
+  },
+  "informative": {
+    "habit_tip": {
+      "1": "Şimdi fırçala. Dünyayı sonra fethedersin 😎"
+    },
+    "dental_fact": {
+      "1": "2 dakika uzun gelebilir, ama çürüğü anlatmak da öyle 😬"
+    },
+    "science_fact": {
+      "1": "Milyonlarca bakteri mi? Hadi buna naneli kıyım diyelim 💥🦠"
+    },
+    "psych_fact": {
+      "1": "Fırçalamak beynine küçük bir 'hallederiz' sinyali gönderir 🧠✨"
+    },
+    "dental_fact_2": {
+      "1": "Diş etlerini de fırçala! İlgi istiyorlar, terk edilmek değil 😩🪥"
+    },
+    "dental_fact_3": {
+      "1": "Dilin aradı. Tüm ilgiyi dişlerin alıyor diye kıskanıyor 🥲"
+    },
+    "science_fact_2": {
+      "1": "Plaque'i boş verirsen? Taş gibi olur 🪨🫠"
+    },
+    "psych_fact_2": {
+      "1": "Fırçalamak = temel alışkanlık. Yani lider hareket 💼"
+    },
+    "morning_breath_fact": {
+      "1": "Sabah nefesi: %100 gerçek. %100 yenilebilir. Nubo yanında 😤"
+    },
+    "toothpaste_fact": {
+      "1": "Eğlenceli bilgi: Sadece nohut kadar macun yeter. Nane tsunamisine gerek yok 🌊"
+    },
+    "floss_fact": {
+      "1": "Diş ipi olmadan fırçalamak? Sadece %65 tamam 😏"
+    },
+    "brushing_too_hard": {
+      "1": "Fayans mı temizliyorsun? Yavaş ol, bu bir diş 🧽"
+    },
+    "night_brushing_importance": {
+      "1": "Uykucu dişler mi? Yok canım, onlar da koruma ister 💤🦷"
+    },
+    "brushing_angle_fact": {
+      "1": "Pro gibi fırçala: O fırçayı biraz eğ, biraz da stil ekle 💅"
+    },
+    "dry_brush_fact": {
+      "1": "Macun yok mu? Sorun değil. Kuru ninja moduna geç 🥷🪥"
+    }
+  },
+  "community": {
+    "community_brushing_now": {
+      "1": "Şu an mı? Fırçalama ekibi tüm dünyada aktif 🪥🌐"
+    },
+    "nubo_network_energy": {
+      "1": "Nubo Network aktif: {{username}} çevrimiçi ✅ Parıltı sinyali güçlü 💫"
+    },
+    "social_momentum": {
+      "1": "Fırçalama sıralaması mı? Alev aldı. Sen de trenddesin 😎"
+    },
+    "late_night_others_brushed": {
+      "1": "Gece geç mi? Ama Nubo’nun gece ekibi hep ayakta 🌙🪥"
+    },
+    "first_week_global_wave": {
+      "1": "Yeni Nubo ekibi geldi. Parıltı partisi başlasın 🎉"
+    },
+    "nubo_day_event": {
+      "1": "🎈 Mutlu Nubo Günü! Bugün herkese ekstra nane 🍃✨"
+    },
+    "community_across_timezones": {
+      "1": "Zaman dilimleri mi? Daha çok 'parıltı bölgeleri' 🗺️ Herkes fırçalıyor."
+    },
+    "brush_in_cities": {
+      "1": "Tokyo'dan Toronto'ya, fırça devrimi başladı 🌆🪥"
+    },
+    "nubo_watching": {
+      "1": "Nubo baktı ve bağırdı: '{{username}}'A BAKIN!' 😭🪥"
+    },
+    "nubo_broadcast": {
+      "1": "Nubo az önce {{username}}'i Temizlik Efsanesi Listesi™'ne ekledi 💾🪥"
+    }
+  }
+},
        "cool": {
-    "time_context": {
-      "morning": {
-        "1": "Kalk. Fırçala. Günü fethet.",
-        "2": "Taze başla. Keskin kal.",
-        "3": "Sabahlar sessiz zaferler içindir. İşte sen de birini yaptın, {{username}}."
-      },
-      "afternoon": {
-        "1": "Sıfırla. Nane moduna dön.",
-        "2": "Öğleden sonra tazelemesi. Ter yok, sadece stil.",
-        "3": "Günün ortası gösterisi? Temiz bir gülüş, {{username}}. Drama yok."
-      },
-      "evening": {
-        "1": "Gece modu aktif. Temiz. Sakin. Tamamlandı.",
-        "2": "Fırçala. Işıkları kapat. Mod tam kontrolünde.",
-        "3": "Son fırçalama. Tam chill. Hadi temiz şekilde kapanalım, {{username}}."
-      },
-      "late_night": {
-        "1": "Kimse görmüyor ama sen geldin. Güç hamlesi.",
-        "2": "Gece yarısı nane etkisi başka.",
-        "3": "Gece yarısını geçtin mi? Bu, parıltıya sadakattir, {{username}}."
-      },
-      "weekday": {
-        "1": "Bu hafta keskin kalalım.",
-        "2": "İş gününe taze başla. Hak ettiğin gibi.",
-        "3": "Temiz sayfa, temiz gülüş, {{username}}. Hadi yapalım."
-      },
-      "weekend": {
-        "1": "Tatilde bile formdasın. Saygı bizden.",
-        "2": "Tembellik günü. Temiz vibe.",
-        "3": "Boş zaman. Taze enerjiler, {{username}}."
-      }
+  "time_context": {
+    "morning": {
+      "1": "Uyan. Fırçala. Günü fethet.",
+      "2": "Temiz başla. Keskin kal.",
+      "3": "Sabahlar sessiz zaferler içindir. Ve sen bir tanesini kazandın, {{username}}."
     },
-    "brushing_behaviour": {
-      "consistent_habit": {
-        "1": "Tutarlılık senin süper gücün. Bu rutin kırılmaz.",
-        "2": "Disiplin seviyesi: usta. Günlük mücadelede ustalaştın.",
-        "3": "Seri modu: durdurulamaz. İşte bağlılık bu."
-      }
+    "afternoon": {
+      "1": "Reset at. Mint moduna geri dön.",
+      "2": "Öğle tazelenmesi. Ter yok, sadece stil.",
+      "3": "Günün ortasında bir hareket? Temiz bir gülümseme yeter, {{username}}. Fazlasına gerek yok."
     },
-    "streak_state": {
-      "new_streak_starting": {
-        "1": "Taze başlangıç, taze enerji, {{username}}. Haydi bakalım nereye gider bu.",
-        "2": "Birini tamamladın. Yeni mod açıldı, {{username}}.",
-        "3": "Sıfırlama aktif. Hadi işe koyulalım."
-      },
-      "almost_week_streak": {
-        "1": "Haftalık bölgeye yaklaşıyorsun, {{username}}. Bu farklı.",
-        "2": "5+ gün tamam. Rahatına bakma, {{username}}.",
-        "3": "Bir gün daha, tam hafta olur. Keskin kal."
-      },
-      "over_10_day_streak": {
-        "1": "Seri devam ediyor. Sessiz güç gösterisi. Devam et, {{username}}.",
-        "2": "Şimdi nadir bir seviyedesin, {{username}}. Sürdür.",
-        "3": "Hâlâ fırçalıyorsun. Hâlâ tırmanıyorsun. Bu hoşuma gidiyor."
-      },
-      "best_streak_reached": {
-        "1": "Bu şimdiye kadarki en iyin, {{username}}. Sonraki hedefi yükseltelim.",
-        "2": "Yeni seviye. Temizlik tamamlandı. Nubo seninle gurur duyuyor, {{username}}.",
-        "3": "Çubuğu sen koydun. Yarın daha iyisini yapacaksın."
-      },
-      "streak_broken": {
-        "1": "Seri mi koptu? Hayat bu. Bugün yine geldin. İşte güç bu, {{username}}.",
-        "2": "Seri gitti. Ama efsane devam ediyor, {{username}}.",
-        "3": "Sıfırla. Yeniden yükle. Hâlâ temiz."
-      }
+    "evening": {
+      "1": "Gece modu aktif. Temiz. Sakin. Bitti.",
+      "2": "Fırçala. Işıkları kapat. Vibe yerinde.",
+      "3": "Son fırçalama. Full chill. Temizce kapanışı yapalım, {{username}}."
     },
-    "milestone_enhancements": {
-      "monthly_brush_20": {
-        "monthly_brush_20": "Bu ay 20 temiz çağrı? Saygı, {{username}}.",
-        "brushed_7_of_10": "Mükemmel değil ama hâlâ baskın. Kontrol sende, {{username}}."
-      },
-      "day_7": {
-        "day_7": "Birinci hafta? Yaptın. Devam edelim, {{username}}.",
-        "day_30": "Bir ay oldu? Sahip çıktın. Tebrikler, {{username}}."
-      },
-      "returning_user_milestone": {
-        "returning_user_milestone": "Ara bitti. Seri yeniden başlıyor. Hoş geldin, {{username}}.",
-        "milestone_streak_recovery": "Toparlandı. Yeniden başlandı. Zaten tırmanıyorsun, {{username}}."
-      },
-      "brush_count_milestones": {
-        "exactly_10": "Çifte rakamlar. Yumuşak yoldan seviye atlıyorsun, {{username}}.",
-        "exactly_50": "Elli tamamlandı. Tam bağlılık, {{username}}.",
-        "exactly_100": "Yüz mü? Efsane doğrulandı, {{username}}."
-      }
+    "late_night": {
+      "1": "Kimse bakmıyor. Ama sen geldin. Bu bir güç hamlesi.",
+      "2": "Gece yarısı nanesi başka bir şeydir.",
+      "3": "Geceyi geçmiş misin? Bu, parıltıya olan sadakatin, {{username}}."
     },
-    "informative": {
-      "habit_tip": {
-        "1": "Rutin güçtür, {{username}}. Üst üste koymaya devam et."
-      },
-      "dental_fact": {
-        "1": "İki dakika fırçalama. Sonsuz cool puan, {{username}}."
-      },
-      "science_fact": {
-        "1": "Bakteri şehrini sildin süpürdün, {{username}}. Saygı duyulur."
-      },
-      "psych_fact": {
-        "1": "Büyük zihniyet mi? Küçük adımlarla başlar. Bu adım gibi, {{username}}."
-      },
-      "dental_fact_2": {
-        "1": "Sağlıklı diş etleri = güçlü gösteriş, {{username}}. Atlama onları."
-      },
-      "dental_fact_3": {
-        "1": "Gerçek ferahlık? Dil ile başlar, {{username}}."
-      },
-      "science_fact_2": {
-        "1": "Şimdi plak temizle yoksa sonra tartar olur. Doğru seçimi yaptın, {{username}}."
-      },
-      "psych_fact_2": {
-        "1": "Bir sağlam alışkanlık diğerlerini getirir. Fırçalama bir numara, {{username}}."
-      },
-      "morning_breath_fact": {
-        "1": "Taze sabahlar taze hareketle başlar, {{username}}. Hadi fırçala."
-      },
-      "toothpaste_fact": {
-        "1": "Bol köpük = iyi değil. Sadece küçük bir nokta yeter, {{username}}."
-      },
-      "floss_fact": {
-        "1": "Diş ipi, fırçanın kaçırdığı köşeleri temizler. Temiz hamle, {{username}}."
-      },
-      "brushing_too_hard": {
-        "1": "Akıllıca fırçala, sert değil, {{username}}. İncelik güçtür."
-      },
-      "night_brushing_importance": {
-        "1": "Gece fırçalama = gece kalkanı. Keskin hamle, {{username}}."
-      },
-      "brushing_angle_fact": {
-        "1": "Açıyı ayarla. Derin temizliğe hazır ol. Bu profesyonel fırçalama, {{username}}."
-      },
-      "dry_brush_fact": {
-        "1": "Kuru fırçaladın ama temiz çıktın. Saygı, {{username}}."
-      }
+    "weekday": {
+      "1": "Bu hafta keskin kalalım.",
+      "2": "İş günleri taze geçer. Olması gerektiği gibi.",
+      "3": "Temiz bir başlangıç, temiz bir gülümseme, {{username}}. Hadi başlayalım."
     },
-    "community": {
-  "community_brushing_now": {
-    "1": "Fırçalama yalnız yapılmaz. Tüm dünyadaki temizlik ekibiyle senkron oldun, {{username}}."
+    "weekend": {
+      "1": "Boş gün ama hâlâ noktayı koyuyorsun. Saygı duyarım.",
+      "2": "Rahat bir gün. Temiz hissiyat.",
+      "3": "Boş zaman. Taze ruhlar, {{username}}."
+    }
   },
-  "nubo_network_energy": {
-    "1": "NuboNet™’e giriş yaptın — temiz enerjinin 7/24 aktığı yerdesin, {{username}}."
+  "brushing_behaviour": {
+    "after_brushing_success": {
+      "1": "Fırçalandı. Tamamdır. Şimdi sırada büyük işler var.",
+      "2": "Bitti. Sorunsuz. Sadece sonuçlar, {{username}}."
+    },
+    "after_brushing_fail": {
+      "1": "Tam isabet değil miydi? Olsun. Buraya geldin. Bu yeter.",
+      "2": "Atlayabilirdin. Atlamadın. Nokta, {{username}}."
+    },
+    "first_brush_of_day": {
+      "1": "Güne özenle başladın. Bu çok düzgün bir hareket.",
+      "2": "Sabah flaşı. Temiz enerji, {{username}}."
+    },
+    "second_brush_of_day": {
+      "1": "Tekrar geldin. Keskin kalmaya devam. Her zaman.",
+      "2": "Günde iki fırçalama. Her zaman net, {{username}}."
+    },
+    "missed_yesterday": {
+      "1": "Dünü kaçırdın mı? Bu sana göre değil. Hadi düzeltelim.",
+      "2": "Yola geri döndün. Bahane yok, sadece hareket, {{username}}."
+    }
   },
-  "social_momentum": {
-    "1": "Bu hafta birçok kişi için temiz geçti. Ama sen? Elitlerdesin, {{username}}."
+  "streak_state": {
+    "new_streak_starting": {
+      "1": "Yeni seri, yeni hissiyat, {{username}}. Nereye gideceğini görelim.",
+      "2": "Bir tamamlandı. Yeni vibe açıldı, {{username}}.",
+      "3": "Reset? Aktif. Hadi işe koyulalım."
+    },
+    "almost_week_streak": {
+      "1": "Neredeyse bir hafta oldu, {{username}}. Bu farklı bir şey.",
+      "2": "5+ gün derinlikte. Bu tesadüf değil, {{username}}.",
+      "3": "Bir gün daha, tam hafta. Keskin kal."
+    },
+    "over_10_day_streak": {
+      "1": "Hâlâ devam ediyor. Hâlâ sessizce ilerliyor. Harikasın, {{username}}.",
+      "2": "Artık nadir bölgedesin, {{username}}. Devam et.",
+      "3": "Hâlâ fırçalıyorsun. Hâlâ yükseliyorsun. Bayıldım buna."
+    },
+    "best_streak_reached": {
+      "1": "Şu anki en iyin bu, {{username}}. Şimdi tavanı yükseltme zamanı.",
+      "2": "Yeni seviye. Temizlik açıldı. Nubo seninle gurur duyuyor, {{username}}.",
+      "3": "Standartları sen belirledin. Yarın onları geçeceksin."
+    },
+    "streak_broken": {
+      "1": "Seri düştü mü? Hayat bu. Ama bugün geldin. Güç budur, {{username}}.",
+      "2": "Seri bitti. Ama efsane devam ediyor, {{username}}.",
+      "3": "Reset. Yüklen. Yine de temizsin."
+    }
   },
-  "late_night_others_brushed": {
-    "1": "Gece yarısını geçtin mi? Gerçeklerle birlikte fırçalıyorsun, {{username}}."
+  "milestone_enhancements": {
+    "monthly_brush_20": {
+      "monthly_brush_20": "Bu ay 20 kez fırçaladın. Saygılar, {{username}}.",
+      "brushed_7_of_10": "Mükemmel değil belki ama çok güçlü. Kontrol sende, {{username}}."
+    },
+    "day_7": {
+      "day_7": "İlk hafta? Parçalandı. Hadi devam, {{username}}.",
+      "day_30": "İlk ay? Sahiplendin. Tebrikler, {{username}}."
+    },
+    "returning_user_milestone": {
+      "returning_user_milestone": "Ara bitti. Seri geri yükleniyor. Hoş geldin, {{username}}.",
+      "milestone_streak_recovery": "Toparlandın. Yeniden başladın. Şimdiden yükseliyorsun, {{username}}."
+    },
+    "brush_count_milestones": {
+      "exactly_10": "Çift hanelere ulaştın. Yükseliyorsun, {{username}}.",
+      "exactly_50": "Yarım yüzyıl. Tam bağlılık, {{username}}.",
+      "exactly_100": "100 mü? Efsane onaylandı, {{username}}."
+    }
   },
-  "first_week_global_wave": {
-    "1": "Taze dalga. Taze yüzler. Hareketin içindesin artık, hoş geldin {{username}}."
+  "informative": {
+    "habit_tip": {
+      "1": "Rutin güçtür, {{username}}. Üst üste koymaya devam et."
+    },
+    "dental_fact": {
+      "1": "İki dakikalık fırçalama. Sonsuz stil puanı, {{username}}."
+    },
+    "science_fact": {
+      "1": "Koca bir bakteri şehri yok edildi, {{username}}. Saygılar."
+    },
+    "psych_fact": {
+      "1": "Büyük zihin yapısı, küçük hareketlerle başlar. Tıpkı bu gibi, {{username}}."
+    },
+    "dental_fact_2": {
+      "1": "Sağlıklı diş eti = güçlü duruş, {{username}}. Atlamamalısın."
+    },
+    "dental_fact_3": {
+      "1": "Gerçek ferahlık dilde başlar, {{username}}."
+    },
+    "science_fact_2": {
+      "1": "Şimdi plak mı, sonra tartar mı? Sen 'şimdi'yi seçtin. Akıllıca, {{username}}."
+    },
+    "psych_fact_2": {
+      "1": "Sağlam bir alışkanlık, diğerlerini de getirir. Fırçalama ilk adım, {{username}}."
+    },
+    "morning_breath_fact": {
+      "1": "Temiz sabahlar, temiz hareketle başlar, {{username}}. Fırçaya bas!"
+    },
+    "toothpaste_fact": {
+      "1": "Büyük köpük ≠ daha iyi. Minik bir damla yeter, {{username}}."
+    },
+    "floss_fact": {
+      "1": "Diş ipi, fırçanın ulaşamadığı yerlere ulaşır. Temiz hamle, {{username}}."
+    },
+    "brushing_too_hard": {
+      "1": "Zeki fırçala, sert değil, {{username}}. Kuvvet değil zarafet önemli."
+    },
+    "night_brushing_importance": {
+      "1": "Gece fırçalama = gece boyunca koruma. Akıllıca, {{username}}."
+    },
+    "brushing_angle_fact": {
+      "1": "Açı ver. Derin temizle. Bu profesyonel seviye fırçalama, {{username}}."
+    },
+    "dry_brush_fact": {
+      "1": "Macun yok mu? Sorun değil, {{username}}. Kuru fırçalama günü kurtarır."
+    }
   },
-  "nubo_day_event": {
-    "1": "Bugün sadece temiz enerji var. Nubo Günü geldi, {{username}}. Parlamaya hazır mısın?"
-  },
-  "community_across_timezones": {
-    "1": "Saatler farklı. Enerji aynı. Tüm dünyada fırçalama ruhu, {{username}}."
-  },
-  "brush_in_cities": {
-    "1": "Büyük şehirler. Parlak gülüşler. Fırçalama evrensel, {{username}}."
-  },
-  "nubo_watching": {
-    "1": "Nubo gördü. Hiçbir şey demedi. Sadece saygıyla kafasını salladı, {{username}}."
-  },
-  "nubo_broadcast": {
-    "1": "Onaylandı: {{username}} fırçaladı. Mesaj iletildi. Durum: 🔥"
+  "community": {
+    "community_brushing_now": {
+      "1": "Fırçalama yalnız yapılmaz. Global temiz ekip senkronize, {{username}}."
+    },
+    "nubo_network_energy": {
+      "1": "NuboNet™’e giriş yaptın — temiz enerji 7/24 akıyor, {{username}}."
+    },
+    "social_momentum": {
+      "1": "Bu hafta çoğu kişi temizdi. Sen? Elit kategoridesin, {{username}}."
+    },
+    "late_night_others_brushed": {
+      "1": "Gece yarısı mı? Gerçeklerle birlikte fırçalıyorsun, {{username}}."
+    },
+    "first_week_global_wave": {
+      "1": "Taze dalga, taze yüzler. Hareketin içindesin artık, {{username}}."
+    },
+    "nubo_day_event": {
+      "1": "Sadece temiz enerjiler. Bugün Nubo Günü, {{username}}. Parlamaya hazır ol."
+    },
+    "community_across_timezones": {
+      "1": "Farklı saatler. Aynı temiz enerji. Global fırçalama tayfası, {{username}}."
+    },
+    "brush_in_cities": {
+      "1": "Büyük şehirler. Parlak gülümsemeler. Fırçalama evrenseldir, {{username}}."
+    },
+    "nubo_watching": {
+      "1": "Nubo gördü. Hiçbir şey demedi. Sadece onayladı, {{username}}."
+    },
+    "nubo_broadcast": {
+      "1": "Doğrulandı: {{username}} fırçaladı. Mesaj iletildi. Durum: 🔥"
+    }
   }
-}
-
-  },
+},
        "wise": {
-    "time_context": {
-      "morning": {
-        "1": "Günün tonu, sabah nasıl başladığınla şekillenir.",
-        "2": "Sakin bir başlangıç, tüm güne yansır.",
-        "3": "Nazik bir başlangıç, gün için sağlam kökler atar, {{username}}."
-      },
-      "afternoon": {
-        "1": "Gürültüyü kes. Ritmi yenile.",
-        "2": "Berrak bir zihin, küçük sıfırlamalarla başlar.",
-        "3": "Koşuşturmalar arasında açıklığı seç, {{username}}."
-      },
-      "evening": {
-        "1": "Günü nasıl kapatırsan, ertesi günü öyle karşılayacaksın.",
-        "2": "Dinginlik. Rutine sadakat. İlerleme.",
-        "3": "Bir günü kapatışın, sonraki güne sessizce fısıldar, {{username}}."
-      },
-      "late_night": {
-        "1": "Disiplin, mükemmel zamanı beklemez—yalnızca harekete geçme iradesini ister.",
-        "2": "Yıldızlar bile sessizce sürdürülen rutinlere saygı duyar, {{username}}.",
-        "3": "Uyku öncesi düzen seçmekte gizli bir güç vardır."
-      },
-      "weekday": {
-        "1": "Yapı özgürlük yaratır. İkisini de inşa ediyorsun.",
-        "2": "Rutin pusulandır. İyi yönlendiriyorsun.",
-        "3": "Haftanın ritmi, küçük hareketlerden oluşur, {{username}}."
-      },
-      "weekend": {
-        "1": "En iyi alışkanlıklar programa bağlı kalmaz.",
-        "2": "Özgürlük, neyin önemli olduğunu ortaya çıkarır—ve sen buradasın, {{username}}.",
-        "3": "Bütün zaman sendeyken, nasıl kullanırsın? Doğru seçtin."
-      }
+  "time_context": {
+    "morning": {
+      "1": "Günün tonu, sabahına nasıl başladığınla belirlenir.",
+      "2": "Sakin bir başlangıç, tüm gün boyunca yankılanır.",
+      "3": "Nazik bir sabah, gün için güçlü temeller atar, {{username}}."
     },
-    "brushing_behaviour": {
-      "consistent_habit": {
-        "1": "Gerçek ustalık, iyi yapılan basit hareketlerin tekrarıdır.",
-        "2": "Tutarlılığın karakterini gösterir. Bu disiplin sana hizmet eder.",
-        "3": "Sağlık bankasına yapılan küçük günlük yatırımlar muazzam büyür."
-      }
+    "afternoon": {
+      "1": "Gürültüyü durdur. Ritmini tazele.",
+      "2": "Temiz bir zihin, küçük yenilenmelerle başlar.",
+      "3": "Koşturma anlarının arasında, sen berraklığı seç {{username}}."
     },
-    "streak_state": {
-      "new_streak_starting": {
-        "1": "Bir serinin ilk fırçalama anı her zaman en değerlisidir.",
-        "2": "Başlangıçlar kutsaldır. Buna özen göster.",
-        "3": "Temiz bir ilk gün, daha temiz bir geleceğe açılır."
-      },
-      "almost_week_streak": {
-        "1": "Alışkanlıklar sessizce şekillenir. Neredeyse oradasın.",
-        "2": "6 gün tesadüf değil. Bu senin tutarlılığa dönüşün.",
-        "3": "6 gün geride. Sadece denemiyorsun—oluşuyorsun."
-      },
-      "over_10_day_streak": {
-        "1": "Alışkanlığın ötesine geçtin. Bu kimliktir.",
-        "2": "Tekrarladıkların, kim olduğundur. Bak, nasıl seviye atlıyorsun.",
-        "3": "Bu şans değil. Bu günlük gösterimin inşa ettikleridir."
-      },
-      "best_streak_reached": {
-        "1": "Kırılan rekor, aşılmış bir benliktir.",
-        "2": "Bu anın ötesinde tek şey, bir sonraki anındır.",
-        "3": "Dönüm noktaları aynalardır. Kendi dönüşümüne bak."
-      },
-      "streak_broken": {
-        "1": "Seri durdu ama yol devam etti.",
-        "2": "Başarısızlık sadece geri bildirimdir—ve sen dinliyorsun.",
-        "3": "Kusur insana mahsustur. Israr ise bilgeliğe."
-      }
+    "evening": {
+      "1": "Günü nasıl kapatırsan, yarını öyle karşılarsın.",
+      "2": "Durgunluk. Rutin. İlerleme.",
+      "3": "Bir günü nasıl kapatırsan, o fısıltı ertesi güne taşınır, {{username}}."
     },
-    "milestone_enhancements": {
-      "monthly_brush_20": {
-        "monthly_brush_20": "Sağlık için yirmi tercih. Her biri kalıcı bir tohum.",
-        "brushed_7_of_10": "Mükemmel olmak değil, tutarlı olmak önemli."
-      },
-      "day_7": {
-        "day_7": "Yedi gün, alışkanlıkların kalıcılığını fısıldamaya başlar.",
-        "day_30": "Bir ay süren ivme. Gerçek bir değişim."
-      },
-      "returning_user_milestone": {
-        "returning_user_milestone": "Her dönüş, en çok önemli olanı öğretir: mükemmellik değil, ısrar.",
-        "milestone_streak_recovery": "Gerçek güç, düşüş sonrası dönüşte saklıdır."
-      },
-      "brush_count_milestones": {
-        "exactly_10": "On tekrar. Bir örüntü başlıyor.",
-        "exactly_50": "Elli sadece sayı değil. Bir örüntünün kanıtı.",
-        "exactly_100": "Üç haneli rakamlar. Disiplin artık gerçektir."
-      }
+    "late_night": {
+      "1": "Disiplinin saatle ilgisi yoktur — sadece niyetle ilgisi vardır.",
+      "2": "Sessizlik içinde sürdürülen rutinlere yıldızlar bile saygı duyar, {{username}}.",
+      "3": "Uykudan önce düzeni seçmekte sessiz bir güç yatar."
     },
-    "informative": {
-      "habit_tip": {
-        "1": "En küçük ritüeller çoğunlukla en güçlü hayatların temelidir."
-      },
-      "dental_fact": {
-        "1": "İki dakika. Önemli olanı korumak için ideal süre."
-      },
-      "science_fact": {
-        "1": "Bakteriler birkaç saatte iki katına çıkar. Senin disiplinin de öyle."
-      },
-      "psych_fact": {
-        "1": "Küçük eylemler kimlik inşa eder. Zihin böyle yeniden şekillenir."
-      },
-      "dental_fact_2": {
-        "1": "İhmal edilen diş etleri genellikle bağırmadan önce fısıldar."
-      },
-      "dental_fact_3": {
-        "1": "Dili ihmal et, tazelik geçici olur."
-      },
-      "science_fact_2": {
-        "1": "Kontrolsüz kalan plak, taşa dönüşür. Özen düzeltir."
-      },
-      "psych_fact_2": {
-        "1": "Temel alışkanlıklar hayatının diğer alanlarına dalga dalga yayılır."
-      },
-      "morning_breath_fact": {
-        "1": "Tükürük ağzı korur — sen uyurken bile."
-      },
-      "toothpaste_fact": {
-        "1": "Tam tüp değil, hassaslık önemlidir — bezelye tanesi kadar yeter."
-      },
-      "floss_fact": {
-        "1": "Diş ipi, fırçanın ulaşamadığı sessiz alanlara erişir."
-      },
-      "brushing_too_hard": {
-        "1": "Fazla baskı geri çekilmeye neden olabilir. Fırçalamada da."
-      },
-      "night_brushing_importance": {
-        "1": "Ağız gece savunmasızdır. Akşam bakımı sessiz kalkanıdır."
-      },
-      "brushing_angle_fact": {
-        "1": "Hassasiyet önemlidir. 45° açı temele ulaşır."
-      },
-      "dry_brush_fact": {
-        "1": "Mükemmel yapamıyorsan da yap. Kuru fırçalama bile zararı azaltır."
-      }
+    "weekday": {
+      "1": "Yapı özgürlük getirir. Sen ikisini birden inşa ediyorsun.",
+      "2": "Rutin bir pusuladır. Ve sen yönü iyi buluyorsun.",
+      "3": "Haftanın ritmi küçük eylemlerle oluşur, {{username}}."
     },
-    "community": {
-  "community_brushing_now": {
-    "1": "Şu anda, farklı zaman dilimlerinde sessiz bir özen gösteriliyor — seninki gibi."
+    "weekend": {
+      "1": "En iyi alışkanlıklar, programın ötesinde de yaşar.",
+      "2": "Özgürlük, neyin önemli olduğunu gösterir — ve sen gerekeni yaptın, {{username}}.",
+      "3": "Bütün zaman senin elindeyken, ne yaparsın? Sen doğruyu seçtin."
+    }
   },
-  "nubo_network_energy": {
-    "1": "Bulutun bir yerinde, senin gibi düşünen başkaları da bilinçlice fırçalıyor. Bu önemli."
+  "brushing_behaviour": {
+    "after_brushing_success": {
+      "1": "Disiplin birikir. Sen bugün bir katkı daha yaptın.",
+      "2": "Rutinler sessiz inşaatçılardır, {{username}}. Nane nane, tuğla tuğla."
+    },
+    "after_brushing_fail": {
+      "1": "Kısa bir ritüel bile uzun bir günü dengeleyebilir.",
+      "2": "Önemli olan süresi değil, hareketin kendisidir, {{username}}. Sen hareketi seçtin."
+    },
+    "first_brush_of_day": {
+      "1": "İlk adımlar yolu şekillendirir. Seninki bilinçliydi.",
+      "2": "Günün ilk hareketi, odağının tohumudur, {{username}}."
+    },
+    "second_brush_of_day": {
+      "1": "Bu çaba, disiplinin tam dairesini tamamladı.",
+      "2": "Döngü tamamlandı. Sen ritmini korudun, {{username}}."
+    },
+    "missed_yesterday": {
+      "1": "Zincir koptu. Ama irade değil. Devam et.",
+      "2": "İlerleme mükemmel olmak değil, {{username}}. Israrcı olmak."
+    }
   },
-  "social_momentum": {
-    "1": "Bu hafta sessiz eylemler birikti. Seninki de onlardan biri."
+  "streak_state": {
+    "new_streak_starting": {
+      "1": "Bir serideki ilk fırçalama her zaman en önemlisidir.",
+      "2": "Başlangıçlar kutsaldır. Buna özen göster.",
+      "3": "Temiz bir ilk gün, daha temiz bir gelecek getirebilir."
+    },
+    "almost_week_streak": {
+      "1": "Alışkanlıklar sessizce oluşur. Neredeyse oradasın.",
+      "2": "6 gün tesadüf değil. Bu, senin istikrarlı hale gelişin.",
+      "3": "6 gün boyunca devam ettin. Artık sadece denemiyorsun — dönüşüyorsun."
+    },
+    "over_10_day_streak": {
+      "1": "Artık bir alışkanlığın ötesindesin. Bu, senin kimliğin.",
+      "2": "Tekrar ettiklerin, kim olduğunu belirler. Bak, sen gelişiyorsun.",
+      "3": "Bu şans değil. Bu, her gün gelmenin getirdiği birikim."
+    },
+    "best_streak_reached": {
+      "1": "Bir rekor kırmak, kendini aşmaktır.",
+      "2": "Bu andan daha iyi olan tek şey, sıradaki andır.",
+      "3": "Kilometre taşları aynadır. Bak, sen neye dönüştün."
+    },
+    "streak_broken": {
+      "1": "Seri durdu. Ama yol değil.",
+      "2": "Başarısızlık sadece bir geri bildirimdir — ve sen onu dinliyorsun.",
+      "3": "Mükemmellik insana ait değildir. Israr, gerçek bilgidir."
+    }
   },
-  "late_night_others_brushed": {
-    "1": "Yatak odalarında, şehir sokaklarında bu saatte başkaları da özeni seçti."
+  "milestone_enhancements": {
+    "monthly_brush_20": {
+      "monthly_brush_20": "Yirmi sağlıklı tercih. Her biri kalıcı bir şeye tohum oldu.",
+      "brushed_7_of_10": "Mesele mükemmel olmak değil. Tutarlı olmak."
+    },
+    "day_7": {
+      "day_7": "Yedi gün, alışkanlıkların kalıcılığı fısıldamaya başladığı andır.",
+      "day_30": "Bir ay boyunca momentum. Gerçek bir değişim bu."
+    },
+    "returning_user_milestone": {
+      "returning_user_milestone": "Her dönüş şunu öğretir: önemli olan kusursuzluk değil, devamlılıktır.",
+      "milestone_streak_recovery": "Gerçek güç, düşüşten sonra nasıl geri döndüğünde gizlidir."
+    },
+    "brush_count_milestones": {
+      "exactly_10": "On tekrar. Bir desen başlar.",
+      "exactly_50": "Elli sadece bir sayı değil. Bir alışkanlığın kanıtı.",
+      "exactly_100": "Üç hane. Disiplin artık gerçek."
+    }
   },
-  "first_week_global_wave": {
-    "1": "Her dalga birkaç cesur adımla başlar. Hoş geldin bu harekete."
+  "informative": {
+    "habit_tip": {
+      "1": "En küçük ritüeller, en sağlam hayatları taşır."
+    },
+    "dental_fact": {
+      "1": "İki dakika. Önemli olanı korumak için ideal süre."
+    },
+    "science_fact": {
+      "1": "Bakteriler birkaç saatte iki katına çıkar. Disiplinin de öyle olabilir."
+    },
+    "psych_fact": {
+      "1": "Küçük eylemler kimlik oluşturur. Zihin böyle yeniden şekillenir."
+    },
+    "dental_fact_2": {
+      "1": "İhmal edilen diş etleri önce fısıldar. Sonra bağırır."
+    },
+    "dental_fact_3": {
+      "1": "Dili ihmal edersen, ferahlık geçici olur."
+    },
+    "science_fact_2": {
+      "1": "Kontrolsüz kalan plak, taşa dönüşür. Özen göstermek, düzeltmeye gerek bırakmaz."
+    },
+    "psych_fact_2": {
+      "1": "Temel alışkanlıklar, hayatının geri kalanına yayılır."
+    },
+    "morning_breath_fact": {
+      "1": "Tükürük ağızı korur — ama sen uyuyunca o da uyur."
+    },
+    "toothpaste_fact": {
+      "1": "Tüm şerit değil, hassasiyet önemli — nohut kadar macun yeterli."
+    },
+    "floss_fact": {
+      "1": "Diş ipi, fırçanın ulaşamadığı sessiz alanlara ulaşır."
+    },
+    "brushing_too_hard": {
+      "1": "Fazla baskı, geri çekilmeye yol açar. Fırçalamada bile."
+    },
+    "night_brushing_importance": {
+      "1": "Ağız gece en savunmasız halindedir. Akşam bakımı sessiz bir kalkandır."
+    },
+    "brushing_angle_fact": {
+      "1": "Hassasiyet önemlidir. 45° açı, temele ulaşır."
+    },
+    "dry_brush_fact": {
+      "1": "Mükemmel yapamıyorsan bile... yine de yap. Kuru fırçalama bile zararı önler."
+    }
   },
-  "nubo_day_event": {
-    "1": "Bugün Nubo Günü — her ritüelin anlamlı olduğunu hatırlatan küçük bir işaret."
-  },
-  "community_across_timezones": {
-    "1": "Kıtalar boyunca özen devam ediyor — her seferinde bir fırçalama ile."
-  },
-  "brush_in_cities": {
-    "1": "Kalabalık sokakların tam ortasında bile, özene yer var."
-  },
-  "nubo_watching": {
-    "1": "Sen fark etmesen bile, Nubo çabayı fark ediyor."
-  },
-  "nubo_broadcast": {
-    "1": "Nubo’nun pano ışıkları seninle yandı. Bu önemli."
+  "community": {
+    "community_brushing_now": {
+      "1": "Şu anda, farklı saat dilimlerinde, sessiz bir özen sürüyor — senin gibi."
+    },
+    "nubo_network_energy": {
+      "1": "Bulutun bir yerinde, başkaları da senin gibi niyetle fırçalıyor. Bu önemli."
+    },
+    "social_momentum": {
+      "1": "Bu hafta sessiz eylemler birikti. Seninki de dahil."
+    },
+    "late_night_others_brushed": {
+      "1": "Yatak odalarında, şehirlerde, bu saatte biri daha özene karar verdi."
+    },
+    "first_week_global_wave": {
+      "1": "Her dalga birkaç cesur adımla başlar. Dalgaya hoş geldin."
+    },
+    "nubo_day_event": {
+      "1": "Bugün Nubo Günü — her ritüelin değerli olduğunu hatırlatan küçük bir işaret."
+    },
+    "community_across_timezones": {
+      "1": "Kıtalar boyunca, bakım devam ediyor — bir fırça darbesiyle."
+    },
+    "brush_in_cities": {
+      "1": "Yoğun sokakların ortasında bile özene vakit bulunur."
+    },
+    "nubo_watching": {
+      "1": "Sen fark etmesen de, Nubo çabanı fark ediyor."
+    },
+    "nubo_broadcast": {
+      "1": "Nubo’nun veri paneli, senin hareketinle parladı. Bu değerli."
+    }
   }
 }
-
-  }
 }
   }
 }
