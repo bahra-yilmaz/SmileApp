@@ -227,19 +227,22 @@
     },
     "statistics": {
       "name": "Statistiken",
-      "description": "Putz-Statistiken ansehen"
+      "description": "Zahnputzstatistiken anzeigen"
     },
     "reminders": {
       "name": "Erinnerungen",
-      "description": "Putz-Erinnerungen einstellen"
+      "description": "Zahnputzerinnerungen einstellen"
     },
     "achievements": {
       "name": "Erfolge",
-      "description": "Deine Putz-Erfolge prüfen"
+      "description": "Zahnputzerfolge überprüfen"
     },
     "settings": {
       "name": "Einstellungen",
-      "description": "App-Einstellungen und Präferenzen"
+      "description": "App-Einstellungen und -Präferenzen",
+      "appSettings": {
+        "title": "App-Einstellungen"
+      }
     }
   },
   "timerOverlay": {
@@ -320,28 +323,17 @@
     "changeTargetButton": "Ziel ändern"
   },
   "brushingTimeOverlay": {
+    "setReminderButton": "Erinnerung einstellen",
     "title": "Putzzeit",
-    "timeProgressFormat": "{{currentTime}} / {{targetTime}} Min",
-    "averageTimeImproving": "Durchschnittliche Zeit wird besser 🌟",
-    "averageTimeDeclining": "Lass uns deine Putzzeit steigern 💪",
-    "brushingTrendTitle": "Putz-Trend",
-    "targetTitle": "Zielzeit setzen",
-    "targetDescriptionFormat": "Aktuelles Ziel: {{targetMinutes}} Min",
-    "targetOptionFormat": "{{option}} Min",
+    "timeProgressFormat": "{{currentTime}} / {{targetTime}}",
+    "updateGoalError": "Putzzeit-Ziel konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
+    "brushingTrendTitle": "Putztrend",
+    "targetTitle": "Zielzeit einstellen",
+    "targetDescriptionFormat": "Aktuelles Ziel: {{targetMinutes}} Minuten",
     "whyTimeMattersTitle": "Warum Zeit wichtig ist",
-    "whyTimeMattersText": "Weniger als 2 Minuten lässt Plaque zurück. 2–3 Minuten sind optimal.",
-    "targetProgressTitle": "Ziel-Fortschritt",
-    "timeToGoFormat": "{{time}} verbleibend!",
-    "shareStatsButton": "Statistik teilen",
-    "setTargetButton": "Neues Ziel setzen",
-    "editTargetButton": "Ziel bearbeiten",
-    "customTargetPrompt": "Ziel in Minuten eingeben (z.B. 2.5 für 2:30 Min)",
-    "saveTargetButton": "Speichern",
-    "cancelButton": "Abbrechen",
-    "targetUpdatedAlert": "Zielzeit auf {{newTarget}} Minuten aktualisiert!",
-    "invalidInputAlert": "Bitte eine gültige Minutenanzahl eingeben.",
-    "chooseTargetPrompt": "Oder wähle aus häufigen Zielen:",
-    "updateGoalError": "Fehler beim Aktualisieren des Zielwerts. Bitte versuche es erneut.",
+    "whyTimeMattersText": "Langes genug Putzen ist entscheidend, um Plaque zu entfernen und die Zahnfleischgesundheit zu verbessern. Die meisten Zahnärzte empfehlen, mindestens 2 Minuten lang zu putzen.",
+    "targetProgressTitle": "Zielfortschritt",
+    "timeToGoFormat": "Noch {{time}}",
     "targetAchieved": "Ziel erreicht!"
   },
   "brushingResultsScreen": {
@@ -1202,5 +1194,17 @@
 }
 
     }
+  },
+  "AppInstallService": {
+    "title": "App-Installation",
+    "description": "Sie haben die App erfolgreich installiert!"
+  },
+  "BestStreakService": {
+    "title": "Beste Serie",
+    "description": "Sie haben eine {{count}}-Tages-Serie erreicht!"
+  },
+  "MonthlyBrushService": {
+    "title": "Monatliches Putzen",
+    "description": "Sie haben diesen Monat {{count}} Mal geputzt!"
   }
 }

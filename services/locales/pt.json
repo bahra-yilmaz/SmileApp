@@ -221,23 +221,26 @@
     "title": "Menu",
     "profile": {
       "name": "Perfil",
-      "description": "Gerencie seu perfil e configurações"
+      "description": "Gerenciar perfil e configurações"
     },
     "statistics": {
       "name": "Estatísticas",
-      "description": "Veja suas estatísticas de escovação"
+      "description": "Ver estatísticas de escovação"
     },
     "reminders": {
       "name": "Lembretes",
-      "description": "Configure seus lembretes de escovação"
+      "description": "Definir lembretes de escovação"
     },
     "achievements": {
       "name": "Conquistas",
-      "description": "Veja suas conquistas de escovação"
+      "description": "Verificar conquistas de escovação"
     },
     "settings": {
       "name": "Configurações",
-      "description": "Configurações e preferências do app"
+      "description": "Configurações e preferências do aplicativo",
+      "appSettings": {
+        "title": "Configurações do Aplicativo"
+      }
     }
   },
   "timerOverlay": {
@@ -318,27 +321,18 @@
     "changeTargetButton": "Alterar meta"
   },
   "brushingTimeOverlay": {
+    "setReminderButton": "Definir Lembrete",
     "title": "Tempo de Escovação",
-    "timeProgressFormat": "{{currentTime}} / {{targetTime}} min",
-    "averageTimeImproving": "O tempo médio está melhorando 🌟",
-    "averageTimeDeclining": "Vamos aumentar esse tempo! 💪",
-    "brushingTrendTitle": "Tendência de escovação",
-    "targetTitle": "Definir tempo-alvo",
-    "targetDescriptionFormat": "Meta atual: {{targetMinutes}} min",
-    "targetOptionFormat": "{{option}} min",
-    "whyTimeMattersTitle": "Por que o tempo importa",
-    "whyTimeMattersText": "Escovar por menos de 2 minutos deixa placa. Mire em 2–3 minutos para uma limpeza completa.",
-    "targetProgressTitle": "Progresso da meta",
-    "timeToGoFormat": "{{time}} restantes!",
-    "shareStatsButton": "Compartilhar estatísticas",
-    "setTargetButton": "Definir nova meta",
-    "editTargetButton": "Editar meta",
-    "customTargetPrompt": "Informe o tempo em minutos (ex.: 2.5 para 2min30s)",
-    "saveTargetButton": "Salvar meta",
-    "cancelButton": "Cancelar",
-    "targetUpdatedAlert": "Meta atualizada para {{newTarget}} minutos!",
-    "invalidInputAlert": "Por favor, insira um número válido de minutos.",
-    "chooseTargetPrompt": "Ou escolha um alvo comum:"
+    "timeProgressFormat": "{{currentTime}} / {{targetTime}}",
+    "updateGoalError": "Falha ao atualizar a meta de escovação. Por favor, tente novamente.",
+    "brushingTrendTitle": "Tendência de Escovação",
+    "targetTitle": "Definir Tempo Alvo",
+    "targetDescriptionFormat": "Meta atual: {{targetMinutes}} minutos",
+    "whyTimeMattersTitle": "Por Que o Tempo Importa?",
+    "whyTimeMattersText": "Escovar por tempo suficiente é crucial para remover a placa e melhorar a saúde da gengiva. A maioria dos dentistas recomenda escovar por pelo menos 2 minutos.",
+    "targetProgressTitle": "Progresso da Meta",
+    "timeToGoFormat": "Faltam {{time}}",
+    "targetAchieved": "Meta alcançada!"
   },
   "brushingResultsScreen": {
     "title": "Escovação Concluída!",
@@ -1197,5 +1191,17 @@
 }
 
     }
+  },
+  "AppInstallService": {
+    "title": "Instalação do Aplicativo",
+    "description": "Você instalou o aplicativo com sucesso!"
+  },
+  "BestStreakService": {
+    "title": "Melhor Sequência",
+    "description": "Você atingiu uma sequência de {{count}} dias!"
+  },
+  "MonthlyBrushService": {
+    "title": "Escovação Mensal",
+    "description": "Você escovou {{count}} vezes este mês!"
   }
 }

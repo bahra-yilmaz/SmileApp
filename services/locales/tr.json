@@ -248,105 +248,34 @@
       "description": "Uygulama ayarları ve tercihler",
       "appSettings": {
         "title": "Uygulama Ayarları"
-      },
-      "resetOnboarding": {
-        "name": "Onboardingi Sıfırla",
-        "title": "Onboardingi Sıfırla",
-        "message": "Onboarding akışını sıfırlamak istediğinize emin misiniz? Karşılama ekranına yönlendirileceksiniz.",
-        "confirm": "Sıfırla"
-      },
-      "theme": {
-        "name": "Uygulama Teması"
-      },
-      "mascotTone": {
-        "name": "Maskot Tonu",
-        "selectTitle": "Nubo'nun Tonunu Seç",
-        "error": {
-          "title": "Ton Hatası",
-          "message": "Maskot tonu değiştirilemedi. Lütfen tekrar deneyin."
-        }
-      },
-      "language": {
-        "name": "Dil",
-        "selectTitle": "Dil Seç",
-        "error": {
-          "title": "Dil Hatası",
-          "message": "Dil değiştirilemedi. Lütfen tekrar deneyin."
-        }
-      },
-      "about": {
-        "title": "Hakkında"
-      },
-      "appVersion": {
-        "name": "Uygulama Sürümü"
-      },
-      "brushingSettings": {
-        "title": "Fırçalama Ayarları",
-        "reminderTime": "Hatırlatma Saati",
-        "frequency": "Fırçalama Sıklığı",
-        "targetTime": "Hedef Süre",
-        "toothbrush": "Fırça Menüsü"
-      },
-      "reminderTimes": {
-        "none": "Yok",
-        "one": "1 hatırlatma",
-        "multiple": "{{count}} hatırlatma",
-        "selectTitle": "Hatırlatma Saatleri",
-        "morning": "Sabah",
-        "afternoon": "Öğleden Sonra",
-        "evening": "Akşam",
-        "night": "Yatmadan Önce",
-        "custom": "Özel",
-        "customBadge": "Özel",
-        "editTime": "Saati Düzenle",
-        "addTime": "Yeni Saat Ekle",
-        "addNew": "Yeni Hatırlatma Ekle",
-        "nameLabel": "Hatırlatma Adı",
-        "hour": "Saat",
-        "minute": "Dakika",
-        "addReminder": "Ekle",
-        "error": {
-          "title": "Hatırlatma Hatası",
-          "message": "Hatırlatma zamanı güncellenemedi. Lütfen tekrar deneyin."
-        }
-      },
-      "dailyFrequency": {
-        "selectTitle": "Günlük Sıklık",
-        "options": {
-          "minimal_label": "Günde 1 kez",
-          "minimal_description": "Temel bakım",
-          "standard_label": "Günde 2 kez",
-          "standard_description": "Sabah ve akşam",
-          "standard_short": "2 kez",
-          "recommended_label": "Günde 3 kez",
-          "recommended_description": "Her öğünden sonra",
-          "comprehensive_label": "Günde 4+ kez",
-          "comprehensive_description": "Maksimum bakım"
-        },
-        "countFormat": "{{count}} kez",
-        "error": {
-          "title": "Sıklık Hatası",
-          "message": "Günlük fırçalama sıklığı değiştirilemedi. Lütfen tekrar deneyin."
-        }
-      },
-      "brushingTarget": {
-        "selectTitle": "Hedef Süre",
-        "options": {
-          "quick_label": "1.5 dakika",
-          "quick_description": "Hızlı ama etkili",
-          "standard_label": "2 dakika",
-          "standard_description": "Diş hekimi önerisi",
-          "thorough_label": "3 dakika",
-          "thorough_description": "Ekstra detaylı temizlik",
-          "comprehensive_label": "4 dakika",
-          "comprehensive_description": "Kapsamlı bakım"
-        },
-        "error": {
-          "title": "Hedef Hatası",
-          "message": "Fırçalama hedefi değiştirilemedi. Lütfen tekrar deneyin."
-        }
       }
     }
+  },
+  "brushingTimeOverlay": {
+    "setReminderButton": "Zamanlayıcı Kur",
+    "title": "Fırçalama Süresi",
+    "timeProgressFormat": "{{currentTime}} / {{targetTime}}",
+    "updateGoalError": "Fırçalama hedefi güncellenemedi. Lütfen tekrar deneyin.",
+    "brushingTrendTitle": "Fırçalama Trendi",
+    "targetTitle": "Hedef Zamanı Ayarla",
+    "targetDescriptionFormat": "Mevcut hedef: {{targetMinutes}} dakika",
+    "whyTimeMattersTitle": "Neden Süre Önemli?",
+    "whyTimeMattersText": "Yeterli süre fırçalama, plağı temizlemek ve diş eti sağlığını iyileştirmek için çok önemlidir. Çoğu diş hekimi en az 2 dakika fırçalamayı önerir.",
+    "targetProgressTitle": "Hedef İlerlemesi",
+    "timeToGoFormat": "{{time}} kaldı",
+    "targetAchieved": "Hedefe ulaşıldı!"
+  },
+  "AppInstallService": {
+    "title": "Uygulama Kurulumu",
+    "description": "Uygulamayı başarıyla yüklediniz!"
+  },
+  "BestStreakService": {
+    "title": "En İyi Seri",
+    "description": "{{count}} günlük bir seri elde ettiniz!"
+  },
+  "MonthlyBrushService": {
+    "title": "Aylık Fırçalama",
+    "description": "Bu ay {{count}} kez fırçaladınız!"
   },
   "timerOverlay": {
     "start": "Başla",
@@ -425,29 +354,6 @@
     "hideHistory": "Geçmişi Gizle",
     "noHistory": "Henüz seri yok. Devam et!",
     "changeTargetButton": "Hedefi değiştir"
-  },
-  "brushingTimeOverlay": {
-    "title": "Fırçalama Süresi",
-    "timeProgressFormat": "{{currentTime}} / {{targetTime}} dk",
-    "averageTimeImproving": "Ortalama süre artıyor 🌟",
-    "averageTimeDeclining": "Hadi süreyi biraz daha uzatalım 💪",
-    "brushingTrendTitle": "Fırçalama Trendi",
-    "targetTitle": "Hedef Süreyi Belirle",
-    "targetDescriptionFormat": "Mevcut hedef: {{targetMinutes}} dk",
-    "targetOptionFormat": "{{option}} dk",
-    "whyTimeMattersTitle": "Süre Neden Önemli?",
-    "whyTimeMattersText": "2 dakikanın altında fırçalamak plak bırakır. 2–3 dakika hedefle.",
-    "targetProgressTitle": "Hedef İlerlemesi",
-    "timeToGoFormat": "{{time}} kaldı!",
-    "shareStatsButton": "İstatistikleri Paylaş",
-    "setTargetButton": "Yeni Hedef Belirle",
-    "editTargetButton": "Hedefi Düzenle",
-    "customTargetPrompt": "Dakika olarak hedef gir (ör: 2.5 = 2 dk 30 sn)",
-    "saveTargetButton": "Kaydet",
-    "cancelButton": "İptal",
-    "targetUpdatedAlert": "Hedef süre {{newTarget}} dakikaya güncellendi!",
-    "invalidInputAlert": "Lütfen geçerli bir dakika değeri girin.",
-    "chooseTargetPrompt": "Veya sık kullanılan hedeflerden seç:"
   },
   "brushingResultsScreen": {
     "title": "Fırçalama Tamamlandı!",

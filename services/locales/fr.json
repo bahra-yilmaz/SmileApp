@@ -224,23 +224,26 @@
     "title": "Menu",
     "profile": {
       "name": "Profil",
-      "description": "Gère ton profil et tes paramètres"
+      "description": "Gérer le profil et les paramètres"
     },
     "statistics": {
       "name": "Statistiques",
-      "description": "Voir tes statistiques de brossage"
+      "description": "Voir les statistiques de brossage"
     },
     "reminders": {
       "name": "Rappels",
-      "description": "Configurer tes rappels de brossage"
+      "description": "Définir des rappels de brossage"
     },
     "achievements": {
       "name": "Réalisations",
-      "description": "Consulter tes badges et objectifs"
+      "description": "Vérifier les réalisations de brossage"
     },
     "settings": {
       "name": "Paramètres",
-      "description": "Paramètres et préférences"
+      "description": "Paramètres et préférences de l'application",
+      "appSettings": {
+        "title": "Paramètres de l'application"
+      }
     }
   },
   "timerOverlay": {
@@ -321,28 +324,18 @@
     "changeTargetButton": "Changer l'objectif"
   },
   "brushingTimeOverlay": {
-    "title": "Durée du brossage",
-    "timeProgressFormat": "{{currentTime}} / {{targetTime}} min",
-    "averageTimeImproving": "Ton temps de brossage s'améliore 🌟",
-    "averageTimeDeclining": "Allons-y pour augmenter ton temps de brossage 💪",
+    "setReminderButton": "Définir un rappel",
+    "title": "Temps de brossage",
+    "timeProgressFormat": "{{currentTime}} / {{targetTime}}",
+    "updateGoalError": "Échec de la mise à jour de l'objectif de brossage. Veuillez réessayer.",
     "brushingTrendTitle": "Tendance de brossage",
-    "targetTitle": "Fixer un objectif",
-    "targetDescriptionFormat": "Objectif actuel : {{targetMinutes}} min",
-    "targetOptionFormat": "{{option}} min",
+    "targetTitle": "Définir l'heure cible",
+    "targetDescriptionFormat": "Objectif actuel : {{targetMinutes}} minutes",
     "whyTimeMattersTitle": "Pourquoi le temps est important",
-    "whyTimeMattersText": "Moins de 2 minutes laisse de la plaque. Vise 2–3 minutes pour un nettoyage optimal.",
+    "whyTimeMattersText": "Un brossage suffisamment long est crucial pour éliminer la plaque et améliorer la santé des gencives. La plupart des dentistes recommandent de se brosser les dents pendant au moins 2 minutes.",
     "targetProgressTitle": "Progression de l'objectif",
-    "timeToGoFormat": "{{time}} restants !",
-    "shareStatsButton": "Partager les stats",
-    "setTargetButton": "Fixer un nouvel objectif",
-    "editTargetButton": "Modifier l'objectif",
-    "customTargetPrompt": "Saisis l'objectif en minutes (ex : 2.5 pour 2m30s)",
-    "saveTargetButton": "Sauvegarder",
-    "cancelButton": "Annuler",
-    "targetUpdatedAlert": "Objectif mis à jour à {{newTarget}} minutes !",
-    "invalidInputAlert": "Merci d'entrer un nombre valide de minutes.",
-    "chooseTargetPrompt": "Ou choisis parmi les objectifs fréquents :",
-    "selectTitle": "Heures rappel"
+    "timeToGoFormat": "Reste {{time}}",
+    "targetAchieved": "Objectif atteint !"
   },
   "brushingResultsScreen": {
     "title": "Brossage terminé !",
@@ -1203,5 +1196,17 @@
 }
 
     }
+  },
+  "AppInstallService": {
+    "title": "Installation de l'application",
+    "description": "Vous avez installé l'application avec succès !"
+  },
+  "BestStreakService": {
+    "title": "Meilleure série",
+    "description": "Vous avez atteint une série de {{count}} jours !"
+  },
+  "MonthlyBrushService": {
+    "title": "Brossage mensuel",
+    "description": "Vous vous êtes brossé {{count}} fois ce mois-ci !"
   }
 }

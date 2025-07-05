@@ -1217,6 +1217,7 @@
     "targetProgressTitle": "Target Progress",
     "timeToGoFormat": "{{time}} to go!",
     "shareStatsButton": "Share Stats",
+    "setReminderButton": "Set Reminder",
     "setTargetButton": "Set New Target",
     "editTargetButton": "Edit Target",
     "customTargetPrompt": "Enter target in minutes (e.g., 2.5 for 2m 30s)",

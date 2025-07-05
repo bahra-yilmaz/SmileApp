@@ -250,6 +250,17 @@ export default function SettingsScreen() {
     }
   }, [params.openFrequencyModal]);
   
+  // Auto-open reminder modal if requested via URL parameter
+  useEffect(() => {
+    if (params.openReminderModal === 'true') {
+      const timer = setTimeout(() => {
+        setIsReminderModalVisible(true);
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+  }, [params.openReminderModal]);
+  
   useEffect(() => {
     if (isEditingUsername) {
       const timer = setTimeout(() => inputRef.current?.focus(), 100);

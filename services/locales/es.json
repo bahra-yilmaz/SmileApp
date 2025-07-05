@@ -233,25 +233,25 @@
     "title": "Menú",
     "profile": {
       "name": "Perfil",
-      "description": "Gestiona tu perfil y ajustes"
+      "description": "Administrar perfil y configuraciones"
     },
     "statistics": {
       "name": "Estadísticas",
-      "description": "Ver tus estadísticas de cepillado"
+      "description": "Ver estadísticas de cepillado"
     },
     "reminders": {
       "name": "Recordatorios",
-      "description": "Configura tus recordatorios de cepillado"
+      "description": "Establecer recordatorios de cepillado"
     },
     "achievements": {
       "name": "Logros",
-      "description": "Revisa tus logros de cepillado"
+      "description": "Revisar logros de cepillado"
     },
     "settings": {
       "name": "Configuración",
-      "description": "Ajustes y preferencias de la app",
+      "description": "Ajustes y preferencias de la aplicación",
       "appSettings": {
-        "title": "Ajustes App"
+        "title": "Configuración de la Aplicación"
       },
       "resetOnboarding": {
         "name": "Reiniciar presentación",
@@ -372,28 +372,18 @@
     "changeTargetButton": "Cambiar objetivo"
   },
   "brushingTimeOverlay": {
-    "title": "Tiempo de cepillado",
-    "timeProgressFormat": "{{currentTime}} / {{targetTime}} min",
-    "averageTimeImproving": "El tiempo promedio de cepillado está mejorando 🌟",
-    "averageTimeDeclining": "¡Vamos a aumentar ese tiempo de cepillado! 💪",
-    "brushingTrendTitle": "Tendencia de cepillado",
-    "targetTitle": "Establecer tiempo objetivo",
-    "targetDescriptionFormat": "Meta actual: {{targetMinutes}} min",
-    "targetOptionFormat": "{{option}} min",
-    "whyTimeMattersTitle": "Por qué importa el tiempo",
-    "whyTimeMattersText": "Cepillarse menos de 2 minutos deja placa. Apunta a 2–3 minutos para una limpieza completa.",
-    "targetProgressTitle": "Progreso de la meta",
-    "timeToGoFormat": "¡Faltan {{time}}!",
-    "shareStatsButton": "Compartir estadísticas",
-    "setTargetButton": "Establecer nueva meta",
-    "editTargetButton": "Editar meta",
-    "customTargetPrompt": "Ingresa el objetivo en minutos (ej.: 2.5 para 2m 30s)",
-    "saveTargetButton": "Guardar meta",
-    "cancelButton": "Cancelar",
-    "targetUpdatedAlert": "¡Tiempo objetivo actualizado a {{newTarget}} minutos!",
-    "invalidInputAlert": "Por favor ingresa un número válido de minutos.",
-    "chooseTargetPrompt": "O elige entre objetivos comunes:",
-    "addReminder": "Agregar"
+    "setReminderButton": "Establecer recordatorio",
+    "title": "Tiempo de Cepillado",
+    "timeProgressFormat": "{{currentTime}} / {{targetTime}}",
+    "updateGoalError": "Fallo al actualizar el objetivo de cepillado. Por favor, inténtelo de nuevo.",
+    "brushingTrendTitle": "Tendencia de Cepillado",
+    "targetTitle": "Establecer Tiempo Objetivo",
+    "targetDescriptionFormat": "Meta actual: {{targetMinutes}} minutos",
+    "whyTimeMattersTitle": "¿Por Qué el Tiempo Importa?",
+    "whyTimeMattersText": "Cepillarse por suficiente tiempo es crucial para eliminar la placa y mejorar la salud de las encías. La mayoría de los dentistas recomiendan cepillarse durante al menos 2 minutos.",
+    "targetProgressTitle": "Progreso del Objetivo",
+    "timeToGoFormat": "Quedan {{time}}",
+    "targetAchieved": "¡Objetivo alcanzado!"
   },
   "brushingResultsScreen": {
     "title": "¡Cepillado completo!",
@@ -1253,5 +1243,17 @@
   }
 }
     }
+  },
+  "AppInstallService": {
+    "title": "Instalación de la Aplicación",
+    "description": "¡Has instalado la aplicación con éxito!"
+  },
+  "BestStreakService": {
+    "title": "Mejor Racha",
+    "description": "¡Has logrado una racha de {{count}} días!"
+  },
+  "MonthlyBrushService": {
+    "title": "Cepillado Mensual",
+    "description": "¡Te has cepillado {{count}} veces este mes!"
   }
 }

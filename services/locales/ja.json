@@ -226,19 +226,22 @@
     },
     "statistics": {
       "name": "統計",
-      "description": "ブラッシング統計を確認"
+      "description": "ブラッシング統計を表示"
     },
     "reminders": {
       "name": "リマインダー",
-      "description": "ブラッシングの通知を設定"
+      "description": "ブラッシングリマインダーを設定"
     },
     "achievements": {
       "name": "実績",
-      "description": "獲得した実績を確認"
+      "description": "ブラッシングの実績を確認"
     },
     "settings": {
       "name": "設定",
-      "description": "アプリの設定と好み"
+      "description": "アプリの設定と環境設定",
+      "appSettings": {
+        "title": "アプリの設定"
+      }
     }
   },
   "timerOverlay": {
@@ -319,28 +322,18 @@
     "changeTargetButton": "目標を変更"
   },
   "brushingTimeOverlay": {
+    "setReminderButton": "リマインダーを設定",
     "title": "ブラッシング時間",
-    "timeProgressFormat": "{{currentTime, number}} / {{targetTime, number}}分",
-    "averageTimeImproving": "平均時間が向上中 🌟",
-    "averageTimeDeclining": "もっと長く磨こう 💪",
-    "brushingTrendTitle": "ブラッシングの傾向",
+    "timeProgressFormat": "{{currentTime}} / {{targetTime}}",
+    "updateGoalError": "ブラッシング目標の更新に失敗しました。もう一度お試しください。",
+    "brushingTrendTitle": "ブラッシング傾向",
     "targetTitle": "目標時間を設定",
-    "targetDescriptionFormat": "現在の目標: {{targetMinutes, number}}分",
-    "targetOptionFormat": "{{option, number}}分",
-    "whyTimeMattersTitle": "なぜ時間が大切？",
-    "whyTimeMattersText": "2分未満では歯垢が残ります。2〜3分を目指しましょう。",
-    "targetProgressTitle": "目標の進捗",
-    "timeToGoFormat": "残り{{time, number}}！",
-    "shareStatsButton": "統計を共有",
-    "setTargetButton": "新しい目標を設定",
-    "editTargetButton": "目標を編集",
-    "customTargetPrompt": "目標時間を分で入力 (例: 2.5は2分30秒)",
-    "saveTargetButton": "保存",
-    "cancelButton": "キャンセル",
-    "targetUpdatedAlert": "目標が{{newTarget}}分に更新されました！",
-    "invalidInputAlert": "有効な分数を入力してください。",
-    "chooseTargetPrompt": "よく使う目標から選ぶ：",
-    "selectTitle": "リマインダー時間"
+    "targetDescriptionFormat": "現在の目標：{{targetMinutes}} 分",
+    "whyTimeMattersTitle": "なぜ時間が重要なのか",
+    "whyTimeMattersText": "プラークを除去し、歯茎の健康を改善するには、十分な時間のブラッシングが不可欠です。ほとんどの歯科医は、少なくとも2分間のブラッシングを推奨しています。",
+    "targetProgressTitle": "目標進捗",
+    "timeToGoFormat": "残り {{time}}",
+    "targetAchieved": "目標達成！"
   },
   "brushingResultsScreen": {
     "title": "ブラッシング完了！",
@@ -1199,5 +1192,17 @@
 }
 
     }
+  },
+  "AppInstallService": {
+    "title": "アプリのインストール",
+    "description": "アプリを正常にインストールしました！"
+  },
+  "BestStreakService": {
+    "title": "ベストストリーク",
+    "description": "{{count}}日間のストリークを達成しました！"
+  },
+  "MonthlyBrushService": {
+    "title": "月間ブラッシング",
+    "description": "今月は{{count}}回ブラッシングしました！"
   }
 }

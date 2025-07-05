@@ -23,13 +23,13 @@ import ThemedText from '../ThemedText';
 import DonutChart from '../ui/DonutChart';
 import { useTranslation } from 'react-i18next';
 import * as Haptics from 'expo-haptics';
-import { shareContent } from '../../utils/share';
 import { getProgressColor } from '../../utils/colorUtils';
 import { useBrushingGoal } from '../../context/BrushingGoalContext';
 import { updateUserBrushingGoal } from '../../services/DashboardService';
 import { useAuth } from '../../context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useBrushingTrend } from '../../hooks/useBrushingTrend';
+import { useRouter } from 'expo-router';
 
 interface BrushingTimeOverlayProps {
   isVisible: boolean;
@@ -60,6 +60,7 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
   const { brushingGoalMinutes, setBrushingGoalMinutes } = useBrushingGoal();
   const { user } = useAuth();
   const { trendText, trendIcon } = useBrushingTrend();
+  const router = useRouter();
   
   // Animation values for container
   const [fadeAnim] = useState(() => new Animated.Value(0));
@@ -453,25 +454,20 @@ export const BrushingTimeOverlay: React.FC<BrushingTimeOverlayProps> = ({
                       : Colors.primary[600],
                 }
               ]}
-              onPress={async () => {
+              onPress={() => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                const durationString = `${minutes.toString().padStart(2, '0')}:${seconds
-                  .toString()
-                  .padStart(2, '0')}`;
-                await shareContent({
-                  title: t('brushingTimeOverlay.shareStatsButton'),
-                  message: `${t('brushingTimeOverlay.title')}: ${durationString} min — tracked via SmileApp 🦷✨`,
-                });
+                router.push('/settings?openReminderModal=true');
+                handleClose();
               }}
             >
               <MaterialCommunityIcons
-                  name="share-variant" 
+                  name="bell-outline" 
                   size={20} 
                   color="#FFF"
                   style={{ marginRight: 8 }} 
               />
               <ThemedText style={styles.buttonText}>
-                {t('brushingTimeOverlay.shareStatsButton')}
+                {t('brushingTimeOverlay.setReminderButton', 'Set Reminder')}
               </ThemedText>
             </Pressable>
           </View>
