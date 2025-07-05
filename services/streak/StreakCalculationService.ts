@@ -1,5 +1,5 @@
 import { calculateStreak, getStreakStatus, StreakStatus } from '../../utils/streakUtils';
-import { getTodayHabitString } from '../../utils/dateUtils';
+import { getTodayHabitString, getHabitDayString, HABIT_DAY_CONFIG } from '../../utils/dateUtils';
 import { StreakDataService } from './StreakDataService';
 import { STREAK_CONFIG } from './StreakConfig';
 import { 
@@ -64,16 +64,42 @@ export class StreakCalculationService {
     }
     
     try {
-      // Calculate the start date of the current streak - use START OF DAY!
-      const today = new Date();
-      const streakStartDate = new Date(today);
-      streakStartDate.setDate(today.getDate() - currentStreak + 1);
-      
-      // Set to start of day (00:00:00.000) to capture all sessions from that day
-      streakStartDate.setHours(0, 0, 0, 0);
-      
-      // Fetch sessions in the current streak period
-      const sessions = await StreakDataService.fetchBrushingSessions(userId, streakStartDate);
+      // -------------------------------------------------------------
+      // Determine whether TODAY is already counted in the streak.
+      // If today's brushing goal isn't met yet, we must NOT include
+      // today's sessions in the count window.
+      // -------------------------------------------------------------
+
+      const dailyTarget = await StreakDataService.getUserDailyTarget();
+      const todaySessions = await StreakDataService.fetchTodaysSessions(userId);
+      const todayCompleted = todaySessions.length >= dailyTarget;
+
+      // Identify today's habit-day (same calendar date string used elsewhere).
+      const todayHabit = getTodayHabitString();
+
+      // Convert the YYYY-MM-DD habit-day to a Date (00:00 local).
+      const startHabitDate = new Date(todayHabit);
+
+      // Offset calculation:
+      //   • If today counts, we need (currentStreak - 1) earlier days.
+      //   • If today DOESN'T count, we need currentStreak earlier days
+      //     (because the streak begins yesterday).
+      const offsetDays = todayCompleted ? currentStreak - 1 : currentStreak;
+      startHabitDate.setDate(startHabitDate.getDate() - offsetDays);
+
+      // Position the start boundary to the reset hour (3:00 AM).
+      startHabitDate.setHours(
+        HABIT_DAY_CONFIG.RESET_HOUR,
+        0,
+        0,
+        0
+      );
+
+      // Fetch sessions in the streak window (inclusive of boundary).
+      const sessions = await StreakDataService.fetchBrushingSessions(
+        userId,
+        startHabitDate
+      );
       
       return sessions.length;
     } catch (error) {
@@ -90,47 +116,100 @@ export class StreakCalculationService {
    */
   static async calculateStreakHistory(userId: string): Promise<StreakHistory> {
     try {
-      // Check cache first
+      // 1) Check cache first
       const cachedHistory = StreakDataService.getCachedHistoryData();
-      if (cachedHistory) {
-        return cachedHistory;
+      if (cachedHistory) return cachedHistory;
+
+      // 2) Prep lookup data
+      const dailyTarget = await StreakDataService.getUserDailyTarget();
+
+      // We'll look back up to a year – adjust if performance dictates
+      const lookbackDays = 365;
+      const startLookupDate = new Date();
+      startLookupDate.setDate(startLookupDate.getDate() - lookbackDays);
+
+      const sessions = await StreakDataService.fetchBrushingSessions(
+        userId,
+        startLookupDate
+      );
+
+      // 3) Group sessions by habit-day → count
+      const countsByDay = new Map<string, number>();
+      sessions.forEach(s => {
+        // Prefer explicit habit-day `date` field. Otherwise derive it from created_at
+        const dayKey = s.date
+          ? s.date
+          : s.created_at
+          ? getHabitDayString(new Date(s.created_at))
+          : '';
+        if (!dayKey) return;
+        const count = countsByDay.get(dayKey) ?? 0;
+        countsByDay.set(dayKey, count + 1);
+      });
+
+      // 4) Iterate over every habit-day from (lookback) → today inclusive,
+      //    identifying consecutive successful streak periods.
+      const periods: StreakPeriod[] = [];
+      let currentStart: Date | null = null;
+      let currentLength = 0;
+
+      const today = new Date();
+      const cursor = new Date(startLookupDate);
+
+      while (cursor <= today) {
+        const dayStr = getHabitDayString(cursor);
+        const brushCount = countsByDay.get(dayStr) ?? 0;
+
+        const successfulDay = brushCount >= dailyTarget;
+
+        if (successfulDay) {
+          if (!currentStart) currentStart = new Date(cursor);
+          currentLength += 1;
+        } else {
+          if (currentLength > 0 && currentStart) {
+            const endDate = new Date(cursor);
+            endDate.setDate(endDate.getDate() - 1);
+            periods.push({
+              id: `${periods.length + 1}`,
+              startDate: getHabitDayString(currentStart),
+              endDate: getHabitDayString(endDate),
+              duration: currentLength,
+            });
+          }
+          currentStart = null;
+          currentLength = 0;
+        }
+
+        // Move to next calendar day (local time; habit-day helper will shift before 3AM automatically)
+        cursor.setDate(cursor.getDate() + 1);
       }
 
-      // For now, return a simplified history with current streak
-      // In a full implementation, this would analyze all historical data
-      // to find all streak periods
-      const currentStreakData = await this.calculateCurrentStreak(userId);
-      
-      const periods: StreakPeriod[] = [];
-      
-      if (currentStreakData.currentStreak > 0) {
-        const today = getTodayHabitString();
-        const streakStart = new Date();
-        streakStart.setDate(streakStart.getDate() - currentStreakData.currentStreak + 1);
-        
+      // Close an open period that reaches today
+      if (currentLength > 0 && currentStart) {
         periods.push({
-          id: 'current',
-          startDate: streakStart.toISOString().slice(0, 10),
-          endDate: today,
-          duration: currentStreakData.currentStreak
+          id: `${periods.length + 1}`,
+          startDate: getHabitDayString(currentStart),
+          endDate: getTodayHabitString(),
+          duration: currentLength,
         });
       }
 
+      // 5) Sort by duration desc, tie-break newer first
+      periods.sort((a, b) => {
+        if (b.duration !== a.duration) return b.duration - a.duration;
+        return a.startDate < b.startDate ? 1 : -1;
+      });
+
       const history: StreakHistory = {
-        periods: periods.filter(p => p.duration > 0),
-        lastUpdated: Date.now()
+        periods,
+        lastUpdated: Date.now(),
       };
 
-      // Cache the result
       await StreakDataService.cacheHistoryData(history);
-      
       return history;
     } catch (error) {
       console.error('Error calculating streak history:', error);
-      return {
-        periods: [],
-        lastUpdated: Date.now()
-      };
+      return { periods: [], lastUpdated: Date.now() };
     }
   }
 

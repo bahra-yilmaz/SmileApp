@@ -34,17 +34,29 @@ export function calculateStreak(
     return 0;
   }
 
-  // Group logs by UTC date string (YYYY-MM-DD)
+  // Group logs by HABIT day string (YYYY-MM-DD) so that both grouping and
+  // later look-ups use the SAME key. This prevents off-by-one errors around
+  // the 3 AM reset boundary.
   const logsByDate = new Map<string, StreakSession[]>();
-  sessions.forEach(log => {
-    // Prefer the `date` field if available, otherwise parse from `created_at`
-    const date = log.date || log.created_at?.slice(0, 10);
-    if (!date) return;
 
-    if (!logsByDate.has(date)) {
-      logsByDate.set(date, []);
+  const getSessionHabitDay = (session: StreakSession): string | null => {
+    const rawDateStr = session.date || session.created_at;
+    if (!rawDateStr) return null;
+
+    // We intentionally run the value through getHabitDayString so that
+    // sessions logged between 00:00-02:59 are attributed to the previous
+    // habit day, matching the logic used later when iterating over days.
+    return getHabitDayString(new Date(rawDateStr));
+  };
+
+  sessions.forEach(session => {
+    const habitDay = getSessionHabitDay(session);
+    if (!habitDay) return;
+
+    if (!logsByDate.has(habitDay)) {
+      logsByDate.set(habitDay, []);
     }
-    logsByDate.get(date)!.push(log);
+    logsByDate.get(habitDay)!.push(session);
   });
 
   const getLocalKey = (d: Date) => getHabitDayString(d);
