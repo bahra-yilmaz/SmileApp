@@ -360,8 +360,8 @@
     "currentStreakBrushingsText": "{{count}} sesiones de cepillado en tu racha de {{days}} días",
     "streakHistoryTitle": "Mejores rachas",
     "streakHistorySubtitle": "Tus mejores rachas de todos los tiempos",
-    "streakPeriodText": "{{startDate}} - {{endDate}} (1 día)",
-    "streakPeriodText_plural": "{{startDate}} - {{endDate}} ({{count}} días})",
+    "streakPeriodText_one": "{{startDate}} - {{endDate}} (1 día)",
+    "streakPeriodText_other": "{{startDate}} - {{endDate}} ({{count}} días)",
     "nuboMotivationTitle": "¡El ascenso de Nubo!",
     "nuboMotivationText": "Cada día que mantengas tu racha, Nubo sube más alto en la montaña",
     "nextSummitTitle": "Próxima cima",
@@ -705,7 +705,7 @@
       "1": "Nubo vio ese cepillado, {{username}} — y se emocionó 🥹"
     },
     "nubo_broadcast": {
-      "1": "Nubo informa: ‘{{username}} se unió a la ola de limpieza de hoy!’ 📡"
+      "1": "Nubo informa: '{{username}} se unió a la ola de limpieza de hoy!' 📡"
     }
   }
 },
@@ -1064,7 +1064,7 @@
       "1": "Desde calles agitadas hasta rincones tranquilos — el cuidado sigue."
     },
     "nubo_watching": {
-      "1": "Nubo vio eso. Y asintió en silencio."
+      "1": "Nubo lo vio. Sonrió. Y siguió observando en silencio."
     },
     "nubo_broadcast": {
       "1": "‘{{username}} cumplió hoy.’ – Nubo, orgulloso."

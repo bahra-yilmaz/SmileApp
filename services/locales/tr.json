@@ -415,8 +415,8 @@
     "currentStreakBrushingsText": "{{days}} günlük serinde {{count}} fırçalama seansı",
     "streakHistoryTitle": "En İyi Seriler",
     "streakHistorySubtitle": "Tüm zamanların en iyi serilerin",
-    "streakPeriodText": "{{startDate}} - {{endDate}} (1 Gün)",
-    "streakPeriodText_plural": "{{startDate}} - {{endDate}} ({{count}} Gün})",
+    "streakPeriodText_one": "{{startDate}} - {{endDate}} (1 Gün)",
+    "streakPeriodText_other": "{{startDate}} - {{endDate}} ({{count}} Gün)",
     "nuboMotivationTitle": "Nubo'nun Tırmanışı!",
     "nuboMotivationText": "Her seri günüyle birlikte Nubo dağda daha yükseğe tırmanıyor!",
     "nextSummitTitle": "Sonraki Zirve",
@@ -739,7 +739,7 @@
       "1": "Yalnız değilsin, {{username}}. Şu anda binlerce kişi seninle birlikte fırçalıyor 💙"
     },
     "nubo_network_energy": {
-      "1": "Artık Nubo’nun halkasındasın, {{username}}. Küçük ritüellerden oluşan minik bir topluluk."
+      "1": "Artık Nubo'nun halkasındasın, {{username}}. Küçük ritüellerden oluşan minik bir topluluk."
     },
     "social_momentum": {
       "1": "Bu hafta birçok kişi bakım yaptı. Ve sen de onlardan birisin, {{username}}."
@@ -748,7 +748,7 @@
       "1": "Bu saatte yalnız değilsin, {{username}} — hepiniz görünüyorsunuz."
     },
     "first_week_global_wave": {
-      "1": "Bu hafta Nubo’ya yeni birçok yüz katıldı, {{username}}. Güzel bir topluluğa dahil oldun."
+      "1": "Bu hafta Nubo'ya yeni birçok yüz katıldı, {{username}}. Güzel bir topluluğa dahil oldun."
     },
     "nubo_day_event": {
       "1": "Bugün Nubo Günü! Tam isabet bir günde fırçaladın, {{username}} 🥹🪥"
@@ -763,7 +763,7 @@
       "1": "Nubo seni gördü, {{username}} — ve duygulandı 🥹"
     },
     "nubo_broadcast": {
-      "1": "Nubo yayında: ‘{{username}} bugün temiz dalgaya katıldı!’ 📡"
+      "1": "Nubo yayında: '{{username}} bugün temiz dalgaya katıldı! 📡"
     }
   }
 },
@@ -926,7 +926,7 @@
       "1": "Fırçalama sıralaması mı? Alev aldı. Sen de trenddesin 😎"
     },
     "late_night_others_brushed": {
-      "1": "Gece geç mi? Ama Nubo’nun gece ekibi hep ayakta 🌙🪥"
+      "1": "Gece geç mi? Ama Nubo'nun gece ekibi hep ayakta 🌙🪥"
     },
     "first_week_global_wave": {
       "1": "Yeni Nubo ekibi geldi. Parıltı partisi başlasın 🎉"
@@ -1101,7 +1101,7 @@
       "1": "Fırçalama yalnız yapılmaz. Global temiz ekip senkronize, {{username}}."
     },
     "nubo_network_energy": {
-      "1": "NuboNet™’e giriş yaptın — temiz enerji 7/24 akıyor, {{username}}."
+      "1": "NuboNet™'e giriş yaptın — temiz enerji 7/24 akıyor, {{username}}."
     },
     "social_momentum": {
       "1": "Bu hafta çoğu kişi temizdi. Sen? Elit kategoridesin, {{username}}."
@@ -1306,7 +1306,7 @@
       "1": "Sen fark etmesen de, Nubo çabanı fark ediyor."
     },
     "nubo_broadcast": {
-      "1": "Nubo’nun veri paneli, senin hareketinle parladı. Bu değerli."
+      "1": "Nubo'nun veri paneli, senin hareketinle parladı. Bu değerli."
     }
   }
 }

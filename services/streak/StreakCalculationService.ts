@@ -154,7 +154,11 @@ export class StreakCalculationService {
       let currentLength = 0;
 
       const today = new Date();
+      // Align both today and the scanning cursor to the habit-day reset hour (e.g. 03:00).
+      today.setHours(HABIT_DAY_CONFIG.RESET_HOUR, 0, 0, 0);
+
       const cursor = new Date(startLookupDate);
+      cursor.setHours(HABIT_DAY_CONFIG.RESET_HOUR, 0, 0, 0);
 
       while (cursor <= today) {
         const dayStr = getHabitDayString(cursor);
@@ -180,8 +184,8 @@ export class StreakCalculationService {
           currentLength = 0;
         }
 
-        // Move to next calendar day (local time; habit-day helper will shift before 3AM automatically)
-        cursor.setDate(cursor.getDate() + 1);
+        // Jump to the *next* habit-day boundary (add 24 h). Using setTime avoids DST pitfalls.
+        cursor.setTime(cursor.getTime() + 24 * 60 * 60 * 1000);
       }
 
       // Close an open period that reaches today

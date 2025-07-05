@@ -306,8 +306,8 @@
     "currentStreakBrushingsText": "{{count}} sessões de escovação em sua sequência de {{days}} dias",
     "streakHistoryTitle": "Melhores Sequências",
     "streakHistorySubtitle": "Suas melhores sequências até agora",
-    "streakPeriodText": "{{startDate}} - {{endDate}} (1 Dia)",
-    "streakPeriodText_plural": "{{startDate}} - {{endDate}} ({{count}} Dias})",
+    "streakPeriodText_one": "{{startDate}} - {{endDate}} (1 Dia)",
+    "streakPeriodText_other": "{{startDate}} - {{endDate}} ({{count}} Dias)",
     "nuboMotivationTitle": "A Subida do Nubo!",
     "nuboMotivationText": "A cada dia de sequência, o Nubo sobe mais alto na montanha!",
     "nextSummitTitle": "Próximo Pico",
@@ -648,7 +648,7 @@
       "1": "O Nubo viu essa escovada, {{username}} — e ficou emocionado 🥹"
     },
     "nubo_broadcast": {
-      "1": "O Nubo anunciou: ‘{{username}} entrou na onda de limpeza de hoje!’ 📡"
+      "1": "O Nubo anunciou: '{{username}} entrou na onda de limpeza de hoje!' 📡"
     }
   }
 },
@@ -767,10 +767,10 @@
       "1": "Seu cérebro ama rotinas… quase tanto quanto ama chiclete sabor menta 🧠🍃"
     },
     "dental_fact_2": {
-      "1": "Pressa na escovação? Seus dentes dizem ‘calma lá, campeão!’ 🐢🪥"
+      "1": "Pressa na escovação? Seus dentes dizem 'calma lá, campeão!' 🐢🪥"
     },
     "dental_fact_3": {
-      "1": "Sua língua tá tipo ‘ei, lembra de mim?’ – dá uma raspadinha nela também 😛"
+      "1": "Sua língua tá tipo 'ei, lembra de mim?' – dá uma raspadinha nela também 😛"
     },
     "science_fact_2": {
       "1": "Menos placa = mais motivos pra sorrir (e cantar no chuveiro) 🧼🎶"
@@ -978,7 +978,7 @@
       "1": "Ângulo certo, impacto certo. Você sabe como fazer."
     },
     "dry_brush_fact": {
-      "1": "Sem pasta, sem problema. Ainda vale."
+      "1": "Mesmo sem pasta, o gesto conta. E você contou com ele."
     }
   },
   "community": {

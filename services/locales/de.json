@@ -308,8 +308,8 @@
     "currentStreakBrushingsText": "{{count}} Putz-Sessions in deiner {{days}}-Tage-Serie",
     "streakHistoryTitle": "Beste Serien",
     "streakHistorySubtitle": "Deine besten Serien",
-    "streakPeriodText": "{{startDate}} - {{endDate}} (1 Tag)",
-    "streakPeriodText_plural": "{{startDate}} - {{endDate}} ({{count}} Tage})",
+    "streakPeriodText_one": "{{startDate}} - {{endDate}} (1 Tag)",
+    "streakPeriodText_other": "{{startDate}} - {{endDate}} ({{count}} Tage)",
     "nuboMotivationTitle": "Nubos Aufstieg!",
     "nuboMotivationText": "Jeden Tag den du dranbleibst, klettert Nubo höher!",
     "nextSummitTitle": "Nächster Gipfel",
@@ -662,7 +662,7 @@
     "morning": {
       "1": "Aufstehen und putzen, Funkel-Kommandant 🪥✨",
       "2": "Zeit für die Molaren-Morgendisco.",
-      "3": "Die Sonne ist wach! Zahnbürsten raus! Lass’s funkeln, {{username}}!"
+      "3": "Die Sonne ist wach! Zahnbürsten raus! Lass's funkeln, {{username}}!"
     },
     "afternoon": {
       "1": "Lunch-Crew besiegt. Atem-Level: minzig.",
@@ -680,7 +680,7 @@
       "3": "Zähne eingetütet. Du auch bereit, {{username}}?"
     },
     "weekday": {
-      "1": "Arbeit. Hustle. Putz wie’n Boss.",
+      "1": "Arbeit. Hustle. Putz wie'n Boss.",
       "2": "Wochentags-Krieger bleiben mintig.",
       "3": "Wochentags-Krieger putzen mit Flair 💃"
     },
@@ -696,8 +696,8 @@
       "2": "Zahnstatus: strahlend. Selbstbewusstsein: boosted, {{username}}."
     },
     "after_brushing_fail": {
-      "1": "Schnell geputzt heute? Nubo lässt’s durchgehen… diesmal 😏",
-      "2": "Speed-Runde? Beim nächsten Mal holen wir’s nach, Funkel-Champ {{username}}."
+      "1": "Schnell geputzt heute? Nubo lässt's durchgehen… diesmal 😏",
+      "2": "Speed-Runde? Beim nächsten Mal holen wir's nach, Funkel-Champ {{username}}."
     },
     "first_brush_of_day": {
       "1": "Erstes Funkeln des Tages: abgesendet. Auf ein strahlendes!",
@@ -736,12 +736,12 @@
     "streak_broken": {
       "1": "Upsie! Der Streak ist gestolpert – aber du? Immer noch Funkel-Krieger ⚔️",
       "2": "Ruhe in Frieden an diesen Streak 🪦 Aber hey… Wiederauferstehung beginnt jetzt!",
-      "3": "Streak KO’d… aber du putzt wie ein Comeback-König 👑"
+      "3": "Streak KO'd… aber du putzt wie ein Comeback-König 👑"
     }
   },
   "milestone_enhancements": {
     "monthly_brush_20": {
-      "monthly_brush_20": "20 Putzungen im Monat? Wir brauchen Konfetti und ’ne Parade 🎉",
+      "monthly_brush_20": "20 Putzungen im Monat? Wir brauchen Konfetti und 'ne Parade 🎉",
       "brushed_7_of_10": "70 % Funkelrate? Premium-Abo-Vibes 😎"
     },
     "day_7": {
@@ -763,13 +763,13 @@
       "1": "Putze jetzt. Erobere später die Welt 😎"
     },
     "dental_fact": {
-      "1": "2 Minuten mögen lang wirken, aber so fühlt sich auch ’ne Karies-Erklärung an 😬"
+      "1": "2 Minuten mögen lang wirken, aber so fühlt sich auch 'ne Karies-Erklärung an 😬"
     },
     "science_fact": {
       "1": "Millionen Bakterien? Lass uns das eine mintige Massaker nennen 💥🦠"
     },
     "psych_fact": {
-      "1": "Schon Zähneputzen sendet deinem Gehirn ’n kleines »du packst das«-Signal 🧠✨"
+      "1": "Schon Zähneputzen sendet deinem Gehirn 'n kleines »du packst das«-Signal 🧠✨"
     },
     "dental_fact_2": {
       "1": "Putze auch dein Zahnfleisch! Es will Aufmerksamkeit, nicht Ablehnung 😩🪥"
@@ -793,7 +793,7 @@
       "1": "Putzen ohne Zahnseide? Du bist nur 65 % da 😏"
     },
     "brushing_too_hard": {
-      "1": "Schrubben, als wär’s Fugen? Nope. Das ist keine Fliesen-Reinigung 🧽"
+      "1": "Schrubben, als wär's Fugen? Nope. Das ist keine Fliesen-Reinigung 🧽"
     },
     "night_brushing_importance": {
       "1": "Schlafende Zähne? Nee, die wollen verteidigt werden, während du träumst 💤🦷"
@@ -813,7 +813,7 @@
       "1": "Nubo Network aktiv: {{username}} online ✅ Funkel-Signal stark 💫"
     },
     "social_momentum": {
-      "1": "Brushing-Leaderboard? Poppin'. Du? Offiziell im Trend 😎"
+      "1": "Diese Woche war bei vielen clean. Du? Elite, {{username}}."
     },
     "late_night_others_brushed": {
       "1": "Es ist spät. Aber Nubos Nachtschicht schläft nie 🌙🪥"
@@ -822,7 +822,7 @@
       "1": "Neue Nubo-Crew ist am Start. Funkel-Party incoming 🎉"
     },
     "nubo_day_event": {
-      "1": "🎈 Happy Nubo Day! Heute gibt’s extra Mint für alle 🍃✨"
+      "1": "🎈 Happy Nubo Day! Heute gibt's extra Mint für alle 🍃✨"
     },
     "community_across_timezones": {
       "1": "Zeitzonen? Eher Grind-Zonen 🗺️ Jeder putzt."
@@ -831,10 +831,10 @@
       "1": "Von Tokyo bis Toronto: Die Bürsten-Revolution läuft 🌆🪥"
     },
     "nubo_watching": {
-      "1": "Nubo hat reingeschaut und geschrien: ‚SCHAU {{username}} WIE DU GEHST!‘ 😭🪥"
+      "1": "Nubo hat's gesehen. Sagte nichts. Nickte in Respekt, {{username}}."
     },
     "nubo_broadcast": {
-      "1": "Nubo hat {{username}} zum Clean Legend Feed™ hinzugefügt 💾🪥"
+      "1": "Bestätigt: {{username}} hat geputzt. Nachricht gesendet. Status: 🔥"
     }
   }
       },
@@ -897,7 +897,7 @@
     "new_streak_starting": {
       "1": "Neuer Lauf, neue Vibes, {{username}}. Mal sehen, wohin das führt.",
       "2": "Eins geschafft. Neuer Vibe freigeschaltet, {{username}}.",
-      "3": "Reset? Aktiviert. Los geht’s."
+      "3": "Reset? Aktiviert. Los geht's."
     },
     "almost_week_streak": {
       "1": "Fast ne Woche drin, {{username}}. Das ist anders.",
@@ -923,10 +923,10 @@
   "milestone_enhancements": {
     "monthly_brush_20": {
       "monthly_brush_20": "Das sind 20 saubere Einsätze diesen Monat. Respekt, {{username}}.",
-      "brushed_7_of_10": "Nicht fehlerfrei, aber dominant. Du hast’s unter Kontrolle, {{username}}."
+      "brushed_7_of_10": "Nicht fehlerfrei, aber dominant. Du hast's unter Kontrolle, {{username}}."
     },
     "day_7": {
-      "day_7": "Woche eins? Zerlegt. Weiter geht’s, {{username}}.",
+      "day_7": "Woche eins? Zerlegt. Weiter geht's, {{username}}.",
       "day_30": "Monat eins? Erobert. Cheers, {{username}}."
     },
     "returning_user_milestone": {
@@ -941,81 +941,81 @@
   },
   "informative": {
     "habit_tip": {
-      "1": "Routine ist Macht, {{username}}. Immer weiter stapeln."
+      "1": "Die kleinsten Rituale verankern oft die stärksten Leben."
     },
     "dental_fact": {
-      "1": "Zwei Minuten Putzen. Unendliche Coolness-Punkte, {{username}}."
+      "1": "Zwei Minuten. Das ist die perfekte Balance, um zu schützen, was zählt."
     },
     "science_fact": {
-      "1": "Du hast gerade eine ganze Bakterienstadt ausgelöscht, {{username}}. Respekt."
+      "1": "Bakterien vermehren sich stündlich. Aber das kann auch deine Disziplin."
     },
     "psych_fact": {
-      "1": "Großes Mindset? Beginnt mit winzigen Aktionen. Wie dieser, {{username}}."
+      "1": "Winzige Handlungen formen Identität. So verkabelt sich Geist neu."
     },
     "dental_fact_2": {
-      "1": "Gesundes Zahnfleisch = starker Flex, {{username}}. Überspring’s nicht."
+      "1": "Vernachlässigtes Zahnfleisch flüstert oft, bevor es schreit."
     },
     "dental_fact_3": {
-      "1": "Echte Frische? Beginnt auf der Zunge, {{username}}."
+      "1": "Vernachlässige die Zunge, und Frische wird vergänglich."
     },
     "science_fact_2": {
-      "1": "Plaque jetzt oder Zahnstein später. Du hast dich für jetzt entschieden. Smarter Move, {{username}}."
+      "1": "Ungeprüfter Plaque wird Stein. Fürsorge verhindert Korrektur."
     },
     "psych_fact_2": {
-      "1": "Eine solide Gewohnheit führt zu anderen. Putzen ist Schritt eins, {{username}}."
+      "1": "Verankerte Gewohnheiten wirken sich auf den Rest deines Lebens aus."
     },
     "morning_breath_fact": {
-      "1": "Frische Morgen beginnt mit frischer Aktion, {{username}}. Leg los."
+      "1": "Speichel schützt den Mund – und 'schläft', wenn du es tust."
     },
     "toothpaste_fact": {
-      "1": "Großer Schaum ≠ besser. Ein Klecks reicht, {{username}}."
+      "1": "Ein voller Streifen ist nicht besser. Präzision schlägt Masse – erbsengroß reicht."
     },
     "floss_fact": {
-      "1": "Zahnseide erreicht die Ecken, die Bürste verpasst. Clean Move, {{username}}."
+      "1": "Zahnseide erreicht die stillen Räume, die Putzen nicht schafft."
     },
     "brushing_too_hard": {
-      "1": "Putze klug, nicht hart, {{username}}. Es geht um Finesse."
+      "1": "Zu viel Druck kann zum Rückzug führen. Auch beim Putzen."
     },
     "night_brushing_importance": {
-      "1": "Nachtputz = Übernacht-Schild. Scharfer Move, {{username}}."
+      "1": "Der Mund ist nachts verwundbar. Abendpflege ist stille Verteidigung."
     },
     "brushing_angle_fact": {
-      "1": "Winkel rein. Sauber tief. Pro-Putz-Level, {{username}}."
+      "1": "Präzision zählt. Ein Winkel von 45° erreicht die Basis."
     },
     "dry_brush_fact": {
-      "1": "Keine Paste? Trotzdem scharf bleiben, {{username}}. Trockenputzen rettet den Tag."
+      "1": "Wenn du es nicht perfekt kannst – tu es trotzdem. Auch Trockenputzen beseitigt Schaden."
     }
   },
   "community": {
     "community_brushing_now": {
-      "1": "Putzen ist kein Solo-Job. Du bist synchron mit der globalen Clean Crew, {{username}}."
+      "1": "In diesem Moment, über Zeitzonen hinweg, geschieht stille Fürsorge – so wie deine."
     },
     "nubo_network_energy": {
-      "1": "Du bist in NuboNet™ eingeloggt – wo Clean-Vibes 24/7 fließen, {{username}}."
+      "1": "Irgendwo in der Cloud putzen andere mit Absicht. Das zählt."
     },
     "social_momentum": {
-      "1": "Diese Woche war bei vielen clean. Du? Elite, {{username}}."
+      "1": "Diese Woche summierten sich stille Taten. Deine eingeschlossen."
     },
     "late_night_others_brushed": {
-      "1": "Nach Mitternacht? Du putzt mit den echten, {{username}}."
+      "1": "In Schlafzimmern und Städten entschied sich jemand anders in dieser Stunde auch für Fürsorge."
     },
     "first_week_global_wave": {
-      "1": "Frische Welle. Frische Gesichter. Willkommen in der Bewegung, {{username}}."
+      "1": "Jede Welle beginnt mit ein paar mutigen Schritten. Willkommen bei der Welle."
     },
     "nubo_day_event": {
-      "1": "Clean-Vibes only. Es ist Nubo Day, {{username}}. Lass uns leuchten."
+      "1": "Heute ist Nubo Day – eine kleine Erinnerung, dass jedes Ritual zählt."
     },
     "community_across_timezones": {
-      "1": "Andere Uhren. Gleiche Clean-Energie. Weltweite Putz-Gang, {{username}}."
+      "1": "Auf allen Kontinenten setzt sich Fürsorge fort – eine Bürste nach der anderen."
     },
     "brush_in_cities": {
-      "1": "Große Städte. Helle Lächeln. Putzen ist universell, {{username}}."
+      "1": "Mitten im geschäftigen Straßen finden wir Zeit zur Fürsorge."
     },
     "nubo_watching": {
-      "1": "Nubo hat’s gesehen. Sagte nichts. Nickte in Respekt, {{username}}."
+      "1": "Auch wenn du es nicht bemerkst, Nubo bemerkt den Einsatz."
     },
     "nubo_broadcast": {
-      "1": "Bestätigt: {{username}} hat geputzt. Nachricht gesendet. Status: 🔥"
+      "1": "Nubos Datenboard leuchtete auf wegen deiner Handlung. Es zählt."
     }
   }
       },
@@ -1146,7 +1146,7 @@
       "1": "Verankerte Gewohnheiten wirken sich auf den Rest deines Lebens aus."
     },
     "morning_breath_fact": {
-      "1": "Speichel schützt den Mund – und „schläft“, wenn du es tust."
+      "1": "Speichel schützt den Mund – und 'schläft', wenn du es tust."
     },
     "toothpaste_fact": {
       "1": "Ein voller Streifen ist nicht besser. Präzision schlägt Masse – erbsengroß reicht."
