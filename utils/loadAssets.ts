@@ -82,6 +82,12 @@ export const AppImages = {
   'nubo-wise-5': require('../assets/mascot/nubo-wise-5.png'),
   'nubo-wise-6-pp': require('../assets/mascot/nubo-wise-6-pp.png'),
   'nubo-wise-6': require('../assets/mascot/nubo-wise-6.png'),
+  'nubo-result-1': require('../assets/mascot/nubo-result-1.png'),
+  'nubo-result-2': require('../assets/mascot/nubo-result-2.png'),
+  'nubo-result-3': require('../assets/mascot/nubo-result-3.png'),
+  'nubo-result-4': require('../assets/mascot/nubo-result-4.png'),
+  'nubo-result-5': require('../assets/mascot/nubo-result-5.png'),
+  'nubo-result-6': require('../assets/mascot/nubo-result-6.png'),
 };
 
 function cacheImages(images: (string | number)[]): Promise<(void | boolean)[]> {

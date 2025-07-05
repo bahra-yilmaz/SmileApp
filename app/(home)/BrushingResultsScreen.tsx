@@ -77,7 +77,7 @@ const BrushingResultsScreen = () => {
   const [motivationalText, setMotivationalText] = useState<string>(t('brushingResultsScreen.motivationalText'));
   const [greetingLoading, setGreetingLoading] = useState(true);
   const [mascotImage, setMascotImage] = useState(() =>
-    MascotImageService.getRandomImageForPersonality('supportive')
+    MascotImageService.getRandomResultsImage()
   );
 
   // Add a useEffect to run the fade-in animation on mount
@@ -164,7 +164,7 @@ const BrushingResultsScreen = () => {
           actualText: greeting.actualText
         });
         setMotivationalText(greeting.actualText);
-        setMascotImage(MascotImageService.getRandomImageForPersonality(greeting.personality));
+        setMascotImage(MascotImageService.getRandomResultsImage());
       } catch (error) {
         console.error('❌ Failed to load informative greeting:', error);
         // Keep the default fallback text

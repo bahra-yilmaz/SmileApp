@@ -35,6 +35,16 @@ const mascotImages: MascotImageMap = {
 
 const defaultImage = require('../assets/mascot/nubo-welcoming-1.png');
 
+// Results screen specific images
+const resultsImages = [
+  require('../assets/mascot/nubo-result-1.png'),
+  require('../assets/mascot/nubo-result-2.png'),
+  require('../assets/mascot/nubo-result-3.png'),
+  require('../assets/mascot/nubo-result-4.png'),
+  require('../assets/mascot/nubo-result-5.png'),
+  require('../assets/mascot/nubo-result-6.png'),
+];
+
 export class MascotImageService {
   /**
    * Get a random mascot image for a given personality.
@@ -48,5 +58,13 @@ export class MascotImageService {
     }
     const randomIndex = Math.floor(Math.random() * images.length);
     return images[randomIndex];
+  }
+
+  /**
+   * Get a random mascot image specifically for the brushing results screen.
+   */
+  static getRandomResultsImage(): ImageSourcePropType {
+    const index = Math.floor(Math.random() * resultsImages.length);
+    return resultsImages[index];
   }
 } 
