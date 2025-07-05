@@ -43,9 +43,10 @@ import {
 } from '../../services/BrushingGoalsService';
 import { useToothbrushStats } from '../../hooks/useToothbrushStats';
 import { Colors } from '../../constants/Colors';
+import { MascotToneService } from '../../services/MascotToneService';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
-const NUBO_TONE_KEY = 'nubo_tone';
+const NUBO_TONE_KEY = 'nubo_tone'; // deprecated – using MascotToneService now
 
 // Mascot tone interface
 interface MascotTone {
@@ -311,24 +312,14 @@ export default function SettingsScreen() {
   
   const loadCurrentTone = async () => {
     try {
-      const storedTone = await AsyncStorage.getItem(NUBO_TONE_KEY);
-      if (storedTone) {
-        const toneData = JSON.parse(storedTone);
-        const tone = TONE_OPTIONS.find(option => option.id === toneData.id);
-        if (tone) {
-          setCurrentTone(tone);
-        }
-      } else {
-        // Default to supportive if no tone is stored
-        setCurrentTone(TONE_OPTIONS[0]);
-      }
+      const toneId = await MascotToneService.loadUserTone(authUser?.id);
+      const tone = TONE_OPTIONS.find(option => option.id === toneId) || TONE_OPTIONS[0];
+      setCurrentTone(tone);
     } catch (error) {
       console.error('Error loading mascot tone:', error);
-      setCurrentTone(TONE_OPTIONS[0]); // Default to supportive
+      setCurrentTone(TONE_OPTIONS[0]);
     }
   };
-
-
 
   const getToothbrushAgeText = () => {
     // Follow same pattern as other settings - use meaningful fallback instead of loading indicator
@@ -462,13 +453,8 @@ export default function SettingsScreen() {
   const handleToneSelect = async (tone: MascotTone) => {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      const toneData = {
-        id: tone.id,
-        label: tone.label,
-        description: tone.description
-      };
-      await AsyncStorage.setItem(NUBO_TONE_KEY, JSON.stringify(toneData));
-      setCurrentTone(tone);
+      setCurrentTone(tone); // Optimistic update
+      await MascotToneService.changeTone(tone.id, authUser?.id);
       closeModalIfConfigured(setIsToneModalVisible);
     } catch (error) {
       console.error('Error changing mascot tone:', error);
