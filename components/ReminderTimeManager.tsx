@@ -15,6 +15,7 @@ import Animated, {
   runOnJS
 } from 'react-native-reanimated';
 import useInlinePickerScroll from '../utils/useInlinePickerScroll';
+import { syncReminderNotifications } from '../services/ReminderNotificationService';
 
 const REMINDER_TIMES_KEY = 'reminder_times';
 const PICKER_ITEM_HEIGHT = 40;
@@ -71,16 +72,20 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
         const sortedTimes = sortRemindersByTime(timesData);
         setReminderTimes(sortedTimes);
         onUpdate?.(sortedTimes);
+        // Ensure local notifications are up-to-date whenever we load reminders
+        syncReminderNotifications(sortedTimes);
       } else {
         const sortedDefaults = sortRemindersByTime(DEFAULT_REMINDER_TIMES);
         setReminderTimes(sortedDefaults);
         onUpdate?.(sortedDefaults);
+        syncReminderNotifications(sortedDefaults);
       }
     } catch (error) {
       console.error('Error loading reminder times:', error);
       const sortedDefaults = sortRemindersByTime(DEFAULT_REMINDER_TIMES);
       setReminderTimes(sortedDefaults);
       onUpdate?.(sortedDefaults);
+      syncReminderNotifications(sortedDefaults);
     }
   };
 
@@ -98,6 +103,8 @@ export default function ReminderTimeManager({ visible, onClose, onUpdate }: Remi
     try {
       await AsyncStorage.setItem(REMINDER_TIMES_KEY, JSON.stringify(times));
       onUpdate?.(times);
+      // Keep notification schedule in sync with the latest reminder set
+      syncReminderNotifications(times);
     } catch (error) {
       console.error('Error saving reminder times:', error);
       throw error;

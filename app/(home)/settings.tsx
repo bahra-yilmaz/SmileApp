@@ -155,6 +155,47 @@ export default function SettingsScreen() {
   } = useBrushingGoal();
   const { stats: toothbrushStats } = useToothbrushStats();
 
+  // ---------------------------------------------------------------------
+  // Reminder times – initial load (so indicator text is correct on first
+  //   render even before the user opens the ReminderTimeManager sheet).
+  // ---------------------------------------------------------------------
+
+  const REMINDER_TIMES_KEY = 'reminder_times';
+
+  const sortRemindersByTime = (reminders: ReminderTime[]) => {
+    return [...reminders].sort((a, b) => {
+      const [hA, mA] = a.time.split(':').map(Number);
+      const [hB, mB] = b.time.split(':').map(Number);
+      return hA * 60 + mA - (hB * 60 + mB);
+    });
+  };
+
+  const loadReminderTimes = async () => {
+    try {
+      const storedTimes = await AsyncStorage.getItem(REMINDER_TIMES_KEY);
+      if (storedTimes) {
+        const timesData: ReminderTime[] = JSON.parse(storedTimes);
+        setReminderTimes(sortRemindersByTime(timesData));
+      } else {
+        // Mirror the default list from ReminderTimeManager so we have an
+        // indicator even on a fresh install.
+        const defaultTimes: ReminderTime[] = [
+          { id: 'morning', time: '08:00', label: t('settings.reminderTimes.morning', 'Morning'), enabled: true },
+          { id: 'afternoon', time: '14:00', label: t('settings.reminderTimes.afternoon', 'Afternoon'), enabled: false },
+          { id: 'evening', time: '20:00', label: t('settings.reminderTimes.evening', 'Evening'), enabled: true },
+          { id: 'night', time: '22:00', label: t('settings.reminderTimes.night', 'Before Bed'), enabled: false },
+        ];
+        setReminderTimes(sortRemindersByTime(defaultTimes));
+      }
+    } catch (err) {
+      console.warn('Unable to load reminder times:', err);
+    }
+  };
+
+  useEffect(() => {
+    loadReminderTimes();
+  }, []);
+
   useEffect(() => {
     // Animate in from the right
     translateX.value = withTiming(0, {
