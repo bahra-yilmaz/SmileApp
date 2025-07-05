@@ -1,10 +1,11 @@
 import { supabase } from './supabaseClient';
-import { calculateEarnedPoints, BrushingSession, EarnedPointsResult } from '../utils/calculateEarnedPoints';
+import { calculateEarnedPoints, EarnedPointsResult } from '../utils/calculateEarnedPoints';
 import { subDays } from 'date-fns';
 import { StreakSession } from './StreakService';
 import { StreakService } from './StreakService';
 import { BrushingGoalsService } from './BrushingGoalsService';
 import { getTodayHabitString } from '../utils/dateUtils';
+import { PointsService } from './PointsService';
 
 export interface InsertBrushingLogResult extends EarnedPointsResult {
   id: string;
@@ -117,6 +118,16 @@ export async function insertBrushingLog(params: {
     await ToothbrushDataService.clearStatsCache();
   } catch (error) {
     console.warn('⚠️ Could not clear toothbrush stats cache after brushing:', error);
+  }
+
+  // -------------------------------------------------------------------------
+  // 6) Increment user\'s total points
+  // -------------------------------------------------------------------------
+  try {
+    await PointsService.addPoints(userId, points.total);
+  } catch (error) {
+    console.error('⚠️ Failed to update user points:', error);
+    // Non-critical – continue without breaking the flow
   }
 
   return {

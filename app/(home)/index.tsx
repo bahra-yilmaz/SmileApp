@@ -23,6 +23,8 @@ import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { useDashboardData } from '../../hooks/useDashboardData';
 import { eventBus } from '../../utils/EventBus';
 import { useIsFocused } from '@react-navigation/native';
+import { PointsStage, getUserStage } from '../../services/PointsService';
+import { getVisualForStage } from '../../constants/MascotClimbConfig';
 
 // Import home components using barrel imports
 import {
@@ -423,6 +425,33 @@ export default function HomeScreen() {
     }
   }, [isFocused]);
 
+  // State for points stage
+  const [pointsStage, setPointsStage] = useState<PointsStage>(1);
+
+  // Load stage initially and after brushing-completed events
+  useEffect(() => {
+    const loadStage = async () => {
+      try {
+        if (user?.id) {
+          const stage = await getUserStage(user.id);
+          setPointsStage(stage);
+        }
+      } catch (err) {
+        console.warn('Failed to load points stage', err);
+      }
+    };
+
+    loadStage();
+
+    // Listen to brushing-completed → points may change
+    const unsub = eventBus.on('brushing-completed', loadStage);
+    return () => unsub();
+  }, [user?.id]);
+
+  const climbVisual = getVisualForStage(pointsStage);
+
+  const climbLeft = width * climbVisual.leftMultiplier;
+
   const screenContent = (
     <>
       <Image 
@@ -515,8 +544,13 @@ export default function HomeScreen() {
             </LinearGradient>
           </TouchableOpacity>
         </Animated.View>
-        <View style={[styles.bottomLeftMascot, { bottom: mountainHeight * 0.25 }]}>
-          <View style={styles.mascotCard}>
+        <View style={[styles.bottomLeftMascot, {
+          bottom: mountainHeight * climbVisual.bottomMultiplier,
+          left: climbLeft,
+          width: climbVisual.size,
+          height: climbVisual.size,
+        }]}>
+          <View style={[styles.mascotCard, { width: climbVisual.size, top: -climbVisual.size * 0.35 }]}>
             <BlurView intensity={70} tint="light" style={styles.cardBlur}>
               <View style={styles.progressBar}>
                 <View style={[styles.progressFill, { width: '70%' }]} />
@@ -524,7 +558,7 @@ export default function HomeScreen() {
             </BlurView>
           </View>
           <Image 
-            source={AppImages['nubo-bag-1']} 
+            source={AppImages[climbVisual.imageKey]} 
             style={styles.mascotImage} 
             contentFit="contain" 
             cachePolicy="disk" 
@@ -693,9 +727,6 @@ const styles = StyleSheet.create({
   },
   bottomLeftMascot: {
     position: 'absolute',
-    left: '5%',
-    width: 100,
-    height: 100,
     zIndex: 1001,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -723,7 +754,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -25,
     left: 0,
-    width: 100,
+    width: '100%',
     borderRadius: 12,
     overflow: 'hidden',
     shadowColor: '#000',

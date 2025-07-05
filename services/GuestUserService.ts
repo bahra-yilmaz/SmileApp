@@ -5,6 +5,7 @@ import { StreakSession } from '../utils/streakUtils';
 import { StreakService } from './StreakService';
 import { BrushingGoalsService } from './BrushingGoalsService';
 import { getTodayHabitString } from '../utils/dateUtils';
+import { PointsService } from './PointsService';
 
 // Generate a proper UUID v4 format for React Native (compatible with PostgreSQL UUID type)
 function generateGuestUserId(): string {
@@ -211,6 +212,15 @@ export class GuestUserService {
         await ToothbrushDataService.clearStatsCache();
       } catch (error) {
         console.warn('⚠️ Could not clear toothbrush stats cache after guest brushing:', error);
+      }
+
+      // ---------------------------------------------------------------------
+      // Increment guest user's total points
+      // ---------------------------------------------------------------------
+      try {
+        await PointsService.addPoints(guestUserId, points.total);
+      } catch (error) {
+        console.error('⚠️ Failed to update guest user points:', error);
       }
 
       console.log('✅ Guest brushing log inserted:', insertedLog.id);
