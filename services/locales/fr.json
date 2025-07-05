@@ -135,7 +135,8 @@
       "oneWeek": "1 semaine",
       "weeks": "{{count}} semaines",
       "oneDay": "1 jour",
-      "days": "{{count}} jours"
+      "days": "{{count}} jours",
+      "brandNew": "Flambant Neuf"
     },
     "status": {
       "brand_new": "Nouveau",

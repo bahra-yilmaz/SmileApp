@@ -142,10 +142,11 @@
       "oneWeek": "1 hafta",
       "weeks": "{{count}} hafta",
       "oneDay": "1 gün",
-      "days": "{{count}} gün"
+      "days": "{{count}} gün",
+      "brandNew": "Yepyeni"
     },
     "status": {
-      "brandNew": "Yeni",
+      "brand_new": "Yepyeni",
       "fresh": "Taze",
       "good": "İyi",
       "due": "Yakında değiştir",

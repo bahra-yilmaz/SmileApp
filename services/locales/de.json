@@ -135,10 +135,11 @@
       "oneWeek": "1 Woche",
       "weeks": "{{count}} Wochen",
       "oneDay": "1 Tag",
-      "days": "{{count}} Tage"
+      "days": "{{count}} Tage",
+      "brandNew": "Brandneu"
     },
     "status": {
-      "brandNew": "Neu",
+      "brand_new": "Brandneu",
       "fresh": "Frisch",
       "good": "Gut",
       "due": "Bald wechseln",

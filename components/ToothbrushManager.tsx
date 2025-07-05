@@ -122,6 +122,10 @@ export default function ToothbrushManager({
     const weeks = Math.floor(daysInUse / 7);
     const months = Math.floor(daysInUse / 30);
 
+    if (daysInUse === 0) {
+      return t('toothbrush.age.brandNew');
+    }
+
     if (months > 0) {
       return months === 1 
         ? t('toothbrush.age.oneMonth', { count: months }) 

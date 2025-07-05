@@ -158,10 +158,11 @@
       "oneWeek": "1 semana",
       "weeks": "{{count}} semanas",
       "oneDay": "1 día",
-      "days": "{{count}} días"
+      "days": "{{count}} días",
+      "brandNew": "Completamente nuevo"
     },
     "status": {
-      "brand_new": "Nuevo",
+      "brand_new": "Completamente nuevo",
       "fresh": "Fresco",
       "good": "Bueno",
       "replace_soon": "Reemplazar Pronto",
@@ -1022,21 +1023,21 @@
       "1": "Cepillar de noche = dejar todo en orden."
     },
     "brushing_angle_fact": {
-      "1": "Un ángulo correcto = menos problemas."
+      "1": "El ángulo importa tanto como la intención."
     },
     "dry_brush_fact": {
-      "1": "Sin pasta, sin excusas. Cuenta igual."
+      "1": "Incluso sin pasta, cepillar es una afirmación de cuidado."
     }
   },
   "community": {
     "community_brushing_now": {
-      "1": "No estás sol@. Esto es parte de algo más grande."
+      "1": "Estás conectado a otros que también eligieron cuidarse ahora."
     },
     "nubo_network_energy": {
-      "1": "La red Nubo sigue activa. Y tú dentro de ella."
+      "1": "El cuidado se expande cuando se comparte. Incluso silenciosamente."
     },
     "social_momentum": {
-      "1": "Acciones pequeñas. Energía compartida."
+      "1": "Pequeñas acciones, grandes movimientos. Estás dentro."
     },
     "late_night_others_brushed": {
       "1": "A esta hora, pocos cepillan. Tú lo hiciste. Eso dice mucho."
@@ -1048,10 +1049,10 @@
       "1": "Hoy es el Día Nubo. Un momento simbólico."
     },
     "community_across_timezones": {
-      "1": "Otra persona, otro país, mismo ritual."
+      "1": "A través del tiempo y el espacio: el cuidado continúa."
     },
     "brush_in_cities": {
-      "1": "Desde calles agitadas hasta rincones tranquilos — el cuidado sigue."
+      "1": "En medio del movimiento urbano, hay quienes aún eligen el cuidado personal."
     },
     "nubo_watching": {
       "1": "Nubo lo vio. Sonrió. Y siguió observando en silencio."

@@ -957,7 +957,7 @@
       "save": "Add Brush"
     },
     "age": {
-      "brandNew": "Brand new",
+      "brandNew": "Brand New",
       "oneMonth": "1 month",
       "months": "{{count}} months",
       "oneWeek": "1 week",
@@ -1364,4 +1364,4 @@
     "item": "Toothbrush",
     "firstBrush": "First Brush"
   }
-} 
+}

@@ -139,10 +139,11 @@
       "oneWeek": "1 semana",
       "weeks": "{{count}} semanas",
       "oneDay": "1 dia",
-      "days": "{{count}} dias"
+      "days": "{{count}} dias",
+      "brandNew": "Novíssimo"
     },
     "status": {
-      "brandNew": "Nova",
+      "brand_new": "Novíssimo",
       "fresh": "Fresca",
       "good": "Boa",
       "due": "Trocar em breve",
@@ -846,7 +847,7 @@
     },
     "late_night": {
       "1": "Silêncio lá fora. Autocuidado aqui dentro.",
-      "2": "Escovando tarde, porque você se importa. Isso é poder calmo.",
+      "2": "Escovar tarde, porque você se importa. Isso é poder calmo.",
       "3": "A cidade dorme. Você, não — não antes de cuidar."
     },
     "weekday": {

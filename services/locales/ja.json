@@ -139,10 +139,11 @@
       "oneWeek": "1週間",
       "weeks": "{{count, number}}週間",
       "oneDay": "1日",
-      "days": "{{count, number}}日"
+      "days": "{{count, number}}日",
+      "brandNew": "新品"
     },
     "status": {
-      "brandNew": "新品",
+      "brand_new": "新品",
       "fresh": "新しい",
       "good": "良好",
       "due": "交換間近",
