@@ -689,7 +689,7 @@
     "evening": {
       "1": "Yatma vakti mi? Yoo, önce parıltı saati 🦷🌌",
       "2": "Yastığın aradı — önce fırçala dedi.",
-      "3": "Azı dişlerin naneli ise, yatağın altında canavar kalmaz 😏"
+      "3": "Azı dişlerin ferah ise, yatağın altında canavar kalmaz 😏"
     },
     "late_night": {
       "1": "Ay yukarıda. Fırçan da öyle. Harika bir görüntü.",
@@ -733,7 +733,7 @@
     "new_streak_starting": {
       "1": "İlk fırçalama tamam — parıltı canavarı uyandı 🦷💥",
       "2": "Boom! Yeni bir seri ortaya çıktı 🪥✨",
-      "3": "Taze seri uyarısı! Birisi fazlasıyla naneli 💨"
+      "3": "Taze seri uyarısı! Birisi fazlasıyla ferah! 💨"
     },
     "almost_week_streak": {
       "1": "5 gün mü? Bu seride ana karakter enerjisi var 💫",
@@ -743,7 +743,7 @@
     "over_10_day_streak": {
       "1": "10+ gün mü? Sparkle Prime moduna geçtin 🚀",
       "2": "10+ gün? Biri bu parıltı trenini durdursun! 🛤️💥",
-      "3": "On gün efsanesi açıldı! Nane oyunu: elit seviye."
+      "3": "On gün efsanesi açıldı! Ferahlık oyunu: elit seviye."
     },
     "best_streak_reached": {
       "1": "Kendi serini kırdın. Havai fişek gerek. Bir de dondurma 🍦🎉",
@@ -839,7 +839,7 @@
       "1": "Yeni Nubo ekibi geldi. Parıltı partisi başlasın 🎉"
     },
     "nubo_day_event": {
-      "1": "🎈 Mutlu Nubo Günü! Bugün herkese ekstra nane 🍃✨"
+      "1": "🎈 Mutlu Nubo Günü! Bugün herkese ekstra ferah 🍃✨"
     },
     "community_across_timezones": {
       "1": "Zaman dilimleri mi? Daha çok 'parıltı bölgeleri' 🗺️ Herkes fırçalıyor."
@@ -874,7 +874,7 @@
     },
     "late_night": {
       "1": "Kimse bakmıyor. Ama sen geldin. Bu bir güç hamlesi.",
-      "2": "Gece yarısı nanesi başka bir şeydir.",
+      "2": "Gece yarısı ferahlığı başka bir şeydir.",
       "3": "Geceyi geçmiş misin? Bu, parıltıya olan sadakatin, {{username}}."
     },
     "weekday": {

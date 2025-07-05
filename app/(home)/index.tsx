@@ -40,6 +40,7 @@ import {
 // Import mascot types and V2 service
 import type { MascotConfig, PersonalityType } from '../../types/mascot';
 import { MascotGreetingService, ContextDetector } from '../../services/MascotGreetingService';
+import { MascotToneService } from '../../services/MascotToneService';
 
 // Get dimensions for background
 const { width, height } = Dimensions.get('window');
@@ -209,18 +210,51 @@ export default function HomeScreen() {
   // Toggle chat overlay visibility
   const toggleChat = () => setIsChatVisible(!isChatVisible);
   
-  // Function to refresh morning text (for testing)
-  // Personality cycling for testing V2 system
-  const [currentPersonalityIndex, setCurrentPersonalityIndex] = useState(0);
+  // User-selected mascot tone preference
+  const [preferredTone, setPreferredTone] = useState<PersonalityType>('supportive');
+
+  // Load preferred tone once (and whenever auth state changes)
+  useEffect(() => {
+    (async () => {
+      try {
+        const toneId = await MascotToneService.loadUserTone(user?.id);
+        // Ensure type safety – default to supportive if id is unknown
+        if (toneId === 'supportive' || toneId === 'playful' || toneId === 'cool' || toneId === 'wise') {
+          setPreferredTone(toneId);
+        }
+      } catch (err) {
+        console.warn('Failed to load preferred mascot tone, defaulting to supportive', err);
+      }
+    })();
+  }, [user?.id]);
+
+  // Personalities list constant
   const personalities: PersonalityType[] = ['supportive', 'playful', 'cool', 'wise'];
 
+  // Weighted random personality selector — preferred tone 4×, others 1×
+  const selectWeightedPersonality = (): PersonalityType => {
+    const weights: Record<PersonalityType, number> = {
+      supportive: 1,
+      playful: 1,
+      cool: 1,
+      wise: 1,
+    };
+    weights[preferredTone] = 4;
+
+    const totalWeight = personalities.reduce((sum, p) => sum + weights[p], 0);
+    let rand = Math.random() * totalWeight;
+    for (const p of personalities) {
+      rand -= weights[p];
+      if (rand <= 0) return p;
+    }
+    return preferredTone; // Fallback
+  };
+  
   // Function to refresh mascot text using V2 system with full context
   const refreshMascotText = async () => {
     try {
-      // Cycle through personalities for testing
-      const currentPersonality = personalities[currentPersonalityIndex];
-      const nextIndex = (currentPersonalityIndex + 1) % personalities.length;
-      setCurrentPersonalityIndex(nextIndex);
+      // Select personality using weighted preference
+      const currentPersonality = selectWeightedPersonality();
       
       // Prepare user state for milestone detection
       const userId = user?.id || 'guest';
