@@ -23,7 +23,7 @@ import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { useDashboardData } from '../../hooks/useDashboardData';
 import { eventBus } from '../../utils/EventBus';
 import { useIsFocused } from '@react-navigation/native';
-import { PointsStage, getUserStage } from '../../services/PointsService';
+import { PointsStage, PointsService, getStageForPoints } from '../../services/PointsService';
 import { getVisualForStage } from '../../constants/MascotClimbConfig';
 
 // Import home components using barrel imports
@@ -397,14 +397,26 @@ export default function HomeScreen() {
   // Check if user needs a first brush created (for existing users without toothbrushes)
   useEffect(() => {
     const ensureFirstBrushExists = async () => {
-      if (!user?.id || user.id === 'guest') return;
-
-      try {
-        const { ToothbrushService } = await import('../../services/toothbrush');
-        await ToothbrushService.createFirstBrush(user.id, t);
-      } catch (error) {
-        console.error('❌ Error ensuring first brush exists:', error);
-        // Don't show error to user - this is a background operation
+      if (user?.id) {
+        // Authenticated user flow
+        try {
+          const { ToothbrushService } = await import('../../services/toothbrush');
+          await ToothbrushService.createFirstBrush(user.id, t);
+        } catch (error) {
+          console.error('❌ Error ensuring first brush exists for authenticated user:', error);
+        }
+      } else {
+        // Guest user flow
+        try {
+          const { GuestUserService } = await import('../../services/GuestUserService');
+          const guestId = await GuestUserService.getCurrentGuestUserId();
+          if (guestId) {
+            const { ToothbrushService } = await import('../../services/toothbrush');
+            await ToothbrushService.createFirstBrush(guestId, t);
+          }
+        } catch (error) {
+          console.error('❌ Error ensuring first brush exists for guest user:', error);
+        }
       }
     };
 
@@ -427,28 +439,74 @@ export default function HomeScreen() {
 
   // State for points stage
   const [pointsStage, setPointsStage] = useState<PointsStage>(1);
+  const [totalPoints, setTotalPoints] = useState<number>(0);
 
-  // Load stage initially and after brushing-completed events
+  // Load points & stage initially and after brushing-completed events
   useEffect(() => {
-    const loadStage = async () => {
+    const loadPointsAndStage = async () => {
       try {
-        if (user?.id) {
-          const stage = await getUserStage(user.id);
+        let uid = user?.id;
+
+        if (!uid) {
+          // Try to get guest user ID, but don't create one.
+          try {
+            const { GuestUserService } = await import('../../services/GuestUserService');
+            const guestId = await GuestUserService.getCurrentGuestUserId();
+            if (guestId) uid = guestId;
+          } catch (err) {
+            console.warn('Failed to check for guest user ID', err);
+          }
+        }
+
+        if (uid) {
+          let total = await PointsService.getPoints(uid);
+
+          // Fallback for users who earned points before `users.points` was added
+          if (total === 0) {
+            try {
+              total = await PointsService.calculateTotalFromLogs(uid);
+            } catch {
+              // Ignore if logs also fail, total remains 0
+            }
+          }
+          
+          const stage = getStageForPoints(total);
           setPointsStage(stage);
+          setTotalPoints(total);
+        } else {
+          // No authenticated or guest user found, reset to default state
+          setPointsStage(1);
+          setTotalPoints(0);
         }
       } catch (err) {
         console.warn('Failed to load points stage', err);
+        setPointsStage(1);
+        setTotalPoints(0);
       }
     };
 
-    loadStage();
+    loadPointsAndStage();
 
     // Listen to brushing-completed → points may change
-    const unsub = eventBus.on('brushing-completed', loadStage);
+    const unsub = eventBus.on('brushing-completed', loadPointsAndStage);
     return () => unsub();
   }, [user?.id]);
 
   const climbVisual = getVisualForStage(pointsStage);
+
+  // Calculate progress within current stage
+  const getStageProgress = (points: number): number => {
+    if (points >= 10000) return 1;
+    if (points <= 0) return 0;
+    if (points < 300) return points / 300; // stage 2
+    if (points < 1000) return (points - 300) / 700; // stage3
+    if (points < 2500) return (points - 1000) / 1500; // stage4
+    if (points < 5000) return (points - 2500) / 2500; // stage5
+    if (points <= 10000) return (points - 5000) / 5000; // stage6
+    return 1;
+  };
+
+  const progressPercent = getStageProgress(totalPoints);
 
   const climbLeft = width * climbVisual.leftMultiplier;
 
@@ -553,7 +611,7 @@ export default function HomeScreen() {
           <View style={[styles.mascotCard, { width: climbVisual.size, top: -climbVisual.size * 0.35 }]}>
             <BlurView intensity={70} tint="light" style={styles.cardBlur}>
               <View style={styles.progressBar}>
-                <View style={[styles.progressFill, { width: '70%' }]} />
+                <View style={[styles.progressFill, { width: `${Math.round(progressPercent * 100)}%` }]} />
               </View>
             </BlurView>
           </View>

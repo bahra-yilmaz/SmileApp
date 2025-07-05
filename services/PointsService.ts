@@ -80,6 +80,19 @@ export class PointsService {
 
     return data?.points ?? 0;
   }
+
+  /**
+   * Fallback: sum earned_points from brushing_logs when users.points is null.
+   */
+  static async calculateTotalFromLogs(userId: string): Promise<number> {
+    const { supabase } = await import('./supabaseClient');
+    const { data, error } = await supabase
+      .from('brushing_logs')
+      .select('earned_points')
+      .eq('user_id', userId);
+    if (error) throw error;
+    return (data ?? []).reduce((sum: number, row: any) => sum + (row.earned_points ?? 0), 0);
+  }
 }
 
 // -----------------------------------------------------------------------------
