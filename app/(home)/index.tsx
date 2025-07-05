@@ -22,6 +22,7 @@ import { OnboardingService } from '../../services/OnboardingService';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { useDashboardData } from '../../hooks/useDashboardData';
 import { eventBus } from '../../utils/EventBus';
+import { useIsFocused } from '@react-navigation/native';
 
 // Import home components using barrel imports
 import {
@@ -231,30 +232,37 @@ export default function HomeScreen() {
   // Personalities list constant
   const personalities: PersonalityType[] = ['supportive', 'playful', 'cool', 'wise'];
 
+  const isValidPersonality = (tone?: string): tone is PersonalityType =>
+    tone === 'supportive' || tone === 'playful' || tone === 'cool' || tone === 'wise';
+
   // Weighted random personality selector — preferred tone 4×, others 1×
-  const selectWeightedPersonality = (): PersonalityType => {
+  const selectWeightedPersonality = (preferred: PersonalityType): PersonalityType => {
     const weights: Record<PersonalityType, number> = {
       supportive: 1,
       playful: 1,
       cool: 1,
       wise: 1,
     };
-    weights[preferredTone] = 4;
-
+    weights[preferred] = 4;
     const totalWeight = personalities.reduce((sum, p) => sum + weights[p], 0);
     let rand = Math.random() * totalWeight;
     for (const p of personalities) {
       rand -= weights[p];
       if (rand <= 0) return p;
     }
-    return preferredTone; // Fallback
+    return preferred; // Fallback
   };
   
   // Function to refresh mascot text using V2 system with full context
   const refreshMascotText = async () => {
     try {
+      // Reload preferred tone each time we refresh
+      const latestToneId = await MascotToneService.loadUserTone(user?.id);
+      const latestTone: PersonalityType = isValidPersonality(latestToneId) ? latestToneId : 'supportive';
+      setPreferredTone(latestTone);
+
       // Select personality using weighted preference
-      const currentPersonality = selectWeightedPersonality();
+      const currentPersonality = selectWeightedPersonality(latestTone);
       
       // Prepare user state for milestone detection
       const userId = user?.id || 'guest';
@@ -406,6 +414,14 @@ export default function HomeScreen() {
   useEffect(() => {
     Animated.timing(introOpacity, { toValue: 1, duration: 600, easing: Easing.inOut(Easing.ease), useNativeDriver: true }).start();
   }, []);
+
+  // Refresh when screen gains focus (e.g., returning from Settings)
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (isFocused) {
+      refreshMascotText();
+    }
+  }, [isFocused]);
 
   const screenContent = (
     <>

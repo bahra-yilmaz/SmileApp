@@ -50,23 +50,38 @@ export class MascotToneService {
     if (!userId) throw new Error('User ID is required');
 
     try {
-      const upsertPromise = supabase
+      // 1) Attempt a plain update (fast path when the row already exists)
+      const { data: updated, error: updateError } = await supabase
         .from('users')
-        .upsert(
-          { id: userId, mascot_tone: toneId },
-          { onConflict: 'id', ignoreDuplicates: false }
-        )
+        .update({ mascot_tone: toneId })
+        .eq('id', userId)
         .select();
 
-      const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('Database query timeout after 5 seconds')), 5000)
-      );
+      if (updateError) {
+        console.warn('[MascotToneService] update failed, will try upsert:', updateError?.message);
+      }
 
-      const { error } = await Promise.race([upsertPromise, timeoutPromise]);
+      // If no rows were affected (possible when row does not yet exist), fall back to upsert.
+      if (updateError || !updated || updated.length === 0) {
+        const upsertObj: Record<string, any> = {
+          id: userId,
+          mascot_tone: toneId,
+        };
 
-      if (error) {
-        console.error('Database upsert error (mascot tone):', error);
-        throw error;
+        // OPTIONAL defaults to satisfy NOT NULL constraints
+        // Add a default brushing target if column exists and has NOT NULL constraint
+        // (mirrors LanguageService implementation)
+        upsertObj["target_time_in_sec"] = 120;
+
+        const { error: upsertError } = await supabase
+          .from('users')
+          .upsert(upsertObj, { onConflict: 'id', ignoreDuplicates: false })
+          .select();
+
+        if (upsertError) {
+          console.error('[MascotToneService] Upsert error:', upsertError);
+          throw upsertError;
+        }
       }
 
       // Also cache locally
