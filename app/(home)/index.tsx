@@ -608,7 +608,11 @@ export default function HomeScreen() {
           width: climbVisual.size,
           height: climbVisual.size,
         }]}>
-          <View style={[styles.mascotCard, { width: climbVisual.size, top: -climbVisual.size * 0.35 }]}>
+          <View style={[styles.mascotCard, { 
+            width: climbVisual.size * 1.2, 
+            top: -climbVisual.size * 0.45,
+            left: -(climbVisual.size * 0.1) 
+          }]}>
             <BlurView intensity={70} tint="light" style={styles.cardBlur}>
               <View style={styles.progressBar}>
                 <View style={[styles.progressFill, { width: `${Math.round(progressPercent * 100)}%` }]} />

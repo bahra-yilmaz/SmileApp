@@ -14,6 +14,8 @@ export const AppImages = {
   toothbrush: require('../assets/images/toothbrush.png'),
 
   // mascot
+  'nubo-climb-1': require('../assets/mascot/nubo-climb-1.png'),
+  'nubo-climb-2': require('../assets/mascot/nubo-climb-2.png'),
   'nubo-bag-1': require('../assets/mascot/nubo-bag-1.png'),
   'nubo-brushing-1-pp': require('../assets/mascot/nubo-brushing-1-pp.png'),
   'nubo-brushing-1': require('../assets/mascot/nubo-brushing-1.png'),
