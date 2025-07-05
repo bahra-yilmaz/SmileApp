@@ -189,6 +189,31 @@ export class MascotGreetingService implements IMascotGreetingService {
    * Get visual configuration for a personality
    */
   getVisualConfig(personality: PersonalityType): PersonalityVisualConfig {
+    // Special handling for the "supportive" personality – rotate through approved poses
+    if (personality === 'supportive') {
+      const collapsedVariants: PpMascotVariant[] = [
+        'nubo-supportive-1-pp',
+        'nubo-supportive-2-pp',
+        'nubo-supportive-3-pp',
+      ];
+      const expandedVariants: NonPpMascotVariant[] = [
+        'nubo-supportive-2',
+        'nubo-supportive-3',
+        'nubo-supportive-4',
+        'nubo-supportive-6',
+      ];
+
+      const expandedVariant = expandedVariants[Math.floor(Math.random() * expandedVariants.length)];
+      const collapsedVariant = collapsedVariants[Math.floor(Math.random() * collapsedVariants.length)];
+
+      return {
+        personality: 'supportive',
+        collapsedVariant,
+        expandedVariant,
+        description: PERSONALITY_VISUAL_CONFIGS.supportive.description,
+      };
+    }
+
     // Special handling for the "cool" personality – rotate through multiple poses
     if (personality === 'cool') {
       const collapsedVariants: PpMascotVariant[] = [
@@ -203,22 +228,66 @@ export class MascotGreetingService implements IMascotGreetingService {
         'nubo-cool-4',
       ];
 
-      // Pick a random index for the expanded variant first
-      const expandedIndex = Math.floor(Math.random() * expandedVariants.length);
-      const expandedVariant = expandedVariants[expandedIndex];
-
-      // If we have a matching collapsed variant (1-3), use the same index.
-      // For the 4th pose (index 3), fall back to a random collapsed variant.
-      const collapsedVariant =
-        expandedIndex < collapsedVariants.length
-          ? collapsedVariants[expandedIndex]
-          : collapsedVariants[Math.floor(Math.random() * collapsedVariants.length)];
+      const expandedVariant = expandedVariants[Math.floor(Math.random() * expandedVariants.length)];
+      const collapsedVariant = collapsedVariants[Math.floor(Math.random() * collapsedVariants.length)];
 
       return {
         personality: 'cool',
         collapsedVariant,
         expandedVariant,
         description: PERSONALITY_VISUAL_CONFIGS.cool.description,
+      };
+    }
+
+    // Special handling for the "wise" personality – rotate through multiple poses
+    if (personality === 'wise') {
+      const collapsedVariants: PpMascotVariant[] = [
+        'nubo-wise-1-pp',
+        'nubo-wise-2-pp',
+        'nubo-wise-3-pp',
+        'nubo-wise-6-pp',
+      ];
+      const expandedVariants: NonPpMascotVariant[] = [
+        'nubo-wise-1',
+        'nubo-wise-2',
+        'nubo-wise-3',
+        'nubo-wise-4',
+        'nubo-wise-6',
+      ];
+
+      const expandedVariant = expandedVariants[Math.floor(Math.random() * expandedVariants.length)];
+      const collapsedVariant = collapsedVariants[Math.floor(Math.random() * collapsedVariants.length)];
+
+      return {
+        personality: 'wise',
+        collapsedVariant,
+        expandedVariant,
+        description: PERSONALITY_VISUAL_CONFIGS.wise.description,
+      };
+    }
+
+    // Special handling for the "playful" personality – rotate through approved poses
+    if (personality === 'playful') {
+      const collapsedVariants: PpMascotVariant[] = [
+        'nubo-playful-1-pp',
+        'nubo-playful-2-pp',
+        'nubo-playful-3-pp',
+      ];
+      const expandedVariants: NonPpMascotVariant[] = [
+        'nubo-playful-2',
+        'nubo-playful-3',
+        'nubo-playful-4',
+        'nubo-playful-5',
+      ];
+
+      const expandedVariant = expandedVariants[Math.floor(Math.random() * expandedVariants.length)];
+      const collapsedVariant = collapsedVariants[Math.floor(Math.random() * collapsedVariants.length)];
+
+      return {
+        personality: 'playful',
+        collapsedVariant,
+        expandedVariant,
+        description: PERSONALITY_VISUAL_CONFIGS.playful.description,
       };
     }
 

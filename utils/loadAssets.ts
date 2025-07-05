@@ -80,6 +80,8 @@ export const AppImages = {
   'nubo-wise-3': require('../assets/mascot/nubo-wise-3.png'),
   'nubo-wise-4': require('../assets/mascot/nubo-wise-4.png'),
   'nubo-wise-5': require('../assets/mascot/nubo-wise-5.png'),
+  'nubo-wise-6-pp': require('../assets/mascot/nubo-wise-6-pp.png'),
+  'nubo-wise-6': require('../assets/mascot/nubo-wise-6.png'),
 };
 
 function cacheImages(images: (string | number)[]): Promise<(void | boolean)[]> {
